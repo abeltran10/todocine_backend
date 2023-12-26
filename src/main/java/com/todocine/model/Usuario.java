@@ -3,26 +3,27 @@ package com.todocine.model;
 import com.todocine.dto.UsuarioDTO;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 public class Usuario {
 
-    private Long id;
+    private String id;
 
     @NotBlank
     private String username;
 
     @NotBlank
     private String password;
-    private Boolean cuentaNoExpirada;
+    private Boolean accountNonExpired;
 
-    private Boolean cuentaNoBloqueada;
+    private Boolean accountNonLocked;
 
-    private Boolean credencialesNoExpiradas;
+    private Boolean credentialsNonExpired;
 
-    private Boolean habilitado;
+    private Boolean enabled;
 
     public Usuario() {
     }
@@ -32,37 +33,51 @@ public class Usuario {
         this.password = password;
     }
 
-    public Usuario(Long id, String username, String password, Boolean cuentaNoExpirada,
-                   Boolean cuentaNoBloqueada, Boolean credencialesNoExpiradas, Boolean habilitado) {
+    public Usuario(String id, String username, String password, Boolean accountNonExpired,
+                   Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.cuentaNoExpirada = cuentaNoExpirada;
-        this.cuentaNoBloqueada = cuentaNoBloqueada;
-        this.credencialesNoExpiradas = credencialesNoExpiradas;
-        this.habilitado = habilitado;
+        this.accountNonExpired = accountNonExpired;
+        this.accountNonLocked = accountNonLocked;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.enabled = enabled;
     }
 
     public Usuario(UsuarioDTO usuario) {
         this.id = usuario.getId();
         this.username = usuario.getUsername();
         this.password = usuario.getPassword();
-        this.cuentaNoExpirada = usuario.getCuentaNoExpirada();
-        this.cuentaNoBloqueada = usuario.getCuentaNoBloqueada();
-        this.credencialesNoExpiradas = usuario.getCredencialesNoExpiradas();
-        this.habilitado = usuario.getHabilitado();
+        this.accountNonExpired = usuario.isAccountNonExpired();
+        this.accountNonLocked = usuario.isAccountNonLocked();
+        this.credentialsNonExpired = usuario.isCredentialsNonExpired();
+        this.enabled = usuario.isEnabled();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public boolean isAccountNonExpired() {
+        return this.accountNonExpired;
+    }
+
+    public boolean isAccountNonLocked() {
+        return this.accountNonLocked;
+    }
+    public boolean isCredentialsNonExpired() {
+        return this.credentialsNonExpired;
+    }
+    public boolean isEnabled() {
+        return this.enabled;
     }
 
     public void setUsername(String username) {
@@ -77,36 +92,36 @@ public class Usuario {
         this.password = password;
     }
 
-    public Boolean getCuentaNoExpirada() {
-        return cuentaNoExpirada;
+    public Boolean getAccountNonExpired() {
+        return accountNonExpired;
     }
 
-    public void setCuentaNoExpirada(Boolean cuentaNoExpirada) {
-        this.cuentaNoExpirada = cuentaNoExpirada;
+    public void setAccountNonExpired(Boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
     }
 
-    public Boolean getCuentaNoBloqueada() {
-        return cuentaNoBloqueada;
+    public Boolean getAccountNonLocked() {
+        return accountNonLocked;
     }
 
-    public void setCuentaNoBloqueada(Boolean cuentaNoBloqueada) {
-        this.cuentaNoBloqueada = cuentaNoBloqueada;
+    public void setAccountNonLocked(Boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
     }
 
-    public Boolean getCredencialesNoExpiradas() {
-        return credencialesNoExpiradas;
+    public Boolean getCredentialsNonExpired() {
+        return credentialsNonExpired;
     }
 
-    public void setCredencialesNoExpiradas(Boolean credencialesNoExpiradas) {
-        this.credencialesNoExpiradas = credencialesNoExpiradas;
+    public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
     }
 
-    public Boolean getHabilitado() {
-        return habilitado;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    public void setHabilitado(Boolean habilitado) {
-        this.habilitado = habilitado;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

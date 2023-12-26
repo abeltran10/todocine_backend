@@ -50,9 +50,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-                                            Authentication auth) throws JWTCreationException, IOException {
+                                            Authentication auth) throws JWTCreationException {
         String token = JWT.create()
-                .withSubject(((UsuarioDTO)auth.getPrincipal()).getId().toString())
+                .withSubject(((UsuarioDTO)auth.getPrincipal()).getId())
                 .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
                 .sign(Algorithm.HMAC256(SUPER_SECRET_KEY));
 

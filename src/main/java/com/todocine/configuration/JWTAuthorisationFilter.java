@@ -45,7 +45,7 @@ public class JWTAuthorisationFilter extends BasicAuthenticationFilter {
             // Se procesa el token y se recupera el usuario.
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SUPER_SECRET_KEY))
                     .build(); //Reusable verifier instance
-            Long usuarioId = Long.parseLong(verifier.verify(token).getSubject());
+            String usuarioId = verifier.verify(token).getSubject();
 
             if (usuarioId != null) {
                 return new UsernamePasswordAuthenticationToken(usuarioId, null, new ArrayList<>());

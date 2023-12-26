@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,10 +41,14 @@ public class WebConfiguration {
 
         AuthenticationConfiguration authenticationManagerConfiguration = http.getSharedObject(AuthenticationConfiguration.class);
 
-        http.authorizeRequests()
-                .requestMatchers("/login").permitAll()
-                .anyRequest().authenticated()
-                .and().addFilter(new JWTAuthenticationFilter(authenticationManager(authenticationManagerConfiguration)))
+        http
+                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(request -> request.requestMatchers("/", "/login").permitAll()
+                        .anyRequest().authenticated())
+                .formLogin(form -> form.loginPage("/").loginProcessingUrl("/login").failureUrl("/login?error=true").defaultSuccessUrl("/").isCustomLoginPage())
+                .logout(logout -> logout.logoutUrl("/logout"))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(authenticationManagerConfiguration)))
                 .addFilter(new JWTAuthorisationFilter(authenticationManager(authenticationManagerConfiguration)));
 
         return http.build();
