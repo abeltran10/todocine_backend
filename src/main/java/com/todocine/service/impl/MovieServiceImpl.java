@@ -1,10 +1,13 @@
 package com.todocine.service.impl;
 
-import com.todocine.dao.MovieDAO;
 import com.todocine.service.MovieService;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,20 +17,39 @@ import java.io.IOException;
 public class MovieServiceImpl implements MovieService {
 
     Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
-    @Autowired
-    private MovieDAO movieDAO;
 
-    public ResponseEntity getMovieByName(String name) {
-        ResponseEntity responseEntity = null;
+    @Value("${tmdb.api.token}")
+    private String API_TOKEN;
+
+   public ResponseEntity getMovieByName(String name) {
+
+        ResponseEntity entity = null;
+
         try {
-           responseEntity =  movieDAO.searchMovie(name);
+            OkHttpClient client = new OkHttpClient();
 
-            logger.info(responseEntity.getBody().toString());
+            Request request = new Request.Builder()
+                    .url("https://api.themoviedb.org/3/search/movie?query=" + name + "&include_adult=false&language=en-US&page=1")
+                    .get()
+                    .addHeader("accept", "application/json")
+                    .addHeader("Authorization", "Bearer " + API_TOKEN)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            String body = response.body().string();
+
+            logger.info(body);
+
+            entity = new ResponseEntity<>(body, HttpStatus.OK);
+
+            logger.info(entity.getBody().toString());
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return responseEntity;
+        return entity;
     }
 
 }
