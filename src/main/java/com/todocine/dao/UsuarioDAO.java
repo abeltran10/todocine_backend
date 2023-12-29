@@ -3,10 +3,11 @@ package com.todocine.dao;
 import com.todocine.dto.UsuarioDTO;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.List;
+
+
 public interface UsuarioDAO extends MongoRepository<UsuarioDTO, String> {
 
-    public UsuarioDTO findUsuarioDTOByUsername(String username);
-
-    public UsuarioDTO findUsuarioDTOById(String id);
+    List<UsuarioDTO> findByUsername(String username);
 
 }

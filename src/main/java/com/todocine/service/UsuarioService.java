@@ -7,4 +7,5 @@ public interface UsuarioService extends UserDetailsService {
 
     public Usuario getUsuarioById(String id);
 
+    Usuario insertUsuario(Usuario usuario);
 }

@@ -2,14 +2,17 @@ package com.todocine.dto;
 
 import com.todocine.model.Usuario;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 import java.util.Arrays;
 import java.util.Collection;
 
-@Document("Usuario")
+@Document(collection = "Usuario")
 public class UsuarioDTO implements UserDetails {
 
     @Id
@@ -27,6 +30,9 @@ public class UsuarioDTO implements UserDetails {
 
     private Boolean enabled;
 
+    @Version
+    private Integer version;
+
     public UsuarioDTO() {
     }
 
@@ -35,6 +41,7 @@ public class UsuarioDTO implements UserDetails {
         this.password = password;
     }
 
+    @PersistenceCreator
     public UsuarioDTO(String id, String username, String password, Boolean accountNonExpired,
                       Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled) {
         this.id = id;
@@ -67,6 +74,7 @@ public class UsuarioDTO implements UserDetails {
     public String getUsername() {
         return username;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -135,5 +143,27 @@ public class UsuarioDTO implements UserDetails {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", accountNonExpired=" + accountNonExpired +
+                ", accountNonLocked=" + accountNonLocked +
+                ", credentialsNonExpired=" + credentialsNonExpired +
+                ", enabled=" + enabled +
+                ", version=" + version +
+                '}';
     }
 }

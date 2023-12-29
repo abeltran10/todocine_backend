@@ -2,10 +2,6 @@ package com.todocine.model;
 
 import com.todocine.dto.UsuarioDTO;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.security.core.GrantedAuthority;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 public class Usuario {
 
@@ -123,8 +119,5 @@ public class Usuario {
         this.enabled = enabled;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList((GrantedAuthority) () -> "USER");
-    }
 
 }
