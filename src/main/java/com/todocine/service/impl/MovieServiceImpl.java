@@ -29,7 +29,7 @@ public class MovieServiceImpl implements MovieService {
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-                    .url("https://api.themoviedb.org/3/search/movie?query=" + name + "&include_adult=false&language=en-US&page=1")
+                    .url("https://api.themoviedb.org/3/search/movie?query=" + name + "&include_adult=false&language=es-ES&page=1")
                     .get()
                     .addHeader("accept", "application/json")
                     .addHeader("Authorization", "Bearer " + API_TOKEN)
