@@ -17,7 +17,6 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping(value = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
-
     public ResponseEntity getMovie(@PathVariable("name") String name) {
         return movieService.getMovieByName(name);
     }

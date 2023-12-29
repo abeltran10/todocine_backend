@@ -39,17 +39,16 @@ public class MovieServiceImpl implements MovieService {
 
             String body = response.body().string();
 
-            logger.info(body);
-
             entity = new ResponseEntity<>(body, HttpStatus.OK);
 
             logger.info(entity.getBody().toString());
 
         } catch (IOException e) {
+            entity =  new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
             throw new RuntimeException(e);
+        } finally {
+            return entity;
         }
-
-        return entity;
     }
 
 }
