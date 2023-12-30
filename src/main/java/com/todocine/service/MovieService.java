@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface MovieService {
 
-    public ResponseEntity getMovieByName(String name);
+    public ResponseEntity getMovieByName(String name, Integer pagina);
 }

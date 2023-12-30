@@ -21,7 +21,7 @@ public class MovieServiceImpl implements MovieService {
     @Value("${tmdb.api.token}")
     private String API_TOKEN;
 
-   public ResponseEntity getMovieByName(String name) {
+   public ResponseEntity getMovieByName(String name, Integer pagina) {
 
         ResponseEntity entity = null;
 
@@ -29,7 +29,7 @@ public class MovieServiceImpl implements MovieService {
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-                    .url("https://api.themoviedb.org/3/search/movie?query=" + name + "&include_adult=false&language=es-ES&page=1")
+                    .url("https://api.themoviedb.org/3/search/movie?query=" + name + "&include_adult=false&language=es-ES&page=" + pagina)
                     .get()
                     .addHeader("accept", "application/json")
                     .addHeader("Authorization", "Bearer " + API_TOKEN)
