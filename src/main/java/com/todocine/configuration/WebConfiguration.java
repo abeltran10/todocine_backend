@@ -3,7 +3,6 @@ package com.todocine.configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,8 +23,6 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebConfiguration {
 
     private Logger logger = LoggerFactory.getLogger(WebConfiguration.class);
-
-    String[] resources = new String[] { "/include/**", "/js/**", "/css/**"};
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -56,16 +53,15 @@ public class WebConfiguration {
 
         AuthenticationConfiguration authenticationManagerConfiguration = http.getSharedObject(AuthenticationConfiguration.class);
 
-        http.csrf(csfr -> csfr.disable())
+        http.cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(resources).permitAll()
+                        .requestMatchers("/js/**", "/css/*", "/index.html").permitAll()
                         .requestMatchers("/", "/login", "/logout").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/")
-                        .failureUrl("/login?error=true")
-                        .isCustomLoginPage())
+                        .failureUrl("/login?error=true"))
                 .logout(logout -> logout.logoutUrl("/logout"))
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(authenticationManagerConfiguration)))
                 .addFilter(new JWTAuthorisationFilter(authenticationManager(authenticationManagerConfiguration)));
