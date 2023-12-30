@@ -25,6 +25,7 @@ public class WebConfiguration {
 
     private Logger logger = LoggerFactory.getLogger(WebConfiguration.class);
 
+    String[] resources = new String[] { "/include/**", "/js/**", "/css/**"};
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -56,7 +57,9 @@ public class WebConfiguration {
         AuthenticationConfiguration authenticationManagerConfiguration = http.getSharedObject(AuthenticationConfiguration.class);
 
         http.csrf(csfr -> csfr.disable())
-                .authorizeHttpRequests(request -> request.requestMatchers("/", "/login", "/logout").permitAll()
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(resources).permitAll()
+                        .requestMatchers("/", "/login", "/logout").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/")
                         .loginProcessingUrl("/login")
