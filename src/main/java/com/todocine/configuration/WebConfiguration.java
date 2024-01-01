@@ -1,5 +1,6 @@
 package com.todocine.configuration;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,7 +34,6 @@ public class WebConfiguration {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        logger.info("provider");
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService);
@@ -53,16 +52,19 @@ public class WebConfiguration {
 
         AuthenticationConfiguration authenticationManagerConfiguration = http.getSharedObject(AuthenticationConfiguration.class);
 
-        http.cors(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable())
+        http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/js/**", "/css/*", "/index.html").permitAll()
-                        .requestMatchers("/", "/login", "/logout").permitAll()
+                        .requestMatchers("/", "/login").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/")
                         .loginProcessingUrl("/login")
-                        .failureUrl("/login?error=true"))
-                .logout(logout -> logout.logoutUrl("/logout"))
+                        .failureUrl("/login?error=true")
+                        .isCustomLoginPage())
+                .logout(logout -> logout.logoutUrl("/logout")
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }))
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(authenticationManagerConfiguration)))
                 .addFilter(new JWTAuthorisationFilter(authenticationManager(authenticationManagerConfiguration)));
 
