@@ -6,7 +6,7 @@ Todo Cine is an API REST to manage movies from [TMBD](https://www.themoviedb.org
 
 ## Code
 
-Todo Cine web app is developed with [Java and Springboot in backend](https://github.com/abeltran10/todocine_backend) and [Javascript's react framework in frontend](https://github.com/abeltran10/todo_cine_frontend)
+Todo Cine web app is developed with [Java and Springboot in backend](https://github.com/abeltran10/todocine_backend) and [Javascript's react framework in frontend](https://github.com/abeltran10/todo_cine_frontend). It's NoSQL database to manage users, hosted in [MongoDB Cloud](https://cloud.mongodb.com/)
 
 
 /src/main/resources/application.properties and Constants files are missing in order you to creat them for your need
