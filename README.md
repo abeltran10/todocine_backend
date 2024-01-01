@@ -11,11 +11,11 @@ Todo Cine web app is developed with [Java and Springboot in backend](https://git
 
 /src/main/resources/application.properties and Constants files are missing in order you to creat them for your need
 
-##Releases
+## Releases
 
 At the moment there is one [beta release](https://github.com/abeltran10/todocine_backend/releases/tag/v1.0)
 
-##Install
+## Install
 
 1- Download one [v1.0-beta.1](https://github.com/abeltran10/todocine_backend/releases/tag/v1.0) release compressed file 
 2- Add application.properties and Constants.java files to project
