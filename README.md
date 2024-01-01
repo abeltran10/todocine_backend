@@ -2,7 +2,7 @@
 
 ## What is Todo Cine
 
-Todo Cine is an API REST to manage movies from [TMBD](https://www.themoviedb.org/) 
+Todo Cine is an API REST to manage movies from [TMDB](https://www.themoviedb.org/) 
 
 ## Code
 
