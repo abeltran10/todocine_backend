@@ -34,7 +34,6 @@ public class WebConfiguration {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        logger.info("provider");
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService);
@@ -61,8 +60,12 @@ public class WebConfiguration {
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/")
                         .loginProcessingUrl("/login")
-                        .failureUrl("/login?error=true"))
-                .logout(logout -> logout.logoutUrl("/logout"))
+                        .failureUrl("/login?error=true")
+                        .defaultSuccessUrl("/")
+                        .isCustomLoginPage())
+                .logout(logout -> logout.logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                )
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(authenticationManagerConfiguration)))
                 .addFilter(new JWTAuthorisationFilter(authenticationManager(authenticationManagerConfiguration)));
 
