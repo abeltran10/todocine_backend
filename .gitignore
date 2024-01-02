@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+/src/main/java/com/todocine/configuration/Constants.java
+/src/main/resources/application.properties
+
 ### STS ###
 .apt_generated
 .classpath
@@ -31,4 +34,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
 
