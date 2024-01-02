@@ -1,6 +1,8 @@
 package com.todocine;
 
 
+import com.todocine.dao.UsuarioDAO;
+import com.todocine.dto.UsuarioDTO;
 import com.todocine.exceptions.BadGateWayException;
 import com.todocine.model.MoviePage;
 import com.todocine.service.MovieService;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,11 +26,12 @@ class TodocineApplicationTests {
 	@Autowired
 	private MovieService movieService;
 
+	@Autowired
+	private UsuarioDAO usuarioDAO;
 
 	@Test
 	void contextLoads() {
 	}
-
 
 
 	@Test
@@ -38,6 +42,18 @@ class TodocineApplicationTests {
 
 
 	}
+
+	@Test
+	void getUsuarioByName() {
+		List<UsuarioDTO> usuarioDTOS = usuarioDAO.findByUsername("user1234");
+
+		LOG.info(usuarioDTOS.toString());
+
+		assertTrue (usuarioDTOS.get(0).getUsername().equals("user1234"));
+
+	}
+
+
 
 
 
