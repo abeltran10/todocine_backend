@@ -18,9 +18,19 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping("/{username}")
-    public Usuario getUsuario(@NotBlank @PathVariable("username") String username) {
+    public Usuario getUsuarioByName(@NotBlank @PathVariable("username") String username) {
         logger.info("getUsuario");
-        return new Usuario((UsuarioDTO) usuarioService.loadUserByUsername(username));
+        UsuarioDTO usuarioDTO = (UsuarioDTO) usuarioService.loadUserByUsername(username);
+        Usuario usuario = new Usuario();
+
+        usuario.setId(usuarioDTO.getId());
+        usuario.setUsername(usuarioDTO.getUsername());
+        usuario.setAccountNonExpired(usuarioDTO.getAccountNonExpired());
+        usuario.setAccountNonLocked(usuarioDTO.getAccountNonLocked());
+        usuario.setEnabled(usuarioDTO.getEnabled());
+        usuario.setCredentialsNonExpired(usuarioDTO.getCredentialsNonExpired());
+
+        return usuario;
     }
 
     @PostMapping
