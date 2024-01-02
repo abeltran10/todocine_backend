@@ -57,6 +57,11 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>
@@ -80,6 +85,17 @@
 			</activation>
 			<properties>
 				<spring.profiles.active>dev</spring.profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<activation>
+				<property>
+					<name>test</name>
+				</property>
+			</activation>
+			<properties>
+				<spring.profiles.active>test</spring.profiles.active>
 			</properties>
 		</profile>
 	</profiles>
