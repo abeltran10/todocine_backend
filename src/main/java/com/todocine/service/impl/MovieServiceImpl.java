@@ -1,54 +1,61 @@
 package com.todocine.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.todocine.dao.MovieDAO;
+import com.todocine.exceptions.BadGateWayException;
+import com.todocine.model.Movie;
+import com.todocine.model.MoviePage;
 import com.todocine.service.MovieService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class MovieServiceImpl implements MovieService {
 
     Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
 
-    @Value("${tmdb.api.token}")
-    private String API_TOKEN;
+    @Autowired
+    private MovieDAO movieDAO;
 
-   public ResponseEntity getMovieByName(String name, Integer pagina) {
 
-        ResponseEntity entity = null;
+    @Override
+   public MoviePage getMovieByName(String name, Integer pagina) throws BadGateWayException {
+       ObjectMapper objectMapper = new ObjectMapper();
+        String body = null;
+        MoviePage moviePage = null;
 
         try {
-            OkHttpClient client = new OkHttpClient();
 
-            Request request = new Request.Builder()
-                    .url("https://api.themoviedb.org/3/search/movie?query=" + name + "&include_adult=false&language=es-ES&page=" + pagina)
-                    .get()
-                    .addHeader("accept", "application/json")
-                    .addHeader("Authorization", "Bearer " + API_TOKEN)
-                    .build();
+            body = movieDAO.getMoviesByName(name, pagina);
 
-            Response response = client.newCall(request).execute();
+            logger.info(body);
 
-            String body = response.body().string();
+            objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            moviePage = objectMapper.readValue(body, MoviePage.class);
 
-            entity = new ResponseEntity<>(body, HttpStatus.OK);
+            logger.info(moviePage.toString());
 
-            logger.info(entity.getBody().toString());
+       } catch (IOException e) {
+            throw new BadGateWayException(e.getMessage());
+       } finally {
+           return moviePage;
+       }
 
-        } catch (IOException e) {
-            entity =  new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-            throw new RuntimeException(e);
-        } finally {
-            return entity;
-        }
     }
 
 }
