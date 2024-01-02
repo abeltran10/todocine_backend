@@ -21,7 +21,6 @@ At the moment there is one [beta release](https://github.com/abeltran10/todocine
 2- Add application.properties and Constants.java files to project
 3- Execute [mvn clean install] command and deploy .jar file generated in one server. [Heroku](https://heroku.com) is a free choice
 
-There is one user by default: username = user1234; password = 1234
 ## Demo
 
 Demo v1.0-beta.1 release
