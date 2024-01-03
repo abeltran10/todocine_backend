@@ -1,9 +1,11 @@
 package com.todocine;
 
 
+import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.exceptions.BadGateWayException;
+import com.todocine.model.Movie;
 import com.todocine.model.MoviePage;
 import com.todocine.service.MovieService;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,9 @@ class TodocineApplicationTests {
 
 	@Autowired
 	private MovieService movieService;
+
+	@Autowired
+	private MovieDAO movieDAO;
 
 	@Autowired
 	private UsuarioDAO usuarioDAO;
@@ -51,6 +56,20 @@ class TodocineApplicationTests {
 
 		assertTrue (usuarioDTOS.get(0).getUsername().equals("user1234"));
 
+	}
+
+	@Test
+	void getMovieById() {
+		Movie movie = null;
+
+		try {
+			movie = movieService.getMovieById("13");
+		} catch (BadGateWayException e) {
+
+		} finally {
+			LOG.info(movie.toString());
+			assertTrue(movie.getId().equals("13"));
+		}
 	}
 
 
