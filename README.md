@@ -1,4 +1,4 @@
-![carta_pobla1](https://github.com/abeltran10/todocine_backend/assets/44783052/ec801cca-7b7c-42e9-9941-7998ff480634)# Todo Cine
+Todo Cine
 
 ## What is Todo Cine
 
