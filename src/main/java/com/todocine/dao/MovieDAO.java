@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface MovieDAO {
 
+    String getMovieById(String id) throws IOException;
+
     String getMoviesByName(String name, Integer pagina) throws IOException;
 }

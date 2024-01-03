@@ -1,18 +1,24 @@
 package com.todocine.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MoviePage {
 
+    @JsonProperty("page")
     private Integer page;
 
+    @JsonProperty("results")
     private List<Movie> results;
 
+    @JsonProperty("total_pages")
     private Integer totalPages;
 
+    @JsonProperty("total_results")
     private Integer totalResults;
 
     public Integer getPage() {

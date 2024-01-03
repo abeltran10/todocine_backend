@@ -1,6 +1,5 @@
 package com.todocine.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.dao.MovieDAO;
@@ -8,21 +7,12 @@ import com.todocine.exceptions.BadGateWayException;
 import com.todocine.model.Movie;
 import com.todocine.model.MoviePage;
 import com.todocine.service.MovieService;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -34,18 +24,39 @@ public class MovieServiceImpl implements MovieService {
 
 
     @Override
+    public Movie getMovieById(String id) throws BadGateWayException{
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        Movie movie = null;
+
+        try {
+            String body = movieDAO.getMovieById(id);
+
+            logger.info(body);
+
+            movie = objectMapper.readValue(body, Movie.class);
+        } catch (IOException ex) {
+            throw new BadGateWayException(ex.getMessage());
+        } finally {
+            return movie;
+        }
+    }
+
+    @Override
    public MoviePage getMovieByName(String name, Integer pagina) throws BadGateWayException {
-       ObjectMapper objectMapper = new ObjectMapper();
-        String body = null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
         MoviePage moviePage = null;
 
         try {
 
-            body = movieDAO.getMoviesByName(name, pagina);
+            String body = movieDAO.getMoviesByName(name, pagina);
 
             logger.info(body);
 
-            objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
             moviePage = objectMapper.readValue(body, MoviePage.class);
 
             logger.info(moviePage.toString());

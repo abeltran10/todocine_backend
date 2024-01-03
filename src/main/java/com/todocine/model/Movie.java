@@ -1,41 +1,53 @@
 package com.todocine.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.MovieDTO;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Movie {
 
 
+    @JsonProperty("id")
     private String id;
 
+    @JsonProperty("original_title")
     private String originalTitle;
 
+    @JsonProperty("poster_path")
     private String posterPath;
 
+    @JsonProperty("overview")
     private String overview;
 
+    @JsonProperty("release_date")
     private Date releaseDate;
 
+    @JsonProperty("popularity")
     private Integer popularity;
 
+    @JsonProperty("vote_count")
     private Integer voteCount;
 
+    @JsonProperty("vote_average")
     private Double voteAverage;
 
+    @JsonProperty("genres")
+    private List<Genre> genres;
 
-    private List<Integer> genreIds;
-
+    @JsonProperty("original_language")
     private String originalLanguage;
 
     public Movie() {
     }
 
 
-    public Movie(String id, String originalTitle, String posterPath, String overview, Date releaseDate, Integer popularity, Integer voteCount, Double voteAverage, List<Integer> genreIds, String originalLanguage) {
+    public Movie(String id, String originalTitle, String posterPath, String overview, Date releaseDate, Integer popularity, Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.posterPath = posterPath;
@@ -44,7 +56,7 @@ public class Movie {
         this.popularity = popularity;
         this.voteCount = voteCount;
         this.voteAverage = voteAverage;
-        this.genreIds = genreIds;
+        this.genres = genres;
         this.originalLanguage = originalLanguage;
     }
 
@@ -57,7 +69,7 @@ public class Movie {
         this.popularity = movieDTO.getPopularity();
         this.voteCount = movieDTO.getVoteCount();
         this.voteAverage = movieDTO.getVoteAverage();
-        this.genreIds = movieDTO.getGenreIds();
+        this.genres = movieDTO.getGenreIds().stream().map(genreDTO ->  new Genre(genreDTO) ).collect(Collectors.toList());
         this.originalLanguage = movieDTO.getOriginalLanguage();
     }
 
@@ -125,12 +137,12 @@ public class Movie {
         this.voteAverage = voteAverage;
     }
 
-    public List<Integer> getGenreIds() {
-        return genreIds;
+    public List<Genre> getGenres() {
+        return genres;
     }
 
-    public void setGenreIds(List<Integer> genreIds) {
-        this.genreIds = genreIds;
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 
     public String getOriginalLanguage() {
@@ -152,7 +164,7 @@ public class Movie {
                 ", popularity=" + popularity +
                 ", voteCount=" + voteCount +
                 ", voteAverage=" + voteAverage +
-                ", genreIds=" + genreIds +
+                ", genreIds=" + genres +
                 ", originalLanguage='" + originalLanguage + '\'' +
                 '}';
     }
