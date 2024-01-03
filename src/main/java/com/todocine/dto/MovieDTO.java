@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Document(collection = "Movie")
 public class MovieDTO {
@@ -29,7 +30,7 @@ public class MovieDTO {
 
     private Double voteAverage;
 
-    private List<Integer> genreIds;
+    private List<GenreDTO> genreIds;
     private String originalLanguage;
 
     @Version
@@ -41,7 +42,7 @@ public class MovieDTO {
     @PersistenceCreator
     public MovieDTO(String id, String originalTitle, String posterPath, String overview, Date releaseDate,
                     Integer popularity, Integer voteCount, Double voteAverage,
-                    List<Integer> genreIds, String originalLanguage) {
+                    List<GenreDTO> genreIds, String originalLanguage) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.posterPath = posterPath;
@@ -63,7 +64,7 @@ public class MovieDTO {
         this.popularity = movie.getPopularity();
         this.voteCount = movie.getVoteCount();
         this.voteAverage = movie.getVoteAverage();
-        this.genreIds = movie.getGenreIds();
+        this.genreIds = movie.getGenres().stream().map(genre -> new GenreDTO(genre)).collect(Collectors.toList());
         this.originalLanguage = movie.getOriginalLanguage();
     }
 
@@ -131,11 +132,11 @@ public class MovieDTO {
         this.voteAverage = voteAverage;
     }
 
-    public List<Integer> getGenreIds() {
+    public List<GenreDTO> getGenreIds() {
         return genreIds;
     }
 
-    public void setGenreIds(List<Integer> genreIds) {
+    public void setGenreIds(List<GenreDTO> genreIds) {
         this.genreIds = genreIds;
     }
 
