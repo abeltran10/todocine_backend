@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -52,15 +53,15 @@ public class WebConfiguration {
 
         AuthenticationConfiguration authenticationManagerConfiguration = http.getSharedObject(AuthenticationConfiguration.class);
 
-        http.csrf(csrf -> csrf.disable())
+        http.cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/js/**", "/css/*", "/index.html").permitAll()
                         .requestMatchers("/", "/login").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/")
                         .loginProcessingUrl("/login")
-                        .failureUrl("/login?error=true")
-                        .isCustomLoginPage())
+                        .failureUrl("/login?error=true"))
                 .logout(logout -> logout.logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
                     response.setStatus(HttpServletResponse.SC_OK);
