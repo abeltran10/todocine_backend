@@ -26,8 +26,7 @@ application.properties loads properties from three files, one per environment (p
 
 Demo v2.0-beta.1 release
 
-![Captura desde 2024-01-03 20-59-56](https://github.com/abeltran10/todocine_backend/assets/44783052/b0817c86-ba84-4bda-bef3-7ca6b3eb2eb5)
-![Captura desde 2024-01-03 21-00-38](https://github.com/abeltran10/todocine_backend/assets/44783052/ab390a81-2837-43d7-976e-53c3968f8fee)
-![Captura desde 2024-01-03 21-01-05](https://github.com/abeltran10/todocine_backend/assets/44783052/9696ebdc-3bc5-4e60-9993-57b096c8087a)
+[output2.webm](https://github.com/abeltran10/todocine_backend/assets/44783052/9abbe013-cb8e-40dd-a2d8-8627ab89fc0a)
+
 
 
