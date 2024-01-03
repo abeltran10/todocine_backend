@@ -1,6 +1,7 @@
 package com.todocine.dto;
 
 import com.todocine.model.Movie;
+import com.todocine.model.Video;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Version;
@@ -22,7 +23,7 @@ public class MovieDTO {
 
     private String overview;
 
-    private Date releaseDate;
+    private String releaseDate;
 
     private Integer popularity;
 
@@ -33,6 +34,8 @@ public class MovieDTO {
     private List<GenreDTO> genreIds;
     private String originalLanguage;
 
+    private List<VideosDTO> videos;
+
     @Version
     private Integer version;
 
@@ -40,9 +43,9 @@ public class MovieDTO {
     }
 
     @PersistenceCreator
-    public MovieDTO(String id, String originalTitle, String posterPath, String overview, Date releaseDate,
+    public MovieDTO(String id, String originalTitle, String posterPath, String overview, String releaseDate,
                     Integer popularity, Integer voteCount, Double voteAverage,
-                    List<GenreDTO> genreIds, String originalLanguage) {
+                    List<GenreDTO> genreIds, String originalLanguage, List<VideosDTO> videos) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.posterPath = posterPath;
@@ -53,6 +56,7 @@ public class MovieDTO {
         this.voteAverage = voteAverage;
         this.genreIds = genreIds;
         this.originalLanguage = originalLanguage;
+        this.videos = videos;
     }
 
     public MovieDTO(Movie movie) {
@@ -66,6 +70,7 @@ public class MovieDTO {
         this.voteAverage = movie.getVoteAverage();
         this.genreIds = movie.getGenres().stream().map(genre -> new GenreDTO(genre)).collect(Collectors.toList());
         this.originalLanguage = movie.getOriginalLanguage();
+        this.videos = movie.getVideos().getResults().stream().map(video -> new VideosDTO(video)).collect(Collectors.toList());
     }
 
     public String getId() {
@@ -100,11 +105,11 @@ public class MovieDTO {
         this.overview = overview;
     }
 
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -154,5 +159,13 @@ public class MovieDTO {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public List<VideosDTO> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<VideosDTO> videos) {
+        this.videos = videos;
     }
 }

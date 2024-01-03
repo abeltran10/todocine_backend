@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.MovieDTO;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +28,7 @@ public class Movie {
     private String overview;
 
     @JsonProperty("release_date")
-    private Date releaseDate;
+    private String releaseDate;
 
     @JsonProperty("popularity")
     private Integer popularity;
@@ -43,11 +45,15 @@ public class Movie {
     @JsonProperty("original_language")
     private String originalLanguage;
 
+    @JsonProperty("videos")
+    private VideoPage videos;
+
     public Movie() {
     }
 
 
-    public Movie(String id, String originalTitle, String posterPath, String overview, Date releaseDate, Integer popularity, Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage) {
+    public Movie(String id, String originalTitle, String posterPath, String overview, String releaseDate, Integer popularity,
+                 Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, VideoPage videos) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.posterPath = posterPath;
@@ -58,6 +64,7 @@ public class Movie {
         this.voteAverage = voteAverage;
         this.genres = genres;
         this.originalLanguage = originalLanguage;
+        this.videos = videos;
     }
 
     public Movie(MovieDTO movieDTO) {
@@ -105,11 +112,11 @@ public class Movie {
         this.overview = overview;
     }
 
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -153,6 +160,14 @@ public class Movie {
         this.originalLanguage = originalLanguage;
     }
 
+    public VideoPage getVideos() {
+        return videos;
+    }
+
+    public void setVideos(VideoPage videos) {
+        this.videos = videos;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -160,12 +175,13 @@ public class Movie {
                 ", originalTitle='" + originalTitle + '\'' +
                 ", posterPath='" + posterPath + '\'' +
                 ", overview='" + overview + '\'' +
-                ", releaseDate=" + releaseDate +
+                ", releaseDate='" + releaseDate + '\'' +
                 ", popularity=" + popularity +
                 ", voteCount=" + voteCount +
                 ", voteAverage=" + voteAverage +
-                ", genreIds=" + genres +
+                ", genres=" + genres +
                 ", originalLanguage='" + originalLanguage + '\'' +
+                ", videos=" + videos +
                 '}';
     }
 }

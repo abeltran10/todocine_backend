@@ -64,11 +64,11 @@ class TodocineApplicationTests {
 
 		try {
 			movie = movieService.getMovieById("13");
-		} catch (BadGateWayException e) {
-
+		}  catch (BadGateWayException e) {
+			throw new RuntimeException(e);
 		} finally {
 			LOG.info(movie.toString());
-			assertTrue(movie.getId().equals("13"));
+			assertTrue(movie.getVideos() != null);
 		}
 	}
 

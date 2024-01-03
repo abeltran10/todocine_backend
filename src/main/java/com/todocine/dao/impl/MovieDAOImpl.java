@@ -25,7 +25,7 @@ public class MovieDAOImpl implements MovieDAO {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://api.themoviedb.org/3/movie/" + id + "?language=es-ES")
+                .url("https://api.themoviedb.org/3/movie/" + id + "?language=es-ES&append_to_response=videos")
                 .get()
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer " + API_TOKEN)

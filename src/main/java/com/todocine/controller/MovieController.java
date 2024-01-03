@@ -20,8 +20,9 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public Movie getMovieById(@PathVariable("id") String id) {
-        return null;
+    public Movie getMovieById(@PathVariable("id") String id) throws BadGateWayException {
+        return movieService.getMovieById(id);
+
     }
 
 }
