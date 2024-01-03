@@ -1,4 +1,4 @@
-# Todo Cine
+![carta_pobla1](https://github.com/abeltran10/todocine_backend/assets/44783052/ec801cca-7b7c-42e9-9941-7998ff480634)# Todo Cine
 
 ## What is Todo Cine
 
@@ -13,16 +13,20 @@ application.properties load properties from three files, one per environment (pr
 
 ## Releases
 
-At the moment there is one [beta release](https://github.com/abeltran10/todocine_backend/releases/tag/v1.0)
+- [v1.0](https://github.com/abeltran10/todocine_backend/releases/tag/v1.0)
+- [v2.0](https://github.com/abeltran10/todocine_backend/releases/tag/v2.0)
 
 ## Install
 
-1- Download one [v1.0-beta.1](https://github.com/abeltran10/todocine_backend/releases/tag/v1.0) release compressed file 
+1- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v2.0) compressed file 
 2- Add application.properties and Constants.java files to project
 3- Execute [mvn clean install] command and deploy .jar file generated in one server. [Heroku](https://heroku.com) is a free choice
 
 ## Demo
 
-Demo v1.0-beta.1 release
+Demo v2.0-beta.1 release
 
-[cine.webm](https://github.com/abeltran10/todocine_backend/assets/44783052/bbdcd328-0bf3-453a-aab3-0a7fafa761e5)
+![Captura desde 2024-01-03 21-01-05](https://github.com/abeltran10/todocine_backend/assets/44783052/9696ebdc-3bc5-4e60-9993-57b096c8087a)
+![Captura desde 2024-01-03 21-00-38](https://github.com/abeltran10/todocine_backend/assets/44783052/ab390a81-2837-43d7-976e-53c3968f8fee)
+![Captura desde 2024-01-03 20-59-56](https://github.com/abeltran10/todocine_backend/assets/44783052/b0817c86-ba84-4bda-bef3-7ca6b3eb2eb5)
+
