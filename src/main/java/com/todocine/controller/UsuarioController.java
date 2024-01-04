@@ -23,6 +23,7 @@ public class UsuarioController {
     public Usuario getUsuarioByName(@NotBlank @PathVariable("username") String username) throws ResourceNotFoundException {
         logger.info("getUsuarioByName");
         Usuario usuario = null;
+
         try {
             UsuarioDTO usuarioDTO = (UsuarioDTO) usuarioService.loadUserByUsername(username);
             usuario = new Usuario();
@@ -39,6 +40,7 @@ public class UsuarioController {
             return usuario;
         }
     }
+
     @PostMapping
     public Usuario insertUsuario(@Valid @RequestBody Usuario usuario) {
         return usuarioService.insertUsuario(usuario);

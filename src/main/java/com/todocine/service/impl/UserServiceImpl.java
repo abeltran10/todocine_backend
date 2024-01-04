@@ -2,6 +2,7 @@ package com.todocine.service.impl;
 
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.exceptions.ResourceNotFoundException;
 import com.todocine.model.Usuario;
 import com.todocine.service.UsuarioService;
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UsuarioService {
         log.info(dtos.toString());
 
         return dtos.get(0);
+
     }
 
     @Override
