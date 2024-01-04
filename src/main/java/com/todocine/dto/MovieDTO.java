@@ -19,6 +19,8 @@ public class MovieDTO {
 
     private String originalTitle;
 
+    private String title;
+
     private String posterPath;
 
     private String overview;
@@ -43,11 +45,12 @@ public class MovieDTO {
     }
 
     @PersistenceCreator
-    public MovieDTO(String id, String originalTitle, String posterPath, String overview, String releaseDate,
+    public MovieDTO(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
                     Integer popularity, Integer voteCount, Double voteAverage,
                     List<GenreDTO> genreIds, String originalLanguage, List<VideosDTO> videos) {
         this.id = id;
         this.originalTitle = originalTitle;
+        this.title = title;
         this.posterPath = posterPath;
         this.overview = overview;
         this.releaseDate = releaseDate;
@@ -62,6 +65,7 @@ public class MovieDTO {
     public MovieDTO(Movie movie) {
         this.id = movie.getId();
         this.originalTitle = movie.getOriginalTitle();
+        this.title = movie.getTitle();
         this.posterPath = movie.getPosterPath();
         this.overview = movie.getOverview();
         this.releaseDate = movie.getReleaseDate();
@@ -87,6 +91,14 @@ public class MovieDTO {
 
     public void setOriginalTitle(String originalTitle) {
         this.originalTitle = originalTitle;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getPosterPath() {
