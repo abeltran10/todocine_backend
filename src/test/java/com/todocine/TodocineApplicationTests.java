@@ -72,6 +72,20 @@ class TodocineApplicationTests {
 		}
 	}
 
+	@Test
+	void getMoviesPlayingNow() {
+		MoviePage movies = null;
+
+		try {
+			movies = movieService.getMoviesPlayingNow("ES");
+		} catch (BadGateWayException e) {
+			throw new RuntimeException(e);
+		} finally {
+			LOG.info(movies.toString());
+			assertTrue(movies != null && !movies.getResults().isEmpty());
+		}
+	}
+
 
 
 

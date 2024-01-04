@@ -69,4 +69,29 @@ public class MovieServiceImpl implements MovieService {
 
     }
 
+    @Override
+    public MoviePage getMoviesPlayingNow(String country) throws BadGateWayException{
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        MoviePage moviePage = null;
+
+        try {
+
+            String body = movieDAO.getMoviesPlayingNow(country);
+
+            logger.info(body);
+
+
+            moviePage = objectMapper.readValue(body, MoviePage.class);
+
+            logger.info(moviePage.toString());
+
+        } catch (IOException e) {
+            throw new BadGateWayException(e.getMessage());
+        } finally {
+            return moviePage;
+        }
+    }
+
 }
