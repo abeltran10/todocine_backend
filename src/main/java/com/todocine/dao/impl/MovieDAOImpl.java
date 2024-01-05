@@ -63,11 +63,11 @@ public class MovieDAOImpl implements MovieDAO {
 
     }
 
-    public String getMoviesPlayingNow(String country) throws IOException {
+    public String getMoviesPlayingNow(String country, Integer pagina) throws IOException {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://api.themoviedb.org/3/movie/now_playing?language=es-ES&region=" + country)
+                .url("https://api.themoviedb.org/3/movie/now_playing?language=es-ES&region=" + country + "&page=" + pagina)
                 .get()
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer " + API_TOKEN)

@@ -77,7 +77,7 @@ class TodocineApplicationTests {
 		MoviePage movies = null;
 
 		try {
-			movies = movieService.getMoviesPlayingNow("ES");
+			movies = movieService.getMoviesPlayingNow("ES", 1);
 		} catch (BadGateWayException e) {
 			throw new RuntimeException(e);
 		} finally {

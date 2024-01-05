@@ -27,8 +27,8 @@ public class MovieController {
     }
 
     @GetMapping("now/{region}")
-    public MoviePage getMoviesPlayingNow(@NotBlank @PathVariable("region") String region) throws BadGateWayException {
-        return movieService.getMoviesPlayingNow(region);
+    public MoviePage getMoviesPlayingNow(@NotBlank @PathVariable("region") String region, @RequestParam("page") Integer pagina) throws BadGateWayException {
+        return movieService.getMoviesPlayingNow(region, pagina);
     }
 
 }

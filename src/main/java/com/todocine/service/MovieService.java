@@ -11,6 +11,6 @@ public interface MovieService {
 
     public MoviePage getMovieByName(String name, Integer pagina) throws BadGateWayException;
 
-    MoviePage getMoviesPlayingNow(String country) throws BadGateWayException;
+    MoviePage getMoviesPlayingNow(String country, Integer pagina) throws BadGateWayException;
 
 }

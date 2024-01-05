@@ -70,7 +70,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MoviePage getMoviesPlayingNow(String country) throws BadGateWayException{
+    public MoviePage getMoviesPlayingNow(String country, Integer pagina) throws BadGateWayException{
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
@@ -78,7 +78,7 @@ public class MovieServiceImpl implements MovieService {
 
         try {
 
-            String body = movieDAO.getMoviesPlayingNow(country);
+            String body = movieDAO.getMoviesPlayingNow(country, pagina);
 
             logger.info(body);
 

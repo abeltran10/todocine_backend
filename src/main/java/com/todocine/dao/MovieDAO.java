@@ -9,5 +9,5 @@ public interface MovieDAO {
 
     String getMoviesByName(String name, Integer pagina) throws IOException;
 
-    String getMoviesPlayingNow(String country) throws IOException;
+    String getMoviesPlayingNow(String country, Integer pagina) throws IOException;
 }
