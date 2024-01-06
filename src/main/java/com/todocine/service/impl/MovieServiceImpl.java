@@ -68,7 +68,7 @@ public class MovieServiceImpl implements MovieService {
 
             logger.info(moviePage.toString());
 
-            if (moviePage == null || moviePage.getPage().equals("null")) {
+            if (moviePage == null || moviePage.getResults() == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película con ese nombre");
             } else
                 return moviePage;
