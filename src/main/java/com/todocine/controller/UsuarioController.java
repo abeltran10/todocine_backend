@@ -38,7 +38,7 @@ public class UsuarioController {
 
             return usuario;
         } catch (UsernameNotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario o la contraseña son incorrectos");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El nombre de usuario no es correcto");
         }
     }
 
