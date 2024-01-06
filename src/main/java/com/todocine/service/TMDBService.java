@@ -1,9 +1,8 @@
-package com.todocine.dao;
+package com.todocine.service;
 
 import java.io.IOException;
-import java.util.List;
 
-public interface MovieDAO {
+public interface TMDBService {
 
     String getMovieById(String id) throws IOException;
 

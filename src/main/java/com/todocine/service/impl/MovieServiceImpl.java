@@ -2,10 +2,10 @@ package com.todocine.service.impl;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.todocine.dao.MovieDAO;
 import com.todocine.model.Movie;
 import com.todocine.model.MoviePage;
 import com.todocine.service.MovieService;
+import com.todocine.service.TMDBService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class MovieServiceImpl implements MovieService {
     Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
 
     @Autowired
-    private MovieDAO movieDAO;
+    private TMDBService tmdbService;
 
 
     @Override
@@ -32,7 +32,7 @@ public class MovieServiceImpl implements MovieService {
         Movie movie = null;
 
        try {
-           String body = movieDAO.getMovieById(id);
+           String body = tmdbService.getMovieById(id);
 
            logger.info(body);
 
@@ -59,7 +59,7 @@ public class MovieServiceImpl implements MovieService {
 
         try {
 
-            String body = movieDAO.getMoviesByName(name, pagina);
+            String body = tmdbService.getMoviesByName(name, pagina);
 
             logger.info(body);
 
@@ -87,7 +87,7 @@ public class MovieServiceImpl implements MovieService {
 
         try {
 
-            String body = movieDAO.getMoviesPlayingNow(country, pagina);
+            String body = tmdbService.getMoviesPlayingNow(country, pagina);
 
             logger.info(body);
 

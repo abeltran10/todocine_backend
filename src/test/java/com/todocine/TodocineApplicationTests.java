@@ -1,20 +1,17 @@
 package com.todocine;
 
 
-import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.model.Movie;
 import com.todocine.model.MoviePage;
 import com.todocine.service.MovieService;
+import com.todocine.service.TMDBService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.io.IOException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,7 +25,7 @@ class TodocineApplicationTests {
 	private MovieService movieService;
 
 	@Autowired
-	private MovieDAO movieDAO;
+	private TMDBService tmdbService;
 
 	@Autowired
 	private UsuarioDAO usuarioDAO;
