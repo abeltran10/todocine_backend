@@ -7,9 +7,11 @@ import com.todocine.service.UsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -34,9 +36,51 @@ public class UserServiceImpl implements UsuarioService {
 
     }
 
+
+
     @Override
-    public Usuario getUsuarioById(String id) {
-        return new Usuario(usuarioDAO.findById(id).get());
+    public Usuario getUsuarioById(String id) throws ResponseStatusException {
+        Usuario usuario = new Usuario();
+        UsuarioDTO usuarioDTO = usuarioDAO.findById(id).get();
+
+        if (usuarioDTO == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario con ese nombre");
+        else {
+            usuario.setId(usuarioDTO.getId());
+            usuario.setUsername(usuarioDTO.getUsername());
+            usuario.setAccountNonExpired(usuarioDTO.getAccountNonExpired());
+            usuario.setAccountNonLocked(usuarioDTO.getAccountNonLocked());
+            usuario.setEnabled(usuarioDTO.getEnabled());
+            usuario.setCredentialsNonExpired(usuarioDTO.getCredentialsNonExpired());
+
+            return usuario;
+        }
+    }
+
+    @Override
+    public Usuario getUsuarioByName(String username) throws ResponseStatusException {
+        log.info("getUsuarioByName");
+
+        Usuario usuario = new Usuario();
+        List<UsuarioDTO> usuarioDTOS = usuarioDAO.findByUsername(username);
+
+        if (usuarioDTOS == null || usuarioDTOS.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario con ese nombre");
+        else {
+            UsuarioDTO usuarioDTO = usuarioDTOS.get(0);
+
+            usuario.setId(usuarioDTO.getId());
+            usuario.setUsername(usuarioDTO.getUsername());
+            usuario.setAccountNonExpired(usuarioDTO.getAccountNonExpired());
+            usuario.setAccountNonLocked(usuarioDTO.getAccountNonLocked());
+            usuario.setEnabled(usuarioDTO.getEnabled());
+            usuario.setCredentialsNonExpired(usuarioDTO.getCredentialsNonExpired());
+
+            return usuario;
+        }
+
+
+
     }
 
     @Override
