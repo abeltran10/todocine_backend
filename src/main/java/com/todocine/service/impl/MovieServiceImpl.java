@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -43,10 +42,9 @@ public class MovieServiceImpl implements MovieService {
 
            if (movie.getId() == null || movie.getId().equals("null")) {
                logger.info("entra exception");
-               throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recurso no encontrado");
-           }
-
-           return movie;
+               throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película");
+           } else
+               return movie;
        } catch (IOException ex) {
            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
        }
@@ -71,10 +69,9 @@ public class MovieServiceImpl implements MovieService {
             logger.info(moviePage.toString());
 
             if (moviePage == null || moviePage.getPage().equals("null")) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recurso no encontrado");
-            }
-
-            return moviePage;
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película con ese nombre");
+            } else
+                return moviePage;
        } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
        }
@@ -98,10 +95,9 @@ public class MovieServiceImpl implements MovieService {
 
             logger.info(moviePage.toString());
             if (moviePage == null || moviePage.getPage().equals("null")) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recurso no encontrado");
-            }
-
-            return moviePage;
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la cartelera para esa región");
+            } else
+                return moviePage;
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
         }
