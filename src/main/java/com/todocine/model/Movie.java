@@ -21,6 +21,9 @@ public class Movie {
     @JsonProperty("original_title")
     private String originalTitle;
 
+    @JsonProperty("title")
+    private String title;
+
     @JsonProperty("poster_path")
     private String posterPath;
 
@@ -52,10 +55,11 @@ public class Movie {
     }
 
 
-    public Movie(String id, String originalTitle, String posterPath, String overview, String releaseDate, Integer popularity,
+    public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate, Integer popularity,
                  Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, VideoPage videos) {
         this.id = id;
         this.originalTitle = originalTitle;
+        this.title = title;
         this.posterPath = posterPath;
         this.overview = overview;
         this.releaseDate = releaseDate;
@@ -70,6 +74,7 @@ public class Movie {
     public Movie(MovieDTO movieDTO) {
         this.id = movieDTO.getId();
         this.originalTitle = movieDTO.getOriginalTitle();
+        this.title = movieDTO.getTitle();
         this.posterPath = movieDTO.getPosterPath();
         this.overview = movieDTO.getOverview();
         this.releaseDate = movieDTO.getReleaseDate();
@@ -94,6 +99,14 @@ public class Movie {
 
     public void setOriginalTitle(String originalTitle) {
         this.originalTitle = originalTitle;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getPosterPath() {

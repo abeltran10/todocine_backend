@@ -1,14 +1,12 @@
-package com.todocine.dao;
-
-import com.todocine.dto.MovieDTO;
-import org.springframework.http.ResponseEntity;
+package com.todocine.service;
 
 import java.io.IOException;
-import java.util.List;
 
-public interface MovieDAO {
+public interface TMDBService {
 
     String getMovieById(String id) throws IOException;
 
     String getMoviesByName(String name, Integer pagina) throws IOException;
+
+    String getMoviesPlayingNow(String country, Integer pagina) throws IOException;
 }

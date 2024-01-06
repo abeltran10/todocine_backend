@@ -1,21 +1,17 @@
 package com.todocine;
 
 
-import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.exceptions.BadGateWayException;
 import com.todocine.model.Movie;
 import com.todocine.model.MoviePage;
 import com.todocine.service.MovieService;
+import com.todocine.service.TMDBService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.io.IOException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -29,7 +25,7 @@ class TodocineApplicationTests {
 	private MovieService movieService;
 
 	@Autowired
-	private MovieDAO movieDAO;
+	private TMDBService tmdbService;
 
 	@Autowired
 	private UsuarioDAO usuarioDAO;
@@ -40,7 +36,7 @@ class TodocineApplicationTests {
 
 
 	@Test
-	void getMoviePage() throws BadGateWayException {
+	void getMoviePage() {
 		MoviePage moviePage = movieService.getMovieByName("Forrest", 1);
 
 		assertTrue (moviePage.getResults().size() == 20);
@@ -50,11 +46,11 @@ class TodocineApplicationTests {
 
 	@Test
 	void getUsuarioByName() {
-		List<UsuarioDTO> usuarioDTOS = usuarioDAO.findByUsername("user1234");
+		UsuarioDTO usuarioDTO = usuarioDAO.findByUsername("user1234");
 
-		LOG.info(usuarioDTOS.toString());
+		LOG.info(usuarioDTO.toString());
 
-		assertTrue (usuarioDTOS.get(0).getUsername().equals("user1234"));
+		assertTrue (usuarioDTO.getUsername().equals("user1234"));
 
 	}
 
@@ -64,11 +60,25 @@ class TodocineApplicationTests {
 
 		try {
 			movie = movieService.getMovieById("13");
-		}  catch (BadGateWayException e) {
-			throw new RuntimeException(e);
+		}  catch (Exception ex ) {
+			throw new RuntimeException(ex);
 		} finally {
 			LOG.info(movie.toString());
 			assertTrue(movie.getVideos() != null);
+		}
+	}
+
+	@Test
+	void getMoviesPlayingNow() {
+		MoviePage movies = null;
+
+		try {
+			movies = movieService.getMoviesPlayingNow("ES", 1);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		} finally {
+			LOG.info(movies.toString());
+			assertTrue(movies != null && !movies.getResults().isEmpty());
 		}
 	}
 

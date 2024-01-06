@@ -57,7 +57,7 @@ public class WebConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/js/**", "/css/*", "/index.html").permitAll()
-                        .requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/", "/login", "/error").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/")
                         .loginProcessingUrl("/login")
