@@ -2,7 +2,6 @@ package com.todocine.service.impl;
 
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.exceptions.ResourceNotFoundException;
 import com.todocine.model.Usuario;
 import com.todocine.service.UsuarioService;
 import org.slf4j.Logger;
@@ -27,11 +26,11 @@ public class UserServiceImpl implements UsuarioService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username);
 
-        List<UsuarioDTO> dtos = usuarioDAO.findByUsername(username);
+        List<UsuarioDTO> usuarioDTOS = usuarioDAO.findByUsername(username);
 
-        log.info(dtos.toString());
+        log.info(usuarioDTOS.toString());
 
-        return dtos.get(0);
+        return usuarioDTOS.get(0);
 
     }
 

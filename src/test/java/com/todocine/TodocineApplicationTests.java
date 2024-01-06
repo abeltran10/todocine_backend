@@ -4,7 +4,6 @@ package com.todocine;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.exceptions.BadGateWayException;
 import com.todocine.model.Movie;
 import com.todocine.model.MoviePage;
 import com.todocine.service.MovieService;
@@ -40,7 +39,7 @@ class TodocineApplicationTests {
 
 
 	@Test
-	void getMoviePage() throws BadGateWayException {
+	void getMoviePage() {
 		MoviePage moviePage = movieService.getMovieByName("Forrest", 1);
 
 		assertTrue (moviePage.getResults().size() == 20);
@@ -64,8 +63,8 @@ class TodocineApplicationTests {
 
 		try {
 			movie = movieService.getMovieById("13");
-		}  catch (BadGateWayException e) {
-			throw new RuntimeException(e);
+		}  catch (Exception ex ) {
+			throw new RuntimeException(ex);
 		} finally {
 			LOG.info(movie.toString());
 			assertTrue(movie.getVideos() != null);
@@ -78,7 +77,7 @@ class TodocineApplicationTests {
 
 		try {
 			movies = movieService.getMoviesPlayingNow("ES", 1);
-		} catch (BadGateWayException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
 			LOG.info(movies.toString());
