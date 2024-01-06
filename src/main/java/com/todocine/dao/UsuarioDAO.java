@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface UsuarioDAO extends MongoRepository<UsuarioDTO, String> {
 
-    List<UsuarioDTO> findByUsername(String username);
+    UsuarioDTO findByUsername(String username);
 
 }

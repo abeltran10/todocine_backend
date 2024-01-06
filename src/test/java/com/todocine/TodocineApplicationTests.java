@@ -49,11 +49,11 @@ class TodocineApplicationTests {
 
 	@Test
 	void getUsuarioByName() {
-		List<UsuarioDTO> usuarioDTOS = usuarioDAO.findByUsername("user1234");
+		UsuarioDTO usuarioDTO = usuarioDAO.findByUsername("user1234");
 
-		LOG.info(usuarioDTOS.toString());
+		LOG.info(usuarioDTO.toString());
 
-		assertTrue (usuarioDTOS.get(0).getUsername().equals("user1234"));
+		assertTrue (usuarioDTO.getUsername().equals("user1234"));
 
 	}
 

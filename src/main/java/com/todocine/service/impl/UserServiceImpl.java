@@ -28,11 +28,12 @@ public class UserServiceImpl implements UsuarioService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username);
 
-        List<UsuarioDTO> usuarioDTOS = usuarioDAO.findByUsername(username);
+        UsuarioDTO usuarioDTO = usuarioDAO.findByUsername(username);
 
-        log.info(usuarioDTOS.toString());
-
-        return usuarioDTOS.get(0);
+        if (usuarioDTO == null)
+            throw new UsernameNotFoundException("Usuario o contraseña incorrectos");
+        else
+            return usuarioDTO;
 
     }
 
@@ -62,13 +63,11 @@ public class UserServiceImpl implements UsuarioService {
         log.info("getUsuarioByName");
 
         Usuario usuario = new Usuario();
-        List<UsuarioDTO> usuarioDTOS = usuarioDAO.findByUsername(username);
+        UsuarioDTO usuarioDTO = usuarioDAO.findByUsername(username);
 
-        if (usuarioDTOS == null || usuarioDTOS.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario con ese nombre");
+        if (usuarioDTO == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario");
         else {
-            UsuarioDTO usuarioDTO = usuarioDTOS.get(0);
-
             usuario.setId(usuarioDTO.getId());
             usuario.setUsername(usuarioDTO.getUsername());
             usuario.setAccountNonExpired(usuarioDTO.getAccountNonExpired());
