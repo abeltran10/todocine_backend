@@ -102,7 +102,7 @@ public class MovieServiceImpl implements MovieService {
             moviePage = objectMapper.readValue(body, Paginator.class);
 
             logger.info(moviePage.toString());
-            if (moviePage == null || moviePage.getPage().equals("null")) {
+            if (moviePage == null || moviePage.getResults() == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la cartelera para esa región");
             } else
                 return moviePage;
@@ -111,11 +111,12 @@ public class MovieServiceImpl implements MovieService {
         }
     }
 
-    public List<Video> getVideosByMovieId(String id) throws ResponseStatusException{
+    @Override
+    public List<Video> getVideosByMovieId(String id) throws ResponseStatusException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-        List<Video> videos = new ArrayList<>();
+        List<Video> videos = null;
 
         try {
             String body = tmdbService.getVideoByMovieId(id);
@@ -127,12 +128,12 @@ public class MovieServiceImpl implements MovieService {
             if (map == null || map.get("id") == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se han encontrado videos");
             } else {
+                videos = new ArrayList<>();
                 videos.addAll((List<Video>) map.get("results"));
 
                 logger.info(videos.toString());
+                return videos;
             }
-
-            return videos;
         } catch (IOException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
         }
