@@ -74,7 +74,7 @@ public class MovieDTO {
         this.voteAverage = movie.getVoteAverage();
         this.genreIds = movie.getGenres().stream().map(genre -> new GenreDTO(genre)).collect(Collectors.toList());
         this.originalLanguage = movie.getOriginalLanguage();
-        this.videos = movie.getVideos().getResults().stream().map(video -> new VideosDTO(video)).collect(Collectors.toList());
+        this.videos = movie.getVideos().stream().map(video -> new VideosDTO(video)).collect(Collectors.toList());
     }
 
     public String getId() {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.model.Movie;
 import com.todocine.model.Paginator;
+import com.todocine.model.Video;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import org.slf4j.Logger;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -43,8 +47,12 @@ public class MovieServiceImpl implements MovieService {
            if (movie.getId() == null || movie.getId().equals("null")) {
                logger.info("entra exception");
                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película");
-           } else
+           } else {
+               List<Video> videos = new ArrayList<>();
+               movie.setVideos(videos);
+               movie.getVideos().addAll(getVideosByMovieId(id));
                return movie;
+           }
        } catch (IOException ex) {
            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
        }
@@ -99,6 +107,33 @@ public class MovieServiceImpl implements MovieService {
             } else
                 return moviePage;
         } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
+        }
+    }
+
+    public List<Video> getVideosByMovieId(String id) throws ResponseStatusException{
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        List<Video> videos = new ArrayList<>();
+
+        try {
+            String body = tmdbService.getVideoByMovieId(id);
+
+            logger.info(body);
+
+            Map<String,Object> map = objectMapper.readValue(body, Map.class);
+
+            if (map == null || map.get("id") == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se han encontrado videos");
+            } else {
+                videos.addAll((List<Video>) map.get("results"));
+
+                logger.info(videos.toString());
+            }
+
+            return videos;
+        } catch (IOException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
         }
     }

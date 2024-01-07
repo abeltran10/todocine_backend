@@ -46,14 +46,14 @@ public class Movie {
     private String originalLanguage;
 
     @JsonProperty("videos")
-    private VideoCollection videos;
+    private List<Video> videos;
 
     public Movie() {
     }
 
 
     public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate, Integer popularity,
-                 Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, VideoCollection videos) {
+                 Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, List<Video> videos) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -170,11 +170,11 @@ public class Movie {
         this.originalLanguage = originalLanguage;
     }
 
-    public VideoCollection getVideos() {
+    public List<Video> getVideos() {
         return videos;
     }
 
-    public void setVideos(VideoCollection videos) {
+    public void setVideos(List<Video> videos) {
         this.videos = videos;
     }
 

@@ -25,7 +25,7 @@ public class TMDBServiceImpl implements TMDBService {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://api.themoviedb.org/3/movie/" + id + "?language=es-ES&append_to_response=videos")
+                .url("https://api.themoviedb.org/3/movie/" + id + "?language=es-ES")
                 .get()
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer " + API_TOKEN)
@@ -39,6 +39,26 @@ public class TMDBServiceImpl implements TMDBService {
 
         return body;
 
+    }
+
+    @Override
+    public String getVideoByMovieId(String id) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://api.themoviedb.org/3/movie/" + id + "/videos?language=es-ES")
+                .get()
+                .addHeader("accept", "application/json")
+                .addHeader("Authorization", "Bearer " + API_TOKEN)
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        String body = response.body().string();
+
+        logger.info(body);
+
+        return body;
     }
 
 
