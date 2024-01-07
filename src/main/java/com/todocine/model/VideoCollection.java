@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VideoPage {
+public class VideoCollection {
 
     @JsonProperty("results")
     private List<Video> results;
 
-    public VideoPage() {
+    public VideoCollection() {
     }
 
-    public VideoPage(List<Video> results) {
+    public VideoCollection(List<Video> results) {
         this.results = results;
     }
 

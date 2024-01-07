@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.MovieDTO;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,14 +46,14 @@ public class Movie {
     private String originalLanguage;
 
     @JsonProperty("videos")
-    private VideoPage videos;
+    private VideoCollection videos;
 
     public Movie() {
     }
 
 
     public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate, Integer popularity,
-                 Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, VideoPage videos) {
+                 Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, VideoCollection videos) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -173,11 +170,11 @@ public class Movie {
         this.originalLanguage = originalLanguage;
     }
 
-    public VideoPage getVideos() {
+    public VideoCollection getVideos() {
         return videos;
     }
 
-    public void setVideos(VideoPage videos) {
+    public void setVideos(VideoCollection videos) {
         this.videos = videos;
     }
 
