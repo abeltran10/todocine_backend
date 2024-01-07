@@ -41,9 +41,7 @@ public class MovieServiceImpl implements MovieService {
                logger.info("entra exception");
                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película");
            } else {
-               List<Video> videos = new ArrayList<>();
-               movie.setVideos(videos);
-               movie.getVideos().addAll(getVideosByMovieId(id));
+               movie.setVideos(getVideosByMovieId(id));
 
                return movie;
            }

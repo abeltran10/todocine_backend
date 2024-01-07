@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.MovieDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -95,6 +96,7 @@ public class Movie {
         this.voteAverage = (Double) map.get("vote_average");
         this.genres = (List<Genre>) map.get("genres");
         this.originalLanguage = (String) map.get("original_language");
+        this.videos = new ArrayList<>();
     }
 
     public String getId() {
