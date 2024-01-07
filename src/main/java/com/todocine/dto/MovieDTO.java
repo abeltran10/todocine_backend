@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.Date;
 import java.util.List;
@@ -33,9 +34,11 @@ public class MovieDTO {
 
     private Double voteAverage;
 
+    @DocumentReference
     private List<GenreDTO> genreIds;
     private String originalLanguage;
 
+    @DocumentReference
     private List<VideosDTO> videos;
 
     @Version
