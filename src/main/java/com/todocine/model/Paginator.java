@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MoviePage {
+public class Paginator<T> {
 
     @JsonProperty("page")
     private Integer page;
 
     @JsonProperty("results")
-    private List<Movie> results;
+    private List<T> results;
 
     @JsonProperty("total_pages")
     private Integer totalPages;
@@ -29,11 +29,11 @@ public class MoviePage {
         this.page = page;
     }
 
-    public List<Movie> getResults() {
+    public List<T> getResults() {
         return results;
     }
 
-    public void setResults(List<Movie> results) {
+    public void setResults(List<T> results) {
         this.results = results;
     }
 

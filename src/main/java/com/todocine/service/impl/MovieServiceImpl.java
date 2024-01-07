@@ -3,7 +3,7 @@ package com.todocine.service.impl;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.model.Movie;
-import com.todocine.model.MoviePage;
+import com.todocine.model.Paginator;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import org.slf4j.Logger;
@@ -51,11 +51,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-   public MoviePage getMovieByName(String name, Integer pagina) throws ResponseStatusException {
+   public Paginator getMovieByName(String name, Integer pagina) throws ResponseStatusException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-        MoviePage moviePage = null;
+        Paginator<Movie> moviePage = null;
 
         try {
 
@@ -64,7 +64,7 @@ public class MovieServiceImpl implements MovieService {
             logger.info(body);
 
 
-            moviePage = objectMapper.readValue(body, MoviePage.class);
+            moviePage = objectMapper.readValue(body, Paginator.class);
 
             logger.info(moviePage.toString());
 
@@ -79,11 +79,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MoviePage getMoviesPlayingNow(String country, Integer pagina) throws ResponseStatusException {
+    public Paginator getMoviesPlayingNow(String country, Integer pagina) throws ResponseStatusException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-        MoviePage moviePage = null;
+        Paginator<Movie> moviePage = null;
 
         try {
 
@@ -91,7 +91,7 @@ public class MovieServiceImpl implements MovieService {
 
             logger.info(body);
 
-            moviePage = objectMapper.readValue(body, MoviePage.class);
+            moviePage = objectMapper.readValue(body, Paginator.class);
 
             logger.info(moviePage.toString());
             if (moviePage == null || moviePage.getPage().equals("null")) {

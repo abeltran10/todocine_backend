@@ -4,7 +4,7 @@ package com.todocine;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.model.Movie;
-import com.todocine.model.MoviePage;
+import com.todocine.model.Paginator;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class TodocineApplicationTests {
 
 	@Test
 	void getMoviePage() {
-		MoviePage moviePage = movieService.getMovieByName("Forrest", 1);
+		Paginator moviePage = movieService.getMovieByName("Forrest", 1);
 
 		assertTrue (moviePage.getResults().size() == 20);
 
@@ -70,7 +70,7 @@ class TodocineApplicationTests {
 
 	@Test
 	void getMoviesPlayingNow() {
-		MoviePage movies = null;
+		Paginator movies = null;
 
 		try {
 			movies = movieService.getMoviesPlayingNow("ES", 1);
