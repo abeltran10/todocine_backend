@@ -1,10 +1,14 @@
 package com.todocine.model;
 
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Paginator<T> {
@@ -20,6 +24,24 @@ public class Paginator<T> {
 
     @JsonProperty("total_results")
     private Integer totalResults;
+
+    public Paginator() {
+    }
+
+    public Paginator(Integer page, List<T> results, Integer totalPages, Integer totalResults) {
+        this.page = page;
+        this.results = results;
+        this.totalPages = totalPages;
+        this.totalResults = totalResults;
+    }
+
+
+    public Paginator (Map<String, Object> map) {
+        this.page = (Integer) map.get("page");
+        this.results = new ArrayList<>();
+        this.totalPages = (Integer) map.get("total_pages");
+        this.totalResults = (Integer) map.get("total_results");
+    }
 
     public Integer getPage() {
         return page;

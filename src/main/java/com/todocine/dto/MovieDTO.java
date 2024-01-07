@@ -28,7 +28,7 @@ public class MovieDTO {
 
     private String releaseDate;
 
-    private Integer popularity;
+    private Double popularity;
 
     private Integer voteCount;
 
@@ -49,7 +49,7 @@ public class MovieDTO {
 
     @PersistenceCreator
     public MovieDTO(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
-                    Integer popularity, Integer voteCount, Double voteAverage,
+                    Double popularity, Integer voteCount, Double voteAverage,
                     List<GenreDTO> genreIds, String originalLanguage, List<VideosDTO> videos) {
         this.id = id;
         this.originalTitle = originalTitle;
@@ -128,11 +128,11 @@ public class MovieDTO {
         this.releaseDate = releaseDate;
     }
 
-    public Integer getPopularity() {
+    public Double getPopularity() {
         return popularity;
     }
 
-    public void setPopularity(Integer popularity) {
+    public void setPopularity(Double popularity) {
         this.popularity = popularity;
     }
 

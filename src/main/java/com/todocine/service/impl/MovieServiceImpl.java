@@ -1,7 +1,6 @@
 package com.todocine.service.impl;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.todocine.model.Movie;
 import com.todocine.model.Paginator;
 import com.todocine.model.Video;
@@ -18,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -30,27 +30,21 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie getMovieById(String id) throws  ResponseStatusException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
         Movie movie = null;
 
        try {
-           String body = tmdbService.getMovieById(id);
-
-           logger.info(body);
-
-           movie = objectMapper.readValue(body, Movie.class);
+           movie = new Movie(tmdbService.getMovieById(id));
 
            logger.info(movie.toString());
 
-           if (movie.getId() == null || movie.getId().equals("null")) {
+           if (movie.getId() == null) {
                logger.info("entra exception");
                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película");
            } else {
                List<Video> videos = new ArrayList<>();
                movie.setVideos(videos);
                movie.getVideos().addAll(getVideosByMovieId(id));
+
                return movie;
            }
        } catch (IOException ex) {
@@ -60,19 +54,16 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
    public Paginator getMovieByName(String name, Integer pagina) throws ResponseStatusException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
         Paginator<Movie> moviePage = null;
 
         try {
 
-            String body = tmdbService.getMoviesByName(name, pagina);
+            Map<String, Object> map = tmdbService.getMoviesByName(name, pagina);
 
-            logger.info(body);
-
-
-            moviePage = objectMapper.readValue(body, Paginator.class);
+            moviePage = new Paginator<>(map);
+            List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
+                    .map(item -> new Movie(item)).collect(Collectors.toList());
+            moviePage.setResults(results);
 
             logger.info(moviePage.toString());
 
@@ -88,20 +79,19 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Paginator getMoviesPlayingNow(String country, Integer pagina) throws ResponseStatusException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
         Paginator<Movie> moviePage = null;
 
         try {
 
-            String body = tmdbService.getMoviesPlayingNow(country, pagina);
+            Map<String, Object> map = tmdbService.getMoviesPlayingNow(country, pagina);
 
-            logger.info(body);
-
-            moviePage = objectMapper.readValue(body, Paginator.class);
+            moviePage = new Paginator<>(map);
+            List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
+                    .map(item -> new Movie(item)).collect(Collectors.toList());
+            moviePage.setResults(results);
 
             logger.info(moviePage.toString());
+
             if (moviePage == null || moviePage.getResults() == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la cartelera para esa región");
             } else
@@ -113,27 +103,16 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Video> getVideosByMovieId(String id) throws ResponseStatusException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
         List<Video> videos = null;
 
         try {
-            String body = tmdbService.getVideoByMovieId(id);
+            videos = ((List<Map<String, Object>>) tmdbService.getVideoByMovieId(id).get("results")).stream()
+                    .map(item -> new Video(item)).collect(Collectors.toList());
 
-            logger.info(body);
-
-            Map<String,Object> map = objectMapper.readValue(body, Map.class);
-
-            if (map == null || map.get("id") == null) {
+            if (videos == null || videos.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se han encontrado videos");
-            } else {
-                videos = new ArrayList<>();
-                videos.addAll((List<Video>) map.get("results"));
-
-                logger.info(videos.toString());
+            } else
                 return videos;
-            }
         } catch (IOException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
         }

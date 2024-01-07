@@ -1,5 +1,7 @@
 package com.todocine.service.impl;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.service.TMDBService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Service
 public class TMDBServiceImpl implements TMDBService {
@@ -21,7 +24,10 @@ public class TMDBServiceImpl implements TMDBService {
 
 
     @Override
-    public String getMovieById(String id) throws IOException {
+    public Map<String, Object> getMovieById(String id) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -35,14 +41,19 @@ public class TMDBServiceImpl implements TMDBService {
 
         String body = response.body().string();
 
+        Map<String,Object> map = objectMapper.readValue(body, Map.class);
+
         logger.info(body);
 
-        return body;
+        return map;
 
     }
 
     @Override
-    public String getVideoByMovieId(String id) throws IOException {
+    public Map<String, Object> getVideoByMovieId(String id) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -56,14 +67,19 @@ public class TMDBServiceImpl implements TMDBService {
 
         String body = response.body().string();
 
+        Map<String,Object> map = objectMapper.readValue(body, Map.class);
+
         logger.info(body);
 
-        return body;
+        return map;
     }
 
 
     @Override
-    public String getMoviesByName(String name, Integer pagina) throws IOException {
+    public Map<String, Object> getMoviesByName(String name, Integer pagina) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -79,12 +95,19 @@ public class TMDBServiceImpl implements TMDBService {
 
         logger.info(body);
 
-        return body;
+        Map<String,Object> map = objectMapper.readValue(body, Map.class);
+
+        logger.info(map.toString());
+
+        return map;
 
     }
 
     @Override
-    public String getMoviesPlayingNow(String country, Integer pagina) throws IOException {
+    public Map<String, Object> getMoviesPlayingNow(String country, Integer pagina) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -98,9 +121,11 @@ public class TMDBServiceImpl implements TMDBService {
 
         String body = response.body().string();
 
+        Map<String,Object> map = objectMapper.readValue(body, Map.class);
+
         logger.info(body);
 
-        return body;
+        return map;
 
     }
 }
