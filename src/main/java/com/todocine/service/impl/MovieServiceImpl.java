@@ -35,11 +35,8 @@ public class MovieServiceImpl implements MovieService {
            logger.info(movie.toString());
 
            if (movie.getId() == null) {
-               logger.info("entra exception");
                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película");
            } else {
-               movie.setVideos(getVideosByMovieId(id));
-
                return movie;
            }
        } catch (IOException ex) {
@@ -88,23 +85,6 @@ public class MovieServiceImpl implements MovieService {
             } else
                 return moviePage;
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
-        }
-    }
-
-    @Override
-    public List<Video> getVideosByMovieId(String id) throws ResponseStatusException {
-        List<Video> videos = null;
-
-        try {
-            videos = ((List<Map<String, Object>>) tmdbService.getVideoByMovieId(id).get("results")).stream()
-                    .map(item -> new Video(item)).collect(Collectors.toList());
-
-            if (videos == null || videos.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se han encontrado videos");
-            } else
-                return videos;
-        } catch (IOException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
         }
     }

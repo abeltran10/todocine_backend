@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.MovieDTO;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -94,10 +95,20 @@ public class Movie {
         this.popularity = (Double) map.get("popularity");
         this.voteCount = (Integer) map.get("vote_count");
         this.voteAverage = (Double) map.get("vote_average");
-        this.genres = ((List<Map<String, Object>>) map.get("genres")).stream()
-                .map(item -> new Genre(item)).collect(Collectors.toList());
+
+        this.genres = (map.containsKey("genres")) ?
+                ((List<Map<String, Object>>) map.get("genres")).stream()
+                .map(item -> new Genre(item)).collect(Collectors.toList())
+                : ((List<Integer>) map.get("genre_ids")).stream()
+                .map(item -> new Genre(String.valueOf(item))).collect(Collectors.toList());
+
         this.originalLanguage = (String) map.get("original_language");
-        this.videos = new ArrayList<>();
+
+        Map<String, Object> objectMap = (map.containsKey("videos") && !(map.get("videos").equals("false")))
+                ? (Map<String, Object>) map.get("videos") : null;
+
+        this.videos = (objectMap != null) ? ((List<Map<String, Object>>) objectMap.get("results")).stream()
+                .map(item -> new Video(item)).collect(Collectors.toList()) : null;
     }
 
     public String getId() {

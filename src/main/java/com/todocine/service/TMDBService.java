@@ -7,8 +7,6 @@ public interface TMDBService {
 
     Map<String, Object> getMovieById(String id) throws IOException;
 
-    Map<String, Object> getVideoByMovieId(String id) throws IOException;
-
     Map<String, Object> getMoviesByName(String name, Integer pagina) throws IOException;
 
     Map<String, Object> getMoviesPlayingNow(String country, Integer pagina) throws IOException;

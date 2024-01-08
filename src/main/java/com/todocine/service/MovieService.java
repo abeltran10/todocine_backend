@@ -12,9 +12,7 @@ public interface MovieService {
 
     Movie getMovieById(String id) throws ResponseStatusException;
 
-    public List<Video> getVideosByMovieId(String id) throws ResponseStatusException;
-
-    public Paginator getMovieByName(String name, Integer pagina) throws ResponseStatusException;
+    Paginator getMovieByName(String name, Integer pagina) throws ResponseStatusException;
 
     Paginator getMoviesPlayingNow(String country, Integer pagina) throws ResponseStatusException;
 

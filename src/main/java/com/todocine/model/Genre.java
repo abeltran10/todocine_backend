@@ -18,6 +18,10 @@ public class Genre {
     public Genre() {
     }
 
+    public Genre(String id) {
+        this.id = id;
+    }
+
     public Genre(String id, String name) {
         this.id = id;
         this.name = name;
@@ -30,7 +34,7 @@ public class Genre {
 
     public Genre(Map<String, Object> map) {
         this.id = String.valueOf(map.get("id"));
-        this.name = (String) map.get("name");
+        this.name = (map.containsKey("name")) ? (String) map.get("name") : null;
     }
 
     public String getId() {
