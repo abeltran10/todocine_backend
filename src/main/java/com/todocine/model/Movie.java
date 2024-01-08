@@ -94,7 +94,8 @@ public class Movie {
         this.popularity = (Double) map.get("popularity");
         this.voteCount = (Integer) map.get("vote_count");
         this.voteAverage = (Double) map.get("vote_average");
-        this.genres = (List<Genre>) map.get("genres");
+        this.genres = ((List<Map<String, Object>>) map.get("genres")).stream()
+                .map(item -> new Genre(item)).collect(Collectors.toList());
         this.originalLanguage = (String) map.get("original_language");
         this.videos = new ArrayList<>();
     }

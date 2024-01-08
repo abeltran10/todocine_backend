@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,10 +29,8 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie getMovieById(String id) throws  ResponseStatusException {
-        Movie movie = null;
-
        try {
-           movie = new Movie(tmdbService.getMovieById(id));
+            Movie movie = new Movie(tmdbService.getMovieById(id));
 
            logger.info(movie.toString());
 
@@ -52,13 +49,11 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
    public Paginator getMovieByName(String name, Integer pagina) throws ResponseStatusException {
-        Paginator<Movie> moviePage = null;
-
-        try {
+       try {
 
             Map<String, Object> map = tmdbService.getMoviesByName(name, pagina);
 
-            moviePage = new Paginator<>(map);
+            Paginator<Movie> moviePage = new Paginator<>(map);
             List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
                     .map(item -> new Movie(item)).collect(Collectors.toList());
             moviePage.setResults(results);
@@ -77,13 +72,11 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Paginator getMoviesPlayingNow(String country, Integer pagina) throws ResponseStatusException {
-        Paginator<Movie> moviePage = null;
-
         try {
 
             Map<String, Object> map = tmdbService.getMoviesPlayingNow(country, pagina);
 
-            moviePage = new Paginator<>(map);
+            Paginator<Movie> moviePage = new Paginator<>(map);
             List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
                     .map(item -> new Movie(item)).collect(Collectors.toList());
             moviePage.setResults(results);
