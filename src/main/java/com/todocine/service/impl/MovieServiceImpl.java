@@ -100,21 +100,20 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Paginator getFavsByUsername(String usuarioId) throws ResponseStatusException {
+    public Paginator getFavsByUsername(String usuarioId, Integer page) throws ResponseStatusException {
         Paginator<Movie> paginator = new Paginator<>();
         List<Movie> movieList = new ArrayList<>();
         List<MovieDTO> movieDTOS = usuarioDAO.findById(usuarioId).get().getFavoritos();
 
-        logger.info(movieDTOS.toString());
-
         if (movieDTOS != null && !movieDTOS.isEmpty()) {
             movieList = movieDTOS.stream().map(movieDTO -> new Movie(movieDTO)).collect(Collectors.toList());
 
-            paginator.setPage(1);
-            paginator.setResults(movieList);
-
             int total = movieList.size()/21;
 
+            List<Movie> results = movieList.stream().skip((page - 1) * 20).limit(20).collect(Collectors.toList());
+
+            paginator.setPage(page);
+            paginator.setResults(results);
             paginator.setTotalPages(total + 1);
             paginator.setTotalResults(movieList.size());
 
