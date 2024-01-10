@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.MovieDTO;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,7 +34,7 @@ public class Movie {
     private String releaseDate;
 
     @JsonProperty("popularity")
-    private Integer popularity;
+    private Double popularity;
 
     @JsonProperty("vote_count")
     private Integer voteCount;
@@ -49,14 +49,18 @@ public class Movie {
     private String originalLanguage;
 
     @JsonProperty("videos")
-    private VideoPage videos;
+    private List<Video> videos;
 
     public Movie() {
     }
 
+    public Movie(String id) {
+        this.id = id;
+    }
 
-    public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate, Integer popularity,
-                 Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, VideoPage videos) {
+
+    public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate, Double popularity,
+                 Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, List<Video> videos) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -81,8 +85,34 @@ public class Movie {
         this.popularity = movieDTO.getPopularity();
         this.voteCount = movieDTO.getVoteCount();
         this.voteAverage = movieDTO.getVoteAverage();
-        this.genres = movieDTO.getGenreIds().stream().map(genreDTO ->  new Genre(genreDTO) ).collect(Collectors.toList());
+        this.genres = movieDTO.getGenreIds().stream().map(genreDTO ->  new Genre(genreDTO)).collect(Collectors.toList());
         this.originalLanguage = movieDTO.getOriginalLanguage();
+    }
+
+    public Movie(Map<String, Object> map) {
+        this.id = String.valueOf(map.get("id"));
+        this.originalTitle = (String) map.get("original_title");
+        this.title = (String) map.get("title");
+        this.posterPath = (String) map.get("poster_path");
+        this.overview = (String) map.get("overview");
+        this.releaseDate = (String) map.get("release_date");
+        this.popularity = (Double) map.get("popularity");
+        this.voteCount = (Integer) map.get("vote_count");
+        this.voteAverage = (Double) map.get("vote_average");
+
+        this.genres = (map.containsKey("genres")) ?
+                ((List<Map<String, Object>>) map.get("genres")).stream()
+                .map(item -> new Genre(item)).collect(Collectors.toList())
+                : ((List<Integer>) map.get("genre_ids")).stream()
+                .map(item -> new Genre(String.valueOf(item))).collect(Collectors.toList());
+
+        this.originalLanguage = (String) map.get("original_language");
+
+        Map<String, Object> objectMap = (map.containsKey("videos") && !(map.get("videos").equals("false")))
+                ? (Map<String, Object>) map.get("videos") : null;
+
+        this.videos = (objectMap != null) ? ((List<Map<String, Object>>) objectMap.get("results")).stream()
+                .map(item -> new Video(item)).collect(Collectors.toList()) : null;
     }
 
     public String getId() {
@@ -133,11 +163,11 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 
-    public Integer getPopularity() {
+    public Double getPopularity() {
         return popularity;
     }
 
-    public void setPopularity(Integer popularity) {
+    public void setPopularity(Double popularity) {
         this.popularity = popularity;
     }
 
@@ -173,11 +203,11 @@ public class Movie {
         this.originalLanguage = originalLanguage;
     }
 
-    public VideoPage getVideos() {
+    public List<Video> getVideos() {
         return videos;
     }
 
-    public void setVideos(VideoPage videos) {
+    public void setVideos(List<Video> videos) {
         this.videos = videos;
     }
 

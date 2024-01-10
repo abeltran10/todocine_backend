@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.VideosDTO;
 
+import java.util.Map;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Video {
 
@@ -39,6 +41,14 @@ public class Video {
         this.key = videosDTO.getKey();
         this.site = videosDTO.getSite();
         this.type = videosDTO.getType();
+    }
+
+    public Video(Map<String, Object> map) {
+        this.id = (String) map.get("id");
+        this.name = (String) map.get("name");
+        this.key = (String) map.get("key");
+        this.site = (String) map.get("site");
+        this.type = (String) map.get("type");
     }
 
     public String getId() {

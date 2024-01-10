@@ -1,9 +1,12 @@
 package com.todocine.service.impl;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.todocine.dao.MovieDAO;
+import com.todocine.dao.UsuarioDAO;
+import com.todocine.dto.MovieDTO;
 import com.todocine.model.Movie;
-import com.todocine.model.MoviePage;
+import com.todocine.model.Paginator;
+import com.todocine.model.Video;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import org.slf4j.Logger;
@@ -14,6 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -23,48 +30,40 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     private TMDBService tmdbService;
 
+    @Autowired
+    private MovieDAO movieDAO;
+
+    @Autowired
+    private UsuarioDAO usuarioDAO;
+
 
     @Override
-    public Movie getMovieById(String id) throws  ResponseStatusException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    public Movie getMovieById(String id) throws ResponseStatusException {
+        try {
+            Movie movie = new Movie(tmdbService.getMovieById(id));
 
-        Movie movie = null;
+            logger.info(movie.toString());
 
-       try {
-           String body = tmdbService.getMovieById(id);
-
-           logger.info(body);
-
-           movie = objectMapper.readValue(body, Movie.class);
-
-           logger.info(movie.toString());
-
-           if (movie.getId() == null || movie.getId().equals("null")) {
-               logger.info("entra exception");
-               throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película");
-           } else
-               return movie;
-       } catch (IOException ex) {
-           throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
-       }
+            if (movie.getId() == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película");
+            } else {
+                return movie;
+            }
+        } catch (IOException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
+        }
     }
 
     @Override
-   public MoviePage getMovieByName(String name, Integer pagina) throws ResponseStatusException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
-        MoviePage moviePage = null;
-
+    public Paginator getMovieByName(String name, Integer pagina) throws ResponseStatusException {
         try {
 
-            String body = tmdbService.getMoviesByName(name, pagina);
+            Map<String, Object> map = tmdbService.getMoviesByName(name, pagina);
 
-            logger.info(body);
-
-
-            moviePage = objectMapper.readValue(body, MoviePage.class);
+            Paginator<Movie> moviePage = new Paginator<>(map);
+            List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
+                    .map(item -> new Movie(item)).collect(Collectors.toList());
+            moviePage.setResults(results);
 
             logger.info(moviePage.toString());
 
@@ -72,35 +71,58 @@ public class MovieServiceImpl implements MovieService {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película con ese nombre");
             } else
                 return moviePage;
-       } catch (IOException e) {
+        } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
-       }
+        }
 
     }
 
     @Override
-    public MoviePage getMoviesPlayingNow(String country, Integer pagina) throws ResponseStatusException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
-        MoviePage moviePage = null;
-
+    public Paginator getMoviesPlayingNow(String country, Integer pagina) throws ResponseStatusException {
         try {
 
-            String body = tmdbService.getMoviesPlayingNow(country, pagina);
+            Map<String, Object> map = tmdbService.getMoviesPlayingNow(country, pagina);
 
-            logger.info(body);
-
-            moviePage = objectMapper.readValue(body, MoviePage.class);
+            Paginator<Movie> moviePage = new Paginator<>(map);
+            List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
+                    .map(item -> new Movie(item)).collect(Collectors.toList());
+            moviePage.setResults(results);
 
             logger.info(moviePage.toString());
-            if (moviePage == null || moviePage.getPage().equals("null")) {
+
+            if (moviePage == null || moviePage.getResults() == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la cartelera para esa región");
             } else
                 return moviePage;
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
         }
+    }
+
+    @Override
+    public Paginator getFavsByUsername(String usuarioId, Integer page) throws ResponseStatusException {
+        Paginator<Movie> paginator = new Paginator<>();
+        List<Movie> movieList = new ArrayList<>();
+        List<MovieDTO> movieDTOS = usuarioDAO.findById(usuarioId).get().getFavoritos();
+
+        if (movieDTOS != null && !movieDTOS.isEmpty()) {
+            movieList = movieDTOS.stream().map(movieDTO -> new Movie(movieDTO)).collect(Collectors.toList());
+
+            int total = movieList.size()/21;
+
+            List<Movie> results = movieList.stream().skip((page - 1) * 20).limit(20).collect(Collectors.toList());
+
+            paginator.setPage(page);
+            paginator.setResults(results);
+            paginator.setTotalPages(total + 1);
+            paginator.setTotalResults(movieList.size());
+
+            return paginator;
+
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay favoritos para el usuario");
+        }
+
     }
 
 }

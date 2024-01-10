@@ -1,8 +1,13 @@
 package com.todocine.service.impl;
 
+import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
+import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.model.Movie;
 import com.todocine.model.Usuario;
+import com.todocine.service.MovieService;
+import com.todocine.service.TMDBService;
 import com.todocine.service.UsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +18,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserServiceImpl implements UsuarioService {
@@ -23,6 +32,11 @@ public class UserServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioDAO usuarioDAO;
 
+    @Autowired
+    private MovieDAO movieDAO;
+
+    @Autowired
+    private TMDBService tmdbService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -41,20 +55,12 @@ public class UserServiceImpl implements UsuarioService {
 
     @Override
     public Usuario getUsuarioById(String id) throws ResponseStatusException {
-        Usuario usuario = new Usuario();
         UsuarioDTO usuarioDTO = usuarioDAO.findById(id).get();
 
         if (usuarioDTO == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario con ese nombre");
         else {
-            usuario.setId(usuarioDTO.getId());
-            usuario.setUsername(usuarioDTO.getUsername());
-            usuario.setAccountNonExpired(usuarioDTO.getAccountNonExpired());
-            usuario.setAccountNonLocked(usuarioDTO.getAccountNonLocked());
-            usuario.setEnabled(usuarioDTO.getEnabled());
-            usuario.setCredentialsNonExpired(usuarioDTO.getCredentialsNonExpired());
-
-            return usuario;
+            return new Usuario(usuarioDTO);
         }
     }
 
@@ -62,20 +68,12 @@ public class UserServiceImpl implements UsuarioService {
     public Usuario getUsuarioByName(String username) throws ResponseStatusException {
         log.info("getUsuarioByName");
 
-        Usuario usuario = new Usuario();
         UsuarioDTO usuarioDTO = usuarioDAO.findByUsername(username);
 
         if (usuarioDTO == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario");
         else {
-            usuario.setId(usuarioDTO.getId());
-            usuario.setUsername(usuarioDTO.getUsername());
-            usuario.setAccountNonExpired(usuarioDTO.getAccountNonExpired());
-            usuario.setAccountNonLocked(usuarioDTO.getAccountNonLocked());
-            usuario.setEnabled(usuarioDTO.getEnabled());
-            usuario.setCredentialsNonExpired(usuarioDTO.getCredentialsNonExpired());
-
-            return usuario;
+            return new Usuario(usuarioDTO);
         }
 
 
@@ -87,5 +85,54 @@ public class UserServiceImpl implements UsuarioService {
         UsuarioDTO usuarioDTO = usuarioDAO.save(new UsuarioDTO(usuario));
 
         return new Usuario(usuarioDTO);
+    }
+
+    @Override
+    public Usuario updateUsuario(String id, Usuario usuario) throws ResponseStatusException {
+       log.info("updateUsuario");
+        UsuarioDTO usuarioDTO = null;
+        try {
+            usuarioDTO = usuarioDAO.findById(id).get();
+            log.info(usuarioDTO.toString());
+            usuarioDTO.setPassword(usuario.getPassword());
+            usuarioDTO.setEnabled(usuario.getEnabled());
+            usuarioDTO.setAccountNonExpired(usuario.getAccountNonExpired());
+            usuarioDTO.setAccountNonLocked(usuario.getAccountNonLocked());
+            usuarioDTO.setCredentialsNonExpired(usuario.getCredentialsNonExpired());
+
+            log.info(usuario.getFavoritos().toString());
+
+            List<MovieDTO> movieDTOS = new ArrayList<>();
+            for (Movie movie : usuario.getFavoritos()) {
+                MovieDTO movieDTO = null;
+
+                try {
+                    movieDTO = movieDAO.findById(movie.getId()).get();
+                } catch (NoSuchElementException ex) {
+                    Movie mov = new Movie(tmdbService.getMovieById(movie.getId()));
+                    movieDTO = new MovieDTO(mov);
+                }
+
+                if (movieDTO == null) {
+                    Movie mov = new Movie(tmdbService.getMovieById(movieDTO.getId()));
+                    movieDTO = new MovieDTO(mov);
+                }
+
+                movieDTO = movieDAO.save(movieDTO);
+                movieDTOS.add(movieDTO);
+
+            }
+
+            usuarioDTO.setFavoritos(movieDTOS);
+            log.info(usuarioDTO.toString());
+
+            return new Usuario(usuarioDAO.save(usuarioDTO));
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario");
+        } catch (IOException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe la película para el usuario");
+        }
+
+
     }
 }

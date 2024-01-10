@@ -3,6 +3,9 @@ package com.todocine.model;
 import com.todocine.dto.UsuarioDTO;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Usuario {
 
     private String id;
@@ -20,7 +23,13 @@ public class Usuario {
 
     private Boolean enabled;
 
+    private List<Movie> favoritos;
+
     public Usuario() {
+    }
+
+    public Usuario(String id) {
+        this.id = id;
     }
 
     public Usuario(String username, String password) {
@@ -29,7 +38,7 @@ public class Usuario {
     }
 
     public Usuario(String id, String username, String password, Boolean accountNonExpired,
-                   Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled) {
+                   Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<Movie> favoritos) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -37,6 +46,7 @@ public class Usuario {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
+        this.favoritos = favoritos;
     }
 
     public Usuario(UsuarioDTO usuario) {
@@ -47,6 +57,7 @@ public class Usuario {
         this.accountNonLocked = usuario.isAccountNonLocked();
         this.credentialsNonExpired = usuario.isCredentialsNonExpired();
         this.enabled = usuario.isEnabled();
+        this.favoritos = usuario.getFavoritos().stream().map(movieDTO -> new Movie(movieDTO.getId())).collect(Collectors.toList());
     }
 
     public String getId() {
@@ -119,6 +130,14 @@ public class Usuario {
         this.enabled = enabled;
     }
 
+    public List<Movie> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(List<Movie> favoritos) {
+        this.favoritos = favoritos;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
@@ -129,6 +148,7 @@ public class Usuario {
                 ", accountNonLocked=" + accountNonLocked +
                 ", credentialsNonExpired=" + credentialsNonExpired +
                 ", enabled=" + enabled +
+                ", favoritos=" + favoritos +
                 '}';
     }
 }

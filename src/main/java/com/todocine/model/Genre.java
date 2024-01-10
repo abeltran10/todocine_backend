@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.GenreDTO;
 
+import java.util.Map;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Genre {
 
@@ -16,6 +18,10 @@ public class Genre {
     public Genre() {
     }
 
+    public Genre(String id) {
+        this.id = id;
+    }
+
     public Genre(String id, String name) {
         this.id = id;
         this.name = name;
@@ -24,6 +30,11 @@ public class Genre {
     public Genre(GenreDTO genreDTO) {
         this.id = genreDTO.getId();
         this.name = genreDTO.getName();
+    }
+
+    public Genre(Map<String, Object> map) {
+        this.id = String.valueOf(map.get("id"));
+        this.name = (map.containsKey("name")) ? (String) map.get("name") : null;
     }
 
     public String getId() {

@@ -6,7 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,15 +29,17 @@ public class MovieDTO {
 
     private String releaseDate;
 
-    private Integer popularity;
+    private Double popularity;
 
     private Integer voteCount;
 
     private Double voteAverage;
 
+    @DocumentReference
     private List<GenreDTO> genreIds;
     private String originalLanguage;
 
+    @DocumentReference
     private List<VideosDTO> videos;
 
     @Version
@@ -44,9 +48,13 @@ public class MovieDTO {
     public MovieDTO() {
     }
 
+    public MovieDTO(String id) {
+        this.id = id;
+    }
+
     @PersistenceCreator
     public MovieDTO(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
-                    Integer popularity, Integer voteCount, Double voteAverage,
+                    Double popularity, Integer voteCount, Double voteAverage,
                     List<GenreDTO> genreIds, String originalLanguage, List<VideosDTO> videos) {
         this.id = id;
         this.originalTitle = originalTitle;
@@ -74,7 +82,7 @@ public class MovieDTO {
         this.voteAverage = movie.getVoteAverage();
         this.genreIds = movie.getGenres().stream().map(genre -> new GenreDTO(genre)).collect(Collectors.toList());
         this.originalLanguage = movie.getOriginalLanguage();
-        this.videos = movie.getVideos().getResults().stream().map(video -> new VideosDTO(video)).collect(Collectors.toList());
+        this.videos = movie.getVideos().stream().map(video -> new VideosDTO(video)).collect(Collectors.toList());
     }
 
     public String getId() {
@@ -125,11 +133,11 @@ public class MovieDTO {
         this.releaseDate = releaseDate;
     }
 
-    public Integer getPopularity() {
+    public Double getPopularity() {
         return popularity;
     }
 
-    public void setPopularity(Integer popularity) {
+    public void setPopularity(Double popularity) {
         this.popularity = popularity;
     }
 
@@ -179,5 +187,24 @@ public class MovieDTO {
 
     public void setVideos(List<VideosDTO> videos) {
         this.videos = videos;
+    }
+
+    @Override
+    public String toString() {
+        return "MovieDTO{" +
+                "id='" + id + '\'' +
+                ", originalTitle='" + originalTitle + '\'' +
+                ", title='" + title + '\'' +
+                ", posterPath='" + posterPath + '\'' +
+                ", overview='" + overview + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", popularity=" + popularity +
+                ", voteCount=" + voteCount +
+                ", voteAverage=" + voteAverage +
+                ", genreIds=" + genreIds +
+                ", originalLanguage='" + originalLanguage + '\'' +
+                ", videos=" + videos +
+                ", version=" + version +
+                '}';
     }
 }
