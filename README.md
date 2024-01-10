@@ -16,6 +16,7 @@ application.properties loads properties from three files, one per environment (p
 - [v1.0](https://github.com/abeltran10/todocine_backend/releases/tag/v1.0)
 - [v2.0](https://github.com/abeltran10/todocine_backend/releases/tag/v2.0)
 - [RC-2.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/RC-2.0.0)
+- [RC-2.1.0](https://github.com/abeltran10/todocine_backend/releases/tag/RC-2.1.0)
 
 ## Install
 
@@ -25,9 +26,11 @@ application.properties loads properties from three files, one per environment (p
 
 ## Demo
 
-Demo RC-2.0.0 release
+Demo RC-2.1.0 release
 
-[RC-2.0.0.webm](https://github.com/abeltran10/todocine_backend/assets/44783052/779e4f1f-a31b-46a8-be41-4b7ba4082f95)
+[RC-2.1.0.webm](https://github.com/abeltran10/todocine_backend/assets/44783052/51f1907b-da17-4123-86ae-9afb5457edf2)
+
+
 
 
 
