@@ -54,6 +54,10 @@ public class Movie {
     public Movie() {
     }
 
+    public Movie(String id) {
+        this.id = id;
+    }
+
 
     public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate, Double popularity,
                  Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, List<Video> videos) {
@@ -81,7 +85,7 @@ public class Movie {
         this.popularity = movieDTO.getPopularity();
         this.voteCount = movieDTO.getVoteCount();
         this.voteAverage = movieDTO.getVoteAverage();
-        this.genres = movieDTO.getGenreIds().stream().map(genreDTO ->  new Genre(genreDTO) ).collect(Collectors.toList());
+        this.genres = movieDTO.getGenreIds().stream().map(genreDTO ->  new Genre(genreDTO)).collect(Collectors.toList());
         this.originalLanguage = movieDTO.getOriginalLanguage();
     }
 

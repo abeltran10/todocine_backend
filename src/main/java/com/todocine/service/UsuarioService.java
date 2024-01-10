@@ -10,4 +10,6 @@ public interface UsuarioService extends UserDetailsService {
     Usuario getUsuarioByName (String username);
 
     Usuario insertUsuario(Usuario usuario);
+
+    Usuario updateUsuario(String id, Usuario usuario);
 }

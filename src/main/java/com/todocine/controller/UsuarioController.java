@@ -32,5 +32,12 @@ public class UsuarioController {
         return usuarioService.insertUsuario(usuario);
     }
 
+    @PutMapping("/{id}")
+    public Usuario updateUsuario(@NotBlank @PathVariable("id") String id, @Valid @RequestBody Usuario usuario) throws ResponseStatusException {
+        logger.info("updateUsuario");
+
+        return usuarioService.updateUsuario(id, usuario);
+    }
+
 
 }

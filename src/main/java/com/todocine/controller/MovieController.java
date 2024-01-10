@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/movie")
 public class MovieController {
@@ -34,6 +36,11 @@ public class MovieController {
     @GetMapping("now/{region}")
     public Paginator<Movie> getMoviesPlayingNow(@NotBlank @PathVariable("region") String region, @RequestParam("page") Integer pagina) throws ResponseStatusException {
         return movieService.getMoviesPlayingNow(region, pagina);
+    }
+
+    @GetMapping("/favs/{usuarioId}")
+    public Paginator<Movie> getFavsByUsername(@NotBlank @PathVariable("usuarioId") String usuarioId) throws ResponseStatusException {
+        return movieService.getFavsByUsername(usuarioId);
     }
 
 }

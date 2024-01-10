@@ -102,4 +102,29 @@ public class TMDBServiceImpl implements TMDBService {
         return map;
 
     }
+
+    @Override
+    public Map<String, Object> getVideosByMovieId(String movieId) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://api.themoviedb.org/3/movie/" + movieId + "/videos?language=es-ES&append_to_response=videos")
+                .get()
+                .addHeader("accept", "application/json")
+                .addHeader("Authorization", "Bearer " + API_TOKEN)
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        String body = response.body().string();
+
+        Map<String,Object> map = objectMapper.readValue(body, Map.class);
+
+        logger.info(body);
+
+        return map;
+    }
 }

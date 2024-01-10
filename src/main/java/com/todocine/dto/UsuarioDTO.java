@@ -5,12 +5,15 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Document(collection = "Usuario")
 public class UsuarioDTO implements UserDetails {
@@ -30,10 +33,17 @@ public class UsuarioDTO implements UserDetails {
 
     private Boolean enabled;
 
+    @DocumentReference
+    private List<MovieDTO> favoritos;
+
     @Version
     private Integer version;
 
     public UsuarioDTO() {
+    }
+
+    public UsuarioDTO(String id) {
+        this.id = id;
     }
 
     public UsuarioDTO(String username, String password) {
@@ -43,7 +53,7 @@ public class UsuarioDTO implements UserDetails {
 
     @PersistenceCreator
     public UsuarioDTO(String id, String username, String password, Boolean accountNonExpired,
-                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled) {
+                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<MovieDTO> favoritos) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -51,6 +61,7 @@ public class UsuarioDTO implements UserDetails {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
+        this.favoritos = favoritos;
     }
 
     public UsuarioDTO(Usuario usuario) {
@@ -61,6 +72,7 @@ public class UsuarioDTO implements UserDetails {
         this.accountNonLocked = usuario.getAccountNonLocked();
         this.credentialsNonExpired = usuario.getCredentialsNonExpired();
         this.enabled = usuario.getEnabled();
+        this.favoritos = usuario.getFavoritos().stream().map(fav -> new MovieDTO(fav)).collect(Collectors.toList());
     }
 
     public String getId() {
@@ -145,6 +157,14 @@ public class UsuarioDTO implements UserDetails {
         this.enabled = enabled;
     }
 
+    public List<MovieDTO> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(List<MovieDTO> favoritos) {
+        this.favoritos = favoritos;
+    }
+
     public Integer getVersion() {
         return version;
     }
@@ -163,6 +183,7 @@ public class UsuarioDTO implements UserDetails {
                 ", accountNonLocked=" + accountNonLocked +
                 ", credentialsNonExpired=" + credentialsNonExpired +
                 ", enabled=" + enabled +
+                ", favoritos=" + favoritos +
                 ", version=" + version +
                 '}';
     }
