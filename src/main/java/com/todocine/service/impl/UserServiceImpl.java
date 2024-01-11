@@ -6,7 +6,6 @@ import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.model.Movie;
 import com.todocine.model.Usuario;
-import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import com.todocine.service.UsuarioService;
 import org.slf4j.Logger;
@@ -21,8 +20,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UsuarioService {
@@ -113,10 +112,10 @@ public class UserServiceImpl implements UsuarioService {
                     movieDTO = new MovieDTO(mov);
                 }
 
-                if (movieDTO == null) {
-                    Movie mov = new Movie(tmdbService.getMovieById(movieDTO.getId()));
-                    movieDTO = new MovieDTO(mov);
-                }
+                List <UsuarioDTO> currentUsers = movieDTO.getUsuarios().stream().filter(userDTO -> userDTO.getId() != id).collect(Collectors.toList());
+
+                currentUsers.add(usuarioDTO);
+                movieDTO.setUsuarios(currentUsers);
 
                 movieDTO = movieDAO.save(movieDTO);
                 movieDTOS.add(movieDTO);
