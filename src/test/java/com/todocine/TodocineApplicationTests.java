@@ -1,17 +1,18 @@
 package com.todocine;
 
 
-import com.todocine.dao.UsuarioDAO;
+import com.todocine.dao.MovieDAO;
+import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.model.Movie;
-import com.todocine.model.Paginator;
-import com.todocine.service.MovieService;
-import com.todocine.service.TMDBService;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -22,65 +23,45 @@ class TodocineApplicationTests {
 	public static Logger LOG = LoggerFactory.getLogger(TodocineApplicationTests.class);
 
 	@Autowired
-	private MovieService movieService;
-
-	@Autowired
-	private TMDBService tmdbService;
-
-	@Autowired
-	private UsuarioDAO usuarioDAO;
+	private MovieDAO movieDAO;
 
 	@Test
 	void contextLoads() {
 	}
 
+	@Before
+	void insterUserToMovies() {
+		List<MovieDTO> movieDTOS = movieDAO.findAll();
 
-	@Test
-	void getMoviePage() {
-		Paginator moviePage = movieService.getMovieByName("Forrest", 1);
+		movieDTOS.forEach(movieDTO -> {
+				movieDTO.setUsuarios(Arrays.asList(new UsuarioDTO("658e27b8373bd467ae8bad1a")));
 
-		assertTrue (moviePage.getResults().size() == 20);
+				movieDTO = movieDAO.save(movieDTO);
 
-
-	}
-
-	@Test
-	void getUsuarioByName() {
-		UsuarioDTO usuarioDTO = usuarioDAO.findByUsername("user1234");
-
-		LOG.info(usuarioDTO.toString());
-
-		assertTrue (usuarioDTO.getUsername().equals("user1234"));
+				LOG.info(movieDTO.getUsuarios().toString());
+		});
 
 	}
 
 	@Test
-	void getMovieById() {
-		Movie movie = null;
+	void findMovieByUser() {
+//		List<MovieDTO> movieDTOS = movieDAO.findAll();
+//
+//		movieDTOS.forEach(movieDTO -> {
+//			movieDTO.setUsuarios(Arrays.asList(new UsuarioDTO("658e27b8373bd467ae8bad1a")));
+//
+//			movieDTO = movieDAO.save(movieDTO);
+//
+//			LOG.info(movieDTO.getUsuarios().toString());
+//		});
 
-		try {
-			movie = movieService.getMovieById("13");
-		}  catch (Exception ex ) {
-			throw new RuntimeException(ex);
-		} finally {
-			LOG.info(movie.toString());
-			assertTrue(movie.getVideos() != null);
-		}
+		List<MovieDTO> foundMovies = movieDAO.findByUserId("658e27b8373bd467ae8bad1a");
+		assertTrue(foundMovies != null);
+		assertTrue(!foundMovies.isEmpty());
+
+		LOG.info(foundMovies.toString());
 	}
 
-	@Test
-	void getMoviesPlayingNow() {
-		Paginator movies = null;
-
-		try {
-			movies = movieService.getMoviesPlayingNow("ES", 1);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		} finally {
-			LOG.info(movies.toString());
-			assertTrue(movies != null && !movies.getResults().isEmpty());
-		}
-	}
 
 
 
