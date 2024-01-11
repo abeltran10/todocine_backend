@@ -40,7 +40,7 @@ public class MovieController {
 
     @GetMapping("/favs/{usuarioId}")
     public Paginator<Movie> getFavsByUsername(@NotBlank @PathVariable("usuarioId") String usuarioId, @RequestParam("page") Integer pagina) throws ResponseStatusException {
-        return movieService.getFavsByUsername(usuarioId, pagina);
+        return movieService.getFavsByUserId(usuarioId, pagina);
     }
 
 }

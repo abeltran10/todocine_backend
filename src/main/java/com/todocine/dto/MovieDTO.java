@@ -42,6 +42,9 @@ public class MovieDTO {
     @DocumentReference
     private List<VideosDTO> videos;
 
+    @DocumentReference(lazy = true)
+    private List<UsuarioDTO> usuarios;
+
     @Version
     private Integer version;
 
@@ -55,7 +58,7 @@ public class MovieDTO {
     @PersistenceCreator
     public MovieDTO(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
                     Double popularity, Integer voteCount, Double voteAverage,
-                    List<GenreDTO> genreIds, String originalLanguage, List<VideosDTO> videos) {
+                    List<GenreDTO> genreIds, String originalLanguage, List<VideosDTO> videos, List<UsuarioDTO> usuarios) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -68,6 +71,7 @@ public class MovieDTO {
         this.genreIds = genreIds;
         this.originalLanguage = originalLanguage;
         this.videos = videos;
+        this.usuarios = usuarios;
     }
 
     public MovieDTO(Movie movie) {
@@ -83,6 +87,7 @@ public class MovieDTO {
         this.genreIds = movie.getGenres().stream().map(genre -> new GenreDTO(genre)).collect(Collectors.toList());
         this.originalLanguage = movie.getOriginalLanguage();
         this.videos = movie.getVideos().stream().map(video -> new VideosDTO(video)).collect(Collectors.toList());
+        this.usuarios = new ArrayList<>();
     }
 
     public String getId() {
@@ -187,6 +192,14 @@ public class MovieDTO {
 
     public void setVideos(List<VideosDTO> videos) {
         this.videos = videos;
+    }
+
+    public List<UsuarioDTO> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<UsuarioDTO> usuarios) {
+        this.usuarios = usuarios;
     }
 
     @Override
