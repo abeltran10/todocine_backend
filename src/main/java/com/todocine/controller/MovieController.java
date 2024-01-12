@@ -33,14 +33,13 @@ public class MovieController {
         return movie;
     }
 
-    @GetMapping("now/{region}")
+    @GetMapping("/now/{region}")
     public Paginator<Movie> getMoviesPlayingNow(@NotBlank @PathVariable("region") String region, @RequestParam("page") Integer pagina) throws ResponseStatusException {
         return movieService.getMoviesPlayingNow(region, pagina);
     }
 
     @GetMapping("/favs/{usuarioId}")
-    public Paginator<Movie> getFavsByUsername(@NotBlank @PathVariable("usuarioId") String usuarioId, @RequestParam("page") Integer pagina) throws ResponseStatusException {
+    public Paginator<Movie> getFavsByUserId(@NotBlank @PathVariable("usuarioId") String usuarioId, @RequestParam("page") Integer pagina) throws ResponseStatusException {
         return movieService.getFavsByUserId(usuarioId, pagina);
     }
-
 }
