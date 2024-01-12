@@ -1,5 +1,6 @@
 package com.todocine.controller;
 
+import com.todocine.model.Movie;
 import com.todocine.model.Usuario;
 import com.todocine.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -37,6 +38,20 @@ public class UsuarioController {
         logger.info("updateUsuario");
 
         return usuarioService.updateUsuario(id, usuario);
+    }
+
+    @PostMapping("/{id}/favs/{movieId}")
+    public Usuario addFavoritosByUserId(@NotBlank @PathVariable("id") String id, @NotBlank @PathVariable("movieId") String movieId) throws ResponseStatusException {
+        logger.info("addFavoritosByUserId");
+
+        return usuarioService.addFavoritosByUserId(id, movieId);
+    }
+
+    @DeleteMapping("/{id}/favs/{movieId}")
+    public void deleteFavoritosByUserId(@NotBlank @PathVariable("id") String id, @NotBlank @PathVariable("movieId") String movieId) throws ResponseStatusException {
+        logger.info("deleteFavoritosByUserId");
+
+        usuarioService.deleteFavoritosByUserId(id, movieId);
     }
 
 
