@@ -2,22 +2,18 @@ package com.todocine.service.impl;
 
 
 import com.todocine.dao.MovieDAO;
-import com.todocine.dto.MovieDTO;
 import com.todocine.model.Movie;
-import com.todocine.model.Paginator;
-import com.todocine.model.Video;
+import com.todocine.utils.Paginator;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -93,35 +89,6 @@ public class MovieServiceImpl implements MovieService {
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
         }
-    }
-
-    @Override
-    public Paginator getFavsByUserId(String usuarioId, Integer page) throws ResponseStatusException {
-        Paginator<Movie> paginator = new Paginator<>();
-        List<Movie> movieList = new ArrayList<>();
-        List<MovieDTO> movieDTOS = movieDAO.findByUserId(usuarioId);
-        if (movieDTOS != null && !movieDTOS.isEmpty()) {
-            movieList = movieDTOS.stream().map(movieDTO -> new Movie(movieDTO)).collect(Collectors.toList());
-
-            int totalResults = movieList.size();
-            int totalPages = totalResults / (20 + 1) + 1;
-
-            List<Movie> results = movieList.stream()
-                    .skip((page - 1) * 20)
-                    .limit(20).collect(Collectors.toList());
-
-            paginator.setPage(page);
-            paginator.setResults(results);
-            paginator.setTotalPages(totalPages);
-            paginator.setTotalResults(totalResults);
-
-            return paginator;
-
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay favoritos para el usuario");
-        }
-
-
     }
 
 }

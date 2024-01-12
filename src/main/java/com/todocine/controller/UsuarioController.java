@@ -3,6 +3,7 @@ package com.todocine.controller;
 import com.todocine.model.Movie;
 import com.todocine.model.Usuario;
 import com.todocine.service.UsuarioService;
+import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.slf4j.Logger;
@@ -38,6 +39,11 @@ public class UsuarioController {
         logger.info("updateUsuario");
 
         return usuarioService.updateUsuario(id, usuario);
+    }
+
+    @GetMapping("/{id}/favs")
+    public Paginator<Movie> getUsuarioFavs(@NotBlank @PathVariable("id") String id, @RequestParam("page") Integer pagina) throws ResponseStatusException {
+        return usuarioService.getUsuarioFavs(id, pagina);
     }
 
     @PutMapping("/{id}/favs")

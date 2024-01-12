@@ -2,6 +2,7 @@ package com.todocine;
 
 
 import com.todocine.dao.MovieDAO;
+import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
 import org.junit.Before;
@@ -25,6 +26,9 @@ class TodocineApplicationTests {
 	@Autowired
 	private MovieDAO movieDAO;
 
+	@Autowired
+	private UsuarioDAO usuarioDAO;
+
 	@Test
 	void contextLoads() {
 	}
@@ -45,15 +49,6 @@ class TodocineApplicationTests {
 
 	@Test
 	void findMovieByUser() {
-//		List<MovieDTO> movieDTOS = movieDAO.findAll();
-//
-//		movieDTOS.forEach(movieDTO -> {
-//			movieDTO.setUsuarios(Arrays.asList(new UsuarioDTO("658e27b8373bd467ae8bad1a")));
-//
-//			movieDTO = movieDAO.save(movieDTO);
-//
-//			LOG.info(movieDTO.getUsuarios().toString());
-//		});
 
 		List<MovieDTO> foundMovies = movieDAO.findByUserId("658e27b8373bd467ae8bad1a");
 		assertTrue(foundMovies != null);

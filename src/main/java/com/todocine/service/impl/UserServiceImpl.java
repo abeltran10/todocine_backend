@@ -8,6 +8,7 @@ import com.todocine.model.Movie;
 import com.todocine.model.Usuario;
 import com.todocine.service.TMDBService;
 import com.todocine.service.UsuarioService;
+import com.todocine.utils.Paginator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,35 +110,70 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
+    public Paginator<Movie> getUsuarioFavs(String id, Integer page) throws ResponseStatusException {
+        Paginator<Movie> paginator = new Paginator<>();
+        List<MovieDTO> movieDTOS = movieDAO.findByUserId(id);
+
+        if (movieDTOS != null && !movieDTOS.isEmpty()) {
+            List<Movie> movieList = movieDTOS.stream().map(movieDTO -> new Movie(movieDTO)).collect(Collectors.toList());
+
+            int totalResults = movieList.size();
+            int totalPages = totalResults / (20 + 1) + 1;
+
+            List<Movie> results = movieList.stream()
+                    .skip((page - 1) * 20)
+                    .limit(20).collect(Collectors.toList());
+
+            paginator.setPage(page);
+            paginator.setResults(results);
+            paginator.setTotalPages(totalPages);
+            paginator.setTotalResults(totalResults);
+
+            return paginator;
+
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay favoritos para el usuario");
+        }
+
+
+    }
+
+    @Override
     public Usuario addFavoritosByUserId(String id, Movie movie) throws ResponseStatusException {
-        UsuarioDTO usuarioDTO = null;
-        MovieDTO movieDTO = null;
+        MovieDTO  movieDTO = null;
+
         try {
-            usuarioDTO = usuarioDAO.findById(id).get();
+            UsuarioDTO usuarioDTO = usuarioDAO.findById(id).get();
 
             try {
                 movieDTO = movieDAO.findById(movie.getId()).get();
             } catch (NoSuchElementException ex) {
-                movieDTO = new MovieDTO(movie);
+                Movie peli = new Movie(tmdbService.getMovieById(movie.getId()));
+                movieDTO = new MovieDTO(peli);
             }
 
-            movieDTO.getUsuarios().add(usuarioDTO);
-            usuarioDTO.getFavoritos().add(movieDAO.save(movieDTO));
+            if (!movieDTO.getUsuarios().contains(usuarioDTO) && !usuarioDTO.getFavoritos().contains(movieDTO)) {
+                movieDTO.getUsuarios().add(usuarioDTO);
+                usuarioDTO.getFavoritos().add(movieDAO.save(movieDTO));
 
-            return new Usuario(usuarioDAO.save(usuarioDTO));
+                return new Usuario(usuarioDAO.save(usuarioDTO));
+
+            } else
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La película ya está en favoritos");
 
         } catch (NoSuchElementException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario");
+        } catch (IOException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe la película");
         }
     }
 
     @Override
     public void deleteFavoritosByUserId(String id, String movieId) throws ResponseStatusException {
-        UsuarioDTO usuarioDTO = null;
         MovieDTO movieDTO = null;
 
         try {
-            usuarioDTO = usuarioDAO.findById(id).get();
+            UsuarioDTO usuarioDTO = usuarioDAO.findById(id).get();
 
             try {
                 movieDTO = movieDAO.findById(movieId).get();
@@ -147,7 +183,7 @@ public class UserServiceImpl implements UsuarioService {
                         .collect(Collectors.toList());
 
                 movieDTO.setUsuarios(currentUsers);
-                movieDTO = movieDAO.save(movieDTO);
+                movieDAO.save(movieDTO);
 
                 List<MovieDTO> currentFavs = usuarioDTO.getFavoritos().stream()
                         .filter(movDTO -> !movDTO.getId().equals(movieId)).collect(Collectors.toList());

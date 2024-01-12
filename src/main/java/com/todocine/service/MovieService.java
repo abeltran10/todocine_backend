@@ -1,7 +1,7 @@
 package com.todocine.service;
 
 import com.todocine.model.Movie;
-import com.todocine.model.Paginator;
+import com.todocine.utils.Paginator;
 import org.springframework.web.server.ResponseStatusException;
 
 public interface MovieService {
@@ -12,5 +12,4 @@ public interface MovieService {
 
     Paginator getMoviesPlayingNow(String country, Integer pagina) throws ResponseStatusException;
 
-    Paginator getFavsByUserId(String username, Integer page);
 }
