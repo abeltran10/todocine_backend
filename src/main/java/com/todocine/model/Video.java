@@ -3,6 +3,7 @@ package com.todocine.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.VideosDTO;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 public class Video {
 
     @JsonProperty("id")
+    @NotBlank
     private String id;
 
     @JsonProperty("name")
@@ -25,6 +27,10 @@ public class Video {
     private String type;
 
     public Video() {
+    }
+
+    public Video(String id) {
+        this.id = id;
     }
 
     public Video(String id, String name, String key, String site, String type) {

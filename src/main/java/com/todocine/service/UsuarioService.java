@@ -15,7 +15,7 @@ public interface UsuarioService extends UserDetailsService {
 
     Usuario updateUsuario(String id, Usuario usuario);
 
-    Usuario addFavoritosByUserId(String id, String movieId) throws ResponseStatusException;
+    Usuario addFavoritosByUserId(String id, Movie movie) throws ResponseStatusException;
 
     void deleteFavoritosByUserId(String id, String movieId) throws ResponseStatusException;
 }

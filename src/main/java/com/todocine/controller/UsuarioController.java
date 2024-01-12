@@ -40,11 +40,11 @@ public class UsuarioController {
         return usuarioService.updateUsuario(id, usuario);
     }
 
-    @PostMapping("/{id}/favs/{movieId}")
-    public Usuario addFavoritosByUserId(@NotBlank @PathVariable("id") String id, @NotBlank @PathVariable("movieId") String movieId) throws ResponseStatusException {
+    @PutMapping("/{id}/favs")
+    public Usuario addFavoritosByUserId(@NotBlank @PathVariable("id") String id, @Valid @RequestBody Movie movie) throws ResponseStatusException {
         logger.info("addFavoritosByUserId");
 
-        return usuarioService.addFavoritosByUserId(id, movieId);
+        return usuarioService.addFavoritosByUserId(id, movie);
     }
 
     @DeleteMapping("/{id}/favs/{movieId}")

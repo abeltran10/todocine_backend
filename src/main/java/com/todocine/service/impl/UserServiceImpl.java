@@ -109,16 +109,16 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario addFavoritosByUserId(String id, String movieId) throws ResponseStatusException {
+    public Usuario addFavoritosByUserId(String id, Movie movie) throws ResponseStatusException {
         UsuarioDTO usuarioDTO = null;
         MovieDTO movieDTO = null;
         try {
             usuarioDTO = usuarioDAO.findById(id).get();
 
             try {
-                movieDTO = movieDAO.findById(movieId).get();
+                movieDTO = movieDAO.findById(movie.getId()).get();
             } catch (NoSuchElementException ex) {
-                movieDTO = new MovieDTO(new Movie(tmdbService.getMovieById(movieId)));
+                movieDTO = new MovieDTO(movie);
             }
 
             movieDTO.getUsuarios().add(usuarioDTO);
@@ -128,8 +128,6 @@ public class UserServiceImpl implements UsuarioService {
 
         } catch (NoSuchElementException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario");
-        } catch (IOException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe la película");
         }
     }
 
