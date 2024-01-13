@@ -28,17 +28,15 @@ public class WebConfiguration {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setPasswordEncoder(passwordEncoder);
 
         return authProvider;
     }
@@ -57,7 +55,7 @@ public class WebConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/js/**", "/css/*", "/index.html").permitAll()
-                        .requestMatchers("/", "/login", "/error").permitAll()
+                        .requestMatchers("/", "/login", "/usuario", "/error").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/")
                         .loginProcessingUrl("/login")

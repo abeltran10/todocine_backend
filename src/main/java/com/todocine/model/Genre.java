@@ -3,6 +3,7 @@ package com.todocine.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.GenreDTO;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 public class Genre {
 
     @JsonProperty("id")
+    @NotBlank
     private String id;
 
     @JsonProperty("name")

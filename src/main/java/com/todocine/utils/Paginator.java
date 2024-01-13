@@ -1,4 +1,4 @@
-package com.todocine.model;
+package com.todocine.utils;
 
 
 

@@ -31,6 +31,7 @@ public class JWTAuthorisationFilter extends BasicAuthenticationFilter {
         String header = req.getHeader(HEADER_AUTHORIZACION_KEY);
         if (header == null || !header.startsWith(TOKEN_BEARER_PREFIX)) {
             chain.doFilter(req, res);
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 

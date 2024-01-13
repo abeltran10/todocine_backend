@@ -57,7 +57,7 @@ public class Usuario {
         this.accountNonLocked = usuario.isAccountNonLocked();
         this.credentialsNonExpired = usuario.isCredentialsNonExpired();
         this.enabled = usuario.isEnabled();
-        this.favoritos = usuario.getFavoritos().stream().map(movieDTO -> new Movie(movieDTO.getId())).collect(Collectors.toList());
+        this.favoritos = usuario.getFavoritos().stream().map(movieDTO -> new Movie(movieDTO)).collect(Collectors.toList());
     }
 
     public String getId() {

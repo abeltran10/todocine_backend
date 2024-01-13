@@ -1,7 +1,6 @@
 package com.todocine.dto;
 
 import com.todocine.model.Movie;
-import com.todocine.model.Video;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Version;
@@ -9,8 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Document(collection = "Movie")
@@ -42,6 +41,9 @@ public class MovieDTO {
     @DocumentReference
     private List<VideosDTO> videos;
 
+    @DocumentReference(lazy = true)
+    private List<UsuarioDTO> usuarios;
+
     @Version
     private Integer version;
 
@@ -55,7 +57,7 @@ public class MovieDTO {
     @PersistenceCreator
     public MovieDTO(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
                     Double popularity, Integer voteCount, Double voteAverage,
-                    List<GenreDTO> genreIds, String originalLanguage, List<VideosDTO> videos) {
+                    List<GenreDTO> genreIds, String originalLanguage, List<VideosDTO> videos, List<UsuarioDTO> usuarios) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -68,6 +70,7 @@ public class MovieDTO {
         this.genreIds = genreIds;
         this.originalLanguage = originalLanguage;
         this.videos = videos;
+        this.usuarios = usuarios;
     }
 
     public MovieDTO(Movie movie) {
@@ -83,6 +86,7 @@ public class MovieDTO {
         this.genreIds = movie.getGenres().stream().map(genre -> new GenreDTO(genre)).collect(Collectors.toList());
         this.originalLanguage = movie.getOriginalLanguage();
         this.videos = movie.getVideos().stream().map(video -> new VideosDTO(video)).collect(Collectors.toList());
+        this.usuarios = new ArrayList<>();
     }
 
     public String getId() {
@@ -187,6 +191,27 @@ public class MovieDTO {
 
     public void setVideos(List<VideosDTO> videos) {
         this.videos = videos;
+    }
+
+    public List<UsuarioDTO> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<UsuarioDTO> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovieDTO movieDTO = (MovieDTO) o;
+        return id.equals(movieDTO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

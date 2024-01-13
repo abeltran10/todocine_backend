@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.MovieDTO;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,39 +18,51 @@ public class Movie {
 
 
     @JsonProperty("id")
+    @NotBlank
     private String id;
 
     @JsonProperty("original_title")
+    @NotBlank
     private String originalTitle;
 
     @JsonProperty("title")
+    @NotBlank
     private String title;
 
     @JsonProperty("poster_path")
+    @NotBlank
     private String posterPath;
 
     @JsonProperty("overview")
+    @NotBlank
     private String overview;
 
     @JsonProperty("release_date")
+    @NotBlank
     private String releaseDate;
 
     @JsonProperty("popularity")
+    @NotNull
     private Double popularity;
 
     @JsonProperty("vote_count")
+    @NotNull
     private Integer voteCount;
 
     @JsonProperty("vote_average")
+    @NotNull
     private Double voteAverage;
 
     @JsonProperty("genres")
+    @NotNull
     private List<Genre> genres;
 
     @JsonProperty("original_language")
+    @NotBlank
     private String originalLanguage;
 
     @JsonProperty("videos")
+    @NotNull
     private List<Video> videos;
 
     public Movie() {
