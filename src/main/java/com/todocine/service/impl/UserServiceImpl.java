@@ -12,9 +12,12 @@ import com.todocine.utils.Paginator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,6 +40,12 @@ public class UserServiceImpl implements UsuarioService {
 
     @Autowired
     private TMDBService tmdbService;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -81,10 +90,23 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario insertUsuario(Usuario usuario) {
-        UsuarioDTO usuarioDTO = usuarioDAO.save(new UsuarioDTO(usuario));
+    public Usuario insertUsuario(Usuario usuario) throws ResponseStatusException {
+        UsuarioDTO usuarioDTO = usuarioDAO.findByUsername(usuario.getUsername());
 
-        return new Usuario(usuarioDTO);
+        if (usuarioDTO == null) {
+            usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setUsername(usuario.getUsername());
+            usuarioDTO.setPassword(passwordEncoder().encode(usuario.getPassword()));
+            usuarioDTO.setEnabled(true);
+            usuarioDTO.setCredentialsNonExpired(true);
+            usuarioDTO.setAccountNonLocked(true);
+            usuarioDTO.setAccountNonExpired(true);
+            usuarioDTO.setFavoritos(new ArrayList<>());
+
+            return new Usuario(usuarioDAO.save(usuarioDTO));
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Un usuario con ese nombre ya existe");
+        }
     }
 
     @Override
@@ -93,14 +115,11 @@ public class UserServiceImpl implements UsuarioService {
         UsuarioDTO usuarioDTO = null;
         try {
             usuarioDTO = usuarioDAO.findById(id).get();
-            log.info(usuarioDTO.toString());
-            usuarioDTO.setPassword(usuario.getPassword());
+            usuarioDTO.setPassword(passwordEncoder().encode(usuario.getPassword()));
             usuarioDTO.setEnabled(usuario.getEnabled());
             usuarioDTO.setAccountNonExpired(usuario.getAccountNonExpired());
             usuarioDTO.setAccountNonLocked(usuario.getAccountNonLocked());
             usuarioDTO.setCredentialsNonExpired(usuario.getCredentialsNonExpired());
-
-            log.info(usuario.getFavoritos().toString());
 
             return new Usuario(usuarioDAO.save(usuarioDTO));
         } catch (NoSuchElementException ex) {

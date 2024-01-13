@@ -12,7 +12,7 @@ public interface UsuarioService extends UserDetailsService {
 
     Usuario getUsuarioByName (String username);
 
-    Usuario insertUsuario(Usuario usuario);
+    Usuario insertUsuario(Usuario usuario) throws ResponseStatusException;
 
     Usuario updateUsuario(String id, Usuario usuario);
 

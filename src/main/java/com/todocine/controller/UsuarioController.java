@@ -30,7 +30,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario insertUsuario(@Valid @RequestBody Usuario usuario) {
+    public Usuario insertUsuario(@Valid @RequestBody Usuario usuario) throws ResponseStatusException {
         return usuarioService.insertUsuario(usuario);
     }
 
