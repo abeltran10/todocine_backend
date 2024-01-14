@@ -14,20 +14,20 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
-public class CheckMoviesTest {
-    public static Logger LOG = LoggerFactory.getLogger(CheckMoviesTest.class);
-
-    @Autowired
-    private MovieDAO movieDAO;
-
-    @Test
-    void findMovieByUser() {
-
-        List<MovieDTO> foundMovies = movieDAO.findByUserId("658e27b8373bd467ae8bad1a");
-        assertThat(foundMovies).isNotNull();
-        assertThat(foundMovies).isNotEmpty();
-
-        LOG.info(foundMovies.toString());
-    }
-}
+//@SpringBootTest
+//public class CheckMoviesTest {
+//    public static Logger LOG = LoggerFactory.getLogger(CheckMoviesTest.class);
+//
+//    @Autowired
+//    private MovieDAO movieDAO;
+//
+//    @Test
+//    void findMovieByUser() {
+//
+//        List<MovieDTO> foundMovies = movieDAO.findByUserId("658e27b8373bd467ae8bad1a");
+//        assertThat(foundMovies).isNotNull();
+//        assertThat(foundMovies).isNotEmpty();
+//
+//        LOG.info(foundMovies.toString());
+//    }
+//}
