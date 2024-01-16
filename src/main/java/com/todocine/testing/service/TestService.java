@@ -1,4 +1,4 @@
-package com.todocine.service.testing;
+package com.todocine.testing.service;
 
 public interface TestService {
 

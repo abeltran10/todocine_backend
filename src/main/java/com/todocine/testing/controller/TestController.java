@@ -1,7 +1,6 @@
-package com.todocine.controller.testing;
+package com.todocine.testing.controller;
 
-import com.todocine.dao.UsuarioDAO;
-import com.todocine.service.testing.TestService;
+import com.todocine.testing.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.PostMapping;
