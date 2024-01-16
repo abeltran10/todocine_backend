@@ -1,4 +1,4 @@
-package com.todocine.controller;
+package com.todocine.controller.testing;
 
 import com.todocine.dao.UsuarioDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Profile("test")
 @RequestMapping("/testing")
-public class ControllerTest {
+public class TestController {
 
     @Autowired
     private UsuarioDAO usuarioDAO;
