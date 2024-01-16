@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,22 +26,30 @@ public class CheckUsuariosTest {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private Usuario usuario;
+
     @BeforeEach
-    @Test
     void cleanDatabase() {
         usuarioDAO.deleteAll();
-    }
 
-    @Test
-    void createUser() {
         UsuarioDTO usuarioDTO = new UsuarioDTO("test","1234");
 
         usuarioDAO.save(usuarioDTO);
 
+        usuario = new Usuario(usuarioDTO.getId());
+
+    }
+
+
+    @Test
+    void findUser() {
+
         UsuarioDTO test = usuarioDAO.findByUsername("test");
 
         assertThat(test).isNotNull();
-
     }
 
     @Test
@@ -50,8 +59,22 @@ public class CheckUsuariosTest {
         try {
             Usuario test = usuarioService.insertUsuario(usuario);
         } catch (ResponseStatusException ex) {
-            assertTrue(ex.getMessage().equals("Un usuario con ese nombre ya existe"));
+            LOG.info(ex.getMessage());
+            assertTrue(ex.getMessage().contains("Un usuario con ese nombre ya existe"));
         }
+    }
 
+    @Test
+    void updateUser() {
+
+        Usuario usuario1 = new Usuario("test", "abcd");
+        usuario1.setEnabled(true);
+        usuario1.setAccountNonLocked(true);
+        usuario1.setCredentialsNonExpired(true);
+        usuario1.setAccountNonExpired(true);
+
+        usuario1 = usuarioService.updateUsuario(usuario.getId(), usuario1);
+
+        assertTrue(passwordEncoder.matches("abcd", usuario1.getPassword()));
     }
 }
