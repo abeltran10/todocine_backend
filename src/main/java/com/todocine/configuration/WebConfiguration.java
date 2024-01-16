@@ -18,6 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 
 @Configuration
 @EnableWebSecurity
@@ -54,6 +57,9 @@ public class WebConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        logger.info(Arrays.stream(resources).collect(Collectors.toList()).toString());
+        logger.info(Arrays.stream(paths).collect(Collectors.toList()).toString());
 
         AuthenticationConfiguration authenticationManagerConfiguration = http.getSharedObject(AuthenticationConfiguration.class);
 
