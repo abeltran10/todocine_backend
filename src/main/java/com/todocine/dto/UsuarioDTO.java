@@ -10,10 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Document(collection = "Usuario")
@@ -50,6 +47,11 @@ public class UsuarioDTO implements UserDetails {
     public UsuarioDTO(String username, String password) {
         this.username = username;
         this.password = password;
+        this.accountNonExpired = true;
+        this.accountNonLocked = true;
+        this.credentialsNonExpired = true;
+        this.enabled = true;
+        this.favoritos = new ArrayList<>();
     }
 
     @PersistenceCreator

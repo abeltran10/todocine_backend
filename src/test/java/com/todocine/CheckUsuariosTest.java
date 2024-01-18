@@ -4,6 +4,8 @@ import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.model.Usuario;
 import com.todocine.service.UsuarioService;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -32,28 +34,25 @@ public class CheckUsuariosTest {
     private Usuario usuario;
 
     @BeforeEach
-    void cleanDatabase() {
+    void clearDatabase() {
+        LOG.info("clearDatabase");
         usuarioDAO.deleteAll();
 
         UsuarioDTO usuarioDTO = new UsuarioDTO("test","1234");
-
-        usuarioDAO.save(usuarioDTO);
-
-        usuario = new Usuario(usuarioDTO.getId());
-
+        usuarioDTO = usuarioDAO.save(usuarioDTO);
+        usuario = new Usuario(usuarioDTO);
     }
-
 
     @Test
     void findUser() {
-
+        LOG.info("findUser");
         UsuarioDTO test = usuarioDAO.findByUsername("test");
-
-        assertThat(test).isNotNull();
+        assertThat(test.getId()).isEqualTo(usuario.getId());
     }
 
     @Test
     void createSameUser() {
+        LOG.info("createSameUser");
         Usuario usuario = new Usuario("test", "1234");
 
         try {
@@ -68,13 +67,10 @@ public class CheckUsuariosTest {
     void updateUser() {
 
         Usuario usuario1 = new Usuario("test", "abcd");
-        usuario1.setEnabled(true);
-        usuario1.setAccountNonLocked(true);
-        usuario1.setCredentialsNonExpired(true);
-        usuario1.setAccountNonExpired(true);
-
         usuario1 = usuarioService.updateUsuario(usuario.getId(), usuario1);
 
         assertTrue(passwordEncoder.matches("abcd", usuario1.getPassword()));
+        assertTrue(usuario1.getUsername().equals("test"));
+        assertTrue(usuario1.getId().equals(usuario.getId()));
     }
 }

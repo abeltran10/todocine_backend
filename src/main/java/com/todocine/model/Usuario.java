@@ -35,6 +35,11 @@ public class Usuario {
     public Usuario(String username, String password) {
         this.username = username;
         this.password = password;
+        this.accountNonExpired = true;
+        this.accountNonLocked = true;
+        this.credentialsNonExpired = true;
+        this.enabled = true;
+        this.favoritos = null;
     }
 
     public Usuario(String id, String username, String password, Boolean accountNonExpired,
