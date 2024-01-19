@@ -83,7 +83,7 @@ public class CheckUsuariosTest {
 
         usuario1 = usuarioService.updateUsuario(usuario1.getId(), usuario1);
 
-        assertTrue(passwordEncoder.matches("abcd", passwordEncoder.encode("abcd")));
+        assertTrue(passwordEncoder.matches("abcd", usuario1.getPassword()));
         assertTrue(usuario1.getUsername().equals("test"));
 
     }
