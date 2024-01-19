@@ -85,7 +85,6 @@ public class CheckUsuariosTest {
         usuarioDTO.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
         Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuarioDTO));
-        Mockito.when(usuarioDAO.save(usuarioDTO)).thenReturn(usuarioDTO);
 
         Usuario usuario1 = usuario;
         usuario1.setPassword("abcd");

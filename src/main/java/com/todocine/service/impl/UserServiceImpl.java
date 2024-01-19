@@ -103,7 +103,9 @@ public class UserServiceImpl implements UsuarioService {
             usuarioDTO.setAccountNonExpired(true);
             usuarioDTO.setFavoritos(new ArrayList<>());
 
-            return new Usuario(usuarioDAO.save(usuarioDTO));
+            usuarioDAO.save(usuarioDTO);
+
+            return new Usuario(usuarioDTO);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Un usuario con ese nombre ya existe");
         }
@@ -121,7 +123,9 @@ public class UserServiceImpl implements UsuarioService {
             usuarioDTO.setAccountNonLocked(usuario.getAccountNonLocked());
             usuarioDTO.setCredentialsNonExpired(usuario.getCredentialsNonExpired());
 
-            return new Usuario(usuarioDAO.save(usuarioDTO));
+            usuarioDAO.save(usuarioDTO);
+
+            return new Usuario(usuarioDTO);
         } catch (NoSuchElementException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario");
         }
