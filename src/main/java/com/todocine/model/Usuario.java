@@ -3,6 +3,7 @@ package com.todocine.model;
 import com.todocine.dto.UsuarioDTO;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ public class Usuario {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
-        this.favoritos = null;
+        this.favoritos = new ArrayList<>();
     }
 
     public Usuario(String id, String username, String password, Boolean accountNonExpired,

@@ -38,20 +38,23 @@ public class CheckUsuariosTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static UsuarioDTO usuarioDTO;
+    private static Usuario usuario;
 
     @BeforeAll
     static void setUp() {
         LOG.info("setUp");
 
-        usuarioDTO = new UsuarioDTO("test","1234");
-        usuarioDTO.setId("9876");
+        usuario = new Usuario ("test", "1234");
+        usuario.setId("9876");
 
     }
 
     @Test
     void findUser() {
         LOG.info("findUser");
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+        usuarioDTO.setPassword(passwordEncoder.encode(usuario.getPassword()));
         Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuarioDTO);
 
         UsuarioDTO test = usuarioDAO.findByUsername("test");
@@ -61,9 +64,10 @@ public class CheckUsuariosTest {
     @Test
     void createSameUser() {
         LOG.info("createSameUser");
-        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuarioDTO);
 
-        Usuario usuario = new Usuario(usuarioDTO);
+        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+        usuarioDTO.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuarioDTO);
 
         try {
             usuarioService.insertUsuario(usuario);
@@ -75,10 +79,15 @@ public class CheckUsuariosTest {
 
     @Test
     void updateUser() {
+        LOG.info("updateUser");
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+        usuarioDTO.setPassword(passwordEncoder.encode(usuario.getPassword()));
+
         Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuarioDTO));
         Mockito.when(usuarioDAO.save(usuarioDTO)).thenReturn(usuarioDTO);
 
-        Usuario usuario1 = new Usuario(usuarioDTO);
+        Usuario usuario1 = usuario;
         usuario1.setPassword("abcd");
 
         usuario1 = usuarioService.updateUsuario(usuario1.getId(), usuario1);
