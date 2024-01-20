@@ -21,12 +21,13 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class CheckUsuariosTest {
-    public static Logger LOG = LoggerFactory.getLogger(CheckUsuariosTest.class);
+public class CheckUsuarioUnitTest {
+    public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioUnitTest.class);
 
 
     @Mock
@@ -57,8 +58,8 @@ public class CheckUsuariosTest {
         usuarioDTO.setPassword(passwordEncoder.encode(usuario.getPassword()));
         Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuarioDTO);
 
-        UsuarioDTO test = usuarioDAO.findByUsername("test");
-        assertThat(test.getId()).isEqualTo(usuarioDTO.getId());
+        Usuario test = usuarioService.getUsuarioByName("test");
+        assertEquals(usuarioDTO.getId(), test.getId());
     }
 
     @Test
@@ -92,7 +93,7 @@ public class CheckUsuariosTest {
         usuario1 = usuarioService.updateUsuario(usuario1.getId(), usuario1);
 
         assertTrue(passwordEncoder.matches("abcd", usuario1.getPassword()));
-        assertTrue(usuario1.getUsername().equals("test"));
+        assertEquals("test", usuario1.getUsername());
 
     }
 }
