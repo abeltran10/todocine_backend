@@ -51,6 +51,7 @@ public class CheckUsuarioTest {
         assertEquals(usuario.getId(), test.getId());
     }
 
+    @Test
     void addUsuario() {
         LOG.info("addUsuario");
 
