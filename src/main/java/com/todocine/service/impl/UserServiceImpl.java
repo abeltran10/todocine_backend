@@ -24,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -171,8 +172,14 @@ public class UserServiceImpl implements UsuarioService {
             try {
                 movieDTO = movieDAO.findById(movie.getId()).get();
             } catch (NoSuchElementException ex) {
-                Movie peli = new Movie(tmdbService.getMovieById(movie.getId()));
-                movieDTO = new MovieDTO(peli);
+                Map<String, Object> movieMap = tmdbService.getMovieById(movie.getId());
+
+                if (movieMap.get("id") == null)
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe la película");
+                else {
+                    Movie peli = new Movie(movieMap);
+                    movieDTO = new MovieDTO(peli);
+                }
             }
 
             if (!movieDTO.getUsuarios().contains(usuarioDTO) && !usuarioDTO.getFavoritos().contains(movieDTO)) {

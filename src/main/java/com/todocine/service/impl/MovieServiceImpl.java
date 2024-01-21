@@ -32,13 +32,12 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Movie getMovieById(String id) throws ResponseStatusException {
         try {
-            Movie movie = new Movie(tmdbService.getMovieById(id));
+            Map<String, Object> movieMap = tmdbService.getMovieById(id);
 
-            logger.info(movie.toString());
-
-            if (movie.getId() == null) {
+            if (movieMap.get("id") == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película");
             } else {
+                Movie movie = new Movie(movieMap);
                 return movie;
             }
         } catch (IOException ex) {
@@ -52,17 +51,19 @@ public class MovieServiceImpl implements MovieService {
 
             Map<String, Object> map = tmdbService.getMoviesByName(name, pagina);
 
-            Paginator<Movie> moviePage = new Paginator<>(map);
-            List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
-                    .map(item -> new Movie(item)).collect(Collectors.toList());
-            moviePage.setResults(results);
-
-            logger.info(moviePage.toString());
-
-            if (moviePage == null || moviePage.getResults() == null) {
+            if (map.get("results") == null)
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película con ese nombre");
-            } else
+            else {
+                Paginator<Movie> moviePage = new Paginator<>(map);
+                List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
+                        .map(item -> new Movie(item)).collect(Collectors.toList());
+                moviePage.setResults(results);
+
+                logger.info(moviePage.toString());
+
                 return moviePage;
+            }
+
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
         }
@@ -75,17 +76,18 @@ public class MovieServiceImpl implements MovieService {
 
             Map<String, Object> map = tmdbService.getMoviesPlayingNow(country, pagina);
 
-            Paginator<Movie> moviePage = new Paginator<>(map);
-            List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
-                    .map(item -> new Movie(item)).collect(Collectors.toList());
-            moviePage.setResults(results);
-
-            logger.info(moviePage.toString());
-
-            if (moviePage == null || moviePage.getResults() == null) {
+            if (map.get("results") == null)
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la cartelera para esa región");
-            } else
+            else {
+                Paginator<Movie> moviePage = new Paginator<>(map);
+                List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
+                        .map(item -> new Movie(item)).collect(Collectors.toList());
+                moviePage.setResults(results);
+
+                logger.info(moviePage.toString());
+
                 return moviePage;
+            }
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
         }
