@@ -184,9 +184,12 @@ public class UserServiceImpl implements UsuarioService {
 
             if (!usuarioDTO.getFavoritos().contains(movieDTO)) {
                 movieDTO.getUsuarios().add(usuarioDTO);
-                usuarioDTO.getFavoritos().add(movieDAO.save(movieDTO));
+                movieDAO.save(movieDTO);
 
-                return new Usuario(usuarioDAO.save(usuarioDTO));
+                usuarioDTO.getFavoritos().add(movieDTO);
+                usuarioDAO.save(usuarioDTO);
+
+                return new Usuario(usuarioDTO);
 
             } else
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La película ya está en favoritos");
