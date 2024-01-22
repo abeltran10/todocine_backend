@@ -3,9 +3,9 @@ package com.todocine.service.impl;
 
 import com.todocine.dao.MovieDAO;
 import com.todocine.model.Movie;
-import com.todocine.utils.Paginator;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
+import com.todocine.utils.Paginator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

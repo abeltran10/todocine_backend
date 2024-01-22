@@ -182,7 +182,7 @@ public class UserServiceImpl implements UsuarioService {
                 }
             }
 
-            if (!movieDTO.getUsuarios().contains(usuarioDTO) && !usuarioDTO.getFavoritos().contains(movieDTO)) {
+            if (!usuarioDTO.getFavoritos().contains(movieDTO)) {
                 movieDTO.getUsuarios().add(usuarioDTO);
                 usuarioDTO.getFavoritos().add(movieDAO.save(movieDTO));
 
@@ -208,18 +208,21 @@ public class UserServiceImpl implements UsuarioService {
             try {
                 movieDTO = movieDAO.findById(movieId).get();
 
-                List<UsuarioDTO> currentUsers = movieDTO.getUsuarios().stream()
-                        .filter(userDTO -> !userDTO.getId().equals(id))
-                        .collect(Collectors.toList());
+                List<MovieDTO> currentFavs = usuarioDTO.getFavoritos();
+                if (currentFavs.contains(movieDTO)) {
+                    currentFavs.remove(movieDTO);
 
-                movieDTO.setUsuarios(currentUsers);
-                movieDAO.save(movieDTO);
+                    List<UsuarioDTO> currentUsers = movieDTO.getUsuarios();
+                    if (currentUsers.contains(usuarioDTO)) {
+                        currentUsers.remove(usuarioDTO);
+                        movieDAO.save(movieDTO);
+                    }
 
-                List<MovieDTO> currentFavs = usuarioDTO.getFavoritos().stream()
-                        .filter(movDTO -> !movDTO.getId().equals(movieId)).collect(Collectors.toList());
+                    usuarioDAO.save(usuarioDTO);
+                } else {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La película no está en favoritos");
+                }
 
-                usuarioDTO.setFavoritos(currentFavs);
-                usuarioDAO.save(usuarioDTO);
             } catch (NoSuchElementException ex) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe la película");
             }

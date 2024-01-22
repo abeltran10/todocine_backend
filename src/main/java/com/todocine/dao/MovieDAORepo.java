@@ -1,7 +1,6 @@
 package com.todocine.dao;
 
 import com.todocine.dto.MovieDTO;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

@@ -1,14 +1,12 @@
 package com.todocine.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.MovieDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -114,11 +112,12 @@ public class Movie {
         this.voteCount = (Integer) map.get("vote_count");
         this.voteAverage = (Double) map.get("vote_average");
 
-        this.genres = (map.containsKey("genres")) ?
-                ((List<Map<String, Object>>) map.get("genres")).stream()
-                .map(item -> new Genre(item)).collect(Collectors.toList())
-                : ((List<Integer>) map.get("genre_ids")).stream()
-                .map(item -> new Genre(String.valueOf(item))).collect(Collectors.toList());
+        if (map.containsKey("genres"))
+            this.genres = ((List<Map<String, Object>>) map.get("genres")).stream().map(genres -> new Genre(genres)).collect(Collectors.toList());
+        else if (map.containsKey("genre_ids"))
+            this.genres = ((List<Integer>) map.get("genre_ids")).stream().map(genres -> new Genre(String.valueOf(genres))).collect(Collectors.toList());
+        else
+            this.genres = new ArrayList<>();
 
         this.originalLanguage = (String) map.get("original_language");
 
@@ -126,7 +125,12 @@ public class Movie {
                 ? (Map<String, Object>) map.get("videos") : null;
 
         this.videos = (objectMap != null) ? ((List<Map<String, Object>>) objectMap.get("results")).stream()
-                .map(item -> new Video(item)).collect(Collectors.toList()) : null;
+                .map(item -> new Video(item)).collect(Collectors.toList()) : new ArrayList<>();
+    }
+
+    public Movie(String id, String originalTitle) {
+        this.id = id;
+        this.originalTitle = originalTitle;
     }
 
     public String getId() {

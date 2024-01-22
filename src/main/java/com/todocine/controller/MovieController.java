@@ -1,8 +1,8 @@
 package com.todocine.controller;
 
 import com.todocine.model.Movie;
-import com.todocine.utils.Paginator;
 import com.todocine.service.MovieService;
+import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
