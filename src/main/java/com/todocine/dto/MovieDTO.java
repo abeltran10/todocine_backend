@@ -39,10 +39,17 @@ public class MovieDTO {
     private String originalLanguage;
 
     @DocumentReference
-    private List<VideosDTO> videos;
+    private List<VideoDTO> videos;
 
     @DocumentReference(lazy = true)
     private List<UsuarioDTO> usuarios;
+
+    @DocumentReference
+    private List<VotoDTO> votosTC;
+
+    private Integer totalVotosTC;
+
+    private Double votosMediaTC;
 
     @Version
     private Integer version;
@@ -56,8 +63,9 @@ public class MovieDTO {
 
     @PersistenceCreator
     public MovieDTO(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
-                    Double popularity, Integer voteCount, Double voteAverage,
-                    List<GenreDTO> genreIds, String originalLanguage, List<VideosDTO> videos, List<UsuarioDTO> usuarios) {
+                    Double popularity, Integer voteCount, Double voteAverage, List<GenreDTO> genreIds,
+                    String originalLanguage, List<VideoDTO> videos, List<UsuarioDTO> usuarios, List<VotoDTO> votosTC,
+                    Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -71,7 +79,11 @@ public class MovieDTO {
         this.originalLanguage = originalLanguage;
         this.videos = videos;
         this.usuarios = usuarios;
+        this.votosTC = votosTC;
+        this.totalVotosTC = totalVotosTC;
+        this.votosMediaTC = votosMediaTC;
     }
+
 
     public MovieDTO(Movie movie) {
         this.id = movie.getId();
@@ -85,8 +97,11 @@ public class MovieDTO {
         this.voteAverage = movie.getVoteAverage();
         this.genreIds = movie.getGenres().stream().map(genre -> new GenreDTO(genre)).collect(Collectors.toList());
         this.originalLanguage = movie.getOriginalLanguage();
-        this.videos = movie.getVideos().stream().map(video -> new VideosDTO(video)).collect(Collectors.toList());
+        this.videos = movie.getVideos().stream().map(video -> new VideoDTO(video)).collect(Collectors.toList());
         this.usuarios = new ArrayList<>();
+        this.votosTC = movie.getVotos().stream().map(voto -> new VotoDTO(voto)).collect(Collectors.toList());
+        this.votosMediaTC = movie.getVotosMediaTC();
+        this.totalVotosTC = movie.getTotalVotosTC();
     }
 
     public String getId() {
@@ -185,11 +200,11 @@ public class MovieDTO {
         this.version = version;
     }
 
-    public List<VideosDTO> getVideos() {
+    public List<VideoDTO> getVideos() {
         return videos;
     }
 
-    public void setVideos(List<VideosDTO> videos) {
+    public void setVideos(List<VideoDTO> videos) {
         this.videos = videos;
     }
 
@@ -199,6 +214,30 @@ public class MovieDTO {
 
     public void setUsuarios(List<UsuarioDTO> usuarios) {
         this.usuarios = usuarios;
+    }
+
+    public List<VotoDTO> getVotosTC() {
+        return votosTC;
+    }
+
+    public void setVotosTC(List<VotoDTO> votosTC) {
+        this.votosTC = votosTC;
+    }
+
+    public Integer getTotalVotosTC() {
+        return totalVotosTC;
+    }
+
+    public void setTotalVotosTC(Integer totalVotosTC) {
+        this.totalVotosTC = totalVotosTC;
+    }
+
+    public Double getVotosMediaTC() {
+        return votosMediaTC;
+    }
+
+    public void setVotosMediaTC(Double votosMediaTC) {
+        this.votosMediaTC = votosMediaTC;
     }
 
     @Override

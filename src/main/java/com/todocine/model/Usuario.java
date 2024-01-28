@@ -26,6 +26,8 @@ public class Usuario {
 
     private List<Movie> favoritos;
 
+    private List<Voto> votos;
+
     public Usuario() {
     }
 
@@ -44,7 +46,8 @@ public class Usuario {
     }
 
     public Usuario(String id, String username, String password, Boolean accountNonExpired,
-                   Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<Movie> favoritos) {
+                   Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<Movie> favoritos,
+                   List<Voto> votos) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -53,6 +56,7 @@ public class Usuario {
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
         this.favoritos = favoritos;
+        this.votos = votos;
     }
 
     public Usuario(UsuarioDTO usuario) {
@@ -64,6 +68,7 @@ public class Usuario {
         this.credentialsNonExpired = usuario.isCredentialsNonExpired();
         this.enabled = usuario.isEnabled();
         this.favoritos = usuario.getFavoritos().stream().map(movieDTO -> new Movie(movieDTO)).collect(Collectors.toList());
+        this.votos = usuario.getVotos().stream().map(votoDTO -> new Voto(votoDTO)).collect(Collectors.toList());
     }
 
     public String getId() {
@@ -142,6 +147,14 @@ public class Usuario {
 
     public void setFavoritos(List<Movie> favoritos) {
         this.favoritos = favoritos;
+    }
+
+    public List<Voto> getVotos() {
+        return votos;
+    }
+
+    public void setVotos(List<Voto> votos) {
+        this.votos = votos;
     }
 
     @Override

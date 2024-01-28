@@ -33,6 +33,9 @@ public class UsuarioDTO implements UserDetails {
     @DocumentReference
     private List<MovieDTO> favoritos;
 
+    @DocumentReference
+    private List<VotoDTO> votos;
+
     @Version
     private Integer version;
 
@@ -55,7 +58,8 @@ public class UsuarioDTO implements UserDetails {
 
     @PersistenceCreator
     public UsuarioDTO(String id, String username, String password, Boolean accountNonExpired,
-                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<MovieDTO> favoritos) {
+                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<MovieDTO> favoritos,
+                      List<VotoDTO> votos) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -64,6 +68,7 @@ public class UsuarioDTO implements UserDetails {
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
         this.favoritos = favoritos;
+        this.votos = votos;
     }
 
     public UsuarioDTO(Usuario usuario) {
@@ -75,6 +80,7 @@ public class UsuarioDTO implements UserDetails {
         this.credentialsNonExpired = usuario.getCredentialsNonExpired();
         this.enabled = usuario.getEnabled();
         this.favoritos = usuario.getFavoritos().stream().map(fav -> new MovieDTO(fav)).collect(Collectors.toList());
+        this.votos = usuario.getVotos().stream().map(v -> new VotoDTO(v)).collect(Collectors.toList());
     }
 
     public String getId() {
@@ -165,6 +171,14 @@ public class UsuarioDTO implements UserDetails {
 
     public void setFavoritos(List<MovieDTO> favoritos) {
         this.favoritos = favoritos;
+    }
+
+    public List<VotoDTO> getVotos() {
+        return votos;
+    }
+
+    public void setVotos(List<VotoDTO> votos) {
+        this.votos = votos;
     }
 
     public Integer getVersion() {

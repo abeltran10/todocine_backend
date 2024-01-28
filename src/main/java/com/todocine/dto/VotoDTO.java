@@ -1,0 +1,86 @@
+package com.todocine.dto;
+
+import com.todocine.model.Voto;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
+@Document
+public class VotoDTO {
+
+    @Id
+    private String id;
+
+    @DocumentReference
+    private UsuarioDTO usuario;
+
+    @DocumentReference
+    private MovieDTO movie;
+
+    private Double voto;
+
+    @Version
+    private Integer version;
+
+    public VotoDTO() {
+    }
+
+    public VotoDTO(String id) {
+        this.id = id;
+    }
+
+    public VotoDTO(String id, UsuarioDTO usuario, MovieDTO movie, Double voto) {
+        this.id = id;
+        this.usuario = usuario;
+        this.movie = movie;
+        this.voto = voto;
+    }
+
+    public VotoDTO(Voto voto) {
+        this.id = voto.getId();
+        this.usuario = voto.getUsuario();
+        this.movie = voto.getMovie();
+        this.voto = voto.getVoto();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public UsuarioDTO getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioDTO usuario) {
+        this.usuario = usuario;
+    }
+
+    public MovieDTO getMovie() {
+        return movie;
+    }
+
+    public void setMovie(MovieDTO movie) {
+        this.movie = movie;
+    }
+
+    public Double getVoto() {
+        return voto;
+    }
+
+    public void setVoto(Double voto) {
+        this.voto = voto;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+}

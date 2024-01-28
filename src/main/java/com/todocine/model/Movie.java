@@ -63,6 +63,12 @@ public class Movie {
     @NotNull
     private List<Video> videos;
 
+    private List<Voto> votos;
+
+    private Integer totalVotosTC;
+
+    private Double votosMediaTC;
+
     public Movie() {
     }
 
@@ -70,9 +76,9 @@ public class Movie {
         this.id = id;
     }
 
-
-    public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate, Double popularity,
-                 Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, List<Video> videos) {
+    public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
+                 Double popularity, Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage,
+                 List<Video> videos, List<Voto> votos, Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -85,6 +91,9 @@ public class Movie {
         this.genres = genres;
         this.originalLanguage = originalLanguage;
         this.videos = videos;
+        this.votos = votos;
+        this.totalVotosTC = totalVotosTC;
+        this.votosMediaTC = votosMediaTC;
     }
 
     public Movie(MovieDTO movieDTO) {
@@ -99,6 +108,9 @@ public class Movie {
         this.voteAverage = movieDTO.getVoteAverage();
         this.genres = movieDTO.getGenreIds().stream().map(genreDTO ->  new Genre(genreDTO)).collect(Collectors.toList());
         this.originalLanguage = movieDTO.getOriginalLanguage();
+        this.votos = movieDTO.getVotosTC().stream().map(votoDTO -> new Voto(votoDTO)).collect(Collectors.toList());
+        this.votosMediaTC = movieDTO.getVotosMediaTC();
+        this.totalVotosTC = movieDTO.getTotalVotosTC();
     }
 
     public Movie(Map<String, Object> map) {
@@ -126,6 +138,10 @@ public class Movie {
 
         this.videos = (objectMap != null) ? ((List<Map<String, Object>>) objectMap.get("results")).stream()
                 .map(item -> new Video(item)).collect(Collectors.toList()) : new ArrayList<>();
+
+        this.votos = new ArrayList<>();
+        this.totalVotosTC = 0;
+        this.votosMediaTC = 0D;
     }
 
     public Movie(String id, String originalTitle) {
@@ -227,6 +243,30 @@ public class Movie {
 
     public void setVideos(List<Video> videos) {
         this.videos = videos;
+    }
+
+    public List<Voto> getVotos() {
+        return votos;
+    }
+
+    public void setVotos(List<Voto> votos) {
+        this.votos = votos;
+    }
+
+    public Integer getTotalVotosTC() {
+        return totalVotosTC;
+    }
+
+    public void setTotalVotosTC(Integer totalVotosTC) {
+        this.totalVotosTC = totalVotosTC;
+    }
+
+    public Double getVotosMediaTC() {
+        return votosMediaTC;
+    }
+
+    public void setVotosMediaTC(Double votosMediaTC) {
+        this.votosMediaTC = votosMediaTC;
     }
 
     @Override

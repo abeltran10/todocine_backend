@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class VideosDTO {
+public class VideoDTO {
 
     @Id
     private String id;
@@ -23,11 +23,11 @@ public class VideosDTO {
     @Version
     private Integer version;
 
-    public VideosDTO() {
+    public VideoDTO() {
     }
 
     @PersistenceCreator
-    public VideosDTO(String id, String name, String key, String site, String type, Integer version) {
+    public VideoDTO(String id, String name, String key, String site, String type, Integer version) {
         this.id = id;
         this.name = name;
         this.key = key;
@@ -36,7 +36,7 @@ public class VideosDTO {
         this.version = version;
     }
 
-    public VideosDTO(Video video) {
+    public VideoDTO(Video video) {
         this.id = video.getId();
         this.name = video.getName();
         this.key = video.getKey();
