@@ -7,15 +7,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
-@Profile("test")
 @RequestMapping("/testing")
 public class TestController {
 
     @Autowired
     private TestService testService;
 
+    @Profile("test")
     @PostMapping("/reset")
     public void resetDatabase() {
         testService.deleteAll();
