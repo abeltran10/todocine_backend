@@ -46,7 +46,7 @@ public class UsuarioController {
         return usuarioService.getUsuarioFavs(id, pagina);
     }
 
-    @PutMapping("/{id}/favs")
+    @PostMapping("/{id}/favs")
     public Usuario addFavoritosByUserId(@NotBlank @PathVariable("id") String id, @Valid @RequestBody Movie movie) throws ResponseStatusException {
         logger.info("addFavoritosByUserId");
 
