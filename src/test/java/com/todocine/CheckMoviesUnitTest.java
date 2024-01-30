@@ -2,7 +2,6 @@ package com.todocine;
 
 import com.todocine.dao.MovieDAO;
 import com.todocine.model.Movie;
-import com.todocine.model.Usuario;
 import com.todocine.service.TMDBService;
 import com.todocine.service.impl.MovieServiceImpl;
 import com.todocine.utils.Paginator;
@@ -18,7 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
