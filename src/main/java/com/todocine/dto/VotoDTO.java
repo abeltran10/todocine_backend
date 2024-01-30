@@ -39,8 +39,8 @@ public class VotoDTO {
 
     public VotoDTO(Voto voto) {
         this.id = voto.getId();
-        this.usuario = voto.getUsuario();
-        this.movie = voto.getMovie();
+        this.usuario = new UsuarioDTO(voto.getUsuario().getId());
+        this.movie = new MovieDTO(voto.getMovie().getId());
         this.voto = voto.getVoto();
     }
 
