@@ -212,9 +212,10 @@ public class UserServiceImpl implements UsuarioService {
                 movieDTO = movieDAO.findById(movieId).get();
 
                 List<MovieDTO> currentFavs = usuarioDTO.getFavoritos();
+                log.info("currentFavs: " + currentFavs);
                 if (currentFavs.contains(movieDTO)) {
                     currentFavs.remove(movieDTO);
-
+                    log.info("favs user: " + usuarioDTO.getFavoritos());
                     List<UsuarioDTO> currentUsers = movieDTO.getUsuarios();
                     if (currentUsers.contains(usuarioDTO)) {
                         currentUsers.remove(usuarioDTO);

@@ -6,7 +6,7 @@ import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "Video")
 public class VideoDTO {
 
     @Id

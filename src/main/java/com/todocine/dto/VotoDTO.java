@@ -6,7 +6,9 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-@Document
+import java.util.Objects;
+
+@Document(collection = "Voto")
 public class VotoDTO {
 
     @Id
@@ -82,5 +84,18 @@ public class VotoDTO {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof VotoDTO)) return false;
+        VotoDTO votoDTO = (VotoDTO) o;
+        return id.equals(votoDTO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -68,7 +68,6 @@ public class Usuario {
         this.credentialsNonExpired = usuario.isCredentialsNonExpired();
         this.enabled = usuario.isEnabled();
         this.favoritos = usuario.getFavoritos().stream().map(movieDTO -> new Movie(movieDTO)).collect(Collectors.toList());
-        this.votos = usuario.getVotos().stream().map(votoDTO -> new Voto(votoDTO)).collect(Collectors.toList());
     }
 
     public String getId() {

@@ -62,11 +62,16 @@ public class Movie {
     @JsonProperty("videos")
     @NotNull
     private List<Video> videos;
-
+    @JsonProperty("votos")
+    @NotNull
     private List<Voto> votos;
 
+    @JsonProperty("total_votos_TC")
+    @NotNull
     private Integer totalVotosTC;
 
+    @JsonProperty("votos_media_TC")
+    @NotNull
     private Double votosMediaTC;
 
     public Movie() {
@@ -108,6 +113,7 @@ public class Movie {
         this.voteAverage = movieDTO.getVoteAverage();
         this.genres = movieDTO.getGenreIds().stream().map(genreDTO ->  new Genre(genreDTO)).collect(Collectors.toList());
         this.originalLanguage = movieDTO.getOriginalLanguage();
+        this.videos = movieDTO.getVideos().stream().map(videoDTO -> new Video(videoDTO)).collect(Collectors.toList());
         this.votos = movieDTO.getVotosTC().stream().map(votoDTO -> new Voto(votoDTO)).collect(Collectors.toList());
         this.votosMediaTC = movieDTO.getVotosMediaTC();
         this.totalVotosTC = movieDTO.getTotalVotosTC();

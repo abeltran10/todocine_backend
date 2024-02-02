@@ -33,7 +33,7 @@ public class UsuarioDTO implements UserDetails {
     @DocumentReference
     private List<MovieDTO> favoritos;
 
-    @DocumentReference
+    @DocumentReference(lazy = true)
     private List<VotoDTO> votos;
 
     @Version
@@ -80,7 +80,7 @@ public class UsuarioDTO implements UserDetails {
         this.credentialsNonExpired = usuario.getCredentialsNonExpired();
         this.enabled = usuario.getEnabled();
         this.favoritos = usuario.getFavoritos().stream().map(fav -> new MovieDTO(fav)).collect(Collectors.toList());
-        this.votos = usuario.getVotos().stream().map(v -> new VotoDTO(v)).collect(Collectors.toList());
+        this.votos = new ArrayList<>();
     }
 
     public String getId() {
