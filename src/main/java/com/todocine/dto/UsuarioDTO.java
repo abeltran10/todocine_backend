@@ -9,11 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Document(collection = "Usuario")
@@ -37,6 +33,9 @@ public class UsuarioDTO implements UserDetails {
     @DocumentReference
     private List<MovieDTO> favoritos;
 
+    @DocumentReference(lazy = true)
+    private List<VotoDTO> votos;
+
     @Version
     private Integer version;
 
@@ -50,11 +49,17 @@ public class UsuarioDTO implements UserDetails {
     public UsuarioDTO(String username, String password) {
         this.username = username;
         this.password = password;
+        this.accountNonExpired = true;
+        this.accountNonLocked = true;
+        this.credentialsNonExpired = true;
+        this.enabled = true;
+        this.favoritos = new ArrayList<>();
     }
 
     @PersistenceCreator
     public UsuarioDTO(String id, String username, String password, Boolean accountNonExpired,
-                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<MovieDTO> favoritos) {
+                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<MovieDTO> favoritos,
+                      List<VotoDTO> votos) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -63,6 +68,7 @@ public class UsuarioDTO implements UserDetails {
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
         this.favoritos = favoritos;
+        this.votos = votos;
     }
 
     public UsuarioDTO(Usuario usuario) {
@@ -74,6 +80,7 @@ public class UsuarioDTO implements UserDetails {
         this.credentialsNonExpired = usuario.getCredentialsNonExpired();
         this.enabled = usuario.getEnabled();
         this.favoritos = usuario.getFavoritos().stream().map(fav -> new MovieDTO(fav)).collect(Collectors.toList());
+        this.votos = new ArrayList<>();
     }
 
     public String getId() {
@@ -164,6 +171,14 @@ public class UsuarioDTO implements UserDetails {
 
     public void setFavoritos(List<MovieDTO> favoritos) {
         this.favoritos = favoritos;
+    }
+
+    public List<VotoDTO> getVotos() {
+        return votos;
+    }
+
+    public void setVotos(List<VotoDTO> votos) {
+        this.votos = votos;
     }
 
     public Integer getVersion() {

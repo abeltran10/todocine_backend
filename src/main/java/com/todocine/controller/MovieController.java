@@ -1,8 +1,9 @@
 package com.todocine.controller;
 
 import com.todocine.model.Movie;
-import com.todocine.utils.Paginator;
+import com.todocine.model.Voto;
 import com.todocine.service.MovieService;
+import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +30,21 @@ public class MovieController {
     }
 
     @GetMapping("/now")
-    public Paginator<Movie> getMoviesPlayingNow(@NotBlank @RequestParam("region") String region, @RequestParam("page") Integer pagina) throws ResponseStatusException {
+    public Paginator<Movie> getMoviesPlayingNow(@NotBlank @RequestParam("region") String region, @RequestParam("page") Integer pagina)
+            throws ResponseStatusException {
         return movieService.getMoviesPlayingNow(region, pagina);
     }
+
+    @PostMapping("/{id}/vote")
+    public Movie votar(@NotBlank @PathVariable("id") String movieId, @RequestBody Voto voto) throws ResponseStatusException {
+        return movieService.addVote(movieId, voto);
+    }
+
+    @PutMapping("/{id}/vote/{votoId}")
+    public Movie actualizarVoto(@NotBlank @PathVariable("id") String movieId, @PathVariable("votoId") String votoId, @RequestBody Voto voto)
+            throws ResponseStatusException {
+        return movieService.updateVote(movieId, votoId, voto);
+    }
+
 
 }

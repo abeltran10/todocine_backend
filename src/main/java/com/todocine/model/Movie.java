@@ -1,14 +1,12 @@
 package com.todocine.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.MovieDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -64,6 +62,17 @@ public class Movie {
     @JsonProperty("videos")
     @NotNull
     private List<Video> videos;
+    @JsonProperty("votos")
+    @NotNull
+    private List<Voto> votos;
+
+    @JsonProperty("total_votos_TC")
+    @NotNull
+    private Integer totalVotosTC;
+
+    @JsonProperty("votos_media_TC")
+    @NotNull
+    private Double votosMediaTC;
 
     public Movie() {
     }
@@ -72,9 +81,9 @@ public class Movie {
         this.id = id;
     }
 
-
-    public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate, Double popularity,
-                 Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage, List<Video> videos) {
+    public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
+                 Double popularity, Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage,
+                 List<Video> videos, List<Voto> votos, Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -87,6 +96,9 @@ public class Movie {
         this.genres = genres;
         this.originalLanguage = originalLanguage;
         this.videos = videos;
+        this.votos = votos;
+        this.totalVotosTC = totalVotosTC;
+        this.votosMediaTC = votosMediaTC;
     }
 
     public Movie(MovieDTO movieDTO) {
@@ -101,6 +113,10 @@ public class Movie {
         this.voteAverage = movieDTO.getVoteAverage();
         this.genres = movieDTO.getGenreIds().stream().map(genreDTO ->  new Genre(genreDTO)).collect(Collectors.toList());
         this.originalLanguage = movieDTO.getOriginalLanguage();
+        this.videos = movieDTO.getVideos().stream().map(videoDTO -> new Video(videoDTO)).collect(Collectors.toList());
+        this.votos = movieDTO.getVotosTC().stream().map(votoDTO -> new Voto(votoDTO)).collect(Collectors.toList());
+        this.votosMediaTC = movieDTO.getVotosMediaTC();
+        this.totalVotosTC = movieDTO.getTotalVotosTC();
     }
 
     public Movie(Map<String, Object> map) {
@@ -114,11 +130,12 @@ public class Movie {
         this.voteCount = (Integer) map.get("vote_count");
         this.voteAverage = (Double) map.get("vote_average");
 
-        this.genres = (map.containsKey("genres")) ?
-                ((List<Map<String, Object>>) map.get("genres")).stream()
-                .map(item -> new Genre(item)).collect(Collectors.toList())
-                : ((List<Integer>) map.get("genre_ids")).stream()
-                .map(item -> new Genre(String.valueOf(item))).collect(Collectors.toList());
+        if (map.containsKey("genres"))
+            this.genres = ((List<Map<String, Object>>) map.get("genres")).stream().map(genres -> new Genre(genres)).collect(Collectors.toList());
+        else if (map.containsKey("genre_ids"))
+            this.genres = ((List<Integer>) map.get("genre_ids")).stream().map(genres -> new Genre(String.valueOf(genres))).collect(Collectors.toList());
+        else
+            this.genres = new ArrayList<>();
 
         this.originalLanguage = (String) map.get("original_language");
 
@@ -126,7 +143,16 @@ public class Movie {
                 ? (Map<String, Object>) map.get("videos") : null;
 
         this.videos = (objectMap != null) ? ((List<Map<String, Object>>) objectMap.get("results")).stream()
-                .map(item -> new Video(item)).collect(Collectors.toList()) : null;
+                .map(item -> new Video(item)).collect(Collectors.toList()) : new ArrayList<>();
+
+        this.votos = new ArrayList<>();
+        this.totalVotosTC = 0;
+        this.votosMediaTC = 0D;
+    }
+
+    public Movie(String id, String originalTitle) {
+        this.id = id;
+        this.originalTitle = originalTitle;
     }
 
     public String getId() {
@@ -223,6 +249,30 @@ public class Movie {
 
     public void setVideos(List<Video> videos) {
         this.videos = videos;
+    }
+
+    public List<Voto> getVotos() {
+        return votos;
+    }
+
+    public void setVotos(List<Voto> votos) {
+        this.votos = votos;
+    }
+
+    public Integer getTotalVotosTC() {
+        return totalVotosTC;
+    }
+
+    public void setTotalVotosTC(Integer totalVotosTC) {
+        this.totalVotosTC = totalVotosTC;
+    }
+
+    public Double getVotosMediaTC() {
+        return votosMediaTC;
+    }
+
+    public void setVotosMediaTC(Double votosMediaTC) {
+        this.votosMediaTC = votosMediaTC;
     }
 
     @Override

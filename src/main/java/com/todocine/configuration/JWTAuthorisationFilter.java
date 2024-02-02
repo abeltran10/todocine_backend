@@ -8,7 +8,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +30,6 @@ public class JWTAuthorisationFilter extends BasicAuthenticationFilter {
         String header = req.getHeader(HEADER_AUTHORIZACION_KEY);
         if (header == null || !header.startsWith(TOKEN_BEARER_PREFIX)) {
             chain.doFilter(req, res);
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
