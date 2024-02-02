@@ -1,7 +1,13 @@
 package com.todocine;
 
 import com.todocine.dao.MovieDAO;
+import com.todocine.dao.VotoDAO;
+import com.todocine.dto.MovieDTO;
+import com.todocine.dto.UsuarioDTO;
+import com.todocine.dto.VotoDTO;
 import com.todocine.model.Movie;
+import com.todocine.model.Usuario;
+import com.todocine.model.Voto;
 import com.todocine.service.TMDBService;
 import com.todocine.service.impl.MovieServiceImpl;
 import com.todocine.utils.Paginator;
@@ -17,9 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,6 +34,9 @@ public class CheckMoviesUnitTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckMoviesUnitTest.class);
     @Mock
     private MovieDAO movieDAO;
+
+    @Mock
+    private VotoDAO votoDAO;
 
     @Mock
     private TMDBService tmdbService;
@@ -117,6 +124,64 @@ public class CheckMoviesUnitTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    void addVoto() {
+        LOG.info("addVoto");
+
+        Map<String, Object> map =  new HashMap<>();
+        map.put("id","13");
+        map.put("original_title", "Fantasia");
+
+        Voto voto = new Voto("1", new Usuario("userTest"), new Movie("13"), 2D);
+
+        try {
+            Mockito.when(tmdbService.getMovieById("13")).thenReturn(map);
+            Mockito.when(movieDAO.findById("13")).thenReturn(Optional.ofNullable(null));
+
+            Movie movie2 = movieService.addVote("13", voto);
+
+            assertEquals(1, movie2.getTotalVotosTC());
+            assertEquals(2, movie2.getVotosMediaTC());
+            assertEquals("13", movie2.getId());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
+
+    @Test
+    void updateVoto() {
+        LOG.info("updateVoto");
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", "13");
+        map.put("original_title", "Fantasia");
+
+        VotoDTO votoDTO = new VotoDTO("1", new UsuarioDTO("userTest"), new MovieDTO("13"), 2D);
+        MovieDTO movieDTO = new MovieDTO("13");
+        movieDTO.setOriginalTitle("Fantasía");
+        movieDTO.setVotosTC(Arrays.asList(votoDTO));
+        movieDTO.setVotosMediaTC(2D);
+        movieDTO.setTotalVotosTC(4);
+
+        Voto voto = new Voto("1", new Usuario("userTest"), new Movie("13"), 4D);
+
+        try {
+            Mockito.when(tmdbService.getMovieById("13")).thenReturn(map);
+            Mockito.when(movieDAO.findById("13")).thenReturn(Optional.of(movieDTO));
+            Mockito.when(votoDAO.findById("1")).thenReturn(Optional.of(votoDTO));
+
+            Movie movie2 = movieService.updateVote("13", "1", voto);
+
+            assertEquals(4, movie2.getTotalVotosTC());
+            assertEquals(Double.valueOf(10D / 4), movie2.getVotosMediaTC(), 0.05);
+            assertEquals("13", movie2.getId());
+
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
 }
