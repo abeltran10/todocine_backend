@@ -160,9 +160,7 @@ public class MovieServiceImpl implements MovieService {
                 VotoDTO votoDTO = votoDAO.findById(votoId).get();
                 List<VotoDTO> votosTC = dto.getVotosTC();
                 if (votosTC.contains(votoDTO)) {
-                    List<VotoDTO> currentVotesDTO = votosTC.stream()
-                            .filter(votoDTO1 -> !votoDTO1.equals(votoDTO))
-                            .collect(Collectors.toList());
+                    votosTC.remove(votoDTO);
 
                     Double total = dto.getVotosMediaTC() * dto.getTotalVotosTC();
                     Double totalOld = total - votoDTO.getVoto();
@@ -172,8 +170,7 @@ public class MovieServiceImpl implements MovieService {
 
                     votoDAO.save(votoDTO);
 
-                    currentVotesDTO.add(votoDTO);
-                    dto.setVotosTC(currentVotesDTO);
+                    votosTC.add(votoDTO);
                     movieDAO.save(dto);
 
                     List<Voto> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new Voto(votoDTO1)).collect(Collectors.toList());
