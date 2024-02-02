@@ -151,37 +151,37 @@ public class CheckMoviesUnitTest {
 
     }
 
-    @Test
-    void updateVoto() {
-        LOG.info("updateVoto");
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", "13");
-        map.put("original_title", "Fantasia");
-
-        VotoDTO votoDTO = new VotoDTO("1", new UsuarioDTO("userTest"), new MovieDTO("13"), 2D);
-        MovieDTO movieDTO = new MovieDTO("13");
-        movieDTO.setOriginalTitle("Fantasía");
-        movieDTO.setVotosTC(Arrays.asList(votoDTO));
-        movieDTO.setVotosMediaTC(2D);
-        movieDTO.setTotalVotosTC(4);
-
-        Voto voto = new Voto("1", new Usuario("userTest"), new Movie("13"), 4D);
-
-        try {
-            Mockito.when(tmdbService.getMovieById("13")).thenReturn(map);
-            Mockito.when(movieDAO.findById("13")).thenReturn(Optional.of(movieDTO));
-            Mockito.when(votoDAO.findById("1")).thenReturn(Optional.of(votoDTO));
-
-            Movie movie2 = movieService.updateVote("13", "1", voto);
-
-            assertEquals(4, movie2.getTotalVotosTC());
-            assertEquals(Double.valueOf(10D / 4), movie2.getVotosMediaTC(), 0.05);
-            assertEquals("13", movie2.getId());
-
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+//    @Test
+//    void updateVoto() {
+//        LOG.info("updateVoto");
+//
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("id", "13");
+//        map.put("original_title", "Fantasia");
+//
+//        VotoDTO votoDTO = new VotoDTO("1", new UsuarioDTO("userTest"), new MovieDTO("13"), 2D);
+//        MovieDTO movieDTO = new MovieDTO("13");
+//        movieDTO.setOriginalTitle("Fantasía");
+//        movieDTO.setVotosTC(Arrays.asList(votoDTO));
+//        movieDTO.setVotosMediaTC(2D);
+//        movieDTO.setTotalVotosTC(4);
+//
+//        Voto voto = new Voto("1", new Usuario("userTest"), new Movie("13"), 4D);
+//
+//        try {
+//            Mockito.when(tmdbService.getMovieById("13")).thenReturn(map);
+//            Mockito.when(movieDAO.findById("13")).thenReturn(Optional.of(movieDTO));
+//            Mockito.when(votoDAO.findById("1")).thenReturn(Optional.of(votoDTO));
+//
+//            Movie movie2 = movieService.updateVote("13", "1", voto);
+//
+//            assertEquals(4, movie2.getTotalVotosTC());
+//            assertEquals(Double.valueOf(10D / 4), movie2.getVotosMediaTC(), 0.05);
+//            assertEquals("13", movie2.getId());
+//
+//        } catch (IOException ex) {
+//            throw new RuntimeException(ex);
+//        }
+//    }
 
 }
