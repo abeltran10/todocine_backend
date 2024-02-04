@@ -2,9 +2,6 @@ package com.todocine;
 
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.VotoDAO;
-import com.todocine.dto.MovieDTO;
-import com.todocine.dto.UsuarioDTO;
-import com.todocine.dto.VotoDTO;
 import com.todocine.model.Movie;
 import com.todocine.model.Usuario;
 import com.todocine.model.Voto;
@@ -23,7 +20,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

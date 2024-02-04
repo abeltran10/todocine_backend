@@ -12,7 +12,6 @@ import com.todocine.utils.Paginator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,11 +41,9 @@ public class UserServiceImpl implements UsuarioService {
     @Autowired
     private TMDBService tmdbService;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+    private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
