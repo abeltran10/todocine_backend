@@ -4,6 +4,8 @@ import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.NotFoudException;
 import com.todocine.model.Movie;
 import com.todocine.model.Usuario;
 import com.todocine.service.TMDBService;
@@ -18,7 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,24 +62,24 @@ public class UserServiceImpl implements UsuarioService {
 
 
     @Override
-    public Usuario getUsuarioById(String id) throws ResponseStatusException {
+    public Usuario getUsuarioById(String id) throws NotFoudException {
         UsuarioDTO usuarioDTO = usuarioDAO.findById(id).get();
 
         if (usuarioDTO == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario con ese nombre");
+            throw new NotFoudException(HttpStatus.NOT_FOUND, "No existe el usuario con ese nombre");
         else {
             return new Usuario(usuarioDTO);
         }
     }
 
     @Override
-    public Usuario getUsuarioByName(String username) throws ResponseStatusException {
+    public Usuario getUsuarioByName(String username) throws NotFoudException {
         log.info("getUsuarioByName");
 
         UsuarioDTO usuarioDTO = usuarioDAO.findByUsername(username);
 
         if (usuarioDTO == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario");
+            throw new NotFoudException("No existe el usuario");
         else {
             return new Usuario(usuarioDTO);
         }
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario insertUsuario(Usuario usuario) throws ResponseStatusException {
+    public Usuario insertUsuario(Usuario usuario) throws BadRequestException {
         UsuarioDTO usuarioDTO = usuarioDAO.findByUsername(usuario.getUsername());
 
         if (usuarioDTO == null) {
@@ -105,12 +106,12 @@ public class UserServiceImpl implements UsuarioService {
 
             return new Usuario(usuarioDTO);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Un usuario con ese nombre ya existe");
+            throw new BadRequestException("Un usuario con ese nombre ya existe");
         }
     }
 
     @Override
-    public Usuario updateUsuario(String id, Usuario usuario) throws ResponseStatusException {
+    public Usuario updateUsuario(String id, Usuario usuario) throws NotFoudException {
        log.info("updateUsuario");
         UsuarioDTO usuarioDTO = null;
         try {
@@ -125,13 +126,13 @@ public class UserServiceImpl implements UsuarioService {
 
             return new Usuario(usuarioDTO);
         } catch (NoSuchElementException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario");
+            throw new NotFoudException("No existe el usuario");
         }
 
     }
 
     @Override
-    public Paginator<Movie> getUsuarioFavs(String id, Integer page) throws ResponseStatusException {
+    public Paginator<Movie> getUsuarioFavs(String id, Integer page) throws NotFoudException {
         Paginator<Movie> paginator = new Paginator<>();
         List<MovieDTO> movieDTOS = movieDAO.findByUserId(id);
 
@@ -153,14 +154,14 @@ public class UserServiceImpl implements UsuarioService {
             return paginator;
 
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay favoritos para el usuario");
+            throw new NotFoudException("No hay favoritos para el usuario");
         }
 
 
     }
 
     @Override
-    public Usuario addFavoritosByUserId(String id, Movie movie) throws ResponseStatusException {
+    public Usuario addFavoritosByUserId(String id, Movie movie) throws BadRequestException, NotFoudException {
         MovieDTO  movieDTO = null;
 
         try {
@@ -172,7 +173,7 @@ public class UserServiceImpl implements UsuarioService {
                 Map<String, Object> movieMap = tmdbService.getMovieById(movie.getId());
 
                 if (movieMap.get("id") == null)
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe la película");
+                    throw new NotFoudException("No existe la película");
                 else {
                     Movie peli = new Movie(movieMap);
                     movieDTO = new MovieDTO(peli);
@@ -189,17 +190,17 @@ public class UserServiceImpl implements UsuarioService {
                 return new Usuario(usuarioDTO);
 
             } else
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La película ya está en favoritos");
+                throw new BadRequestException("La película ya está en favoritos");
 
         } catch (NoSuchElementException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario");
+            throw new NotFoudException("No existe el usuario");
         } catch (IOException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe la película");
+            throw new NotFoudException("No existe la película");
         }
     }
 
     @Override
-    public void deleteFavoritosByUserId(String id, String movieId) throws ResponseStatusException {
+    public void deleteFavoritosByUserId(String id, String movieId) throws BadRequestException, NotFoudException {
         MovieDTO movieDTO = null;
 
         try {
@@ -221,15 +222,15 @@ public class UserServiceImpl implements UsuarioService {
 
                     usuarioDAO.save(usuarioDTO);
                 } else {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La película no está en favoritos");
+                    throw new BadRequestException("La película no está en favoritos");
                 }
 
             } catch (NoSuchElementException ex) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe la película");
+                throw new NotFoudException("No existe la película");
             }
 
         } catch (NoSuchElementException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario");
+            throw new NotFoudException("No existe el usuario");
         }
 
     }

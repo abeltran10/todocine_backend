@@ -5,6 +5,8 @@ import com.todocine.dao.MovieDAO;
 import com.todocine.dao.VotoDAO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.VotoDTO;
+import com.todocine.exceptions.BadGatewayException;
+import com.todocine.exceptions.NotFoudException;
 import com.todocine.model.Movie;
 import com.todocine.model.Voto;
 import com.todocine.service.MovieService;
@@ -13,9 +15,7 @@ import com.todocine.utils.Paginator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,29 +38,29 @@ public class MovieServiceImpl implements MovieService {
     private VotoDAO votoDAO;
 
     @Override
-    public Movie getMovieById(String id) throws ResponseStatusException {
+    public Movie getMovieById(String id) throws NotFoudException, BadGatewayException {
         try {
             Map<String, Object> movieMap = tmdbService.getMovieById(id);
 
             if (movieMap.get("id") == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película");
+                throw new NotFoudException("No se ha encontrado la película");
             } else {
                 Movie movie = new Movie(movieMap);
                 return movie;
             }
         } catch (IOException ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
+            throw new BadGatewayException("La respuesta de TMDB ha fallado");
         }
     }
 
     @Override
-    public Paginator getMovieByName(String name, Integer pagina) throws ResponseStatusException {
+    public Paginator getMovieByName(String name, Integer pagina) throws NotFoudException, BadGatewayException {
         try {
 
             Map<String, Object> map = tmdbService.getMoviesByName(name, pagina);
 
             if (map.get("results") == null)
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película con ese nombre");
+                throw new NotFoudException("No se ha encontrado la película con ese nombre");
             else {
                 Paginator<Movie> moviePage = new Paginator<>(map);
                 List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
@@ -73,19 +73,19 @@ public class MovieServiceImpl implements MovieService {
             }
 
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
+            throw new BadGatewayException("La respuesta de TMDB ha fallado");
         }
 
     }
 
     @Override
-    public Paginator getMoviesPlayingNow(String country, Integer pagina) throws ResponseStatusException {
+    public Paginator getMoviesPlayingNow(String country, Integer pagina) throws NotFoudException, BadGatewayException {
         try {
 
             Map<String, Object> map = tmdbService.getMoviesPlayingNow(country, pagina);
 
             if (map.get("results") == null)
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la cartelera para esa región");
+                throw new NotFoudException("No se ha encontrado la cartelera para esa región");
             else {
                 Paginator<Movie> moviePage = new Paginator<>(map);
                 List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
@@ -97,12 +97,12 @@ public class MovieServiceImpl implements MovieService {
                 return moviePage;
             }
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
+            throw new BadGatewayException("La respuesta de TMDB ha fallado");
         }
     }
 
     @Override
-    public Movie addVote(String id, Voto voto) throws ResponseStatusException {
+    public Movie addVote(String id, Voto voto) throws BadGatewayException {
         MovieDTO dto = null;
         Movie movie = null;
 
@@ -138,13 +138,13 @@ public class MovieServiceImpl implements MovieService {
 
             return movie;
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "La respuesta de TMDB ha fallado");
+            throw new BadGatewayException("La respuesta de TMDB ha fallado");
         }
 
     }
 
     @Override
-    public Movie updateVote(String movieId, String votoId, Voto voto) throws ResponseStatusException {
+    public Movie updateVote(String movieId, String votoId, Voto voto) throws NotFoudException {
         MovieDTO dto = null;
         Movie movie = null;
 
@@ -180,13 +180,13 @@ public class MovieServiceImpl implements MovieService {
 
                     return movie;
                 } else {
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay un voto anterior");
+                    throw new NotFoudException("No hay un voto anterior");
                 }
             } catch (NoSuchElementException ex) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay un voto anterior");
+                throw new NotFoudException("No hay un voto anterior");
             }
         } catch (IOException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado la película");
+            throw new NotFoudException("No se ha encontrado la película");
         }
     }
 

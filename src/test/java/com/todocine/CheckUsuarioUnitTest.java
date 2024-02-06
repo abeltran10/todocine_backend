@@ -4,6 +4,7 @@ import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.exceptions.BadRequestException;
 import com.todocine.model.Movie;
 import com.todocine.model.Usuario;
 import com.todocine.service.impl.UserServiceImpl;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,7 +89,7 @@ public class CheckUsuarioUnitTest {
 
         try {
             usuarioService.insertUsuario(usuario);
-        } catch (ResponseStatusException ex) {
+        } catch (BadRequestException ex) {
             LOG.info(ex.getMessage());
             assertTrue(ex.getMessage().contains("Un usuario con ese nombre ya existe"));
         }
