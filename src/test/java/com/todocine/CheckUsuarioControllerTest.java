@@ -15,7 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -28,23 +29,20 @@ public class CheckUsuarioControllerTest {
     private UsuarioController controller;
 
     @Test
-    void inserException() throws BadRequestException {
-        BadRequestException exception = null;
+    void inserException() {
+        LOG.info("insertException");
         Usuario user1 = new Usuario("test", "1234");
-        Mockito.doThrow(new BadRequestException(HttpStatus.BAD_REQUEST, "Ya existe el usuario")).when(serviceMock).insertUsuario(user1);
+        Mockito.doThrow(new BadRequestException("Ya existe el usuario")).when(serviceMock).insertUsuario(user1);
+
         try {
-            Usuario usuario = controller.insertUsuario(user1);
+            controller.insertUsuario(user1);
         } catch (BadRequestException ex) {
-            exception = ex;
+
+            assertAll(
+                    () -> assertEquals("Ya existe el usuario", ex.getReason()),
+                    () -> assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode())
+            );
         }
-
-
-        BadRequestException finalException = exception;
-        LOG.info(finalException.toString());
-
-        assertTrue(finalException.getMessage().contains("Ya existe el usuario"));
-
-
     }
 
 }

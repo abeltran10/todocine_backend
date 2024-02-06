@@ -19,4 +19,6 @@ public class BadRequestException extends ResponseStatusException {
     public BadRequestException(String reason) {
         super(HttpStatus.BAD_REQUEST, reason);
     }
+
+
 }
