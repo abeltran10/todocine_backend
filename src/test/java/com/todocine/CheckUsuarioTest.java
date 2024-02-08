@@ -139,11 +139,7 @@ public class CheckUsuarioTest {
                 , "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
                 , new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
-        Usuario usuario1 = usuarioService.addFavoritosByUserId(usuario.getId(), movie);
-
-        assertTrue(usuario1.getFavoritos().size() == 2);
-
-        Movie movie1 = usuario1.getFavoritos().stream().filter(mov -> mov.getId().equals(movie.getId())).findAny().get();
+        Movie movie1 = usuarioService.addFavoritosByUserId(usuario.getId(), movie);
 
         assertEquals("572802", movie1.getId());
 

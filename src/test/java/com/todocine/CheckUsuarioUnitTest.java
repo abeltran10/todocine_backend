@@ -148,11 +148,7 @@ public class CheckUsuarioUnitTest {
         Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuarioDTO));
         Mockito.when(movieDAO.findById("572802")).thenReturn(Optional.of(movieDTO));
 
-        Usuario usuario1 = usuarioService.addFavoritosByUserId(usuario.getId(), movie);
-
-        assertTrue(usuario1.getFavoritos().size() == 2);
-
-        Movie movie1 = usuario1.getFavoritos().stream().filter(mov -> mov.getId().equals(movie.getId())).findAny().get();
+        Movie movie1 = usuarioService.addFavoritosByUserId(usuario.getId(), movie);
 
         assertEquals("572802", movie1.getId());
 

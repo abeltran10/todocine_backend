@@ -19,7 +19,7 @@ public interface UsuarioService extends UserDetailsService {
 
     Paginator getUsuarioFavs(String username, Integer page) throws NotFoudException;
 
-    Usuario addFavoritosByUserId(String id, Movie movie) throws BadRequestException, NotFoudException;
+    Movie addFavoritosByUserId(String id, Movie movie) throws BadRequestException, NotFoudException;
 
     void deleteFavoritosByUserId(String id, String movieId) throws BadRequestException, NotFoudException;
 }

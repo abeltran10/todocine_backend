@@ -66,7 +66,7 @@ public class UserServiceImpl implements UsuarioService {
         UsuarioDTO usuarioDTO = usuarioDAO.findById(id).get();
 
         if (usuarioDTO == null)
-            throw new NotFoudException(HttpStatus.NOT_FOUND, "No existe el usuario con ese nombre");
+            throw new NotFoudException("No existe el usuario con ese nombre");
         else {
             return new Usuario(usuarioDTO);
         }
@@ -161,7 +161,7 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario addFavoritosByUserId(String id, Movie movie) throws BadRequestException, NotFoudException {
+    public Movie addFavoritosByUserId(String id, Movie movie) throws BadRequestException, NotFoudException {
         MovieDTO  movieDTO = null;
 
         try {
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UsuarioService {
                 usuarioDTO.getFavoritos().add(movieDTO);
                 usuarioDAO.save(usuarioDTO);
 
-                return new Usuario(usuarioDTO);
+                return new Movie(movieDTO);
 
             } else
                 throw new BadRequestException("La película ya está en favoritos");

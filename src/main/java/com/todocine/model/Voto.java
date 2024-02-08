@@ -1,15 +1,19 @@
 package com.todocine.model;
 
 import com.todocine.dto.VotoDTO;
+import jakarta.validation.constraints.NotBlank;
 
 public class Voto {
 
     private String id;
 
+    @NotBlank
     private Usuario usuario;
 
+    @NotBlank
     private Movie movie;
 
+    @NotBlank
     private Double voto;
 
     public Voto() {
