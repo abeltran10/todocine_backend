@@ -61,7 +61,7 @@ public class UsuarioController {
         logger.info("deleteFavoritosByUserId");
         usuarioService.deleteFavoritosByUserId(id, movieId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
