@@ -6,6 +6,7 @@ import com.todocine.dao.VotoDAO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.VotoDTO;
 import com.todocine.exceptions.BadGatewayException;
+import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.model.Movie;
 import com.todocine.model.Voto;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,14 +39,25 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie getMovieById(String id) throws NotFoudException, BadGatewayException {
+        Movie movie1 = null;
         try {
             Map<String, Object> movieMap = tmdbService.getMovieById(id);
 
-            if (movieMap.get("id") == null) {
-                throw new NotFoudException("No se ha encontrado la película");
-            } else {
+            if (movieMap.get("id") != null) {
                 Movie movie = new Movie(movieMap);
+                MovieDTO movieDTO = movieDAO.findById(id).orElse(null);
+
+                if (movieDTO != null) {
+                    movie1 = new Movie(movieDTO);
+                    movie.setVotos(movie1.getVotos());
+                    movie.setVotosMediaTC(movie1.getVotosMediaTC());
+                    movie.setTotalVotosTC(movie1.getTotalVotosTC());
+                }
+
                 return movie;
+
+            } else {
+                throw new NotFoudException("No se ha encontrado la película");
             }
         } catch (IOException ex) {
             throw new BadGatewayException("La respuesta de TMDB ha fallado");
@@ -102,7 +113,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie addVote(String id, Voto voto) throws BadGatewayException {
+    public Movie addVote(String id, Voto voto) throws BadGatewayException, NotFoudException {
         MovieDTO dto = null;
         Movie movie = null;
 
@@ -110,33 +121,36 @@ public class MovieServiceImpl implements MovieService {
             Map<String, Object> map = tmdbService.getMovieById(id);
             if (map.get("id") != null) {
                 movie = new Movie(map);
+                dto = movieDAO.findById(id).orElse(null);
+
+                if (dto == null)
+                    dto = new MovieDTO(movie);
+
+                VotoDTO votoDTO = new VotoDTO(voto);
+                votoDAO.save(votoDTO);
+
+                dto.getVotosTC().add(votoDTO);
+
+                Integer totalVotosTC = dto.getTotalVotosTC();
+                Double total = dto.getVotosMediaTC() * totalVotosTC;
+
+                ++totalVotosTC;
+                dto.setTotalVotosTC(totalVotosTC);
+                dto.setVotosMediaTC((total + voto.getVoto()) / totalVotosTC);
+
+                movieDAO.save(dto);
+
+                List<Voto> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new Voto(votoDTO1)).collect(Collectors.toList());
+                movie.setVotos(currentVotes);
+                movie.setTotalVotosTC(dto.getTotalVotosTC());
+                movie.setVotosMediaTC(dto.getVotosMediaTC());
+
+                return movie;
+            } else {
+                throw new NotFoudException("No se ha encontrado la película en TMDB");
             }
 
-            dto = movieDAO.findById(id).orElse(null);
 
-            if (dto == null)
-                dto = new MovieDTO(movie);
-
-            VotoDTO votoDTO = new VotoDTO(voto);
-            votoDAO.save(votoDTO);
-
-            dto.getVotosTC().add(votoDTO);
-
-            Integer totalVotosTC = dto.getTotalVotosTC();
-            Double total = dto.getVotosMediaTC() * totalVotosTC;
-
-            ++totalVotosTC;
-            dto.setTotalVotosTC(totalVotosTC);
-            dto.setVotosMediaTC((total + voto.getVoto()) / totalVotosTC);
-
-            movieDAO.save(dto);
-
-            List<Voto> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new Voto(votoDTO1)).collect(Collectors.toList());
-            movie.setVotos(currentVotes);
-            movie.setTotalVotosTC(dto.getTotalVotosTC());
-            movie.setVotosMediaTC(dto.getVotosMediaTC());
-
-            return movie;
         } catch (IOException e) {
             throw new BadGatewayException("La respuesta de TMDB ha fallado");
         }
@@ -144,7 +158,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie updateVote(String movieId, String votoId, Voto voto) throws NotFoudException {
+    public Movie updateVote(String movieId, String votoId, Voto voto) throws BadRequestException, NotFoudException, BadGatewayException {
         MovieDTO dto = null;
         Movie movie = null;
 
@@ -152,42 +166,40 @@ public class MovieServiceImpl implements MovieService {
             Map<String, Object> map = tmdbService.getMovieById(movieId);
             if (map.get("id") != null) {
                 movie = new Movie(map);
-            }
+                dto = movieDAO.findById(movieId).orElse(null);
 
-            try {
-                dto = movieDAO.findById(movieId).get();
+                if (dto != null) {
+                    VotoDTO votoDTO = votoDAO.findById(votoId).get();
+                    List<VotoDTO> votosTC = dto.getVotosTC();
+                    if (votosTC.contains(votoDTO)) {
+                        votosTC.remove(votoDTO);
 
-                VotoDTO votoDTO = votoDAO.findById(votoId).get();
-                List<VotoDTO> votosTC = dto.getVotosTC();
-                if (votosTC.contains(votoDTO)) {
-                    votosTC.remove(votoDTO);
+                        Double total = dto.getVotosMediaTC() * dto.getTotalVotosTC();
+                        Double totalOld = total - votoDTO.getVoto();
 
-                    Double total = dto.getVotosMediaTC() * dto.getTotalVotosTC();
-                    Double totalOld = total - votoDTO.getVoto();
+                        dto.setVotosMediaTC((totalOld + voto.getVoto()) / dto.getTotalVotosTC());
+                        votoDTO.setVoto(voto.getVoto());
 
-                    dto.setVotosMediaTC((totalOld + voto.getVoto()) / dto.getTotalVotosTC());
-                    votoDTO.setVoto(voto.getVoto());
+                        votoDAO.save(votoDTO);
 
-                    votoDAO.save(votoDTO);
+                        votosTC.add(votoDTO);
+                        movieDAO.save(dto);
 
-                    votosTC.add(votoDTO);
-                    movieDAO.save(dto);
+                        List<Voto> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new Voto(votoDTO1)).collect(Collectors.toList());
+                        movie.setVotos(currentVotes);
+                        movie.setTotalVotosTC(dto.getTotalVotosTC());
+                        movie.setVotosMediaTC(dto.getVotosMediaTC());
 
-                    List<Voto> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new Voto(votoDTO1)).collect(Collectors.toList());
-                    movie.setVotos(currentVotes);
-                    movie.setTotalVotosTC(dto.getTotalVotosTC());
-                    movie.setVotosMediaTC(dto.getVotosMediaTC());
-
-                    return movie;
-                } else {
-                    throw new NotFoudException("No hay un voto anterior");
+                        return movie;
+                    }
                 }
-            } catch (NoSuchElementException ex) {
-                throw new NotFoudException("No hay un voto anterior");
+                throw new BadRequestException("No hay un voto para esa película");
+            } else {
+                throw new NotFoudException("No se ha encontrado la película");
             }
         } catch (IOException ex) {
-            throw new NotFoudException("No se ha encontrado la película");
+            throw new BadGatewayException("La respuesta de TMDB ha fallado");
         }
     }
-
 }
+

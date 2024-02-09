@@ -1,6 +1,7 @@
 package com.todocine.service;
 
 import com.todocine.exceptions.BadGatewayException;
+import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.model.Movie;
 import com.todocine.model.Voto;
@@ -16,5 +17,5 @@ public interface MovieService {
 
     Movie addVote(String id, Voto voto) throws BadGatewayException;
 
-    Movie updateVote(String movieId, String votoId, Voto voto) throws NotFoudException;
+    Movie updateVote(String movieId, String votoId, Voto voto) throws BadGatewayException, NotFoudException, BadRequestException;
 }
