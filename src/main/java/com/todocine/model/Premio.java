@@ -10,20 +10,24 @@ public class Premio {
 
     private String titulo;
 
+    private Movie movie;
+
     public Premio(String id) {
         this.id = id;
     }
 
-    public Premio(String id, String categoria, String titulo) {
+    public Premio(String id, String categoria, String titulo, Movie movie) {
         this.id = id;
         this.categoria = categoria;
         this.titulo = titulo;
+        this.movie = movie;
     }
 
     public Premio(PremioDTO premioDTO) {
         this.id = premioDTO.getId();
         this.categoria = premioDTO.getCategoria();
         this.titulo = premioDTO.getTitulo();
+        this.movie = new Movie(premioDTO.getMovie());
     }
 
     public String getId() {
@@ -48,5 +52,13 @@ public class Premio {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
     }
 }

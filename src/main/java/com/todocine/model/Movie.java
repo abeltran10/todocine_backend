@@ -3,6 +3,7 @@ package com.todocine.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.MovieDTO;
+import com.todocine.dto.PremioDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -62,6 +63,9 @@ public class Movie {
     @JsonProperty("videos")
     @NotNull
     private List<Video> videos;
+
+    private List<Premio> premios;
+
     @JsonProperty("votos")
     @NotNull
     private List<Voto> votos;
@@ -83,7 +87,7 @@ public class Movie {
 
     public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
                  Double popularity, Integer voteCount, Double voteAverage, List<Genre> genres, String originalLanguage,
-                 List<Video> videos, List<Voto> votos, Integer totalVotosTC, Double votosMediaTC) {
+                 List<Video> videos, List<Premio> premios, List<Voto> votos, Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -96,6 +100,7 @@ public class Movie {
         this.genres = genres;
         this.originalLanguage = originalLanguage;
         this.videos = videos;
+        this.premios = premios;
         this.votos = votos;
         this.totalVotosTC = totalVotosTC;
         this.votosMediaTC = votosMediaTC;
@@ -114,6 +119,7 @@ public class Movie {
         this.genres = movieDTO.getGenreIds().stream().map(genreDTO ->  new Genre(genreDTO)).collect(Collectors.toList());
         this.originalLanguage = movieDTO.getOriginalLanguage();
         this.videos = movieDTO.getVideos().stream().map(videoDTO -> new Video(videoDTO)).collect(Collectors.toList());
+        this.premios = movieDTO.getPremios().stream().map(premioDTO -> new Premio(premioDTO)).collect(Collectors.toList());
         this.votos = movieDTO.getVotosTC().stream().map(votoDTO -> new Voto(votoDTO)).collect(Collectors.toList());
         this.votosMediaTC = movieDTO.getVotosMediaTC();
         this.totalVotosTC = movieDTO.getTotalVotosTC();

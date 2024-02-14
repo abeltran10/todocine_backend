@@ -16,6 +16,8 @@ public class PremioDTO {
 
     private String titulo;
 
+    private MovieDTO movie;
+
     @Version
     private Integer version;
 
@@ -24,16 +26,18 @@ public class PremioDTO {
     }
 
     @PersistenceCreator
-    public PremioDTO(String id, String categoria, String titulo) {
+    public PremioDTO(String id, String categoria, String titulo, MovieDTO movie) {
         this.id = id;
         this.categoria = categoria;
         this.titulo = titulo;
+        this.movie = movie;
     }
 
     public PremioDTO(Premio premio) {
         this.id = premio.getId();
         this.categoria = premio.getCategoria();
         this.titulo = premio.getTitulo();
+        this.movie = new MovieDTO(premio.getMovie());
     }
 
     public String getId() {
@@ -58,6 +62,14 @@ public class PremioDTO {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public MovieDTO getMovie() {
+        return movie;
+    }
+
+    public void setMovie(MovieDTO movie) {
+        this.movie = movie;
     }
 
     public Integer getVersion() {

@@ -45,6 +45,9 @@ public class MovieDTO {
     private List<UsuarioDTO> usuarios;
 
     @DocumentReference
+    private List<PremioDTO> premios;
+
+    @DocumentReference
     private List<VotoDTO> votosTC;
 
     private Integer totalVotosTC;
@@ -214,6 +217,14 @@ public class MovieDTO {
 
     public void setUsuarios(List<UsuarioDTO> usuarios) {
         this.usuarios = usuarios;
+    }
+
+    public List<PremioDTO> getPremios() {
+        return premios;
+    }
+
+    public void setPremios(List<PremioDTO> premios) {
+        this.premios = premios;
     }
 
     public List<VotoDTO> getVotosTC() {
