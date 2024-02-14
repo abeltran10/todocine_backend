@@ -12,7 +12,7 @@ public class PremioDTO {
     @Id
     private String id;
 
-    private String categoría;
+    private String categoria;
 
     private String titulo;
 
@@ -24,15 +24,15 @@ public class PremioDTO {
     }
 
     @PersistenceCreator
-    public PremioDTO(String id, String categoría, String titulo) {
+    public PremioDTO(String id, String categoria, String titulo) {
         this.id = id;
-        this.categoría = categoría;
+        this.categoria = categoria;
         this.titulo = titulo;
     }
 
     public PremioDTO(Premio premio) {
         this.id = premio.getId();
-        this.categoría = premio.getCategoria();
+        this.categoria = premio.getCategoria();
         this.titulo = premio.getTitulo();
     }
 
@@ -44,12 +44,12 @@ public class PremioDTO {
         this.id = id;
     }
 
-    public String getCategoría() {
-        return categoría;
+    public String getCategoria() {
+        return categoria;
     }
 
-    public void setCategoría(String categoría) {
-        this.categoría = categoría;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public String getTitulo() {

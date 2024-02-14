@@ -22,7 +22,7 @@ public class Premio {
 
     public Premio(PremioDTO premioDTO) {
         this.id = premioDTO.getId();
-        this.categoria = premioDTO.getCategoría();
+        this.categoria = premioDTO.getCategoria();
         this.titulo = premioDTO.getTitulo();
     }
 
