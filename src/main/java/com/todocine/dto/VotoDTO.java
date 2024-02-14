@@ -2,6 +2,7 @@ package com.todocine.dto;
 
 import com.todocine.model.Voto;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -32,6 +33,7 @@ public class VotoDTO {
         this.id = id;
     }
 
+    @PersistenceCreator
     public VotoDTO(String id, UsuarioDTO usuario, MovieDTO movie, Double voto) {
         this.id = id;
         this.usuario = usuario;
