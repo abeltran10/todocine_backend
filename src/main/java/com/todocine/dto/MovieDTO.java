@@ -67,7 +67,7 @@ public class MovieDTO {
     @PersistenceCreator
     public MovieDTO(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
                     Double popularity, Integer voteCount, Double voteAverage, List<GenreDTO> genreIds,
-                    String originalLanguage, List<VideoDTO> videos, List<UsuarioDTO> usuarios, List<VotoDTO> votosTC,
+                    String originalLanguage, List<VideoDTO> videos, List<UsuarioDTO> usuarios, List<PremioDTO> premios, List<VotoDTO> votosTC,
                     Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
         this.originalTitle = originalTitle;
@@ -82,6 +82,7 @@ public class MovieDTO {
         this.originalLanguage = originalLanguage;
         this.videos = videos;
         this.usuarios = usuarios;
+        this.premios = premios;
         this.votosTC = votosTC;
         this.totalVotosTC = totalVotosTC;
         this.votosMediaTC = votosMediaTC;
@@ -102,6 +103,7 @@ public class MovieDTO {
         this.originalLanguage = movie.getOriginalLanguage();
         this.videos = movie.getVideos().stream().map(video -> new VideoDTO(video)).collect(Collectors.toList());
         this.usuarios = new ArrayList<>();
+        this.premios = movie.getPremios().stream().map(premio -> new PremioDTO(premio)).collect(Collectors.toList());
         this.votosTC = movie.getVotos().stream().map(voto -> new VotoDTO(voto)).collect(Collectors.toList());
         this.votosMediaTC = movie.getVotosMediaTC();
         this.totalVotosTC = movie.getTotalVotosTC();

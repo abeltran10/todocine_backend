@@ -133,7 +133,7 @@ public class UserServiceImpl implements UsuarioService {
     @Override
     public Paginator<Movie> getUsuarioFavs(String id, Integer page) throws NotFoudException {
         Paginator<Movie> paginator = new Paginator<>();
-        List<MovieDTO> movieDTOS = movieDAO.findByUserId(id);
+        List<MovieDTO> movieDTOS = movieDAO.findByUsuariosId(id);
 
         if (movieDTOS != null && !movieDTOS.isEmpty()) {
             List<Movie> movieList = movieDTOS.stream().map(movieDTO -> new Movie(movieDTO)).collect(Collectors.toList());

@@ -151,6 +151,7 @@ public class Movie {
         this.videos = (objectMap != null) ? ((List<Map<String, Object>>) objectMap.get("results")).stream()
                 .map(item -> new Video(item)).collect(Collectors.toList()) : new ArrayList<>();
 
+        this.premios = new ArrayList<>();
         this.votos = new ArrayList<>();
         this.totalVotosTC = 0;
         this.votosMediaTC = 0D;
@@ -255,6 +256,14 @@ public class Movie {
 
     public void setVideos(List<Video> videos) {
         this.videos = videos;
+    }
+
+    public List<Premio> getPremios() {
+        return premios;
+    }
+
+    public void setPremios(List<Premio> premios) {
+        this.premios = premios;
     }
 
     public List<Voto> getVotos() {
