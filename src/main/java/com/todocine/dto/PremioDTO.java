@@ -7,14 +7,16 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Document(collection = "Premios")
 public class PremioDTO {
 
     @Id
     private String id;
 
-    @DBRef
-    private CategoriaDTO categoriaDTO;
+    private List<CategoriaDTO> categoriaDTOS;
 
     private String titulo;
 
@@ -26,15 +28,16 @@ public class PremioDTO {
     }
 
     @PersistenceCreator
-    public PremioDTO(String id, CategoriaDTO categoriaDTO, String titulo) {
+    public PremioDTO(String id, List<CategoriaDTO> categoriaDTOS, String titulo) {
         this.id = id;
-        this.categoriaDTO = categoriaDTO;
+        this.categoriaDTOS = categoriaDTOS;
         this.titulo = titulo;
     }
 
     public PremioDTO(Premio premio) {
         this.id = premio.getId();
-        this.categoriaDTO = new CategoriaDTO(premio.getCategoria());
+        this.categoriaDTOS = premio.getCategorias().stream().map(categoria -> new CategoriaDTO(categoria))
+                .collect(Collectors.toList());
         this.titulo = premio.getTitulo();
     }
 
@@ -46,12 +49,12 @@ public class PremioDTO {
         this.id = id;
     }
 
-    public CategoriaDTO getCategoriaDTO() {
-        return categoriaDTO;
+    public List<CategoriaDTO> getCategoriaDTOS() {
+        return categoriaDTOS;
     }
 
-    public void setCategoriaDTO(CategoriaDTO categoriaDTO) {
-        this.categoriaDTO = categoriaDTO;
+    public void setCategoriaDTOS(List<CategoriaDTO> categoriaDTOS) {
+        this.categoriaDTOS = categoriaDTOS;
     }
 
     public String getTitulo() {
