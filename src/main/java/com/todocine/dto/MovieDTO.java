@@ -103,7 +103,7 @@ public class MovieDTO {
         this.originalLanguage = movie.getOriginalLanguage();
         this.videos = movie.getVideos().stream().map(video -> new VideoDTO(video)).collect(Collectors.toList());
         this.usuarios = new ArrayList<>();
-        this.premios = movie.getPremios().stream().map(premio -> new PremioDTO(premio)).collect(Collectors.toList());
+        this.premios = new ArrayList<>();
         this.votosTC = movie.getVotos().stream().map(voto -> new VotoDTO(voto)).collect(Collectors.toList());
         this.votosMediaTC = movie.getVotosMediaTC();
         this.totalVotosTC = movie.getTotalVotosTC();
