@@ -137,7 +137,7 @@ public class CheckUsuarioTest {
                 "el ex rey de la Atlántida, para forjar una alianza improbable. Juntos, deben dejar de lado sus diferencias" +
                 " para proteger su reino y salvar a la familia de Aquaman, y al mundo, de una destrucción irreversible."
                 , "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
-                , new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), 0, 0D);
+                , new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
         Movie movie1 = usuarioService.addFavoritosByUserId(usuario.getId(), movie);
 
