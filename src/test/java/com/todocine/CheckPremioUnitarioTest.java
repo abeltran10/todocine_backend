@@ -49,17 +49,17 @@ public class CheckPremioUnitarioTest {
 
         CategoriaDTO categoriaDTO1 = new CategoriaDTO();
         categoriaDTO1.setNombre("Mejor Película");
-        categoriaDTO1.setMovieDTO(movieDTO1);
+        categoriaDTO1.setMovie(movieDTO1);
 
         CategoriaDTO categoriaDTO2 = new CategoriaDTO();
         categoriaDTO2.setNombre("Mejor Director");
-        categoriaDTO2.setMovieDTO(movieDTO1);
+        categoriaDTO2.setMovie(movieDTO1);
 
         List<CategoriaDTO> categoriaDTOS = Arrays.asList(categoriaDTO1, categoriaDTO2);
 
         PremioDTO premioDTO1 = new PremioDTO("1");
         premioDTO1.setTitulo("Goya");
-        premioDTO1.setCategoriaDTOS(categoriaDTOS);
+        premioDTO1.setCategorias(categoriaDTOS);
 
         premioDTO = premioDTO1;
     }

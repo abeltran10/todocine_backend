@@ -8,14 +8,14 @@ public class CategoriaDTO {
     private String nombre;
 
     @DocumentReference
-    private MovieDTO movieDTO;
+    private MovieDTO movie;
 
     public CategoriaDTO() {
     }
 
     public CategoriaDTO(Categoria categoria) {
         this.nombre = categoria.getNombre();
-        this.movieDTO = new MovieDTO(categoria.getMovie());
+        this.movie = new MovieDTO(categoria.getMovie());
     }
 
     public String getNombre() {
@@ -26,11 +26,11 @@ public class CategoriaDTO {
         this.nombre = nombre;
     }
 
-    public MovieDTO getMovieDTO() {
-        return movieDTO;
+    public MovieDTO getMovie() {
+        return movie;
     }
 
-    public void setMovieDTO(MovieDTO movieDTO) {
-        this.movieDTO = movieDTO;
+    public void setMovie(MovieDTO movie) {
+        this.movie = movie;
     }
 }

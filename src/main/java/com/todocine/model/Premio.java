@@ -25,7 +25,7 @@ public class Premio {
 
     public Premio(PremioDTO premioDTO) {
         this.id = premioDTO.getId();
-        this.categorias = premioDTO.getCategoriaDTOS().stream().map(categoriaDTO -> new Categoria(categoriaDTO))
+        this.categorias = premioDTO.getCategorias().stream().map(categoriaDTO -> new Categoria(categoriaDTO))
                 .collect(Collectors.toList());
         this.titulo = premioDTO.getTitulo();
     }

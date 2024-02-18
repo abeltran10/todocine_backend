@@ -4,7 +4,6 @@ import com.todocine.model.Premio;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Version;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public class PremioDTO {
     @Id
     private String id;
 
-    private List<CategoriaDTO> categoriaDTOS;
+    private List<CategoriaDTO> categorias;
 
     private String titulo;
 
@@ -28,15 +27,15 @@ public class PremioDTO {
     }
 
     @PersistenceCreator
-    public PremioDTO(String id, List<CategoriaDTO> categoriaDTOS, String titulo) {
+    public PremioDTO(String id, List<CategoriaDTO> categorias, String titulo) {
         this.id = id;
-        this.categoriaDTOS = categoriaDTOS;
+        this.categorias = categorias;
         this.titulo = titulo;
     }
 
     public PremioDTO(Premio premio) {
         this.id = premio.getId();
-        this.categoriaDTOS = premio.getCategorias().stream().map(categoria -> new CategoriaDTO(categoria))
+        this.categorias = premio.getCategorias().stream().map(categoria -> new CategoriaDTO(categoria))
                 .collect(Collectors.toList());
         this.titulo = premio.getTitulo();
     }
@@ -49,12 +48,12 @@ public class PremioDTO {
         this.id = id;
     }
 
-    public List<CategoriaDTO> getCategoriaDTOS() {
-        return categoriaDTOS;
+    public List<CategoriaDTO> getCategorias() {
+        return categorias;
     }
 
-    public void setCategoriaDTOS(List<CategoriaDTO> categoriaDTOS) {
-        this.categoriaDTOS = categoriaDTOS;
+    public void setCategorias(List<CategoriaDTO> categorias) {
+        this.categorias = categorias;
     }
 
     public String getTitulo() {
