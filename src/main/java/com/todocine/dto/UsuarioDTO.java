@@ -79,7 +79,7 @@ public class UsuarioDTO implements UserDetails {
         this.accountNonLocked = usuario.getAccountNonLocked();
         this.credentialsNonExpired = usuario.getCredentialsNonExpired();
         this.enabled = usuario.getEnabled();
-        this.favoritos = usuario.getFavoritos().stream().map(fav -> new MovieDTO(fav)).collect(Collectors.toList());
+        this.favoritos = usuario.getFavoritos().stream().map(fav -> new MovieDTO(fav.getId())).collect(Collectors.toList());
         this.votos = new ArrayList<>();
     }
 
