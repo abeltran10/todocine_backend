@@ -119,7 +119,7 @@ public class Movie {
         this.genres = movieDTO.getGenreIds().stream().map(genreDTO ->  new Genre(genreDTO)).collect(Collectors.toList());
         this.originalLanguage = movieDTO.getOriginalLanguage();
         this.videos = movieDTO.getVideos().stream().map(videoDTO -> new Video(videoDTO)).collect(Collectors.toList());
-        this.premios = movieDTO.getPremios().stream().map(premioDTO -> new Premio(premioDTO.getId())).collect(Collectors.toList());
+        this.premios = movieDTO.getPremios().stream().map(premioDTO -> new Premio(premioDTO)).collect(Collectors.toList());
         this.votos = movieDTO.getVotosTC().stream().map(votoDTO -> new Voto(votoDTO)).collect(Collectors.toList());
         this.votosMediaTC = movieDTO.getVotosMediaTC();
         this.totalVotosTC = movieDTO.getTotalVotosTC();
