@@ -26,6 +26,10 @@ public class GenreDTO {
         this.name = name;
     }
 
+    public GenreDTO(String id) {
+        this.id = id;
+    }
+
     public GenreDTO(Genre genero) {
         this.id = genero.getId();
         this.name = genero.getName();

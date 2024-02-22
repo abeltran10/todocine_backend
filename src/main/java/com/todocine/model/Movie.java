@@ -125,6 +125,12 @@ public class Movie {
         this.totalVotosTC = movieDTO.getTotalVotosTC();
     }
 
+    public Movie(String id, String originalTitle, String posterPath) {
+        this.id = id;
+        this.originalTitle = originalTitle;
+        this.posterPath = posterPath;
+    }
+
     public Movie(Map<String, Object> map) {
         this.id = String.valueOf(map.get("id"));
         this.originalTitle = (String) map.get("original_title");
