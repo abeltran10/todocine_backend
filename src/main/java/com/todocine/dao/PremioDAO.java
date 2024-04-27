@@ -1,7 +1,7 @@
 package com.todocine.dao;
 
-import com.todocine.dto.PremioDTO;
+import com.todocine.entities.Premio;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface PremioDAO extends MongoRepository<PremioDTO, String> {
+public interface PremioDAO extends MongoRepository<Premio, String> {
 }

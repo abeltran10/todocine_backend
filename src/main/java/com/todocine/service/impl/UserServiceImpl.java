@@ -2,12 +2,12 @@ package com.todocine.service.impl;
 
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.entities.Movie;
+import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
-import com.todocine.model.Movie;
-import com.todocine.model.Usuario;
+import com.todocine.dto.MovieDTO;
 import com.todocine.service.TMDBService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;
@@ -49,38 +49,38 @@ public class UserServiceImpl implements UsuarioService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username);
 
-        UsuarioDTO usuarioDTO = usuarioDAO.findByUsername(username);
+        Usuario usuario = usuarioDAO.findByUsername(username);
 
-        if (usuarioDTO == null)
+        if (usuario == null)
             throw new UsernameNotFoundException("Usuario o contraseña incorrectos");
         else
-            return usuarioDTO;
+            return usuario;
 
     }
 
 
 
     @Override
-    public Usuario getUsuarioById(String id) throws NotFoudException {
-        UsuarioDTO usuarioDTO = usuarioDAO.findById(id).get();
+    public UsuarioDTO getUsuarioById(String id) throws NotFoudException {
+        Usuario usuario = usuarioDAO.findById(id).get();
 
-        if (usuarioDTO == null)
+        if (usuario == null)
             throw new NotFoudException("No existe el usuario con ese nombre");
         else {
-            return new Usuario(usuarioDTO);
+            return new UsuarioDTO(usuario);
         }
     }
 
     @Override
-    public Usuario getUsuarioByName(String username) throws NotFoudException {
+    public UsuarioDTO getUsuarioByName(String username) throws NotFoudException {
         log.info("getUsuarioByName");
 
-        UsuarioDTO usuarioDTO = usuarioDAO.findByUsername(username);
+        Usuario usuario = usuarioDAO.findByUsername(username);
 
-        if (usuarioDTO == null)
+        if (usuario == null)
             throw new NotFoudException("No existe el usuario");
         else {
-            return new Usuario(usuarioDTO);
+            return new UsuarioDTO(usuario);
         }
 
 
@@ -88,42 +88,42 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario insertUsuario(Usuario usuario) throws BadRequestException {
-        UsuarioDTO usuarioDTO = usuarioDAO.findByUsername(usuario.getUsername());
+    public UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws BadRequestException {
+        Usuario usuario = usuarioDAO.findByUsername(usuarioDTO.getUsername());
 
-        if (usuarioDTO == null) {
-            usuarioDTO = new UsuarioDTO();
-            usuarioDTO.setUsername(usuario.getUsername());
-            usuarioDTO.setPassword(passwordEncoder().encode(usuario.getPassword()));
-            usuarioDTO.setEnabled(true);
-            usuarioDTO.setCredentialsNonExpired(true);
-            usuarioDTO.setAccountNonLocked(true);
-            usuarioDTO.setAccountNonExpired(true);
-            usuarioDTO.setFavoritos(new ArrayList<>());
+        if (usuario == null) {
+            usuario = new Usuario();
+            usuario.setUsername(usuarioDTO.getUsername());
+            usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
+            usuario.setEnabled(true);
+            usuario.setCredentialsNonExpired(true);
+            usuario.setAccountNonLocked(true);
+            usuario.setAccountNonExpired(true);
+            usuario.setFavoritos(new ArrayList<>());
 
-            usuarioDAO.save(usuarioDTO);
+            usuarioDAO.save(usuario);
 
-            return new Usuario(usuarioDTO);
+            return new UsuarioDTO(usuario);
         } else {
             throw new BadRequestException("Un usuario con ese nombre ya existe");
         }
     }
 
     @Override
-    public Usuario updateUsuario(String id, Usuario usuario) throws NotFoudException {
+    public UsuarioDTO updateUsuario(String id, UsuarioDTO usuarioDTO) throws NotFoudException {
        log.info("updateUsuario");
-        UsuarioDTO usuarioDTO = null;
+        Usuario usuario = null;
         try {
-            usuarioDTO = usuarioDAO.findById(id).get();
-            usuarioDTO.setPassword(passwordEncoder().encode(usuario.getPassword()));
-            usuarioDTO.setEnabled(usuario.getEnabled());
-            usuarioDTO.setAccountNonExpired(usuario.getAccountNonExpired());
-            usuarioDTO.setAccountNonLocked(usuario.getAccountNonLocked());
-            usuarioDTO.setCredentialsNonExpired(usuario.getCredentialsNonExpired());
+            usuario = usuarioDAO.findById(id).get();
+            usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
+            usuario.setEnabled(usuarioDTO.getEnabled());
+            usuario.setAccountNonExpired(usuarioDTO.getAccountNonExpired());
+            usuario.setAccountNonLocked(usuarioDTO.getAccountNonLocked());
+            usuario.setCredentialsNonExpired(usuarioDTO.getCredentialsNonExpired());
 
-            usuarioDAO.save(usuarioDTO);
+            usuarioDAO.save(usuario);
 
-            return new Usuario(usuarioDTO);
+            return new UsuarioDTO(usuario);
         } catch (NoSuchElementException ex) {
             throw new NotFoudException("No existe el usuario");
         }
@@ -131,17 +131,17 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Paginator<Movie> getUsuarioFavs(String id, Integer page) throws NotFoudException {
-        Paginator<Movie> paginator = new Paginator<>();
-        List<MovieDTO> movieDTOS = movieDAO.findByUsuariosId(id);
+    public Paginator<MovieDTO> getUsuarioFavs(String id, Integer page) throws NotFoudException {
+        Paginator<MovieDTO> paginator = new Paginator<>();
+        List<Movie> movieEntities = movieDAO.findByUsuariosId(id);
 
-        if (movieDTOS != null && !movieDTOS.isEmpty()) {
-            List<Movie> movieList = movieDTOS.stream().map(movieDTO -> new Movie(movieDTO)).collect(Collectors.toList());
+        if (movieEntities != null && !movieEntities.isEmpty()) {
+            List<MovieDTO> movieDTOList = movieEntities.stream().map(movieDTO -> new MovieDTO(movieDTO)).collect(Collectors.toList());
 
-            int totalResults = movieList.size();
+            int totalResults = movieDTOList.size();
             int totalPages = totalResults / (20 + 1) + 1;
 
-            List<Movie> results = movieList.stream()
+            List<MovieDTO> results = movieDTOList.stream()
                     .skip((page - 1) * 20)
                     .limit(20).collect(Collectors.toList());
 
@@ -160,33 +160,33 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Movie addFavoritosByUserId(String id, Movie movie) throws BadRequestException, NotFoudException {
-        MovieDTO  movieDTO = null;
+    public MovieDTO addFavoritosByUserId(String id, MovieDTO movieDTO) throws BadRequestException, NotFoudException {
+        Movie movie = null;
 
         try {
-            UsuarioDTO usuarioDTO = usuarioDAO.findById(id).get();
+            Usuario usuario = usuarioDAO.findById(id).get();
 
             try {
-                movieDTO = movieDAO.findById(movie.getId()).get();
+                movie = movieDAO.findById(movieDTO.getId()).get();
             } catch (NoSuchElementException ex) {
-                Map<String, Object> movieMap = tmdbService.getMovieById(movie.getId());
+                Map<String, Object> movieMap = tmdbService.getMovieById(movieDTO.getId());
 
                 if (movieMap.get("id") == null)
                     throw new NotFoudException("No existe la película");
                 else {
-                    Movie peli = new Movie(movieMap);
-                    movieDTO = new MovieDTO(peli);
+                    MovieDTO peli = new MovieDTO(movieMap);
+                    movie = new Movie(peli);
                 }
             }
 
-            if (!usuarioDTO.getFavoritos().contains(movieDTO)) {
-                movieDTO.getUsuarios().add(usuarioDTO);
-                movieDAO.save(movieDTO);
+            if (!usuario.getFavoritos().contains(movie)) {
+                movie.getUsuarios().add(usuario);
+                movieDAO.save(movie);
 
-                usuarioDTO.getFavoritos().add(movieDTO);
-                usuarioDAO.save(usuarioDTO);
+                usuario.getFavoritos().add(movie);
+                usuarioDAO.save(usuario);
 
-                return new Movie(movieDTO);
+                return new MovieDTO(movie);
 
             } else
                 throw new BadRequestException("La película ya está en favoritos");
@@ -200,26 +200,26 @@ public class UserServiceImpl implements UsuarioService {
 
     @Override
     public void deleteFavoritosByUserId(String id, String movieId) throws BadRequestException, NotFoudException {
-        MovieDTO movieDTO = null;
+        Movie movie = null;
 
         try {
-            UsuarioDTO usuarioDTO = usuarioDAO.findById(id).get();
+            Usuario usuario = usuarioDAO.findById(id).get();
 
             try {
-                movieDTO = movieDAO.findById(movieId).get();
+                movie = movieDAO.findById(movieId).get();
 
-                List<MovieDTO> currentFavs = usuarioDTO.getFavoritos();
+                List<Movie> currentFavs = usuario.getFavoritos();
                 log.info("currentFavs: " + currentFavs);
-                if (currentFavs.contains(movieDTO)) {
-                    currentFavs.remove(movieDTO);
-                    log.info("favs user: " + usuarioDTO.getFavoritos());
-                    List<UsuarioDTO> currentUsers = movieDTO.getUsuarios();
-                    if (currentUsers.contains(usuarioDTO)) {
-                        currentUsers.remove(usuarioDTO);
-                        movieDAO.save(movieDTO);
+                if (currentFavs.contains(movie)) {
+                    currentFavs.remove(movie);
+                    log.info("favs user: " + usuario.getFavoritos());
+                    List<Usuario> currentUsers = movie.getUsuarios();
+                    if (currentUsers.contains(usuario)) {
+                        currentUsers.remove(usuario);
+                        movieDAO.save(movie);
                     }
 
-                    usuarioDAO.save(usuarioDTO);
+                    usuarioDAO.save(usuario);
                 } else {
                     throw new BadRequestException("La película no está en favoritos");
                 }

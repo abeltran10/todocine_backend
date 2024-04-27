@@ -1,8 +1,8 @@
 package com.todocine.service.impl;
 
 import com.todocine.dao.PremioDAO;
+import com.todocine.entities.Premio;
 import com.todocine.dto.PremioDTO;
-import com.todocine.model.Premio;
 import com.todocine.service.PremioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ public class PremioServiceImpl implements PremioService {
     private PremioDAO premioDAO;
 
     @Override
-    public Premio getPremioById(String id) {
-        PremioDTO premioDTO = premioDAO.findById(id).get();
+    public PremioDTO getPremioById(String id) {
+        Premio premio = premioDAO.findById(id).get();
 
-        Premio premio = new Premio(premioDTO);
-        return premio;
+        PremioDTO premioDTO = new PremioDTO(premio);
+        return premioDTO;
     }
 }

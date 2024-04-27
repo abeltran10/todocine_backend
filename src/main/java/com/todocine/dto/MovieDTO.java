@@ -1,61 +1,81 @@
 package com.todocine.dto;
 
-import com.todocine.model.Movie;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceCreator;
-import org.springframework.data.annotation.Version;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.todocine.entities.Movie;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-@Document(collection = "Movie")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO {
 
-    @Id
+
+    @JsonProperty("id")
+    @NotBlank
     private String id;
 
+    @JsonProperty("original_title")
+    @NotBlank
     private String originalTitle;
 
+    @JsonProperty("title")
+    @NotBlank
     private String title;
 
+    @JsonProperty("poster_path")
+    @NotBlank
     private String posterPath;
 
+    @JsonProperty("overview")
+    @NotBlank
     private String overview;
 
+    @JsonProperty("release_date")
+    @NotBlank
     private String releaseDate;
 
+    @JsonProperty("popularity")
+    @NotNull
     private Double popularity;
 
+    @JsonProperty("vote_count")
+    @NotNull
     private Integer voteCount;
 
+    @JsonProperty("vote_average")
+    @NotNull
     private Double voteAverage;
 
-    @DocumentReference
-    private List<GenreDTO> genreIds;
+    @JsonProperty("genres")
+    @NotNull
+    private List<GenreDTO> genreDTOS;
+
+    @JsonProperty("original_language")
+    @NotBlank
     private String originalLanguage;
 
-    @DocumentReference
-    private List<VideoDTO> videos;
+    @JsonProperty("videos")
+    @NotNull
+    private List<VideoDTO> videoDTOS;
 
-    @DocumentReference(lazy = true)
-    private List<UsuarioDTO> usuarios;
+    private List<PremioDTO> premioDTOS;
 
-    @DocumentReference
-    private List<PremioDTO> premios;
+    @JsonProperty("votos")
+    @NotNull
+    private List<VotoDTO> votoDTOS;
 
-    @DocumentReference
-    private List<VotoDTO> votosTC;
-
+    @JsonProperty("total_votos_TC")
+    @NotNull
     private Integer totalVotosTC;
 
+    @JsonProperty("votos_media_TC")
+    @NotNull
     private Double votosMediaTC;
-
-    @Version
-    private Integer version;
 
     public MovieDTO() {
     }
@@ -64,11 +84,9 @@ public class MovieDTO {
         this.id = id;
     }
 
-    @PersistenceCreator
     public MovieDTO(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
-                    Double popularity, Integer voteCount, Double voteAverage, List<GenreDTO> genreIds,
-                    String originalLanguage, List<VideoDTO> videos, List<UsuarioDTO> usuarios, List<PremioDTO> premios, List<VotoDTO> votosTC,
-                    Integer totalVotosTC, Double votosMediaTC) {
+                    Double popularity, Integer voteCount, Double voteAverage, List<GenreDTO> genreDTOS, String originalLanguage,
+                    List<VideoDTO> videoDTOS, List<PremioDTO> premioDTOS, List<VotoDTO> votoDTOS, Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -78,16 +96,14 @@ public class MovieDTO {
         this.popularity = popularity;
         this.voteCount = voteCount;
         this.voteAverage = voteAverage;
-        this.genreIds = genreIds;
+        this.genreDTOS = genreDTOS;
         this.originalLanguage = originalLanguage;
-        this.videos = videos;
-        this.usuarios = usuarios;
-        this.premios = premios;
-        this.votosTC = votosTC;
+        this.videoDTOS = videoDTOS;
+        this.premioDTOS = premioDTOS;
+        this.votoDTOS = votoDTOS;
         this.totalVotosTC = totalVotosTC;
         this.votosMediaTC = votosMediaTC;
     }
-
 
     public MovieDTO(Movie movie) {
         this.id = movie.getId();
@@ -99,14 +115,55 @@ public class MovieDTO {
         this.popularity = movie.getPopularity();
         this.voteCount = movie.getVoteCount();
         this.voteAverage = movie.getVoteAverage();
-        this.genreIds = movie.getGenres().stream().map(genre -> new GenreDTO(genre.getId())).collect(Collectors.toList());
+        this.genreDTOS = movie.getGenreIds().stream().map(genreDTO ->  new GenreDTO(genreDTO)).collect(Collectors.toList());
         this.originalLanguage = movie.getOriginalLanguage();
-        this.videos = movie.getVideos().stream().map(video -> new VideoDTO(video)).collect(Collectors.toList());
-        this.usuarios = new ArrayList<>();
-        this.premios = movie.getPremios().stream().map(premio -> new PremioDTO(premio.getId())).collect(Collectors.toList());
-        this.votosTC = movie.getVotos().stream().map(voto -> new VotoDTO(voto.getId())).collect(Collectors.toList());
+        this.videoDTOS = movie.getVideos().stream().map(videoDTO -> new VideoDTO(videoDTO)).collect(Collectors.toList());
+        this.premioDTOS = movie.getPremios().stream().map(premioDTO -> new PremioDTO(premioDTO)).collect(Collectors.toList());
+        this.votoDTOS = movie.getVotosTC().stream().map(votoDTO -> new VotoDTO(votoDTO)).collect(Collectors.toList());
         this.votosMediaTC = movie.getVotosMediaTC();
         this.totalVotosTC = movie.getTotalVotosTC();
+    }
+
+    public MovieDTO(String id, String originalTitle, String posterPath) {
+        this.id = id;
+        this.originalTitle = originalTitle;
+        this.posterPath = posterPath;
+    }
+
+    public MovieDTO(Map<String, Object> map) {
+        this.id = String.valueOf(map.get("id"));
+        this.originalTitle = (String) map.get("original_title");
+        this.title = (String) map.get("title");
+        this.posterPath = (String) map.get("poster_path");
+        this.overview = (String) map.get("overview");
+        this.releaseDate = (String) map.get("release_date");
+        this.popularity = (Double) map.get("popularity");
+        this.voteCount = (Integer) map.get("vote_count");
+        this.voteAverage = (Double) map.get("vote_average");
+
+        if (map.containsKey("genres"))
+            this.genreDTOS = ((List<Map<String, Object>>) map.get("genres")).stream().map(genres -> new GenreDTO(genres)).collect(Collectors.toList());
+        else if (map.containsKey("genre_ids"))
+            this.genreDTOS = ((List<Integer>) map.get("genre_ids")).stream().map(genres -> new GenreDTO(String.valueOf(genres))).collect(Collectors.toList());
+        else
+            this.genreDTOS = new ArrayList<>();
+
+        this.originalLanguage = (String) map.get("original_language");
+
+        Map<String, Object> objectMap = (map.containsKey("videos") && !(map.get("videos").equals("false")))
+                ? (Map<String, Object>) map.get("videos") : null;
+
+        this.videoDTOS = (objectMap != null) ? ((List<Map<String, Object>>) objectMap.get("results")).stream()
+                .map(item -> new VideoDTO(item)).collect(Collectors.toList()) : new ArrayList<>();
+
+        this.votoDTOS = new ArrayList<>();
+        this.totalVotosTC = 0;
+        this.votosMediaTC = 0D;
+    }
+
+    public MovieDTO(String id, String originalTitle) {
+        this.id = id;
+        this.originalTitle = originalTitle;
     }
 
     public String getId() {
@@ -181,12 +238,12 @@ public class MovieDTO {
         this.voteAverage = voteAverage;
     }
 
-    public List<GenreDTO> getGenreIds() {
-        return genreIds;
+    public List<GenreDTO> getGenres() {
+        return genreDTOS;
     }
 
-    public void setGenreIds(List<GenreDTO> genreIds) {
-        this.genreIds = genreIds;
+    public void setGenres(List<GenreDTO> genreDTOS) {
+        this.genreDTOS = genreDTOS;
     }
 
     public String getOriginalLanguage() {
@@ -197,44 +254,28 @@ public class MovieDTO {
         this.originalLanguage = originalLanguage;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
     public List<VideoDTO> getVideos() {
-        return videos;
+        return videoDTOS;
     }
 
-    public void setVideos(List<VideoDTO> videos) {
-        this.videos = videos;
-    }
-
-    public List<UsuarioDTO> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(List<UsuarioDTO> usuarios) {
-        this.usuarios = usuarios;
+    public void setVideos(List<VideoDTO> videoDTOS) {
+        this.videoDTOS = videoDTOS;
     }
 
     public List<PremioDTO> getPremios() {
-        return premios;
+        return premioDTOS;
     }
 
-    public void setPremios(List<PremioDTO> premios) {
-        this.premios = premios;
+    public void setPremios(List<PremioDTO> premioDTOS) {
+        this.premioDTOS = premioDTOS;
     }
 
-    public List<VotoDTO> getVotosTC() {
-        return votosTC;
+    public List<VotoDTO> getVotos() {
+        return votoDTOS;
     }
 
-    public void setVotosTC(List<VotoDTO> votosTC) {
-        this.votosTC = votosTC;
+    public void setVotos(List<VotoDTO> votoDTOS) {
+        this.votoDTOS = votoDTOS;
     }
 
     public Integer getTotalVotosTC() {
@@ -254,34 +295,19 @@ public class MovieDTO {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MovieDTO movieDTO = (MovieDTO) o;
-        return id.equals(movieDTO.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
     public String toString() {
-        return "MovieDTO{" +
+        return "Movie{" +
                 "id='" + id + '\'' +
                 ", originalTitle='" + originalTitle + '\'' +
-                ", title='" + title + '\'' +
                 ", posterPath='" + posterPath + '\'' +
                 ", overview='" + overview + '\'' +
                 ", releaseDate='" + releaseDate + '\'' +
                 ", popularity=" + popularity +
                 ", voteCount=" + voteCount +
                 ", voteAverage=" + voteAverage +
-                ", genreIds=" + genreIds +
+                ", genres=" + genreDTOS +
                 ", originalLanguage='" + originalLanguage + '\'' +
-                ", videos=" + videos +
-                ", version=" + version +
+                ", videos=" + videoDTOS +
                 '}';
     }
 }

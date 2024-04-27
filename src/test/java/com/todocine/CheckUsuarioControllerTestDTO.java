@@ -1,8 +1,8 @@
 package com.todocine;
 
 import com.todocine.controller.UsuarioController;
+import com.todocine.dto.UsuarioDTO;
 import com.todocine.exceptions.BadRequestException;
-import com.todocine.model.Usuario;
 import com.todocine.service.UsuarioService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,8 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class CheckUsuarioControllerTest {
-    public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioControllerTest.class);
+public class CheckUsuarioControllerTestDTO {
+    public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioControllerTestDTO.class);
     @Mock
     private UsuarioService serviceMock;
 
@@ -31,7 +31,7 @@ public class CheckUsuarioControllerTest {
     @Test
     void inserException() {
         LOG.info("insertException");
-        Usuario user1 = new Usuario("test", "1234");
+        UsuarioDTO user1 = new UsuarioDTO("test", "1234");
         Mockito.doThrow(new BadRequestException("Ya existe el usuario")).when(serviceMock).insertUsuario(user1);
 
         try {

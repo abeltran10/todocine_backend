@@ -1,21 +1,22 @@
 package com.todocine.dto;
 
-import com.todocine.model.Categoria;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import com.todocine.entities.Categoria;
 
 public class CategoriaDTO {
 
     private String nombre;
 
-    @DocumentReference
-    private MovieDTO movie;
+    private MovieDTO movieDTO;
 
-    public CategoriaDTO() {
+    public CategoriaDTO(String nombre, MovieDTO movieDTO) {
+        this.nombre = nombre;
+        this.movieDTO = movieDTO;
     }
 
     public CategoriaDTO(Categoria categoria) {
         this.nombre = categoria.getNombre();
-        this.movie = new MovieDTO(categoria.getMovie().getId());
+        this.movieDTO = new MovieDTO(categoria.getMovie().getId(), categoria.getMovie().getOriginalTitle(),
+                categoria.getMovie().getPosterPath());
     }
 
     public String getNombre() {
@@ -27,10 +28,10 @@ public class CategoriaDTO {
     }
 
     public MovieDTO getMovie() {
-        return movie;
+        return movieDTO;
     }
 
-    public void setMovie(MovieDTO movie) {
-        this.movie = movie;
+    public void setMovie(MovieDTO movieDTO) {
+        this.movieDTO = movieDTO;
     }
 }

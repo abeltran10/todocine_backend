@@ -1,9 +1,9 @@
 package com.todocine.service;
 
-import com.todocine.model.Premio;
+import com.todocine.dto.PremioDTO;
 
 public interface PremioService {
 
-    Premio getPremioById(String id);
+    PremioDTO getPremioById(String id);
 
 }

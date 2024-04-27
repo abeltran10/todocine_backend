@@ -1,7 +1,7 @@
 package com.todocine;
 
 import com.todocine.dao.MovieDAO;
-import com.todocine.model.Movie;
+import com.todocine.dto.MovieDTO;
 import com.todocine.service.MovieService;
 import com.todocine.utils.Paginator;
 import org.junit.jupiter.api.Test;
@@ -27,16 +27,16 @@ public class CheckMoviesTest {
     void findMovieById() {
         LOG.info("findMovieById");
 
-        Movie movie = movieService.getMovieById("13");
+        MovieDTO movieDTO = movieService.getMovieById("13");
 
-        assertEquals("13", movie.getId());
+        assertEquals("13", movieDTO.getId());
     }
 
     @Test
     void findMovieByName() {
         LOG.info("findMovieByName");
 
-        Paginator<Movie> paginator = movieService.getMovieByName("star wars", 1);
+        Paginator<MovieDTO> paginator = movieService.getMovieByName("star wars", 1);
 
         assertTrue(paginator.getResults() != null);
     }
@@ -45,7 +45,7 @@ public class CheckMoviesTest {
     void findMoviesPlayingNow() {
         LOG.info("findMoviesPlayingNow");
 
-        Paginator<Movie> paginator = movieService.getMoviesPlayingNow("ES", 1);
+        Paginator<MovieDTO> paginator = movieService.getMoviesPlayingNow("ES", 1);
 
         assertTrue(paginator.getResults() != null);
     }

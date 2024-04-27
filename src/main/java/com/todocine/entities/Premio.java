@@ -1,22 +1,32 @@
-package com.todocine.model;
+package com.todocine.entities;
 
 import com.todocine.dto.PremioDTO;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Document(collection = "Premios")
 public class Premio {
 
+    @Id
     private String id;
 
     private List<Categoria> categorias;
 
     private String titulo;
 
+    @Version
+    private Integer version;
+
     public Premio(String id) {
         this.id = id;
     }
 
+    @PersistenceCreator
     public Premio(String id, List<Categoria> categorias, String titulo) {
         this.id = id;
         this.categorias = categorias;
@@ -25,7 +35,7 @@ public class Premio {
 
     public Premio(PremioDTO premioDTO) {
         this.id = premioDTO.getId();
-        this.categorias = premioDTO.getCategorias().stream().map(categoriaDTO -> new Categoria(categoriaDTO))
+        this.categorias = premioDTO.getCategorias().stream().map(categoria -> new Categoria(categoria))
                 .collect(Collectors.toList());
         this.titulo = premioDTO.getTitulo();
     }
@@ -52,5 +62,13 @@ public class Premio {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

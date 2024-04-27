@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.todocine.entities.Usuario;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.model.Usuario;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +39,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
-            Usuario credenciales = new ObjectMapper().readValue(request.getInputStream(), Usuario.class);
+            UsuarioDTO credenciales = new ObjectMapper().readValue(request.getInputStream(), UsuarioDTO.class);
 
             return authManager.authenticate(new UsernamePasswordAuthenticationToken(
                     credenciales.getUsername(), credenciales.getPassword(), new ArrayList<>()));
@@ -52,7 +52,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication auth) throws JWTCreationException {
         String token = JWT.create()
-                .withSubject(((UsuarioDTO)auth.getPrincipal()).getId())
+                .withSubject(((Usuario)auth.getPrincipal()).getId())
                 .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
                 .sign(Algorithm.HMAC256(SUPER_SECRET_KEY));
 

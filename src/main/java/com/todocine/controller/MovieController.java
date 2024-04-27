@@ -2,8 +2,8 @@ package com.todocine.controller;
 
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.NotFoudException;
-import com.todocine.model.Movie;
-import com.todocine.model.Voto;
+import com.todocine.dto.MovieDTO;
+import com.todocine.dto.VotoDTO;
 import com.todocine.service.MovieService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotBlank;
@@ -22,38 +22,38 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping("/search")
-    public ResponseEntity<Paginator<Movie>> getMovieByName(@NotBlank @RequestParam("name") String name, @RequestParam("page") Integer pagina)
+    public ResponseEntity<Paginator<MovieDTO>> getMovieByName(@NotBlank @RequestParam("name") String name, @RequestParam("page") Integer pagina)
             throws NotFoudException, BadGatewayException {
-        Paginator<Movie> paginator = movieService.getMovieByName(name, pagina);
-        ResponseEntity<Paginator<Movie>> responseEntity = new ResponseEntity<>(paginator, HttpStatus.OK);
+        Paginator<MovieDTO> paginator = movieService.getMovieByName(name, pagina);
+        ResponseEntity<Paginator<MovieDTO>> responseEntity = new ResponseEntity<>(paginator, HttpStatus.OK);
         return responseEntity;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovieById(@NotBlank @PathVariable("id") String id) throws NotFoudException, BadGatewayException {
-        ResponseEntity<Movie> responseEntity = new ResponseEntity<>(movieService.getMovieById(id), HttpStatus.OK);
+    public ResponseEntity<MovieDTO> getMovieById(@NotBlank @PathVariable("id") String id) throws NotFoudException, BadGatewayException {
+        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.getMovieById(id), HttpStatus.OK);
         return responseEntity;
 
     }
 
     @GetMapping("/now")
-    public ResponseEntity<Paginator<Movie>> getMoviesPlayingNow(@NotBlank @RequestParam("region") String region, @RequestParam("page") Integer pagina)
+    public ResponseEntity<Paginator<MovieDTO>> getMoviesPlayingNow(@NotBlank @RequestParam("region") String region, @RequestParam("page") Integer pagina)
             throws NotFoudException, BadGatewayException {
-        Paginator<Movie> paginator = movieService.getMoviesPlayingNow(region, pagina);
-        ResponseEntity<Paginator<Movie>> responseEntity = new ResponseEntity<>(paginator, HttpStatus.OK);
+        Paginator<MovieDTO> paginator = movieService.getMoviesPlayingNow(region, pagina);
+        ResponseEntity<Paginator<MovieDTO>> responseEntity = new ResponseEntity<>(paginator, HttpStatus.OK);
         return responseEntity;
     }
 
     @PostMapping("/{id}/vote")
-    public ResponseEntity<Movie> votar(@NotBlank @PathVariable("id") String movieId, @RequestBody Voto voto) throws BadGatewayException {
-        ResponseEntity<Movie> responseEntity = new ResponseEntity<>(movieService.addVote(movieId, voto), HttpStatus.CREATED);
+    public ResponseEntity<MovieDTO> votar(@NotBlank @PathVariable("id") String movieId, @RequestBody VotoDTO votoDTO) throws BadGatewayException {
+        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.addVote(movieId, votoDTO), HttpStatus.CREATED);
         return responseEntity;
     }
 
     @PutMapping("/{id}/vote/{votoId}")
-    public ResponseEntity<Movie> actualizarVoto(@NotBlank @PathVariable("id") String movieId, @PathVariable("votoId") String votoId, @RequestBody Voto voto)
+    public ResponseEntity<MovieDTO> actualizarVoto(@NotBlank @PathVariable("id") String movieId, @PathVariable("votoId") String votoId, @RequestBody VotoDTO votoDTO)
             throws NotFoudException {
-        ResponseEntity<Movie> responseEntity = new ResponseEntity<>(movieService.updateVote(movieId, votoId, voto), HttpStatus.OK);
+        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.updateVote(movieId, votoId, votoDTO), HttpStatus.OK);
         return responseEntity;
     }
 

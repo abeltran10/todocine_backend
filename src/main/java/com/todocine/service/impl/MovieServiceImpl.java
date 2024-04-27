@@ -3,13 +3,13 @@ package com.todocine.service.impl;
 
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.VotoDAO;
-import com.todocine.dto.MovieDTO;
-import com.todocine.dto.VotoDTO;
+import com.todocine.entities.Movie;
+import com.todocine.entities.Voto;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
-import com.todocine.model.Movie;
-import com.todocine.model.Voto;
+import com.todocine.dto.MovieDTO;
+import com.todocine.dto.VotoDTO;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.Paginator;
@@ -38,23 +38,23 @@ public class MovieServiceImpl implements MovieService {
     private VotoDAO votoDAO;
 
     @Override
-    public Movie getMovieById(String id) throws NotFoudException, BadGatewayException {
-        Movie movie1 = null;
+    public MovieDTO getMovieById(String id) throws NotFoudException, BadGatewayException {
+        MovieDTO movieDTO1 = null;
         try {
             Map<String, Object> movieMap = tmdbService.getMovieById(id);
 
             if (movieMap.get("id") != null) {
-                Movie movie = new Movie(movieMap);
-                MovieDTO movieDTO = movieDAO.findById(id).orElse(null);
+                MovieDTO movieDTO = new MovieDTO(movieMap);
+                Movie movie = movieDAO.findById(id).orElse(null);
 
-                if (movieDTO != null) {
-                    movie1 = new Movie(movieDTO);
-                    movie.setVotos(movie1.getVotos());
-                    movie.setVotosMediaTC(movie1.getVotosMediaTC());
-                    movie.setTotalVotosTC(movie1.getTotalVotosTC());
+                if (movie != null) {
+                    movieDTO1 = new MovieDTO(movie);
+                    movieDTO.setVotos(movieDTO1.getVotos());
+                    movieDTO.setVotosMediaTC(movieDTO1.getVotosMediaTC());
+                    movieDTO.setTotalVotosTC(movieDTO1.getTotalVotosTC());
                 }
 
-                return movie;
+                return movieDTO;
 
             } else {
                 throw new NotFoudException("No se ha encontrado la película");
@@ -73,9 +73,9 @@ public class MovieServiceImpl implements MovieService {
             if (map.get("results") == null)
                 throw new NotFoudException("No se ha encontrado la película con ese nombre");
             else {
-                Paginator<Movie> moviePage = new Paginator<>(map);
-                List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
-                        .map(item -> new Movie(item)).collect(Collectors.toList());
+                Paginator<MovieDTO> moviePage = new Paginator<>(map);
+                List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
+                        .map(item -> new MovieDTO(item)).collect(Collectors.toList());
                 moviePage.setResults(results);
 
                 logger.info(moviePage.toString());
@@ -98,9 +98,9 @@ public class MovieServiceImpl implements MovieService {
             if (map.get("results") == null)
                 throw new NotFoudException("No se ha encontrado la cartelera para esa región");
             else {
-                Paginator<Movie> moviePage = new Paginator<>(map);
-                List<Movie> results = ((List<Map<String, Object>>) map.get("results")).stream()
-                        .map(item -> new Movie(item)).collect(Collectors.toList());
+                Paginator<MovieDTO> moviePage = new Paginator<>(map);
+                List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
+                        .map(item -> new MovieDTO(item)).collect(Collectors.toList());
                 moviePage.setResults(results);
 
                 logger.info(moviePage.toString());
@@ -113,39 +113,39 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie addVote(String id, Voto voto) throws BadGatewayException, NotFoudException {
-        MovieDTO dto = null;
-        Movie movie = null;
+    public MovieDTO addVote(String id, VotoDTO votoDTO) throws BadGatewayException, NotFoudException {
+        Movie dto = null;
+        MovieDTO movieDTO = null;
 
         try {
             Map<String, Object> map = tmdbService.getMovieById(id);
             if (map.get("id") != null) {
-                movie = new Movie(map);
+                movieDTO = new MovieDTO(map);
                 dto = movieDAO.findById(id).orElse(null);
 
                 if (dto == null)
-                    dto = new MovieDTO(movie);
+                    dto = new Movie(movieDTO);
 
-                VotoDTO votoDTO = new VotoDTO(voto);
-                votoDAO.save(votoDTO);
+                Voto voto = new Voto(votoDTO);
+                votoDAO.save(voto);
 
-                dto.getVotosTC().add(votoDTO);
+                dto.getVotosTC().add(voto);
 
                 Integer totalVotosTC = dto.getTotalVotosTC();
                 Double total = dto.getVotosMediaTC() * totalVotosTC;
 
                 ++totalVotosTC;
                 dto.setTotalVotosTC(totalVotosTC);
-                dto.setVotosMediaTC((total + voto.getVoto()) / totalVotosTC);
+                dto.setVotosMediaTC((total + votoDTO.getVoto()) / totalVotosTC);
 
                 movieDAO.save(dto);
 
-                List<Voto> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new Voto(votoDTO1)).collect(Collectors.toList());
-                movie.setVotos(currentVotes);
-                movie.setTotalVotosTC(dto.getTotalVotosTC());
-                movie.setVotosMediaTC(dto.getVotosMediaTC());
+                List<VotoDTO> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new VotoDTO(votoDTO1)).collect(Collectors.toList());
+                movieDTO.setVotos(currentVotes);
+                movieDTO.setTotalVotosTC(dto.getTotalVotosTC());
+                movieDTO.setVotosMediaTC(dto.getVotosMediaTC());
 
-                return movie;
+                return movieDTO;
             } else {
                 throw new NotFoudException("No se ha encontrado la película en TMDB");
             }
@@ -158,39 +158,39 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie updateVote(String movieId, String votoId, Voto voto) throws BadRequestException, NotFoudException, BadGatewayException {
-        MovieDTO dto = null;
-        Movie movie = null;
+    public MovieDTO updateVote(String movieId, String votoId, VotoDTO votoDTO) throws BadRequestException, NotFoudException, BadGatewayException {
+        Movie dto = null;
+        MovieDTO movieDTO = null;
 
         try {
             Map<String, Object> map = tmdbService.getMovieById(movieId);
             if (map.get("id") != null) {
-                movie = new Movie(map);
+                movieDTO = new MovieDTO(map);
                 dto = movieDAO.findById(movieId).orElse(null);
 
                 if (dto != null) {
-                    VotoDTO votoDTO = votoDAO.findById(votoId).get();
-                    List<VotoDTO> votosTC = dto.getVotosTC();
-                    if (votosTC.contains(votoDTO)) {
-                        votosTC.remove(votoDTO);
+                    Voto voto = votoDAO.findById(votoId).get();
+                    List<Voto> votosTC = dto.getVotosTC();
+                    if (votosTC.contains(voto)) {
+                        votosTC.remove(voto);
 
                         Double total = dto.getVotosMediaTC() * dto.getTotalVotosTC();
-                        Double totalOld = total - votoDTO.getVoto();
+                        Double totalOld = total - voto.getVoto();
 
-                        dto.setVotosMediaTC((totalOld + voto.getVoto()) / dto.getTotalVotosTC());
-                        votoDTO.setVoto(voto.getVoto());
+                        dto.setVotosMediaTC((totalOld + votoDTO.getVoto()) / dto.getTotalVotosTC());
+                        voto.setVoto(votoDTO.getVoto());
 
-                        votoDAO.save(votoDTO);
+                        votoDAO.save(voto);
 
-                        votosTC.add(votoDTO);
+                        votosTC.add(voto);
                         movieDAO.save(dto);
 
-                        List<Voto> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new Voto(votoDTO1)).collect(Collectors.toList());
-                        movie.setVotos(currentVotes);
-                        movie.setTotalVotosTC(dto.getTotalVotosTC());
-                        movie.setVotosMediaTC(dto.getVotosMediaTC());
+                        List<VotoDTO> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new VotoDTO(votoDTO1)).collect(Collectors.toList());
+                        movieDTO.setVotos(currentVotes);
+                        movieDTO.setTotalVotosTC(dto.getTotalVotosTC());
+                        movieDTO.setVotosMediaTC(dto.getVotosMediaTC());
 
-                        return movie;
+                        return movieDTO;
                     }
                 }
                 throw new BadRequestException("No hay un voto para esa película");
