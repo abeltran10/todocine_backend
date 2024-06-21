@@ -15,8 +15,7 @@ public class CategoriaDTO {
 
     public CategoriaDTO(Categoria categoria) {
         this.nombre = categoria.getNombre();
-        this.movieDTO = new MovieDTO(categoria.getMovie().getId(), categoria.getMovie().getOriginalTitle(),
-                categoria.getMovie().getPosterPath());
+        this.movieDTO = new MovieDTO(categoria.getMovie());
     }
 
     public String getNombre() {
