@@ -41,9 +41,6 @@ public class Movie {
     @DocumentReference
     private List<Video> videos;
 
-    @DocumentReference(lazy = true)
-    private List<Usuario> usuarios;
-
     @DocumentReference
     private List<Premio> premios;
 
@@ -67,7 +64,7 @@ public class Movie {
     @PersistenceCreator
     public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
                  Double popularity, Integer voteCount, Double voteAverage, List<Genre> genreIds,
-                 String originalLanguage, List<Video> videos, List<Usuario> usuarios, List<Premio> premios, List<Voto> votosTC,
+                 String originalLanguage, List<Video> videos, List<Premio> premios, List<Voto> votosTC,
                  Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
         this.originalTitle = originalTitle;
@@ -81,7 +78,6 @@ public class Movie {
         this.genreIds = genreIds;
         this.originalLanguage = originalLanguage;
         this.videos = videos;
-        this.usuarios = usuarios;
         this.premios = premios;
         this.votosTC = votosTC;
         this.totalVotosTC = totalVotosTC;
@@ -102,8 +98,6 @@ public class Movie {
         this.genreIds = movieDTO.getGenres().stream().map(genre -> new Genre(genre.getId())).collect(Collectors.toList());
         this.originalLanguage = movieDTO.getOriginalLanguage();
         this.videos = movieDTO.getVideos().stream().map(video -> new Video(video)).collect(Collectors.toList());
-        this.usuarios = new ArrayList<>();
-        this.premios = movieDTO.getPremios().stream().map(premio -> new Premio(premio.getId())).collect(Collectors.toList());
         this.votosTC = movieDTO.getVotos().stream().map(voto -> new Voto(voto.getId())).collect(Collectors.toList());
         this.votosMediaTC = movieDTO.getVotosMediaTC();
         this.totalVotosTC = movieDTO.getTotalVotosTC();
@@ -211,14 +205,6 @@ public class Movie {
 
     public void setVideos(List<Video> videos) {
         this.videos = videos;
-    }
-
-    public List<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(List<Usuario> usuarios) {
-        this.usuarios = usuarios;
     }
 
     public List<Premio> getPremios() {

@@ -114,36 +114,36 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDTO addVote(String id, VotoDTO votoDTO) throws BadGatewayException, NotFoudException {
-        Movie dto = null;
+        Movie movieEntity = null;
         MovieDTO movieDTO = null;
 
         try {
             Map<String, Object> map = tmdbService.getMovieById(id);
             if (map.get("id") != null) {
                 movieDTO = new MovieDTO(map);
-                dto = movieDAO.findById(id).orElse(null);
+                movieEntity = movieDAO.findById(id).orElse(null);
 
-                if (dto == null)
-                    dto = new Movie(movieDTO);
+                if (movieEntity == null)
+                    movieEntity = new Movie(movieDTO);
 
                 Voto voto = new Voto(votoDTO);
                 votoDAO.save(voto);
 
-                dto.getVotosTC().add(voto);
+                movieEntity.getVotosTC().add(voto);
 
-                Integer totalVotosTC = dto.getTotalVotosTC();
-                Double total = dto.getVotosMediaTC() * totalVotosTC;
+                Integer totalVotosTC = movieEntity.getTotalVotosTC();
+                Double total = movieEntity.getVotosMediaTC() * totalVotosTC;
 
                 ++totalVotosTC;
-                dto.setTotalVotosTC(totalVotosTC);
-                dto.setVotosMediaTC((total + votoDTO.getVoto()) / totalVotosTC);
+                movieEntity.setTotalVotosTC(totalVotosTC);
+                movieEntity.setVotosMediaTC((total + votoDTO.getVoto()) / totalVotosTC);
 
-                movieDAO.save(dto);
+                movieDAO.save(movieEntity);
 
-                List<VotoDTO> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new VotoDTO(votoDTO1)).collect(Collectors.toList());
+                List<VotoDTO> currentVotes = movieEntity.getVotosTC().stream().map(votoDTO1 -> new VotoDTO(votoDTO1)).collect(Collectors.toList());
                 movieDTO.setVotos(currentVotes);
-                movieDTO.setTotalVotosTC(dto.getTotalVotosTC());
-                movieDTO.setVotosMediaTC(dto.getVotosMediaTC());
+                movieDTO.setTotalVotosTC(movieEntity.getTotalVotosTC());
+                movieDTO.setVotosMediaTC(movieEntity.getVotosMediaTC());
 
                 return movieDTO;
             } else {
@@ -159,36 +159,36 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDTO updateVote(String movieId, String votoId, VotoDTO votoDTO) throws BadRequestException, NotFoudException, BadGatewayException {
-        Movie dto = null;
+        Movie movieEntity = null;
         MovieDTO movieDTO = null;
 
         try {
             Map<String, Object> map = tmdbService.getMovieById(movieId);
             if (map.get("id") != null) {
                 movieDTO = new MovieDTO(map);
-                dto = movieDAO.findById(movieId).orElse(null);
+                movieEntity = movieDAO.findById(movieId).orElse(null);
 
-                if (dto != null) {
+                if (movieEntity != null) {
                     Voto voto = votoDAO.findById(votoId).get();
-                    List<Voto> votosTC = dto.getVotosTC();
+                    List<Voto> votosTC = movieEntity.getVotosTC();
                     if (votosTC.contains(voto)) {
                         votosTC.remove(voto);
 
-                        Double total = dto.getVotosMediaTC() * dto.getTotalVotosTC();
+                        Double total = movieEntity.getVotosMediaTC() * movieEntity.getTotalVotosTC();
                         Double totalOld = total - voto.getVoto();
 
-                        dto.setVotosMediaTC((totalOld + votoDTO.getVoto()) / dto.getTotalVotosTC());
+                        movieEntity.setVotosMediaTC((totalOld + votoDTO.getVoto()) / movieEntity.getTotalVotosTC());
                         voto.setVoto(votoDTO.getVoto());
 
                         votoDAO.save(voto);
 
                         votosTC.add(voto);
-                        movieDAO.save(dto);
+                        movieDAO.save(movieEntity);
 
-                        List<VotoDTO> currentVotes = dto.getVotosTC().stream().map(votoDTO1 -> new VotoDTO(votoDTO1)).collect(Collectors.toList());
+                        List<VotoDTO> currentVotes = movieEntity.getVotosTC().stream().map(votoDTO1 -> new VotoDTO(votoDTO1)).collect(Collectors.toList());
                         movieDTO.setVotos(currentVotes);
-                        movieDTO.setTotalVotosTC(dto.getTotalVotosTC());
-                        movieDTO.setVotosMediaTC(dto.getVotosMediaTC());
+                        movieDTO.setTotalVotosTC(movieEntity.getTotalVotosTC());
+                        movieDTO.setVotosMediaTC(movieEntity.getVotosMediaTC());
 
                         return movieDTO;
                     }

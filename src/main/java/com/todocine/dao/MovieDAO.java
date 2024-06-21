@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface MovieDAO extends MongoRepository<Movie, String> {
 
-
-    List<Movie> findByUsuariosId(String userId);
 }

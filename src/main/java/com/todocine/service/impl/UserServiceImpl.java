@@ -133,7 +133,7 @@ public class UserServiceImpl implements UsuarioService {
     @Override
     public Paginator<MovieDTO> getUsuarioFavs(String id, Integer page) throws NotFoudException {
         Paginator<MovieDTO> paginator = new Paginator<>();
-        List<Movie> movieEntities = movieDAO.findByUsuariosId(id);
+        List<Movie> movieEntities = usuarioDAO.findFavoritosById(id);
 
         if (movieEntities != null && !movieEntities.isEmpty()) {
             List<MovieDTO> movieDTOList = movieEntities.stream().map(movieDTO -> new MovieDTO(movieDTO)).collect(Collectors.toList());
@@ -180,9 +180,6 @@ public class UserServiceImpl implements UsuarioService {
             }
 
             if (!usuario.getFavoritos().contains(movie)) {
-                movie.getUsuarios().add(usuario);
-                movieDAO.save(movie);
-
                 usuario.getFavoritos().add(movie);
                 usuarioDAO.save(usuario);
 
@@ -213,11 +210,6 @@ public class UserServiceImpl implements UsuarioService {
                 if (currentFavs.contains(movie)) {
                     currentFavs.remove(movie);
                     log.info("favs user: " + usuario.getFavoritos());
-                    List<Usuario> currentUsers = movie.getUsuarios();
-                    if (currentUsers.contains(usuario)) {
-                        currentUsers.remove(usuario);
-                        movieDAO.save(movie);
-                    }
 
                     usuarioDAO.save(usuario);
                 } else {
