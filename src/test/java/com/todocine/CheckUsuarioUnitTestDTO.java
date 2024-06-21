@@ -62,7 +62,7 @@ public class CheckUsuarioUnitTestDTO {
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
                 , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
                 , 1284.858, 467, 8.158, new ArrayList<>()
-                , "es", new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), 0, 0D);
+                , "es", new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
         usuarioDTO.setFavoritos(Arrays.asList(movieDTO));
     }
@@ -119,7 +119,7 @@ public class CheckUsuarioUnitTestDTO {
         LOG.info("findUserFavs");
 
         Movie movie = new Movie(movieDTO);
-        Mockito.when(movieDAO.findByUsuariosId("9876")).thenReturn(Arrays.asList(movie));
+        Mockito.when(usuarioDAO.findFavoritosById("9876")).thenReturn(Arrays.asList(movie));
 
         Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 1);
         assertTrue(paginator != null);
@@ -140,7 +140,7 @@ public class CheckUsuarioUnitTestDTO {
                 "el ex rey de la Atlántida, para forjar una alianza improbable. Juntos, deben dejar de lado sus diferencias" +
                 " para proteger su reino y salvar a la familia de Aquaman, y al mundo, de una destrucción irreversible."
                 , "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
-                , new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), 0, 0D);
+                , new ArrayList<>(), new ArrayList<>(), 0, 0D);
         Usuario usuario = new Usuario(usuarioDTO);
         Movie movie = new Movie(movieDTO);
 

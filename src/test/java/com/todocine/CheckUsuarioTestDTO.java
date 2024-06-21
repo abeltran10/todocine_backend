@@ -61,7 +61,7 @@ public class CheckUsuarioTestDTO {
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
                 , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
                 , 1284.858, 467, 8.158, new ArrayList<>()
-                , "es", new ArrayList<>(), usuarioList, new ArrayList<>(), new ArrayList<>(), 0, 0D);
+                , "es", new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), 0, 0D) ;
         List<Movie> favoritos = Arrays.asList(movie);
 
         movie = movieDAO.save(movie);
@@ -137,7 +137,7 @@ public class CheckUsuarioTestDTO {
                 "el ex rey de la Atlántida, para forjar una alianza improbable. Juntos, deben dejar de lado sus diferencias" +
                 " para proteger su reino y salvar a la familia de Aquaman, y al mundo, de una destrucción irreversible."
                 , "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
-                , new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), 0, 0D);
+                , new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
         MovieDTO movieDTO1 = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
 
