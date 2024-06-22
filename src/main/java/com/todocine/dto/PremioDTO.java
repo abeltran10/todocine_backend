@@ -1,35 +1,46 @@
 package com.todocine.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.entities.Premio;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PremioDTO {
 
+    @JsonProperty("id")
+    @NotBlank
     private String id;
 
+    @JsonProperty("codigo")
+    @NotNull
     private Integer codigo;
 
-    private List<CategoriaDTO> categoriaDTOS;
+    @JsonProperty("categorias")
+    private List<CategoriaDTO> categorias;
 
+    @JsonProperty("titulo")
     private String titulo;
 
     public PremioDTO(String id) {
         this.id = id;
     }
 
-    public PremioDTO(String id, Integer codigo, List<CategoriaDTO> categoriaDTOS, String titulo) {
+    public PremioDTO(String id, Integer codigo, List<CategoriaDTO> categorias, String titulo) {
         this.id = id;
         this.codigo = codigo;
-        this.categoriaDTOS = categoriaDTOS;
+        this.categorias = categorias;
         this.titulo = titulo;
     }
 
     public PremioDTO(Premio premio) {
         this.id = premio.getId();
         this.codigo = premio.getCodigo();
-        this.categoriaDTOS = premio.getCategorias().stream().map(categoriaDTO -> new CategoriaDTO(categoriaDTO))
+        this.categorias = premio.getCategorias().stream().map(categoriaDTO -> new CategoriaDTO(categoriaDTO))
                 .collect(Collectors.toList());
         this.titulo = premio.getTitulo();
     }
@@ -50,12 +61,12 @@ public class PremioDTO {
         this.codigo = codigo;
     }
 
-    public List<CategoriaDTO> getCategoriaDTOS() {
-        return categoriaDTOS;
+    public List<CategoriaDTO> getCategorias() {
+        return categorias;
     }
 
-    public void setCategoriaDTOS(List<CategoriaDTO> categoriaDTOS) {
-        this.categoriaDTOS = categoriaDTOS;
+    public void setCategorias(List<CategoriaDTO> categorias) {
+        this.categorias = categorias;
     }
 
     public String getTitulo() {

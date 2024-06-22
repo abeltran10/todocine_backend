@@ -1,21 +1,26 @@
 package com.todocine.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.entities.Categoria;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CategoriaDTO {
 
+    @JsonProperty("nombre")
     private String nombre;
 
-    private MovieDTO movieDTO;
+    @JsonProperty("movie")
+    private MovieDTO movie;
 
-    public CategoriaDTO(String nombre, MovieDTO movieDTO) {
+    public CategoriaDTO(String nombre, MovieDTO movie) {
         this.nombre = nombre;
-        this.movieDTO = movieDTO;
+        this.movie = movie;
     }
 
     public CategoriaDTO(Categoria categoria) {
         this.nombre = categoria.getNombre();
-        this.movieDTO = new MovieDTO(categoria.getMovie());
+        this.movie = new MovieDTO(categoria.getMovie());
     }
 
     public String getNombre() {
@@ -27,10 +32,10 @@ public class CategoriaDTO {
     }
 
     public MovieDTO getMovie() {
-        return movieDTO;
+        return movie;
     }
 
     public void setMovie(MovieDTO movieDTO) {
-        this.movieDTO = movieDTO;
+        this.movie = movieDTO;
     }
 }

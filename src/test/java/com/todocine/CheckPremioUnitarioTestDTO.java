@@ -65,14 +65,14 @@ public class CheckPremioUnitarioTestDTO {
     }
 
     @Test
-    void getPremioById() {
-        LOG.info("getPremioById");
+    void getPremioByCodigo() {
+        LOG.info("getPremioByCodigo");
 
         PremioDTO premioDTO = new PremioDTO(premio);
 
         Mockito.when(premioDAO.findById("1")).thenReturn(Optional.of(premio));
 
-        PremioDTO premioDTO1 = premioService.getPremioById("1");
+        PremioDTO premioDTO1 = premioService.getPremioByCodigo(1);
 
         assertEquals(premioDTO.getId(), premioDTO1.getId());
     }

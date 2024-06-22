@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,16 +22,16 @@ public class CheckPremioControllerTest {
 
     @Test
     void getPremioById() {
-        ResponseEntity<PremioDTO> responseEntity = premioController.getPremioById("6676f0933659e96e81401f3b");
+        ResponseEntity<PremioDTO> responseEntity = premioController.getPremioByCodigo(1);
 
         assertEquals("La sociedad de la nieve", responseEntity.getBody().getCategorias().get(0).getMovie().getTitle());
 
     }
 
     @Test
-    void getPremioByIdException() {
+    void getPremioByCodigoException() {
         try {
-            premioController.getPremioById("0");
+            premioController.getPremioByCodigo(0);
         } catch (NotFoudException ex) {
             assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
         }
