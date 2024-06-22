@@ -5,6 +5,6 @@ import com.todocine.exceptions.NotFoudException;
 
 public interface PremioService {
 
-    PremioDTO getPremioById(String id) throws NotFoudException;
+    PremioDTO getPremioByCodigo(Integer codigo) throws NotFoudException;
 
 }

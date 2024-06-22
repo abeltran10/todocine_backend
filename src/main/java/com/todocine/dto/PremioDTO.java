@@ -9,6 +9,8 @@ public class PremioDTO {
 
     private String id;
 
+    private Integer codigo;
+
     private List<CategoriaDTO> categoriaDTOS;
 
     private String titulo;
@@ -17,14 +19,16 @@ public class PremioDTO {
         this.id = id;
     }
 
-    public PremioDTO(String id, List<CategoriaDTO> categoriaDTOS, String titulo) {
+    public PremioDTO(String id, Integer codigo, List<CategoriaDTO> categoriaDTOS, String titulo) {
         this.id = id;
+        this.codigo = codigo;
         this.categoriaDTOS = categoriaDTOS;
         this.titulo = titulo;
     }
 
     public PremioDTO(Premio premio) {
         this.id = premio.getId();
+        this.codigo = premio.getCodigo();
         this.categoriaDTOS = premio.getCategorias().stream().map(categoriaDTO -> new CategoriaDTO(categoriaDTO))
                 .collect(Collectors.toList());
         this.titulo = premio.getTitulo();
@@ -38,11 +42,19 @@ public class PremioDTO {
         this.id = id;
     }
 
-    public List<CategoriaDTO> getCategorias() {
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+
+    public List<CategoriaDTO> getCategoriaDTOS() {
         return categoriaDTOS;
     }
 
-    public void setCategorias(List<CategoriaDTO> categoriaDTOS) {
+    public void setCategoriaDTOS(List<CategoriaDTO> categoriaDTOS) {
         this.categoriaDTOS = categoriaDTOS;
     }
 

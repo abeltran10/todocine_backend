@@ -15,8 +15,8 @@ public class PremioServiceImpl implements PremioService {
     private PremioDAO premioDAO;
 
     @Override
-    public PremioDTO getPremioById(String id) throws NotFoudException {
-        Premio premio = premioDAO.findById(id).orElse(null);
+    public PremioDTO getPremioByCodigo(Integer codigo) throws NotFoudException {
+        Premio premio = premioDAO.findByCodigo(codigo);
 
         if (premio != null) {
             PremioDTO premioDTO = new PremioDTO(premio);

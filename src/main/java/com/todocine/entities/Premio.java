@@ -15,6 +15,8 @@ public class Premio {
     @Id
     private String id;
 
+    private Integer codigo;
+
     private List<Categoria> categorias;
 
     private String titulo;
@@ -27,15 +29,17 @@ public class Premio {
     }
 
     @PersistenceCreator
-    public Premio(String id, List<Categoria> categorias, String titulo) {
+    public Premio(String id, Integer codigo, List<Categoria> categorias, String titulo) {
         this.id = id;
+        this.codigo = codigo;
         this.categorias = categorias;
         this.titulo = titulo;
     }
 
     public Premio(PremioDTO premioDTO) {
         this.id = premioDTO.getId();
-        this.categorias = premioDTO.getCategorias().stream().map(categoria -> new Categoria(categoria))
+        this.codigo = premioDTO.getCodigo();
+        this.categorias = premioDTO.getCategoriaDTOS().stream().map(categoria -> new Categoria(categoria))
                 .collect(Collectors.toList());
         this.titulo = premioDTO.getTitulo();
     }
@@ -46,6 +50,14 @@ public class Premio {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
     }
 
     public List<Categoria> getCategorias() {
