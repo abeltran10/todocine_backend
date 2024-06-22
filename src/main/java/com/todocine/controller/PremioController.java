@@ -20,7 +20,7 @@ public class PremioController {
     private PremioService premioService;
 
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<PremioDTO> getPremioById(@NotBlank @PathParam("id") String id) throws NotFoudException {
         ResponseEntity<PremioDTO> responseEntity = new ResponseEntity<>(premioService.getPremioById(id), HttpStatus.OK);
 

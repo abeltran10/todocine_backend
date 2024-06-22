@@ -27,9 +27,9 @@ public class CheckMoviesTest {
     void findMovieById() {
         LOG.info("findMovieById");
 
-        MovieDTO movieDTO = movieService.getMovieById("13");
+        MovieDTO movieDTO = movieService.getMovieById("906126");
 
-        assertEquals("13", movieDTO.getId());
+        assertEquals("906126", movieDTO.getId());
     }
 
     @Test

@@ -1,7 +1,6 @@
 package com.todocine;
 
 import com.todocine.dao.PremioDAO;
-import com.todocine.entities.Categoria;
 import com.todocine.entities.Premio;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -21,7 +20,7 @@ public class CheckPremiosTest {
 
     @Test
     void getPremioById() {
-        Premio premio = premioDAO.findById("65d2269cff4e277756e2195c").orElse(null);
+        Premio premio = premioDAO.findById("6676f0b93659e96e81401f3c").orElse(null);
 
         LOG.info(premio.getCategorias().get(0).getMovie().getOriginalTitle());
 
