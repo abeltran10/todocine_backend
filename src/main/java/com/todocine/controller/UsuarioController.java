@@ -1,7 +1,9 @@
 package com.todocine.controller;
 
-import com.todocine.model.Movie;
-import com.todocine.model.Usuario;
+import com.todocine.dto.UsuarioDTO;
+import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.NotFoudException;
+import com.todocine.dto.MovieDTO;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;
@@ -9,8 +11,9 @@ import jakarta.validation.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/usuario")
@@ -21,43 +24,44 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping("/username/{username}")
-    public Usuario getUsuarioByName(@NotBlank @PathVariable("username") String username) throws ResponseStatusException {
+    public ResponseEntity<UsuarioDTO> getUsuarioByName(@NotBlank @PathVariable("username") String username) throws NotFoudException {
         logger.info("getUsuarioByName controller");
-
-        Usuario usuario =  usuarioService.getUsuarioByName(username);
-
-        return usuario;
+        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.getUsuarioByName(username), HttpStatus.OK);
+        return responseEntity;
     }
 
     @PostMapping
-    public Usuario insertUsuario(@Valid @RequestBody Usuario usuario) throws ResponseStatusException {
-        return usuarioService.insertUsuario(usuario);
+    public ResponseEntity<UsuarioDTO> insertUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) throws BadRequestException {
+        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.insertUsuario(usuarioDTO), HttpStatus.CREATED);
+        return responseEntity;
     }
 
     @PutMapping("/{id}")
-    public Usuario updateUsuario(@NotBlank @PathVariable("id") String id, @Valid @RequestBody Usuario usuario) throws ResponseStatusException {
+    public ResponseEntity<UsuarioDTO> updateUsuario(@NotBlank @PathVariable("id") String id, @Valid @RequestBody UsuarioDTO usuarioDTO) throws NotFoudException {
         logger.info("updateUsuario");
-
-        return usuarioService.updateUsuario(id, usuario);
+        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.updateUsuario(id, usuarioDTO), HttpStatus.OK);
+        return responseEntity;
     }
 
     @GetMapping("/{id}/favs")
-    public Paginator<Movie> getUsuarioFavs(@NotBlank @PathVariable("id") String id, @RequestParam("page") Integer pagina) throws ResponseStatusException {
-        return usuarioService.getUsuarioFavs(id, pagina);
+    public ResponseEntity<Paginator<MovieDTO>> getUsuarioFavs(@NotBlank @PathVariable("id") String id, @RequestParam("page") Integer pagina) throws NotFoudException {
+        ResponseEntity<Paginator<MovieDTO>> responseEntity = new ResponseEntity<>(usuarioService.getUsuarioFavs(id, pagina), HttpStatus.OK);
+        return responseEntity;
     }
 
     @PostMapping("/{id}/favs")
-    public Usuario addFavoritosByUserId(@NotBlank @PathVariable("id") String id, @Valid @RequestBody Movie movie) throws ResponseStatusException {
+    public ResponseEntity<MovieDTO> addFavoritosByUserId(@NotBlank @PathVariable("id") String id, @Valid @RequestBody MovieDTO movieDTO) throws BadRequestException, NotFoudException {
         logger.info("addFavoritosByUserId");
-
-        return usuarioService.addFavoritosByUserId(id, movie);
+        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(usuarioService.addFavoritosByUserId(id, movieDTO), HttpStatus.CREATED);
+        return responseEntity;
     }
 
     @DeleteMapping("/{id}/favs/{movieId}")
-    public void deleteFavoritosByUserId(@NotBlank @PathVariable("id") String id, @NotBlank @PathVariable("movieId") String movieId) throws ResponseStatusException {
+    public ResponseEntity deleteFavoritosByUserId(@NotBlank @PathVariable("id") String id, @NotBlank @PathVariable("movieId") String movieId) throws BadRequestException, NotFoudException {
         logger.info("deleteFavoritosByUserId");
-
         usuarioService.deleteFavoritosByUserId(id, movieId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

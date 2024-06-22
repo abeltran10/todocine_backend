@@ -1,44 +1,39 @@
-package com.todocine.model;
+package com.todocine.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.dto.VideoDTO;
-import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Map;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Document(collection = "Video")
 public class Video {
 
-    @JsonProperty("id")
-    @NotBlank
+    @Id
     private String id;
 
-    @JsonProperty("name")
     private String name;
 
-    @JsonProperty("key")
     private String key;
 
-    @JsonProperty("site")
     private String site;
 
-    @JsonProperty("type")
     private String type;
+
+    @Version
+    private Integer version;
 
     public Video() {
     }
 
-    public Video(String id) {
-        this.id = id;
-    }
-
-    public Video(String id, String name, String key, String site, String type) {
+    @PersistenceCreator
+    public Video(String id, String name, String key, String site, String type, Integer version) {
         this.id = id;
         this.name = name;
         this.key = key;
         this.site = site;
         this.type = type;
+        this.version = version;
     }
 
     public Video(VideoDTO videoDTO) {
@@ -47,14 +42,6 @@ public class Video {
         this.key = videoDTO.getKey();
         this.site = videoDTO.getSite();
         this.type = videoDTO.getType();
-    }
-
-    public Video(Map<String, Object> map) {
-        this.id = (String) map.get("id");
-        this.name = (String) map.get("name");
-        this.key = (String) map.get("key");
-        this.site = (String) map.get("site");
-        this.type = (String) map.get("type");
     }
 
     public String getId() {
@@ -97,14 +84,11 @@ public class Video {
         this.type = type;
     }
 
-    @Override
-    public String toString() {
-        return "Video{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", key='" + key + '\'' +
-                ", site='" + site + '\'' +
-                ", type='" + type + '\'' +
-                '}';
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

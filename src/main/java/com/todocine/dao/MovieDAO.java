@@ -1,9 +1,10 @@
 package com.todocine.dao;
 
-import com.todocine.dto.MovieDTO;
+import com.todocine.entities.Movie;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface MovieDAO extends MongoRepository<MovieDTO, String>, MovieDAORepo {
+import java.util.List;
 
+public interface MovieDAO extends MongoRepository<Movie, String> {
 
 }

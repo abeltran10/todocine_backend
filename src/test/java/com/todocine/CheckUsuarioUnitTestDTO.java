@@ -2,10 +2,11 @@ package com.todocine;
 
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.model.Movie;
-import com.todocine.model.Usuario;
+import com.todocine.entities.Movie;
+import com.todocine.entities.Usuario;
+import com.todocine.exceptions.BadRequestException;
+import com.todocine.dto.MovieDTO;
 import com.todocine.service.impl.UserServiceImpl;
 import com.todocine.utils.Paginator;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class CheckUsuarioUnitTest {
-    public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioUnitTest.class);
+public class CheckUsuarioUnitTestDTO {
+    public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioUnitTestDTO.class);
 
 
     @Mock
@@ -47,35 +47,35 @@ public class CheckUsuarioUnitTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static Usuario usuario;
+    private static UsuarioDTO usuarioDTO;
 
-    private static Movie movie;
+    private static MovieDTO movieDTO;
 
     @BeforeAll
     static void setUp() {
         LOG.info("setUp");
 
-        usuario = new Usuario ("test", "1234");
-        usuario.setId("9876");
+        usuarioDTO = new UsuarioDTO("test", "1234");
+        usuarioDTO.setId("9876");
 
-        movie = new Movie("906126","La sociedad de la nieve"
+        movieDTO = new MovieDTO("906126","La sociedad de la nieve"
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
                 , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
                 , 1284.858, 467, 8.158, new ArrayList<>()
                 , "es", new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
-        usuario.setFavoritos(Arrays.asList(movie));
+        usuarioDTO.setFavoritos(Arrays.asList(movieDTO));
     }
 
     @Test
     void findUser() {
         LOG.info("findUser");
 
-        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
-        usuarioDTO.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuarioDTO);
+        Usuario usuario = new Usuario(usuarioDTO);
+        usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
+        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuario);
 
-        Usuario test = usuarioService.getUsuarioByName("test");
+        UsuarioDTO test = usuarioService.getUsuarioByName("test");
         assertEquals("9876", test.getId());
     }
 
@@ -83,13 +83,13 @@ public class CheckUsuarioUnitTest {
     void createSameUser() {
         LOG.info("createSameUser");
 
-        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
-        usuarioDTO.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuarioDTO);
+        Usuario usuario = new Usuario(usuarioDTO);
+        usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
+        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuario);
 
         try {
-            usuarioService.insertUsuario(usuario);
-        } catch (ResponseStatusException ex) {
+            usuarioService.insertUsuario(usuarioDTO);
+        } catch (BadRequestException ex) {
             LOG.info(ex.getMessage());
             assertTrue(ex.getMessage().contains("Un usuario con ese nombre ya existe"));
         }
@@ -99,18 +99,18 @@ public class CheckUsuarioUnitTest {
     void updateUser() {
         LOG.info("updateUser");
 
-        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
-        usuarioDTO.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        Usuario usuario = new Usuario(usuarioDTO);
+        usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
 
-        Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuarioDTO));
+        Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuario));
 
-        Usuario usuario1 = usuario;
-        usuario1.setPassword("abcd");
+        UsuarioDTO usuarioDTO1 = usuarioDTO;
+        usuarioDTO1.setPassword("abcd");
 
-        usuario1 = usuarioService.updateUsuario(usuario1.getId(), usuario1);
+        usuarioDTO1 = usuarioService.updateUsuario(usuarioDTO1.getId(), usuarioDTO1);
 
-        assertTrue(passwordEncoder.matches("abcd", usuario1.getPassword()));
-        assertEquals("test", usuario1.getUsername());
+        assertTrue(passwordEncoder.matches("abcd", usuarioDTO1.getPassword()));
+        assertEquals("test", usuarioDTO1.getUsername());
 
     }
 
@@ -118,10 +118,10 @@ public class CheckUsuarioUnitTest {
     void findUserFavs() {
         LOG.info("findUserFavs");
 
-        MovieDTO movieDTO = new MovieDTO(movie);
-        Mockito.when(movieDAO.findByUserId("9876")).thenReturn(Arrays.asList(movieDTO));
+        Movie movie = new Movie(movieDTO);
+        Mockito.when(usuarioDAO.findFavoritosById("9876")).thenReturn(Arrays.asList(movie));
 
-        Paginator<Movie> paginator = usuarioService.getUsuarioFavs(usuario.getId(), 1);
+        Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 1);
         assertTrue(paginator != null);
         assertTrue(paginator.getResults().size() == 1);
         assertEquals("906126", paginator.getResults().get(0).getId());
@@ -131,7 +131,7 @@ public class CheckUsuarioUnitTest {
     void addFavoritosByUserId() {
         LOG.info("addFavoritosByUserId");
 
-        Movie movie = new Movie("572802", "Aquaman and the Lost Kingdom", "Aquaman y el reino perdido"
+        MovieDTO movieDTO = new MovieDTO("572802", "Aquaman and the Lost Kingdom", "Aquaman y el reino perdido"
                 , "/d9Hv3b37ZErby79f4iqTZ8doaTp.jpg"
                 , "Al no poder derrotar a Aquaman la primera vez, Black Manta, todavía impulsado por la necesidad de vengar " +
                 "la muerte de su padre, no se detendrá ante nada para derrotar a Aquaman de una vez por todas. " +
@@ -141,34 +141,30 @@ public class CheckUsuarioUnitTest {
                 " para proteger su reino y salvar a la familia de Aquaman, y al mundo, de una destrucción irreversible."
                 , "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
                 , new ArrayList<>(), new ArrayList<>(), 0, 0D);
-        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
-        MovieDTO movieDTO = new MovieDTO(movie);
+        Usuario usuario = new Usuario(usuarioDTO);
+        Movie movie = new Movie(movieDTO);
 
 
-        Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuarioDTO));
-        Mockito.when(movieDAO.findById("572802")).thenReturn(Optional.of(movieDTO));
+        Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuario));
+        Mockito.when(movieDAO.findById("572802")).thenReturn(Optional.of(movie));
 
-        Usuario usuario1 = usuarioService.addFavoritosByUserId(usuario.getId(), movie);
+        MovieDTO movieDTO1 = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
 
-        assertTrue(usuario1.getFavoritos().size() == 2);
-
-        Movie movie1 = usuario1.getFavoritos().stream().filter(mov -> mov.getId().equals(movie.getId())).findAny().get();
-
-        assertEquals("572802", movie1.getId());
+        assertEquals("572802", movieDTO1.getId());
 
     }
 
     @Test
     void deleteUserFavs() {
         LOG.info("deleteUserFavs");
-        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
-        MovieDTO movieDTO = new MovieDTO(movie);
+        Usuario usuario = new Usuario(usuarioDTO);
+        Movie movie = new Movie(movieDTO);
 
-        Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuarioDTO));
-        Mockito.when(movieDAO.findById("906126")).thenReturn(Optional.of(movieDTO));
+        Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuario));
+        Mockito.when(movieDAO.findById("906126")).thenReturn(Optional.of(movie));
 
-        usuarioService.deleteFavoritosByUserId(usuario.getId(), movie.getId());
+        usuarioService.deleteFavoritosByUserId(usuarioDTO.getId(), movieDTO.getId());
 
-        assertTrue(usuarioDTO.getFavoritos().isEmpty());
+        assertTrue(usuario.getFavoritos().isEmpty());
     }
 }

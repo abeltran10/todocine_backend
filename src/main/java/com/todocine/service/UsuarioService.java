@@ -1,24 +1,25 @@
 package com.todocine.service;
 
-import com.todocine.model.Movie;
-import com.todocine.model.Usuario;
+import com.todocine.dto.UsuarioDTO;
+import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.NotFoudException;
+import com.todocine.dto.MovieDTO;
 import com.todocine.utils.Paginator;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.server.ResponseStatusException;
 
 public interface UsuarioService extends UserDetailsService {
 
-    Usuario getUsuarioById(String id);
+    UsuarioDTO getUsuarioById(String id) throws NotFoudException;
 
-    Usuario getUsuarioByName (String username);
+    UsuarioDTO getUsuarioByName (String username) throws NotFoudException;
 
-    Usuario insertUsuario(Usuario usuario) throws ResponseStatusException;
+    UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws BadRequestException;
 
-    Usuario updateUsuario(String id, Usuario usuario);
+    UsuarioDTO updateUsuario(String id, UsuarioDTO usuarioDTO) throws NotFoudException;
 
-    Paginator getUsuarioFavs(String username, Integer page);
+    Paginator getUsuarioFavs(String username, Integer page) throws NotFoudException;
 
-    Usuario addFavoritosByUserId(String id, Movie movie) throws ResponseStatusException;
+    MovieDTO addFavoritosByUserId(String id, MovieDTO movieDTO) throws BadRequestException, NotFoudException;
 
-    void deleteFavoritosByUserId(String id, String movieId) throws ResponseStatusException;
+    void deleteFavoritosByUserId(String id, String movieId) throws BadRequestException, NotFoudException;
 }
