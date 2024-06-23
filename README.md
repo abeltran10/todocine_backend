@@ -12,6 +12,7 @@ Todo Cine is an API REST developed with [Java and Springboot in backend](https:/
 application.properties loads properties from three files, one per environment (prod, dev, test) and Constants file is missing in order you can create it for your need
 
 ## Releases
+- [RC-3.5.1](https://github.com/abeltran10/todocine_backend/releases/tag/RC-3.5.1)
 - [RC-3.5.0](https://github.com/abeltran10/todocine_backend/releases/tag/RC-3.5.0)
 - [v3.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/v3.0.0)
 - [RC-3.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/RC-3.0.0)
@@ -22,14 +23,15 @@ application.properties loads properties from three files, one per environment (p
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/RC-3.5.0) compressed file 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/RC-3.5.1) compressed file 
 - Add application.properties and Constants.java files to project
 - Execute [mvn clean install] command and deploy .jar file generated in one server. [Heroku](https://heroku.com) is a free choice
 
 ## Demo
 
-Demo RC-3.5.0 release candidate
-[RC-3.5.0.webm](https://github.com/abeltran10/todocine_backend/assets/44783052/976bff7d-8ac3-44a9-8198-83657f0044c0)
+Demo RC-3.5.1 release candidate (bug fixed)
+[RC-3.5.1.webm](https://github.com/abeltran10/todocine_backend/assets/44783052/c656b1ee-061c-4147-b030-a54883a6c394)
+
 
 
 
