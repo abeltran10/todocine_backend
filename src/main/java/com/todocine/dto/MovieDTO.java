@@ -112,9 +112,7 @@ public class MovieDTO {
         this.popularity = movie.getPopularity();
         this.voteCount = movie.getVoteCount();
         this.voteAverage = movie.getVoteAverage();
-        this.genreDTOS = movie.getGenreIds().stream().map(genre ->  new GenreDTO(genre)).collect(Collectors.toList());
         this.originalLanguage = movie.getOriginalLanguage();
-        this.videoDTOS = movie.getVideos().stream().map(video -> new VideoDTO(video)).collect(Collectors.toList());
         this.votoDTOS = movie.getVotosTC().stream().map(voto -> new VotoDTO(voto)).collect(Collectors.toList());
         this.votosMediaTC = movie.getVotosMediaTC();
         this.totalVotosTC = movie.getTotalVotosTC();

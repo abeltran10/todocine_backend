@@ -5,13 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 
 public class VotoDTO {
 
-    private String id;
+    @NotBlank
+    private Long usuarioId;
 
     @NotBlank
-    private UsuarioDTO usuarioDTO;
-
-    @NotBlank
-    private MovieDTO movieDTO;
+    private String movieId;
 
     @NotBlank
     private Double voto;
@@ -19,46 +17,37 @@ public class VotoDTO {
     public VotoDTO() {
     }
 
-    public VotoDTO(String id) {
-        this.id = id;
+    public VotoDTO(Long usuarioId, String movieId) {
+        this.usuarioId = usuarioId;
+        this.movieId = movieId;
     }
 
-    public VotoDTO(String id, UsuarioDTO usuarioDTO, MovieDTO movieDTO, Double voto) {
-        this.id = id;
-        this.usuarioDTO = usuarioDTO;
-        this.movieDTO = movieDTO;
+    public VotoDTO(Long usuarioId, String movieId, Double voto) {
+        this.usuarioId = usuarioId;
+        this.movieId = movieId;
         this.voto = voto;
     }
 
     public VotoDTO(Voto voto) {
-        this.id = voto.getId();
-        this.usuarioDTO = new UsuarioDTO(voto.getUsuario().getId());
-        this.movieDTO = new MovieDTO(voto.getMovie().getId());
+        this.usuarioId = voto.getId().getUsuario().getId();
+        this.movieId = voto.getId().getMovie().getId();
         this.voto = voto.getVoto();
     }
 
-    public String getId() {
-        return id;
+    public Long getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
-    public UsuarioDTO getUsuario() {
-        return usuarioDTO;
+    public String getMovieId() {
+        return movieId;
     }
 
-    public void setUsuario(UsuarioDTO usuarioDTO) {
-        this.usuarioDTO = usuarioDTO;
-    }
-
-    public MovieDTO getMovie() {
-        return movieDTO;
-    }
-
-    public void setMovie(MovieDTO movieDTO) {
-        this.movieDTO = movieDTO;
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
     }
 
     public Double getVoto() {
@@ -67,5 +56,14 @@ public class VotoDTO {
 
     public void setVoto(Double voto) {
         this.voto = voto;
+    }
+
+    @Override
+    public String toString() {
+        return "VotoDTO{" +
+                "usuarioId=" + usuarioId +
+                ", movieId='" + movieId + '\'' +
+                ", voto=" + voto +
+                '}';
     }
 }

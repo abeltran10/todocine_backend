@@ -17,19 +17,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class CheckPremioUnitarioTestDTO {
+@ActiveProfiles(value = "test")
+public class CheckPremioUnitarioTest {
 
-    public static Logger LOG = LoggerFactory.getLogger(CheckPremioUnitarioTestDTO.class);
+    public static Logger LOG = LoggerFactory.getLogger(CheckPremioUnitarioTest.class);
 
     @Mock
     PremioDAO premioDAO;
@@ -43,8 +44,6 @@ public class CheckPremioUnitarioTestDTO {
     static void setUp() {
         Movie movie1 = new Movie("123");
         movie1.setTitle("La sociedad de la nieve");
-        movie1.setGenreIds(new ArrayList<>());
-        movie1.setVideos(new ArrayList<>());
         movie1.setVotosTC(new ArrayList<>());
 
         Categoria categoria1 = new Categoria();
@@ -57,7 +56,7 @@ public class CheckPremioUnitarioTestDTO {
 
         List<Categoria> categoriaEntities = Arrays.asList(categoria1, categoria2);
 
-        Premio premio1 = new Premio("1");
+        Premio premio1 = new Premio(1L);
         premio1.setTitulo("Goya");
         premio1.setCategorias(categoriaEntities);
 
@@ -70,7 +69,7 @@ public class CheckPremioUnitarioTestDTO {
 
         PremioDTO premioDTO = new PremioDTO(premio);
 
-        Mockito.when(premioDAO.findById("1")).thenReturn(Optional.of(premio));
+        Mockito.when(premioDAO.findByCodigo(1)).thenReturn(premio);
 
         PremioDTO premioDTO1 = premioService.getPremioByCodigo(1);
 

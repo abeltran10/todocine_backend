@@ -2,7 +2,6 @@ package com.todocine.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.todocine.entities.Genre;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Map;
@@ -27,11 +26,6 @@ public class GenreDTO {
     public GenreDTO(String id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    public GenreDTO(Genre genre) {
-        this.id = genre.getId();
-        this.name = genre.getName();
     }
 
     public GenreDTO(Map<String, Object> map) {

@@ -9,17 +9,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UsuarioService extends UserDetailsService {
 
-    UsuarioDTO getUsuarioById(String id) throws NotFoudException;
+    UsuarioDTO getUsuarioById(Long id) throws NotFoudException;
 
     UsuarioDTO getUsuarioByName (String username) throws NotFoudException;
 
     UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws BadRequestException;
 
-    UsuarioDTO updateUsuario(String id, UsuarioDTO usuarioDTO) throws NotFoudException;
+    UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException;
 
-    Paginator getUsuarioFavs(String username, Integer page) throws NotFoudException;
+    Paginator getUsuarioFavs(Long id, Integer page) throws NotFoudException;
 
-    MovieDTO addFavoritosByUserId(String id, MovieDTO movieDTO) throws BadRequestException, NotFoudException;
+    MovieDTO addFavoritosByUserId(Long id, MovieDTO movieDTO) throws BadRequestException, NotFoudException;
 
-    void deleteFavoritosByUserId(String id, String movieId) throws BadRequestException, NotFoudException;
+    void deleteFavoritosByUserId(Long id, String movieId) throws BadRequestException, NotFoudException;
 }

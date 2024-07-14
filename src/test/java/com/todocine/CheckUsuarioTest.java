@@ -1,8 +1,9 @@
 package com.todocine;
 
-import com.todocine.dao.MovieDAO;
-import com.todocine.dao.UsuarioDAO;
+import com.todocine.dao.*;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.entities.Favoritos;
+import com.todocine.entities.FavoritosId;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadRequestException;
@@ -17,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,8 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class CheckUsuarioTestDTO {
-    public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioTestDTO.class);
+@ActiveProfiles(value = "test")
+public class CheckUsuarioTest {
+    public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioTest.class);
     @Autowired
     private UsuarioService usuarioService;
 
@@ -35,7 +39,13 @@ public class CheckUsuarioTestDTO {
     private UsuarioDAO usuarioDAO;
 
     @Autowired
+    private CategoriaDAO categoriaDAO;
+
+    @Autowired
     private MovieDAO movieDAO;
+
+    @Autowired
+    private FavoritosDAO favoritosDAO;
 
     @Autowired
     private MovieService movieService;
@@ -50,27 +60,32 @@ public class CheckUsuarioTestDTO {
     @BeforeEach
     void before() {
         usuarioDAO.deleteAll();
+        categoriaDAO.deleteAll();
         movieDAO.deleteAll();
 
         Usuario usuario = new Usuario("test", "1234");
-        usuarioDAO.save(usuario);
 
         List<Usuario> usuarioList = Arrays.asList(usuario);
 
         Movie movie = new Movie("906126","La sociedad de la nieve"
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
                 , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
-                , 1284.858, 467, 8.158, new ArrayList<>()
-                , "es", new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), 0, 0D) ;
-        List<Movie> favoritos = Arrays.asList(movie);
+                , 1284.858, 467, 8.158, "es", new ArrayList<>(), 0, 0D) ;
+        Favoritos favorito = new Favoritos(new FavoritosId(usuario,movie));
 
         movie = movieDAO.save(movie);
         movieDTO = new MovieDTO(movie);
 
-        usuario.setFavoritos(favoritos);
+        usuario.setFavoritos(new ArrayList<>());
+        usuario.getFavoritos().add(favorito);
         usuario = usuarioDAO.save(usuario);
 
-        usuarioDTO = new UsuarioDTO(usuario);
+        favoritosDAO.save(favorito);
+
+        usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuario.getId());
+        usuarioDTO.setUsername(usuario.getUsername());
+        usuarioDTO.setPassword(usuario.getPassword());
     }
 
     @Test
@@ -129,14 +144,7 @@ public class CheckUsuarioTestDTO {
         LOG.info("addFavoritosByUserId");
 
         MovieDTO movieDTO = new MovieDTO("572802", "Aquaman and the Lost Kingdom", "Aquaman y el reino perdido"
-                , "/d9Hv3b37ZErby79f4iqTZ8doaTp.jpg"
-                , "Al no poder derrotar a Aquaman la primera vez, Black Manta, todavía impulsado por la necesidad de vengar " +
-                "la muerte de su padre, no se detendrá ante nada para derrotar a Aquaman de una vez por todas. " +
-                "Esta vez Black Manta es más formidable que nunca y ejerce el poder del mítico Tridente Negro, que desata " +
-                "una fuerza antigua y malévola.  Para derrotarlo, Aquaman recurrirá a su hermano encarcelado Orm, " +
-                "el ex rey de la Atlántida, para forjar una alianza improbable. Juntos, deben dejar de lado sus diferencias" +
-                " para proteger su reino y salvar a la familia de Aquaman, y al mundo, de una destrucción irreversible."
-                , "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
+                , "/d9Hv3b37ZErby79f4iqTZ8doaTp.jpg", "overview", "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
                 , new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
         MovieDTO movieDTO1 = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
@@ -146,6 +154,7 @@ public class CheckUsuarioTestDTO {
     }
 
     @Test
+    @Transactional
     void deleteUserFavs() {
         LOG.info("deleteUserFavs");
 

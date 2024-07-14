@@ -1,7 +1,8 @@
 package com.todocine.dao;
 
 import com.todocine.entities.Voto;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.todocine.entities.VotoId;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface VotoDAO extends MongoRepository<Voto, String> {
+public interface VotoDAO extends JpaRepository<Voto, VotoId> {
 }

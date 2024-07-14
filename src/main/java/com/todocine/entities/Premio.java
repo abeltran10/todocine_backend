@@ -1,35 +1,37 @@
 package com.todocine.entities;
 
 import com.todocine.dto.PremioDTO;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceCreator;
-import org.springframework.data.annotation.Version;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Document(collection = "Premios")
+@Entity
+@Table(name = "PREMIO")
 public class Premio {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_entity_generator")
+    @SequenceGenerator(name = "sequence_entity_generator", allocationSize = 1, sequenceName = "sequence_entity_generator")
+    private Long id;
 
     private Integer codigo;
 
+    @OneToMany(mappedBy = "premio", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Categoria> categorias;
 
     private String titulo;
 
-    @Version
-    private Integer version;
+    public Premio() {
+    }
 
-    public Premio(String id) {
+    public Premio(Long id) {
         this.id = id;
     }
 
-    @PersistenceCreator
-    public Premio(String id, Integer codigo, List<Categoria> categorias, String titulo) {
+
+    public Premio(Long id, Integer codigo, List<Categoria> categorias, String titulo) {
         this.id = id;
         this.codigo = codigo;
         this.categorias = categorias;
@@ -44,11 +46,11 @@ public class Premio {
         this.titulo = premioDTO.getTitulo();
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -76,11 +78,4 @@ public class Premio {
         this.titulo = titulo;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 }

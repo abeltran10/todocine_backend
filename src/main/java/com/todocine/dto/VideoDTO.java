@@ -2,7 +2,6 @@ package com.todocine.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.todocine.entities.Video;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Map;
@@ -39,14 +38,6 @@ public class VideoDTO {
         this.key = key;
         this.site = site;
         this.type = type;
-    }
-
-    public VideoDTO(Video video) {
-        this.id = video.getId();
-        this.name = video.getName();
-        this.key = video.getKey();
-        this.site = video.getSite();
-        this.type = video.getType();
     }
 
     public VideoDTO(Map<String, Object> map) {
