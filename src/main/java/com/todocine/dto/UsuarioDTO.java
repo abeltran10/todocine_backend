@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class UsuarioDTO {
 
-    private String id;
+    private Long id;
 
     @NotBlank
     private String username;
@@ -24,14 +24,14 @@ public class UsuarioDTO {
 
     private Boolean enabled;
 
-    private List<MovieDTO> favoritos;
+    private List<FavoritosDTO> favoritos;
 
-    private List<VotoDTO> votoDTOS;
+    private List<VotoDTO> votos;
 
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(String id) {
+    public UsuarioDTO(Long id) {
         this.id = id;
     }
 
@@ -45,9 +45,9 @@ public class UsuarioDTO {
         this.favoritos = new ArrayList<>();
     }
 
-    public UsuarioDTO(String id, String username, String password, Boolean accountNonExpired,
-                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<MovieDTO> favoritos,
-                      List<VotoDTO> votoDTOS) {
+    public UsuarioDTO(Long id, String username, String password, Boolean accountNonExpired,
+                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<FavoritosDTO> favoritos,
+                      List<VotoDTO> votos) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -56,25 +56,27 @@ public class UsuarioDTO {
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
         this.favoritos = favoritos;
-        this.votoDTOS = votoDTOS;
+        this.votos = votos;
     }
 
     public UsuarioDTO(Usuario usuario) {
         this.id = usuario.getId();
         this.username = usuario.getUsername();
         this.password = usuario.getPassword();
-        this.accountNonExpired = usuario.isAccountNonExpired();
-        this.accountNonLocked = usuario.isAccountNonLocked();
-        this.credentialsNonExpired = usuario.isCredentialsNonExpired();
-        this.enabled = usuario.isEnabled();
-        this.favoritos = usuario.getFavoritos().stream().map(movieDTO -> new MovieDTO(movieDTO.getId())).collect(Collectors.toList());
+        this.accountNonExpired = usuario.getAccountNonExpired();
+        this.accountNonLocked = usuario.getAccountNonLocked();
+        this.credentialsNonExpired = usuario.getCredentialsNonExpired();
+        this.enabled = usuario.getEnabled();
+        this.favoritos = usuario.getFavoritos().stream().map(fav ->
+                new FavoritosDTO(fav.getId().getUsuario().getId(), new MovieDTO(fav.getId().getMovie().getId())))
+                .collect(Collectors.toList());
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -140,20 +142,20 @@ public class UsuarioDTO {
         this.enabled = enabled;
     }
 
-    public List<MovieDTO> getFavoritos() {
+    public List<FavoritosDTO> getFavoritos() {
         return favoritos;
     }
 
-    public void setFavoritos(List<MovieDTO> favoritos) {
+    public void setFavoritos(List<FavoritosDTO> favoritos) {
         this.favoritos = favoritos;
     }
 
     public List<VotoDTO> getVotos() {
-        return votoDTOS;
+        return votos;
     }
 
     public void setVotos(List<VotoDTO> votoDTOS) {
-        this.votoDTOS = votoDTOS;
+        this.votos = votoDTOS;
     }
 
     @Override

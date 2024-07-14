@@ -7,6 +7,7 @@ import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.PremioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PremioServiceImpl implements PremioService {
@@ -15,6 +16,7 @@ public class PremioServiceImpl implements PremioService {
     private PremioDAO premioDAO;
 
     @Override
+    @Transactional(readOnly = true)
     public PremioDTO getPremioByCodigo(Integer codigo) throws NotFoudException {
         Premio premio = premioDAO.findByCodigo(codigo);
 

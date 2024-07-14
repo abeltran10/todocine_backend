@@ -1,8 +1,12 @@
 package com.todocine;
 
+import com.todocine.dao.FavoritosDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
+import com.todocine.dto.FavoritosDTO;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.entities.Favoritos;
+import com.todocine.entities.FavoritosId;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadRequestException;
@@ -21,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,8 +36,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class CheckUsuarioUnitTestDTO {
-    public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioUnitTestDTO.class);
+@ActiveProfiles(value = "test")
+public class CheckUsuarioUnitTest {
+    public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioUnitTest.class);
 
 
     @Mock
@@ -40,6 +46,9 @@ public class CheckUsuarioUnitTestDTO {
 
     @Mock
     private MovieDAO movieDAO;
+
+    @Mock
+    private FavoritosDAO favoritosDAO;
 
     @InjectMocks
     private UserServiceImpl usuarioService;
@@ -56,15 +65,15 @@ public class CheckUsuarioUnitTestDTO {
         LOG.info("setUp");
 
         usuarioDTO = new UsuarioDTO("test", "1234");
-        usuarioDTO.setId("9876");
+        usuarioDTO.setId(9876L);
 
         movieDTO = new MovieDTO("906126","La sociedad de la nieve"
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
                 , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
-                , 1284.858, 467, 8.158, new ArrayList<>()
-                , "es", new ArrayList<>(), new ArrayList<>(), 0, 0D);
+                , 1284.858, 467, 8.158, new ArrayList<>(), "es"
+                , new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
-        usuarioDTO.setFavoritos(Arrays.asList(movieDTO));
+        usuarioDTO.setFavoritos(Arrays.asList(new FavoritosDTO(usuarioDTO.getId(), movieDTO)));
     }
 
     @Test
@@ -76,7 +85,7 @@ public class CheckUsuarioUnitTestDTO {
         Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuario);
 
         UsuarioDTO test = usuarioService.getUsuarioByName("test");
-        assertEquals("9876", test.getId());
+        assertEquals(9876L, test.getId());
     }
 
     @Test
@@ -102,7 +111,7 @@ public class CheckUsuarioUnitTestDTO {
         Usuario usuario = new Usuario(usuarioDTO);
         usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
 
-        Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuario));
+        Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
 
         UsuarioDTO usuarioDTO1 = usuarioDTO;
         usuarioDTO1.setPassword("abcd");
@@ -119,7 +128,8 @@ public class CheckUsuarioUnitTestDTO {
         LOG.info("findUserFavs");
 
         Movie movie = new Movie(movieDTO);
-        Mockito.when(usuarioDAO.findFavoritosById("9876")).thenReturn(Arrays.asList(movie));
+        Mockito.when(favoritosDAO.findByIdUsuarioId(9876L)).thenReturn(Arrays.asList(
+                new Favoritos(new FavoritosId(new Usuario(usuarioDTO.getId()), movie))));
 
         Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 1);
         assertTrue(paginator != null);
@@ -145,7 +155,7 @@ public class CheckUsuarioUnitTestDTO {
         Movie movie = new Movie(movieDTO);
 
 
-        Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuario));
+        Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
         Mockito.when(movieDAO.findById("572802")).thenReturn(Optional.of(movie));
 
         MovieDTO movieDTO1 = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
@@ -160,7 +170,7 @@ public class CheckUsuarioUnitTestDTO {
         Usuario usuario = new Usuario(usuarioDTO);
         Movie movie = new Movie(movieDTO);
 
-        Mockito.when(usuarioDAO.findById("9876")).thenReturn(Optional.of(usuario));
+        Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
         Mockito.when(movieDAO.findById("906126")).thenReturn(Optional.of(movie));
 
         usuarioService.deleteFavoritosByUserId(usuarioDTO.getId(), movieDTO.getId());

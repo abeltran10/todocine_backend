@@ -1,48 +1,51 @@
 package com.todocine.entities;
 
 import com.todocine.dto.UsuarioDTO;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceCreator;
-import org.springframework.data.annotation.Version;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Document(collection = "Usuario")
+@Entity
+@Table(name = "USUARIO")
 public class Usuario implements UserDetails {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_entity_generator")
+    @SequenceGenerator(name = "sequence_entity_generator", allocationSize = 1, sequenceName = "sequence_entity_generator")
+    private Long id;
 
+    @Column
     private String username;
 
+    @Column
     private String password;
 
+    @Column
     private Boolean accountNonExpired;
 
+    @Column
     private Boolean accountNonLocked;
 
+    @Column
     private Boolean credentialsNonExpired;
 
+    @Column
     private Boolean enabled;
 
-    @DocumentReference
-    private List<Movie> favoritos;
+    @OneToMany(mappedBy = "id.usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Favoritos> favoritos;
 
-    @DocumentReference(lazy = true)
+    @OneToMany(mappedBy = "id.usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Voto> votos;
-
-    @Version
-    private Integer version;
 
     public Usuario() {
     }
 
-    public Usuario(String id) {
+    public Usuario(Long id) {
         this.id = id;
     }
 
@@ -53,13 +56,11 @@ public class Usuario implements UserDetails {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
-        this.favoritos = new ArrayList<>();
     }
 
-    @PersistenceCreator
-    public Usuario(String id, String username, String password, Boolean accountNonExpired,
-                   Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<Movie> favoritos,
-                   List<Voto> votos) {
+
+    public Usuario(Long id, String username, String password, Boolean accountNonExpired,
+                   Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -67,8 +68,6 @@ public class Usuario implements UserDetails {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
-        this.favoritos = favoritos;
-        this.votos = votos;
     }
 
     public Usuario(UsuarioDTO usuarioDTO) {
@@ -79,15 +78,17 @@ public class Usuario implements UserDetails {
         this.accountNonLocked = usuarioDTO.getAccountNonLocked();
         this.credentialsNonExpired = usuarioDTO.getCredentialsNonExpired();
         this.enabled = usuarioDTO.getEnabled();
-        this.favoritos = usuarioDTO.getFavoritos().stream().map(fav -> new Movie(fav.getId())).collect(Collectors.toList());
+        this.favoritos = usuarioDTO.getFavoritos().stream().map(fav ->
+                new Favoritos(new FavoritosId(new Usuario(fav.getUsuarioId()), new Movie(fav.getMovie().getId()))))
+                .collect(Collectors.toList());
         this.votos = new ArrayList<>();
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -165,11 +166,11 @@ public class Usuario implements UserDetails {
         this.enabled = enabled;
     }
 
-    public List<Movie> getFavoritos() {
+    public List<Favoritos> getFavoritos() {
         return favoritos;
     }
 
-    public void setFavoritos(List<Movie> favoritos) {
+    public void setFavoritos(List<Favoritos> favoritos) {
         this.favoritos = favoritos;
     }
 
@@ -179,14 +180,6 @@ public class Usuario implements UserDetails {
 
     public void setVotos(List<Voto> votos) {
         this.votos = votos;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     @Override
@@ -213,7 +206,6 @@ public class Usuario implements UserDetails {
                 ", credentialsNonExpired=" + credentialsNonExpired +
                 ", enabled=" + enabled +
                 ", favoritos=" + favoritos +
-                ", version=" + version +
                 '}';
     }
 }

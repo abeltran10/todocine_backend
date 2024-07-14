@@ -7,6 +7,7 @@ import com.todocine.dto.VotoDTO;
 import com.todocine.service.MovieService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,16 +45,16 @@ public class MovieController {
         return responseEntity;
     }
 
-    @PostMapping("/{id}/vote")
-    public ResponseEntity<MovieDTO> votar(@NotBlank @PathVariable("id") String movieId, @RequestBody VotoDTO votoDTO) throws BadGatewayException {
-        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.addVote(movieId, votoDTO), HttpStatus.CREATED);
-        return responseEntity;
-    }
+//    @PostMapping("/{id}/vote")
+//    public ResponseEntity<MovieDTO> votar(@NotBlank @PathVariable("id") String movieId, @RequestBody VotoDTO votoDTO) throws BadGatewayException {
+//        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.addVote(movieId, votoDTO), HttpStatus.CREATED);
+//        return responseEntity;
+//    }
 
-    @PutMapping("/{id}/vote/{votoId}")
-    public ResponseEntity<MovieDTO> actualizarVoto(@NotBlank @PathVariable("id") String movieId, @PathVariable("votoId") String votoId, @RequestBody VotoDTO votoDTO)
+    @PutMapping("/{id}/vote/{usuarioId}")
+    public ResponseEntity<MovieDTO> actualizarVoto(@NotBlank @PathVariable("id") String movieId, @NotNull @PathVariable("usuarioId") Long usuarioId, @RequestBody VotoDTO votoDTO)
             throws NotFoudException {
-        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.updateVote(movieId, votoId, votoDTO), HttpStatus.OK);
+        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.updateVote(movieId, usuarioId, votoDTO), HttpStatus.OK);
         return responseEntity;
     }
 
