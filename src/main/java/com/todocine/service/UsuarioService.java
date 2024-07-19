@@ -1,5 +1,6 @@
 package com.todocine.service;
 
+import com.todocine.dto.FavoritosDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
@@ -19,7 +20,7 @@ public interface UsuarioService extends UserDetailsService {
 
     Paginator getUsuarioFavs(Long id, Integer page) throws NotFoudException;
 
-    MovieDTO addFavoritosByUserId(Long id, MovieDTO movieDTO) throws BadRequestException, NotFoudException;
+    FavoritosDTO addFavoritosByUserId(Long id, MovieDTO movieDTO) throws BadRequestException, NotFoudException;
 
     void deleteFavoritosByUserId(Long id, String movieId) throws BadRequestException, NotFoudException;
 }
