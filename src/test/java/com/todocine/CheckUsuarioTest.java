@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-@ActiveProfiles(value = "test")
 public class CheckUsuarioTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioTest.class);
     @Autowired

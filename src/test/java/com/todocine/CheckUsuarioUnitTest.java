@@ -36,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-@ActiveProfiles(value = "test")
 public class CheckUsuarioUnitTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioUnitTest.class);
 
