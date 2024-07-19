@@ -85,11 +85,17 @@ public class UserServiceImpl implements UsuarioService {
         log.info("getUsuarioByName");
 
         Usuario usuario = usuarioDAO.findByUsername(username);
+        List<Favoritos> favoritos = usuario.getFavoritos();
 
         if (usuario == null)
             throw new NotFoudException("No existe el usuario");
         else {
-            return new UsuarioDTO(usuario);
+            UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+            List<FavoritosDTO> favoritosDTOS = favoritos.stream().map(favs -> new FavoritosDTO(favs.getId().getUsuario()
+                    .getId(), new MovieDTO(favs.getId().getMovie()))).collect(Collectors.toList());
+            usuarioDTO.setFavoritos(favoritosDTOS);
+
+            return usuarioDTO;
         }
     }
 
