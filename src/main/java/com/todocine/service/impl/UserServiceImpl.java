@@ -169,7 +169,7 @@ public class UserServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public FavoritosDTO addFavoritosByUserId(Long id, MovieDTO movieDTO) throws BadRequestException, NotFoudException {
+    public MovieDTO addFavoritosByUserId(Long id, MovieDTO movieDTO) throws BadRequestException, NotFoudException {
         Movie movie = null;
 
         try {
@@ -194,7 +194,7 @@ public class UserServiceImpl implements UsuarioService {
                 usuario.getFavoritos().add(favorito);
                 favoritosDAO.save(favorito);
 
-                return new FavoritosDTO(usuario.getId(), new MovieDTO(movie));
+                return new MovieDTO(movie);
 
             } else
                 throw new BadRequestException("La película ya está en favoritos");

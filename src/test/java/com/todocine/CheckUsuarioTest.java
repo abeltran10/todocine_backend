@@ -147,9 +147,9 @@ public class CheckUsuarioTest {
                 , "/d9Hv3b37ZErby79f4iqTZ8doaTp.jpg", "overview", "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
                 , new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
-        FavoritosDTO favoritosDTO = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
+        MovieDTO movieDTO1 = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
 
-        assertEquals("572802", favoritosDTO.getMovie().getId());
+        assertEquals("572802", movieDTO1.getId());
 
     }
 

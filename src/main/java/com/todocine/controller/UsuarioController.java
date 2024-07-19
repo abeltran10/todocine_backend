@@ -52,9 +52,9 @@ public class UsuarioController {
     }
 
     @PostMapping("/{id}/favs")
-    public ResponseEntity<FavoritosDTO> addFavoritosByUserId(@NotNull @PathVariable("id") Long id, @Valid @RequestBody MovieDTO movieDTO) throws BadRequestException, NotFoudException {
+    public ResponseEntity<MovieDTO> addFavoritosByUserId(@NotNull @PathVariable("id") Long id, @Valid @RequestBody MovieDTO movieDTO) throws BadRequestException, NotFoudException {
         logger.info("addFavoritosByUserId");
-        ResponseEntity<FavoritosDTO> responseEntity = new ResponseEntity<>(usuarioService.addFavoritosByUserId(id, movieDTO), HttpStatus.CREATED);
+        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(usuarioService.addFavoritosByUserId(id, movieDTO), HttpStatus.CREATED);
         return responseEntity;
     }
 
