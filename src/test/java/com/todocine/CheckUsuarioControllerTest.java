@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles(value = "test")
 public class CheckUsuarioControllerTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioControllerTest.class);
     @Mock

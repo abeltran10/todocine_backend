@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-@ActiveProfiles(value = "test")
 public class CheckPremioUnitarioTest {
 
     public static Logger LOG = LoggerFactory.getLogger(CheckPremioUnitarioTest.class);

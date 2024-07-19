@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ActiveProfiles(value = "test")
 public class CheckMoviesTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckMoviesTest.class);
 

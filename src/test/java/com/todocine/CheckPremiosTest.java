@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ActiveProfiles(value = "test")
 public class CheckPremiosTest {
 
     public static Logger LOG = LoggerFactory.getLogger(CheckPremiosTest.class);
