@@ -1,6 +1,7 @@
 package com.todocine;
 
 import com.todocine.dao.CategoriaDAO;
+import com.todocine.dao.FavoritosDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.PremioDAO;
 import com.todocine.entities.Categoria;
@@ -34,12 +35,17 @@ public class CheckPremiosTest {
     private MovieDAO movieDAO;
 
     @Autowired
+    private FavoritosDAO favoritosDAO;
+
+
+    @Autowired
     private MovieService movieService;
 
     private Premio p = null;
     @BeforeAll
     void setUp() {
         premioDAO.deleteAll();
+        favoritosDAO.deleteAll();
         movieDAO.deleteAll();
 
         Movie movie = new Movie(movieService.getMovieById("906126"));
