@@ -1,5 +1,6 @@
 package com.todocine.controller;
 
+import com.todocine.dto.FavoritosDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
@@ -51,9 +52,9 @@ public class UsuarioController {
     }
 
     @PostMapping("/{id}/favs")
-    public ResponseEntity<MovieDTO> addFavoritosByUserId(@NotNull @PathVariable("id") Long id, @Valid @RequestBody MovieDTO movieDTO) throws BadRequestException, NotFoudException {
+    public ResponseEntity<FavoritosDTO> addFavoritosByUserId(@NotNull @PathVariable("id") Long id, @Valid @RequestBody MovieDTO movieDTO) throws BadRequestException, NotFoudException {
         logger.info("addFavoritosByUserId");
-        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(usuarioService.addFavoritosByUserId(id, movieDTO), HttpStatus.CREATED);
+        ResponseEntity<FavoritosDTO> responseEntity = new ResponseEntity<>(usuarioService.addFavoritosByUserId(id, movieDTO), HttpStatus.CREATED);
         return responseEntity;
     }
 

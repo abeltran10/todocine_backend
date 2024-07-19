@@ -1,6 +1,7 @@
 package com.todocine;
 
 import com.todocine.dao.*;
+import com.todocine.dto.FavoritosDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Favoritos;
 import com.todocine.entities.FavoritosId;
@@ -146,9 +147,9 @@ public class CheckUsuarioTest {
                 , "/d9Hv3b37ZErby79f4iqTZ8doaTp.jpg", "overview", "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
                 , new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
-        MovieDTO movieDTO1 = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
+        FavoritosDTO favoritosDTO = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
 
-        assertEquals("572802", movieDTO1.getId());
+        assertEquals("572802", favoritosDTO.getMovie().getId());
 
     }
 

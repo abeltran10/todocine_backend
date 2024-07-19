@@ -3,6 +3,7 @@ package com.todocine.service.impl;
 import com.todocine.dao.FavoritosDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
+import com.todocine.dto.FavoritosDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Favoritos;
 import com.todocine.entities.FavoritosId;
@@ -168,7 +169,7 @@ public class UserServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public MovieDTO addFavoritosByUserId(Long id, MovieDTO movieDTO) throws BadRequestException, NotFoudException {
+    public FavoritosDTO addFavoritosByUserId(Long id, MovieDTO movieDTO) throws BadRequestException, NotFoudException {
         Movie movie = null;
 
         try {
@@ -193,7 +194,7 @@ public class UserServiceImpl implements UsuarioService {
                 usuario.getFavoritos().add(favorito);
                 favoritosDAO.save(favorito);
 
-                return new MovieDTO(movie);
+                return new FavoritosDTO(usuario.getId(), new MovieDTO(movie));
 
             } else
                 throw new BadRequestException("La película ya está en favoritos");
