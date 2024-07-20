@@ -1,16 +1,21 @@
 package com.todocine.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.entities.Voto;
 import jakarta.validation.constraints.NotBlank;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class VotoDTO {
 
+    @JsonProperty("usuarioId")
     @NotBlank
     private Long usuarioId;
 
     @NotBlank
     private String movieId;
 
+    @JsonProperty("voto")
     @NotBlank
     private Double voto;
 

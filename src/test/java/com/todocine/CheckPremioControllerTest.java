@@ -2,6 +2,7 @@ package com.todocine;
 
 import com.todocine.controller.PremioController;
 import com.todocine.dao.CategoriaDAO;
+import com.todocine.dao.FavoritosDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.PremioDAO;
 import com.todocine.dto.PremioDTO;
@@ -43,11 +44,15 @@ public class CheckPremioControllerTest {
     private MovieService movieService;
 
     @Autowired
+    private FavoritosDAO favoritosDAO;
+
+    @Autowired
     private PremioController premioController;
 
     @BeforeAll
     void setUp() {
         premioDAO.deleteAll();
+        favoritosDAO.deleteAll();
         movieDAO.deleteAll();
 
         Movie movie = new Movie(movieService.getMovieById("906126"));

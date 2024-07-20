@@ -1,9 +1,9 @@
 package com.todocine.controller;
 
-import com.todocine.exceptions.BadGatewayException;
-import com.todocine.exceptions.NotFoudException;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.VotoDTO;
+import com.todocine.exceptions.BadGatewayException;
+import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotBlank;

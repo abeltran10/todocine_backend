@@ -1,10 +1,9 @@
 package com.todocine.controller;
 
-import com.todocine.dto.FavoritosDTO;
+import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
-import com.todocine.dto.MovieDTO;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;

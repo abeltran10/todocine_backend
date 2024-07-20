@@ -2,7 +2,6 @@ package com.todocine.entities;
 
 import com.todocine.dto.CategoriaDTO;
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "CATEGORIA")

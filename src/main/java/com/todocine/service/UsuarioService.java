@@ -1,10 +1,9 @@
 package com.todocine.service;
 
-import com.todocine.dto.FavoritosDTO;
+import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
-import com.todocine.dto.MovieDTO;
 import com.todocine.utils.Paginator;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
