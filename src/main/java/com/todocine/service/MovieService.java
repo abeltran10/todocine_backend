@@ -1,10 +1,9 @@
 package com.todocine.service;
 
-import com.todocine.exceptions.BadGatewayException;
-import com.todocine.exceptions.BadRequestException;
-import com.todocine.exceptions.NotFoudException;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.VotoDTO;
+import com.todocine.exceptions.BadGatewayException;
+import com.todocine.exceptions.NotFoudException;
 import com.todocine.utils.Paginator;
 
 public interface MovieService {

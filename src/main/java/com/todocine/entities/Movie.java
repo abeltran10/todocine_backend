@@ -2,7 +2,6 @@ package com.todocine.entities;
 
 import com.todocine.dto.MovieDTO;
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.ArrayList;
 import java.util.List;

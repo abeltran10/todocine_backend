@@ -68,7 +68,7 @@ public class UsuarioDTO {
         this.credentialsNonExpired = usuario.getCredentialsNonExpired();
         this.enabled = usuario.getEnabled();
         this.favoritos = usuario.getFavoritos().stream().map(fav ->
-                new FavoritosDTO(fav.getId().getUsuario().getId(), new MovieDTO(fav.getId().getMovie().getId())))
+                new FavoritosDTO(fav.getId().getUsuario().getId(), fav.getId().getMovie().getId()))
                 .collect(Collectors.toList());
     }
 

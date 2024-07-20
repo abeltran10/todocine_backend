@@ -1,24 +1,26 @@
 package com.todocine.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FavoritosDTO {
 
-    @JsonProperty("usuario")
+    @JsonIgnore
     private Long usuarioId;
 
-    @JsonProperty("movie")
-    private MovieDTO movie;
+    @JsonProperty("movieId")
+    @NotBlank
+    private String movieId;
 
     public FavoritosDTO() {
     }
 
-    public FavoritosDTO(Long usuarioId, MovieDTO movie) {
+    public FavoritosDTO(Long usuarioId, String movieId) {
         this.usuarioId = usuarioId;
-        this.movie = movie;
+        this.movieId = movieId;
     }
 
     public Long getUsuarioId() {
@@ -29,11 +31,11 @@ public class FavoritosDTO {
         this.usuarioId = usuarioId;
     }
 
-    public MovieDTO getMovie() {
-        return movie;
+    public String getMovieId() {
+        return movieId;
     }
 
-    public void setMovie(MovieDTO movie) {
-        this.movie = movie;
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
     }
 }

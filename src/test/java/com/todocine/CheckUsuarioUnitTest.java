@@ -72,7 +72,7 @@ public class CheckUsuarioUnitTest {
                 , 1284.858, 467, 8.158, new ArrayList<>(), "es"
                 , new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
-        usuarioDTO.setFavoritos(Arrays.asList(new FavoritosDTO(usuarioDTO.getId(), movieDTO)));
+        usuarioDTO.setFavoritos(Arrays.asList(new FavoritosDTO(usuarioDTO.getId(), movieDTO.getId())));
     }
 
     @Test

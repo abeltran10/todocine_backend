@@ -2,7 +2,6 @@ package com.todocine.entities;
 
 import com.todocine.dto.UsuarioDTO;
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -79,7 +78,7 @@ public class Usuario implements UserDetails {
         this.credentialsNonExpired = usuarioDTO.getCredentialsNonExpired();
         this.enabled = usuarioDTO.getEnabled();
         this.favoritos = usuarioDTO.getFavoritos().stream().map(fav ->
-                new Favoritos(new FavoritosId(new Usuario(fav.getUsuarioId()), new Movie(fav.getMovie().getId()))))
+                new Favoritos(new FavoritosId(new Usuario(fav.getUsuarioId()), new Movie(fav.getMovieId()))))
                 .collect(Collectors.toList());
         this.votos = new ArrayList<>();
     }

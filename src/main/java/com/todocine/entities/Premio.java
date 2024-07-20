@@ -2,7 +2,6 @@ package com.todocine.entities;
 
 import com.todocine.dto.PremioDTO;
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 import java.util.stream.Collectors;

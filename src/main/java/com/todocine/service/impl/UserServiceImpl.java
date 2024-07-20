@@ -4,6 +4,7 @@ import com.todocine.dao.FavoritosDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.FavoritosDTO;
+import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Favoritos;
 import com.todocine.entities.FavoritosId;
@@ -11,7 +12,6 @@ import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
-import com.todocine.dto.MovieDTO;
 import com.todocine.service.TMDBService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;
@@ -54,6 +54,7 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username);
 
@@ -92,7 +93,7 @@ public class UserServiceImpl implements UsuarioService {
         else {
             UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
             List<FavoritosDTO> favoritosDTOS = favoritos.stream().map(favs -> new FavoritosDTO(favs.getId().getUsuario()
-                    .getId(), new MovieDTO(favs.getId().getMovie()))).collect(Collectors.toList());
+                    .getId(), favs.getId().getMovie().getId())).collect(Collectors.toList());
             usuarioDTO.setFavoritos(favoritosDTOS);
 
             return usuarioDTO;
@@ -122,7 +123,6 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException {
        log.info("updateUsuario");
         Usuario usuario = null;
