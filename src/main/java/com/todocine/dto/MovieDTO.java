@@ -32,7 +32,6 @@ public class MovieDTO {
     private String posterPath;
 
     @JsonProperty("overview")
-    @NotBlank
     private String overview;
 
     @JsonProperty("release_date")
@@ -60,7 +59,6 @@ public class MovieDTO {
     private String originalLanguage;
 
     @JsonProperty("videos")
-    @NotNull
     private List<VideoDTO> videoDTOS;
 
     @JsonProperty("votos")
