@@ -46,11 +46,11 @@ public class FavoritosId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FavoritosId that = (FavoritosId) o;
-        return usuario.getId().equals(that.usuario.getId()) && movie.getId().equals(that.movie.getId());
+        return usuario.equals(that.usuario) && movie.equals(that.movie);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(usuario.getId(), movie.getId());
+        return Objects.hash(usuario, movie);
     }
 }

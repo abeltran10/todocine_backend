@@ -2,10 +2,10 @@ package com.todocine;
 
 
 import com.todocine.dao.PremioDAO;
+import com.todocine.dto.PremioDTO;
 import com.todocine.entities.Categoria;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Premio;
-import com.todocine.dto.PremioDTO;
 import com.todocine.service.impl.PremioServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Arrays;

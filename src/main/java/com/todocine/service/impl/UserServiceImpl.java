@@ -3,7 +3,6 @@ package com.todocine.service.impl;
 import com.todocine.dao.FavoritosDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dto.FavoritosDTO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Favoritos;
@@ -86,21 +85,18 @@ public class UserServiceImpl implements UsuarioService {
         log.info("getUsuarioByName");
 
         Usuario usuario = usuarioDAO.findByUsername(username);
-        List<Favoritos> favoritos = usuario.getFavoritos();
 
         if (usuario == null)
             throw new NotFoudException("No existe el usuario");
         else {
             UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
-            List<FavoritosDTO> favoritosDTOS = favoritos.stream().map(favs -> new FavoritosDTO(favs.getId().getUsuario()
-                    .getId(), favs.getId().getMovie().getId())).collect(Collectors.toList());
-            usuarioDTO.setFavoritos(favoritosDTOS);
 
             return usuarioDTO;
         }
     }
 
     @Override
+    @Transactional
     public UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws BadRequestException {
         Usuario usuario = usuarioDAO.findByUsername(usuarioDTO.getUsername());
 
@@ -123,6 +119,7 @@ public class UserServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional
     public UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException {
        log.info("updateUsuario");
         Usuario usuario = null;

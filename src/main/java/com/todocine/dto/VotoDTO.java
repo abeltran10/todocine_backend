@@ -4,19 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todocine.entities.Voto;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VotoDTO {
 
     @JsonProperty("usuarioId")
-    @NotBlank
+    @NotNull
     private Long usuarioId;
 
     @NotBlank
     private String movieId;
 
     @JsonProperty("voto")
-    @NotBlank
+    @NotNull
     private Double voto;
 
     public VotoDTO() {
