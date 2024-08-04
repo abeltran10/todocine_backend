@@ -49,8 +49,12 @@ public class MovieServiceImpl implements MovieService {
                 MovieDTO movieDTO = new MovieDTO(movieMap);
                 Movie movie = movieDAO.findById(id).orElse(null);
 
-                if (movie != null)
-                    movieDTO = new MovieDTO(movie);
+                if (movie != null) {
+                    MovieDTO movieDTO1 = new MovieDTO(movie);
+                    movieDTO.setVotos(movieDTO1.getVotos());
+                    movieDTO.setVotosMediaTC(movieDTO1.getVotosMediaTC());
+                    movieDTO.setTotalVotosTC(movieDTO1.getTotalVotosTC());
+                }
 
                 return movieDTO;
 
