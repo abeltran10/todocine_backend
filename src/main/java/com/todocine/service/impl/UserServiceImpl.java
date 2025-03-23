@@ -17,6 +17,9 @@ import com.todocine.utils.Paginator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -73,7 +76,7 @@ public class UserServiceImpl implements UsuarioService {
         Usuario usuario = usuarioDAO.findById(id).get();
 
         if (usuario == null)
-            throw new NotFoudException("No existe el usuario con ese nombre");
+            throw new NotFoudException("No existe el usuario");
         else {
             return new UsuarioDTO(usuario);
         }
@@ -87,7 +90,7 @@ public class UserServiceImpl implements UsuarioService {
         Usuario usuario = usuarioDAO.findByUsername(username);
 
         if (usuario == null)
-            throw new NotFoudException("No existe el usuario");
+            throw new NotFoudException("No existe el usuario con ese nombre");
         else {
             UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
 
@@ -126,10 +129,10 @@ public class UserServiceImpl implements UsuarioService {
         try {
             usuario = usuarioDAO.findById(id).get();
             usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
-            usuario.setEnabled(usuarioDTO.getEnabled());
+            /*usuario.setEnabled(usuarioDTO.getEnabled());
             usuario.setAccountNonExpired(usuarioDTO.getAccountNonExpired());
             usuario.setAccountNonLocked(usuarioDTO.getAccountNonLocked());
-            usuario.setCredentialsNonExpired(usuarioDTO.getCredentialsNonExpired());
+            usuario.setCredentialsNonExpired(usuarioDTO.getCredentialsNonExpired());*/
 
             usuarioDAO.save(usuario);
 
@@ -144,22 +147,16 @@ public class UserServiceImpl implements UsuarioService {
     @Transactional(readOnly = true)
     public Paginator<MovieDTO> getUsuarioFavs(Long id, Integer page) throws NotFoudException {
         Paginator<MovieDTO> paginator = new Paginator<>();
-        List<Favoritos> favoritos = favoritosDAO.findByIdUsuarioId(id);
+        Pageable pageable = PageRequest.of(page - 1, 20);
+        Page<Favoritos> favoritos = favoritosDAO.findByIdUsuarioId(id, pageable);
 
-        if (favoritos != null && !favoritos.isEmpty()) {
-            List<MovieDTO> movieDTOList = favoritos.stream().map(favs-> new MovieDTO(favs.getId().getMovie())).collect(Collectors.toList());
-
-            int totalResults = movieDTOList.size();
-            int totalPages = totalResults / (20 + 1) + 1;
-
-            List<MovieDTO> results = movieDTOList.stream()
-                    .skip((page - 1) * 20)
-                    .limit(20).collect(Collectors.toList());
+        if (favoritos.hasContent()) {
+            List<MovieDTO> movieDTOList = favoritos.getContent().stream().map(favs-> new MovieDTO(favs.getId().getMovie())).collect(Collectors.toList());
 
             paginator.setPage(page);
-            paginator.setResults(results);
-            paginator.setTotalPages(totalPages);
-            paginator.setTotalResults(totalResults);
+            paginator.setResults(movieDTOList);
+            paginator.setTotalPages(favoritos.getTotalPages());
+            paginator.setTotalResults((int)favoritos.getTotalElements());
 
             return paginator;
 

@@ -1,14 +1,10 @@
 package com.todocine;
 
 import com.todocine.controller.PremioController;
-import com.todocine.dao.CategoriaDAO;
-import com.todocine.dao.FavoritosDAO;
-import com.todocine.dao.MovieDAO;
-import com.todocine.dao.PremioDAO;
+import com.todocine.dao.*;
+import com.todocine.dto.GanadorDTO;
 import com.todocine.dto.PremioDTO;
-import com.todocine.entities.Categoria;
-import com.todocine.entities.Movie;
-import com.todocine.entities.Premio;
+import com.todocine.entities.*;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -44,10 +42,15 @@ public class CheckPremioControllerTest {
     private FavoritosDAO favoritosDAO;
 
     @Autowired
+    private GanadorDAO ganadorDAO;
+
+    @Autowired
     private PremioController premioController;
 
     @BeforeAll
     void setUp() {
+        ganadorDAO.deleteAll();
+        categoriaDAO.deleteAll();
         premioDAO.deleteAll();
         favoritosDAO.deleteAll();
         movieDAO.deleteAll();
@@ -55,27 +58,33 @@ public class CheckPremioControllerTest {
         Movie movie = new Movie(movieService.getMovieById("906126"));
         movieDAO.save(movie);
 
-        Premio premio = new Premio(null, 1, null, "Goya");
+        Premio premio = new Premio(1L, 1, "Goya");
         premioDAO.save(premio);
 
-        Categoria categoria = new Categoria(null, new Premio(premio.getId()), "Mejor película",  movie);
+        Categoria categoria = new Categoria(1L, "Mejor película");
         categoriaDAO.save(categoria);
+
+        GanadorId ganadorId = new GanadorId(premio, categoria, movie, 2024);
+        Ganador ganador = new Ganador();
+        ganador.setId(ganadorId);
+
+        ganadorDAO.save(ganador);
 
 
     }
 
     @Test
     void getPremioById() {
-        ResponseEntity<PremioDTO> responseEntity = premioController.getPremioByCodigo(1);
+        ResponseEntity<List<GanadorDTO>> responseEntity = premioController.getPremioByCodigoAnyo(1, 2024);
 
-        assertEquals("La sociedad de la nieve", responseEntity.getBody().getCategorias().get(0).getMovie().getTitle());
+        assertEquals("La sociedad de la nieve", responseEntity.getBody().get(0).getMovie().getTitle());
 
     }
 
     @Test
     void getPremioByCodigoException() {
         try {
-            premioController.getPremioByCodigo(0);
+            premioController.getPremioByCodigoAnyo(0, 2023);
         } catch (NotFoudException ex) {
             assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
         }

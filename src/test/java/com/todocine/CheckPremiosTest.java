@@ -1,9 +1,6 @@
 package com.todocine;
 
-import com.todocine.dao.CategoriaDAO;
-import com.todocine.dao.FavoritosDAO;
-import com.todocine.dao.MovieDAO;
-import com.todocine.dao.PremioDAO;
+import com.todocine.dao.*;
 import com.todocine.entities.Categoria;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Premio;
@@ -36,6 +33,9 @@ public class CheckPremiosTest {
     @Autowired
     private FavoritosDAO favoritosDAO;
 
+    @Autowired
+    private GanadorDAO ganadorDAO;
+
 
     @Autowired
     private MovieService movieService;
@@ -43,17 +43,19 @@ public class CheckPremiosTest {
     private Premio p = null;
     @BeforeAll
     void setUp() {
+        ganadorDAO.deleteAll();
         premioDAO.deleteAll();
+        categoriaDAO.deleteAll();
         favoritosDAO.deleteAll();
         movieDAO.deleteAll();
 
         Movie movie = new Movie(movieService.getMovieById("906126"));
         movieDAO.save(movie);
 
-        p = new Premio(null, 1, null, "Goya");
+        p = new Premio(null, 1, "Goya");
         premioDAO.save(p);
 
-        Categoria categoria = new Categoria(null, new Premio(p.getId()), "Mejor película",  movie);
+        Categoria categoria = new Categoria(null, "Mejor película");
         categoriaDAO.save(categoria);
 
 
@@ -63,8 +65,8 @@ public class CheckPremiosTest {
     void getPremioById() {
         Premio premio = premioDAO.findById(p.getId()).orElse(null);
 
-        LOG.info(premio.getCategorias().get(0).getMovie().getOriginalTitle());
+        LOG.info(premio.getTitulo());
 
-        assertEquals(1, premio.getCategorias().size());
+        assertEquals("Goya", premio.getTitulo());
     }
 }

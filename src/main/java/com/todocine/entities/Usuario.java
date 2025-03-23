@@ -35,7 +35,7 @@ public class Usuario implements UserDetails {
     @Column
     private Boolean enabled;
 
-    @OneToMany(mappedBy = "id.usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "id.usuario", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Favoritos> favoritos;
 
     @OneToMany(mappedBy = "id.usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

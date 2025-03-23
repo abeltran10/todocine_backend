@@ -24,6 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -126,10 +130,13 @@ public class CheckUsuarioUnitTest {
         LOG.info("findUserFavs");
 
         Movie movie = new Movie(movieDTO);
-        Mockito.when(favoritosDAO.findByIdUsuarioId(9876L)).thenReturn(Arrays.asList(
+        Pageable pageable = PageRequest.of(0, 20);
+        Page<Favoritos> favoritosPage = new PageImpl<>(Arrays.asList(
                 new Favoritos(new FavoritosId(new Usuario(usuarioDTO.getId()), movie))));
 
-        Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 1);
+        Mockito.when(favoritosDAO.findByIdUsuarioId(9876L, pageable)).thenReturn(favoritosPage);
+
+        Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 0);
         assertTrue(paginator != null);
         assertTrue(paginator.getResults().size() == 1);
         assertEquals("906126", paginator.getResults().get(0).getId());

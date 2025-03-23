@@ -61,7 +61,7 @@ public class CheckUsuarioTest {
     @BeforeEach
     void before() {
         usuarioDAO.deleteAll();
-        categoriaDAO.deleteAll();
+        favoritosDAO.deleteAll();
         movieDAO.deleteAll();
 
         Usuario usuario = new Usuario("test", "1234");
@@ -134,7 +134,7 @@ public class CheckUsuarioTest {
     void findUserFavs() {
         LOG.info("findUserFavs");
 
-        Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 1);
+        Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 0);
         assertTrue(paginator != null);
         assertTrue(paginator.getResults().size() == 1);
         assertEquals("906126", paginator.getResults().get(0).getId());

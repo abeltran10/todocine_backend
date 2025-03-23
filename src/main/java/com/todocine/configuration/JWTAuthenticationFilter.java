@@ -3,6 +3,7 @@ package com.todocine.configuration;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Usuario;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 import static com.todocine.configuration.Constants.*;
 
@@ -50,13 +52,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-                                            Authentication auth) throws JWTCreationException {
+                                            Authentication auth) throws JWTCreationException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Usuario usuario = (Usuario) auth.getPrincipal();
+        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+
         String token = JWT.create()
-                .withSubject(((Usuario)auth.getPrincipal()).getId().toString())
+                .withSubject(usuarioDTO.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
                 .sign(Algorithm.HMAC256(SUPER_SECRET_KEY));
 
         response.addHeader(HEADER_AUTHORIZACION_KEY, TOKEN_BEARER_PREFIX + " " + token);
+        response.getWriter().write(mapper.writeValueAsString(usuarioDTO));
+        response.getWriter().flush();
 
     }
 
