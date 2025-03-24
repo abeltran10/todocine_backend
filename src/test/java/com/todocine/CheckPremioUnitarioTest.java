@@ -1,11 +1,11 @@
 package com.todocine;
 
 
+import com.todocine.dao.GanadorDAO;
 import com.todocine.dao.PremioDAO;
-import com.todocine.entities.Categoria;
-import com.todocine.entities.Movie;
-import com.todocine.entities.Premio;
+import com.todocine.dto.GanadorDTO;
 import com.todocine.dto.PremioDTO;
+import com.todocine.entities.*;
 import com.todocine.service.impl.PremioServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,10 +33,15 @@ public class CheckPremioUnitarioTest {
     @Mock
     PremioDAO premioDAO;
 
+    @Mock
+    GanadorDAO ganadorDAO;
+
     @InjectMocks
     PremioServiceImpl premioService;
 
     static Premio premio;
+
+    static Ganador ganador;
 
     @BeforeAll
     static void setUp() {
@@ -45,21 +49,20 @@ public class CheckPremioUnitarioTest {
         movie1.setTitle("La sociedad de la nieve");
         movie1.setVotosTC(new ArrayList<>());
 
-        Categoria categoria1 = new Categoria();
-        categoria1.setNombre("Mejor Película");
-        categoria1.setMovie(movie1);
 
         Categoria categoria2 = new Categoria();
         categoria2.setNombre("Mejor Director");
-        categoria2.setMovie(movie1);
-
-        List<Categoria> categoriaEntities = Arrays.asList(categoria1, categoria2);
 
         Premio premio1 = new Premio(1L);
         premio1.setTitulo("Goya");
-        premio1.setCategorias(categoriaEntities);
 
         premio = premio1;
+
+        Ganador ganador1 = new Ganador();
+        GanadorId ganadorId = new GanadorId(premio1, categoria2, movie1, 2024);
+        ganador1.setId(ganadorId);
+
+        ganador = ganador1;
     }
 
     @Test
@@ -69,10 +72,11 @@ public class CheckPremioUnitarioTest {
         PremioDTO premioDTO = new PremioDTO(premio);
 
         Mockito.when(premioDAO.findByCodigo(1)).thenReturn(premio);
+        Mockito.when(ganadorDAO.findByIdPremioIdAndIdAnyo(1L,2024)).thenReturn(Arrays.asList(ganador));
 
-        PremioDTO premioDTO1 = premioService.getPremioByCodigo(1);
+        List<GanadorDTO> ganadores = premioService.getPremioByCodigoAnyo(1, 2024);
 
-        assertEquals(premioDTO.getId(), premioDTO1.getId());
+        assertEquals("Mejor Director", ganadores.get(0).getCategoria());
     }
 
 }

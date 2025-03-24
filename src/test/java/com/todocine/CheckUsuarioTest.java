@@ -1,14 +1,16 @@
 package com.todocine;
 
-import com.todocine.dao.*;
-import com.todocine.dto.FavoritosDTO;
+import com.todocine.dao.CategoriaDAO;
+import com.todocine.dao.FavoritosDAO;
+import com.todocine.dao.MovieDAO;
+import com.todocine.dao.UsuarioDAO;
+import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Favoritos;
 import com.todocine.entities.FavoritosId;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadRequestException;
-import com.todocine.dto.MovieDTO;
 import com.todocine.service.MovieService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;
@@ -19,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class CheckUsuarioTest {
     @BeforeEach
     void before() {
         usuarioDAO.deleteAll();
-        categoriaDAO.deleteAll();
+        favoritosDAO.deleteAll();
         movieDAO.deleteAll();
 
         Usuario usuario = new Usuario("test", "1234");

@@ -3,7 +3,6 @@ package com.todocine;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.VotoDAO;
 import com.todocine.dto.MovieDTO;
-import com.todocine.dto.UsuarioDTO;
 import com.todocine.dto.VotoDTO;
 import com.todocine.service.TMDBService;
 import com.todocine.service.impl.MovieServiceImpl;
@@ -18,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
 import java.util.Arrays;

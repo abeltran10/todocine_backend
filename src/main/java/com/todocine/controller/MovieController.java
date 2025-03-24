@@ -45,12 +45,6 @@ public class MovieController {
         return responseEntity;
     }
 
-//    @PostMapping("/{id}/vote")
-//    public ResponseEntity<MovieDTO> votar(@NotBlank @PathVariable("id") String movieId, @RequestBody VotoDTO votoDTO) throws BadGatewayException {
-//        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.addVote(movieId, votoDTO), HttpStatus.CREATED);
-//        return responseEntity;
-//    }
-
     @PutMapping("/{id}/vote/{usuarioId}")
     public ResponseEntity<MovieDTO> actualizarVoto(@NotBlank @PathVariable("id") String movieId, @NotNull @PathVariable("usuarioId") Long usuarioId, @RequestBody VotoDTO votoDTO)
             throws NotFoudException {

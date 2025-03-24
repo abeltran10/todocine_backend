@@ -4,13 +4,13 @@ import com.todocine.dao.FavoritosDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.FavoritosDTO;
+import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Favoritos;
 import com.todocine.entities.FavoritosId;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadRequestException;
-import com.todocine.dto.MovieDTO;
 import com.todocine.service.impl.UserServiceImpl;
 import com.todocine.utils.Paginator;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,8 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -127,8 +130,11 @@ public class CheckUsuarioUnitTest {
         LOG.info("findUserFavs");
 
         Movie movie = new Movie(movieDTO);
-        Mockito.when(favoritosDAO.findByIdUsuarioId(9876L)).thenReturn(Arrays.asList(
+        Pageable pageable = PageRequest.of(0, 20);
+        Page<Favoritos> favoritosPage = new PageImpl<>(Arrays.asList(
                 new Favoritos(new FavoritosId(new Usuario(usuarioDTO.getId()), movie))));
+
+        Mockito.when(favoritosDAO.findByIdUsuarioId(9876L, pageable)).thenReturn(favoritosPage);
 
         Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 1);
         assertTrue(paginator != null);

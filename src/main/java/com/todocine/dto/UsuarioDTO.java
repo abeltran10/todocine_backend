@@ -1,14 +1,19 @@
 package com.todocine.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.todocine.entities.Usuario;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UsuarioDTO {
 
+    @NotNull
     private Long id;
 
     @NotBlank
@@ -16,12 +21,17 @@ public class UsuarioDTO {
 
     @NotBlank
     private String password;
+
+    @JsonIgnore
     private Boolean accountNonExpired;
 
+    @JsonIgnore
     private Boolean accountNonLocked;
 
+    @JsonIgnore
     private Boolean credentialsNonExpired;
 
+    @JsonIgnore
     private Boolean enabled;
 
     private List<FavoritosDTO> favoritos;
@@ -33,6 +43,12 @@ public class UsuarioDTO {
 
     public UsuarioDTO(Long id) {
         this.id = id;
+    }
+
+    public UsuarioDTO(Long id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
     }
 
     public UsuarioDTO(String username, String password) {

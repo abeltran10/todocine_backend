@@ -17,9 +17,6 @@ public class Premio {
 
     private Integer codigo;
 
-    @OneToMany(mappedBy = "premio", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private List<Categoria> categorias;
-
     private String titulo;
 
     public Premio() {
@@ -30,18 +27,15 @@ public class Premio {
     }
 
 
-    public Premio(Long id, Integer codigo, List<Categoria> categorias, String titulo) {
+    public Premio(Long id, Integer codigo, String titulo) {
         this.id = id;
         this.codigo = codigo;
-        this.categorias = categorias;
         this.titulo = titulo;
     }
 
     public Premio(PremioDTO premioDTO) {
         this.id = premioDTO.getId();
         this.codigo = premioDTO.getCodigo();
-        this.categorias = premioDTO.getCategorias().stream().map(categoria -> new Categoria(categoria))
-                .collect(Collectors.toList());
         this.titulo = premioDTO.getTitulo();
     }
 
@@ -59,14 +53,6 @@ public class Premio {
 
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
-    }
-
-    public List<Categoria> getCategorias() {
-        return categorias;
-    }
-
-    public void setCategorias(List<Categoria> categorias) {
-        this.categorias = categorias;
     }
 
     public String getTitulo() {

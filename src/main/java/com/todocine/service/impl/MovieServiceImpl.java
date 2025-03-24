@@ -42,7 +42,6 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional(readOnly = true)
     public MovieDTO getMovieById(String id) throws NotFoudException, BadGatewayException {
-        MovieDTO movieDTO1 = null;
         try {
             Map<String, Object> movieMap = tmdbService.getMovieById(id);
 
@@ -51,7 +50,7 @@ public class MovieServiceImpl implements MovieService {
                 Movie movie = movieDAO.findById(id).orElse(null);
 
                 if (movie != null) {
-                    movieDTO1 = new MovieDTO(movie);
+                    MovieDTO movieDTO1 = new MovieDTO(movie);
                     movieDTO.setVotos(movieDTO1.getVotos());
                     movieDTO.setVotosMediaTC(movieDTO1.getVotosMediaTC());
                     movieDTO.setTotalVotosTC(movieDTO1.getTotalVotosTC());
@@ -137,21 +136,12 @@ public class MovieServiceImpl implements MovieService {
                     if (voto != null && votosTC.contains(voto)) {
                         votosTC.remove(voto);
 
-                        Double total = movieEntity.getVotosMediaTC() * movieEntity.getTotalVotosTC();
-                        Double totalOld = total - voto.getVoto();
-
-                        movieEntity.setVotosMediaTC((totalOld + votoDTO.getVoto()) / movieEntity.getTotalVotosTC());
+                        actualizarMediaVotos(movieEntity, votoDTO.getVoto(), voto.getVoto());
                         voto.setVoto(votoDTO.getVoto());
-
                     } else {
                         voto = new Voto(votoDTO);
 
-                        Integer totalVotosTC = movieEntity.getTotalVotosTC();
-                        Double total = movieEntity.getVotosMediaTC() * totalVotosTC;
-
-                        ++totalVotosTC;
-                        movieEntity.setTotalVotosTC(totalVotosTC);
-                        movieEntity.setVotosMediaTC((total + votoDTO.getVoto()) / totalVotosTC);
+                        calcularMediaVotos(movieEntity, votoDTO.getVoto());
                     }
 
                     logger.info(voto.toString());
@@ -173,6 +163,22 @@ public class MovieServiceImpl implements MovieService {
         } catch (IOException ex) {
             throw new BadGatewayException("La respuesta de TMDB ha fallado");
         }
+    }
+
+    private void actualizarMediaVotos(Movie movieEntity, Double newVote, Double oldVoto) {
+        Double total = movieEntity.getVotosMediaTC() * movieEntity.getTotalVotosTC();
+        Double totalOld = total - oldVoto;
+
+        movieEntity.setVotosMediaTC((totalOld + newVote) / movieEntity.getTotalVotosTC());
+    }
+
+    private void calcularMediaVotos(Movie movieEntity, Double voto) {
+        Integer totalVotosTC = movieEntity.getTotalVotosTC();
+        Double total = movieEntity.getVotosMediaTC() * totalVotosTC;
+
+        ++totalVotosTC;
+        movieEntity.setTotalVotosTC(totalVotosTC);
+        movieEntity.setVotosMediaTC((total + voto) / totalVotosTC);
     }
 }
 

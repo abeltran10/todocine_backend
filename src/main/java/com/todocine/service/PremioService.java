@@ -1,10 +1,13 @@
 package com.todocine.service;
 
-import com.todocine.dto.PremioDTO;
+import com.todocine.dto.GanadorDTO;
+
 import com.todocine.exceptions.NotFoudException;
+
+import java.util.List;
 
 public interface PremioService {
 
-    PremioDTO getPremioByCodigo(Integer codigo) throws NotFoudException;
+    List<GanadorDTO> getPremioByCodigoAnyo(Integer codigo, Integer anyo) throws NotFoudException;
 
 }
