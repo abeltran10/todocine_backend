@@ -1,6 +1,7 @@
 package com.todocine.controller;
 
 import com.todocine.dto.GanadorDTO;
+import com.todocine.dto.PremioAnyoDTO;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.PremioService;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +26,13 @@ public class PremioController {
     @GetMapping("/{codigo}/anyo/{anyo}")
     public ResponseEntity<List<GanadorDTO>> getPremioByCodigoAnyo(@NotNull @PathVariable("codigo") Integer codigo, @NotNull @PathVariable("anyo") Integer anyo) throws NotFoudException {
         ResponseEntity<List<GanadorDTO>> responseEntity = new ResponseEntity<>(premioService.getPremioByCodigoAnyo(codigo, anyo), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PremioAnyoDTO>> getPremios() throws NotFoudException {
+        ResponseEntity<List<PremioAnyoDTO>> responseEntity = new ResponseEntity<>(premioService.getPremios(), HttpStatus.OK);
 
         return responseEntity;
     }
