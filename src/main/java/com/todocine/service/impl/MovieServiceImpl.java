@@ -78,7 +78,14 @@ public class MovieServiceImpl implements MovieService {
                 Paginator<MovieDTO> moviePage = new Paginator<>(map);
                 List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
                         .map(item -> new MovieDTO(item)).collect(Collectors.toList());
-                moviePage.setResults(results);
+
+                List<MovieDTO> page = results.stream().limit(21).skip((pagina - 1) * 21 ).collect(Collectors.toList());
+
+                moviePage.setPage(pagina);
+                moviePage.setResults(page);
+                moviePage.setTotalPages((results.size() / (21 + 1)) + 1);
+                moviePage.setTotalResults(results.size());
+
 
                 logger.info(moviePage.toString());
 
@@ -103,7 +110,13 @@ public class MovieServiceImpl implements MovieService {
                 Paginator<MovieDTO> moviePage = new Paginator<>(map);
                 List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
                         .map(item -> new MovieDTO(item)).collect(Collectors.toList());
-                moviePage.setResults(results);
+
+                List<MovieDTO> page = results.stream().limit(21).skip((pagina - 1) * 21 ).collect(Collectors.toList());
+
+                moviePage.setPage(pagina);
+                moviePage.setResults(page);
+                moviePage.setTotalPages((results.size() / (21 + 1)) + 1);
+                moviePage.setTotalResults(results.size());
 
                 logger.info(moviePage.toString());
 

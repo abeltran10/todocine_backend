@@ -23,9 +23,9 @@ public class PremioController {
     private PremioService premioService;
 
 
-    @GetMapping("/{codigo}/anyo/{anyo}")
-    public ResponseEntity<List<GanadorDTO>> getPremioByCodigoAnyo(@NotNull @PathVariable("codigo") Integer codigo, @NotNull @PathVariable("anyo") Integer anyo) throws NotFoudException {
-        ResponseEntity<List<GanadorDTO>> responseEntity = new ResponseEntity<>(premioService.getPremioByCodigoAnyo(codigo, anyo), HttpStatus.OK);
+    @GetMapping("/{id}/anyo/{anyo}")
+    public ResponseEntity<List<GanadorDTO>> getPremioByCodigoAnyo(@NotNull @PathVariable("id") Long id, @NotNull @PathVariable("anyo") Integer anyo) throws NotFoudException {
+        ResponseEntity<List<GanadorDTO>> responseEntity = new ResponseEntity<>(premioService.getPremioByCodigoAnyo(id, anyo), HttpStatus.OK);
 
         return responseEntity;
     }

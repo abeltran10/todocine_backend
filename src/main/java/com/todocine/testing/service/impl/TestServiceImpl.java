@@ -12,12 +12,8 @@ public class TestServiceImpl implements TestService {
     @Autowired
     private UsuarioDAO usuarioDAO;
 
-    @Autowired
-    private MovieDAO movieDAO;
-
     @Override
     public void deleteAll() {
         usuarioDAO.deleteAll();
-        movieDAO.deleteAll();
     }
 }

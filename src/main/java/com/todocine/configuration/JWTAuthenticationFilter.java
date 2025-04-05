@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -43,8 +44,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             UsuarioDTO credenciales = new ObjectMapper().readValue(request.getInputStream(), UsuarioDTO.class);
 
-            return authManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    credenciales.getUsername(), credenciales.getPassword(), new ArrayList<>()));
+            Authentication authentication = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            credenciales.getUsername(),
+                            credenciales.getPassword(),
+                            new ArrayList<>()));
+
+            return authentication;
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -58,7 +65,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
 
         String token = JWT.create()
-                .withSubject(usuarioDTO.getUsername())
+                .withSubject(mapper.writeValueAsString(usuarioDTO))
                 .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
                 .sign(Algorithm.HMAC256(SUPER_SECRET_KEY));
 

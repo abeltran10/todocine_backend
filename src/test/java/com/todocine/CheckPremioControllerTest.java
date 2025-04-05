@@ -75,7 +75,7 @@ public class CheckPremioControllerTest {
 
     @Test
     void getPremioById() {
-        ResponseEntity<List<GanadorDTO>> responseEntity = premioController.getPremioByCodigoAnyo(1, 2024);
+        ResponseEntity<List<GanadorDTO>> responseEntity = premioController.getPremioByCodigoAnyo(1L, 2024);
 
         assertEquals("La sociedad de la nieve", responseEntity.getBody().get(0).getMovie().getTitle());
 
@@ -84,7 +84,7 @@ public class CheckPremioControllerTest {
     @Test
     void getPremioByCodigoException() {
         try {
-            premioController.getPremioByCodigoAnyo(0, 2023);
+            premioController.getPremioByCodigoAnyo(0L, 2023);
         } catch (NotFoudException ex) {
             assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
         }

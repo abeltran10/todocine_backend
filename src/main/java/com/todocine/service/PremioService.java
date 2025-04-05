@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface PremioService {
 
-    List<GanadorDTO> getPremioByCodigoAnyo(Integer codigo, Integer anyo) throws NotFoudException;
+    List<GanadorDTO> getPremioByCodigoAnyo(Long id, Integer anyo) throws NotFoudException;
     List<PremioAnyoDTO> getPremios() throws NotFoudException;
 
 }

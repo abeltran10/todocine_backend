@@ -71,10 +71,9 @@ public class CheckPremioUnitarioTest {
 
         PremioDTO premioDTO = new PremioDTO(premio);
 
-        Mockito.when(premioDAO.findByCodigo(1)).thenReturn(premio);
         Mockito.when(ganadorDAO.findByIdPremioIdAndIdAnyo(1L,2024)).thenReturn(Arrays.asList(ganador));
 
-        List<GanadorDTO> ganadores = premioService.getPremioByCodigoAnyo(1, 2024);
+        List<GanadorDTO> ganadores = premioService.getPremioByCodigoAnyo(1L, 2024);
 
         assertEquals("Mejor Director", ganadores.get(0).getCategoria());
     }

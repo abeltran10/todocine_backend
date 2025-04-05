@@ -129,40 +129,4 @@ public class CheckUsuarioTest {
         assertTrue(passwordEncoder.matches("abcd", usuarioDTO1.getPassword()));
         assertEquals("test", usuarioDTO1.getUsername());
     }
-
-    @Test
-    void findUserFavs() {
-        LOG.info("findUserFavs");
-
-        Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 1);
-        assertTrue(paginator != null);
-        assertTrue(paginator.getResults().size() == 1);
-        assertEquals("906126", paginator.getResults().get(0).getId());
-    }
-
-    @Test
-    void addFavoritosByUserId() {
-        LOG.info("addFavoritosByUserId");
-
-        MovieDTO movieDTO = new MovieDTO("572802", "Aquaman and the Lost Kingdom", "Aquaman y el reino perdido"
-                , "/d9Hv3b37ZErby79f4iqTZ8doaTp.jpg", "overview", "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
-                , new ArrayList<>(), new ArrayList<>(), 0, 0D);
-
-        MovieDTO movieDTO1 = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
-
-        assertEquals("572802", movieDTO1.getId());
-
-    }
-
-    @Test
-    @Transactional
-    void deleteUserFavs() {
-        LOG.info("deleteUserFavs");
-
-        usuarioService.deleteFavoritosByUserId(usuarioDTO.getId(), movieDTO.getId());
-
-        Usuario usuario = usuarioDAO.findByUsername(usuarioDTO.getUsername());
-
-        assertTrue(usuario.getFavoritos().isEmpty());
-    }
 }

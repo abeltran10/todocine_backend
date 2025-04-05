@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UsuarioDTO {
 
-    @NotNull
     private Long id;
 
     @NotBlank
@@ -59,6 +58,7 @@ public class UsuarioDTO {
         this.credentialsNonExpired = true;
         this.enabled = true;
         this.favoritos = new ArrayList<>();
+        this.votos = new ArrayList<>();
     }
 
     public UsuarioDTO(Long id, String username, String password, Boolean accountNonExpired,
@@ -86,6 +86,9 @@ public class UsuarioDTO {
         this.favoritos = usuario.getFavoritos().stream().map(fav ->
                 new FavoritosDTO(fav.getId().getUsuario().getId(), fav.getId().getMovie().getId()))
                 .collect(Collectors.toList());
+        if (this.favoritos == null) this.favoritos = new ArrayList<>();
+
+        this.votos = new ArrayList<>();
     }
 
     public Long getId() {

@@ -29,16 +29,12 @@ public class PremioServiceImpl implements PremioService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GanadorDTO> getPremioByCodigoAnyo(Integer codigo, Integer anyo) throws NotFoudException {
-        Premio premio = premioDAO.findByCodigo(codigo);
+    public List<GanadorDTO> getPremioByCodigoAnyo(Long id, Integer anyo) throws NotFoudException {
+        List<Ganador> premios = ganadorDAO.findByIdPremioIdAndIdAnyo(id, anyo);
 
-        if (premio != null) {
-            List<Ganador> premios = ganadorDAO.findByIdPremioIdAndIdAnyo(premio.getId(), anyo);
-
-            if (premios != null) {
+        if (premios != null) {
                 List<GanadorDTO> premiosDTO = premios.stream().map(GanadorDTO::new).toList();
                 return premiosDTO;
-            }
         }
 
         throw new NotFoudException("Premio no encontrado");

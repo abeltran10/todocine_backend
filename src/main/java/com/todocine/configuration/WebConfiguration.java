@@ -1,5 +1,6 @@
 package com.todocine.configuration;
 
+import com.todocine.service.UsuarioService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class WebConfiguration {
     private String[] paths;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UsuarioService usuarioService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,7 +47,7 @@ public class WebConfiguration {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setUserDetailsService(usuarioService);
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;

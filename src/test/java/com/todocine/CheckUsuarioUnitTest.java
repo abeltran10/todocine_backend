@@ -46,12 +46,6 @@ public class CheckUsuarioUnitTest {
     @Mock
     private UsuarioDAO usuarioDAO;
 
-    @Mock
-    private MovieDAO movieDAO;
-
-    @Mock
-    private FavoritosDAO favoritosDAO;
-
     @InjectMocks
     private UserServiceImpl usuarioService;
 
@@ -125,61 +119,5 @@ public class CheckUsuarioUnitTest {
 
     }
 
-    @Test
-    void findUserFavs() {
-        LOG.info("findUserFavs");
 
-        Movie movie = new Movie(movieDTO);
-        Pageable pageable = PageRequest.of(0, 20);
-        Page<Favoritos> favoritosPage = new PageImpl<>(Arrays.asList(
-                new Favoritos(new FavoritosId(new Usuario(usuarioDTO.getId()), movie))));
-
-        Mockito.when(favoritosDAO.findByIdUsuarioId(9876L, pageable)).thenReturn(favoritosPage);
-
-        Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 1);
-        assertTrue(paginator != null);
-        assertTrue(paginator.getResults().size() == 1);
-        assertEquals("906126", paginator.getResults().get(0).getId());
-    }
-
-    @Test
-    void addFavoritosByUserId() {
-        LOG.info("addFavoritosByUserId");
-
-        MovieDTO movieDTO = new MovieDTO("572802", "Aquaman and the Lost Kingdom", "Aquaman y el reino perdido"
-                , "/d9Hv3b37ZErby79f4iqTZ8doaTp.jpg"
-                , "Al no poder derrotar a Aquaman la primera vez, Black Manta, todavía impulsado por la necesidad de vengar " +
-                "la muerte de su padre, no se detendrá ante nada para derrotar a Aquaman de una vez por todas. " +
-                "Esta vez Black Manta es más formidable que nunca y ejerce el poder del mítico Tridente Negro, que desata " +
-                "una fuerza antigua y malévola.  Para derrotarlo, Aquaman recurrirá a su hermano encarcelado Orm, " +
-                "el ex rey de la Atlántida, para forjar una alianza improbable. Juntos, deben dejar de lado sus diferencias" +
-                " para proteger su reino y salvar a la familia de Aquaman, y al mundo, de una destrucción irreversible."
-                , "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
-                , new ArrayList<>(), new ArrayList<>(), 0, 0D);
-        Usuario usuario = new Usuario(usuarioDTO);
-        Movie movie = new Movie(movieDTO);
-
-
-        Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
-        Mockito.when(movieDAO.findById("572802")).thenReturn(Optional.of(movie));
-
-        MovieDTO movieDTO1 = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
-
-        assertEquals("572802", movieDTO1.getId());
-
-    }
-
-    @Test
-    void deleteUserFavs() {
-        LOG.info("deleteUserFavs");
-        Usuario usuario = new Usuario(usuarioDTO);
-        Movie movie = new Movie(movieDTO);
-
-        Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
-        Mockito.when(movieDAO.findById("906126")).thenReturn(Optional.of(movie));
-
-        usuarioService.deleteFavoritosByUserId(usuarioDTO.getId(), movieDTO.getId());
-
-        assertTrue(usuario.getFavoritos().isEmpty());
-    }
 }

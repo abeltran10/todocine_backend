@@ -35,21 +35,13 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UsuarioService {
+public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
     Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UsuarioDAO usuarioDAO;
 
-    @Autowired
-    private MovieDAO movieDAO;
-
-    @Autowired
-    private TMDBService tmdbService;
-
-    @Autowired
-    private FavoritosDAO favoritosDAO;
 
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -84,13 +76,15 @@ public class UserServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    public UsuarioDTO getUsuarioByName(String username) throws NotFoudException {
+    public UsuarioDTO getUsuarioByName(String username) throws NotFoudException, BadRequestException {
         log.info("getUsuarioByName");
 
         Usuario usuario = usuarioDAO.findByUsername(username);
 
         if (usuario == null)
             throw new NotFoudException("No existe el usuario con ese nombre");
+        else if (!getCurrentUserId().equals(usuario.getId()))
+            throw new BadRequestException("El usuario solicitado no es el de la sesión");
         else {
             UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
 
@@ -123,121 +117,43 @@ public class UserServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException {
+    public UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException, BadRequestException {
        log.info("updateUsuario");
         Usuario usuario = null;
-        try {
-            usuario = usuarioDAO.findById(id).get();
-            usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
+
+        if (getCurrentUserId().equals(id)) {
+
+            try {
+                usuario = usuarioDAO.findById(id).get();
+                usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
             /*usuario.setEnabled(usuarioDTO.getEnabled());
             usuario.setAccountNonExpired(usuarioDTO.getAccountNonExpired());
             usuario.setAccountNonLocked(usuarioDTO.getAccountNonLocked());
             usuario.setCredentialsNonExpired(usuarioDTO.getCredentialsNonExpired());*/
 
-            usuarioDAO.save(usuario);
+                usuarioDAO.save(usuario);
 
-            return new UsuarioDTO(usuario);
-        } catch (NoSuchElementException ex) {
-            throw new NotFoudException("No existe el usuario");
-        }
-
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Paginator<MovieDTO> getUsuarioFavs(Long id, Integer page) throws NotFoudException {
-        Paginator<MovieDTO> paginator = new Paginator<>();
-        Pageable pageable = PageRequest.of(page - 1, 20);
-        Page<Favoritos> favoritos = favoritosDAO.findByIdUsuarioId(id, pageable);
-
-        if (favoritos.hasContent()) {
-            List<MovieDTO> movieDTOList = favoritos.getContent().stream().map(favs-> new MovieDTO(favs.getId().getMovie())).collect(Collectors.toList());
-
-            paginator.setPage(page);
-            paginator.setResults(movieDTOList);
-            paginator.setTotalPages(favoritos.getTotalPages());
-            paginator.setTotalResults((int)favoritos.getTotalElements());
-
-            return paginator;
-
+                return new UsuarioDTO(usuario);
+            } catch (NoSuchElementException ex) {
+                throw new NotFoudException("No existe el usuario");
+            }
         } else {
-            throw new NotFoudException("No hay favoritos para el usuario");
+            throw new BadRequestException("El usuario no es el de la sesión");
         }
-
 
     }
 
-    @Override
-    @Transactional
-    public MovieDTO addFavoritosByUserId(Long id, MovieDTO movieDTO) throws BadRequestException, NotFoudException {
-        Movie movie = null;
-
-        try {
-            Usuario usuario = usuarioDAO.findById(id).get();
-
-            try {
-                movie = movieDAO.findById(movieDTO.getId()).get();
-            } catch (NoSuchElementException ex) {
-                Map<String, Object> movieMap = tmdbService.getMovieById(movieDTO.getId());
-
-                if (movieMap.get("id") == null)
-                    throw new NotFoudException("No existe la película");
-                else {
-                    MovieDTO peli = new MovieDTO(movieMap);
-                    movie = new Movie(peli);
-                    movieDAO.save(movie);
-                }
-            }
-
-            Favoritos favorito = new Favoritos(new FavoritosId(usuario, movie));
-            if (!usuario.getFavoritos().contains(favorito)) {
-                usuario.getFavoritos().add(favorito);
-                favoritosDAO.save(favorito);
-
-                return new MovieDTO(movie);
-
-            } else
-                throw new BadRequestException("La película ya está en favoritos");
-
-        } catch (NoSuchElementException ex) {
-            throw new NotFoudException("No existe el usuario");
-        } catch (IOException ex) {
-            throw new NotFoudException("No existe la película");
-        }
-    }
 
     @Override
-    @Transactional
-    public void deleteFavoritosByUserId(Long id, String movieId) throws BadRequestException, NotFoudException {
-        Movie movie = null;
-
-        try {
+    public UsuarioDTO getUsuario(Long id) throws BadRequestException {
+        if (getCurrentUserId().equals(id)) {
             Usuario usuario = usuarioDAO.findById(id).get();
 
-            try {
-                movie = movieDAO.findById(movieId).get();
+            UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
 
-                List<Favoritos> currentFavs = usuario.getFavoritos();
-
-                log.info("currentFavs: " + currentFavs);
-
-                Favoritos favorito = new Favoritos(new FavoritosId(usuario, movie));
-                if (currentFavs.contains(favorito)) {
-                    currentFavs.remove(favorito);
-                    log.info("favs user: " + usuario.getFavoritos());
-
-                    favoritosDAO.delete(favorito);
-                } else {
-                    throw new BadRequestException("La película no está en favoritos");
-                }
-
-            } catch (NoSuchElementException ex) {
-                throw new NotFoudException("No existe la película");
-            }
-
-        } catch (NoSuchElementException ex) {
-            throw new NotFoudException("No existe el usuario");
+            return usuarioDTO;
+        } else {
+            throw new BadRequestException("El usuario no es el de la sesión");
         }
-
     }
 }
