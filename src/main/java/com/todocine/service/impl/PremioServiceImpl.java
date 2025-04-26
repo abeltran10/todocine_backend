@@ -10,6 +10,7 @@ import com.todocine.entities.Premio;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.PremioService;
+import com.todocine.utils.mapper.GanadorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,7 @@ public class PremioServiceImpl implements PremioService {
         List<Ganador> premios = ganadorDAO.findByIdPremioIdAndIdAnyo(id, anyo);
 
         if (premios != null) {
-                List<GanadorDTO> premiosDTO = premios.stream().map(GanadorDTO::new).toList();
+                List<GanadorDTO> premiosDTO = GanadorMapper.toDTOList(premios);
                 return premiosDTO;
         }
 

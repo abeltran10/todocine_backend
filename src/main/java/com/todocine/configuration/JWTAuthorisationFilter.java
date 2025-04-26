@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Usuario;
+import com.todocine.utils.mapper.UserMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,7 +62,7 @@ public class JWTAuthorisationFilter extends BasicAuthenticationFilter {
 
             try {
                 UsuarioDTO usuarioDTO = mapper.readValue(usuarioString, UsuarioDTO.class);
-                Usuario usuario = new Usuario(usuarioDTO);
+                Usuario usuario = UserMapper.toEntity(usuarioDTO);
 
                 if (usuario != null) {
                     return new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), new ArrayList<>());

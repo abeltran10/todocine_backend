@@ -5,6 +5,7 @@ import com.todocine.entities.Categoria;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Premio;
 import com.todocine.service.MovieService;
+import com.todocine.utils.mapper.MovieMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -49,7 +50,7 @@ public class CheckPremiosTest {
         favoritosDAO.deleteAll();
         movieDAO.deleteAll();
 
-        Movie movie = new Movie(movieService.getMovieById("906126"));
+        Movie movie = MovieMapper.toEntity(movieService.getMovieById("906126"));
         movieDAO.save(movie);
 
         p = new Premio(null, 1, "Goya");

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Usuario;
+import com.todocine.utils.mapper.UserMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -62,7 +63,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication auth) throws JWTCreationException, IOException {
         ObjectMapper mapper = new ObjectMapper();
         Usuario usuario = (Usuario) auth.getPrincipal();
-        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+        UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
 
         String token = JWT.create()
                 .withSubject(mapper.writeValueAsString(usuarioDTO))

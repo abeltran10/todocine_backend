@@ -67,25 +67,6 @@ public class Movie {
         this.votosMediaTC = votosMediaTC;
     }
 
-
-    public Movie(MovieDTO movieDTO) {
-        this.id = movieDTO.getId();
-        this.originalTitle = movieDTO.getOriginalTitle();
-        this.title = movieDTO.getTitle();
-        this.posterPath = movieDTO.getPosterPath();
-        this.overview = movieDTO.getOverview();
-        this.releaseDate = movieDTO.getReleaseDate();
-        this.popularity = movieDTO.getPopularity();
-        this.voteCount = movieDTO.getVoteCount();
-        this.voteAverage = movieDTO.getVoteAverage();
-        this.originalLanguage = movieDTO.getOriginalLanguage();
-        this.votosTC = movieDTO.getVotos().stream().map(voto ->
-                new Voto(new VotoId(new Usuario(voto.getUsuarioId()), new Movie(voto.getMovieId()))))
-                .collect(Collectors.toList());
-        this.votosMediaTC = movieDTO.getVotosMediaTC();
-        this.totalVotosTC = movieDTO.getTotalVotosTC();
-    }
-
     public String getId() {
         return id;
     }

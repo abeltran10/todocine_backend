@@ -19,13 +19,6 @@ public class GanadorDTO {
     public GanadorDTO() {
     }
 
-    public GanadorDTO(Ganador ganador) {
-        this.premio = ganador.getId().getPremio().getTitulo();
-        this.categoria = ganador.getId().getCategoria().getNombre();
-        this.anyo = ganador.getId().getAnyo();
-        this.movie = new MovieDTO(ganador.getId().getMovie());
-    }
-
     public String getPremio() {
         return premio;
     }

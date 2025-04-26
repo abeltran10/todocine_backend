@@ -11,6 +11,7 @@ import com.todocine.entities.Voto;
 import com.todocine.entities.VotoId;
 import com.todocine.service.MovieService;
 import com.todocine.utils.Paginator;
+import com.todocine.utils.mapper.MovieMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -49,7 +50,7 @@ public class CheckMoviesTest {
         usuarioDAO.save(usuario);
 
         MovieDTO movieDTO = movieService.getMovieById("906126");
-        Movie movie = new Movie(movieDTO);
+        Movie movie = MovieMapper.toEntity(movieDTO);
         movieDAO.save(movie);
 
     }

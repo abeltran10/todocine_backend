@@ -15,6 +15,8 @@ import com.todocine.service.impl.BaseServiceImpl;
 import com.todocine.service.impl.FavoritosServiceImpl;
 import com.todocine.service.impl.UserServiceImpl;
 import com.todocine.utils.Paginator;
+import com.todocine.utils.mapper.MovieMapper;
+import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +38,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,22 +79,25 @@ public class CheckFavoritosUnitTest {
                 , 1284.858, 467, 8.158, new ArrayList<>(), "es"
                 , new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
-        usuarioDTO.setFavoritos(Arrays.asList(new FavoritosDTO(usuarioDTO.getId(), movieDTO.getId())));
+        List<FavoritosDTO> favoritosDTOList = new ArrayList<>();
+        favoritosDTOList.add(new FavoritosDTO(usuarioDTO.getId(), movieDTO.getId()));
+
+        usuarioDTO.setFavoritos(favoritosDTOList);
     }
 
     @Test
     void findUserFavs() {
         LOG.info("findUserFavs");
 
-        Movie movie = new Movie(movieDTO);
-        Pageable pageable = PageRequest.of(0, 20);
+        Movie movie = MovieMapper.toEntity(movieDTO);
+        Pageable pageable = PageRequest.of(0, 21);
         Page<Favoritos> favoritosPage = new PageImpl<>(Arrays.asList(
                 new Favoritos(new FavoritosId(new Usuario(usuarioDTO.getId()), movie))));
 
         Mockito.when(favoritosDAO.findByIdUsuarioId(9876L, pageable)).thenReturn(favoritosPage);
 
         Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(9876L);
+        Mockito.when(authentication.getPrincipal()).thenReturn(UserMapper.toEntity(usuarioDTO));
 
         // Mock del SecurityContext
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
@@ -120,14 +126,14 @@ public class CheckFavoritosUnitTest {
                 " para proteger su reino y salvar a la familia de Aquaman, y al mundo, de una destrucción irreversible."
                 , "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
                 , new ArrayList<>(), new ArrayList<>(), 0, 0D);
-        Usuario usuario = new Usuario(usuarioDTO);
-        Movie movie = new Movie(movieDTO);
+        Usuario usuario = UserMapper.toEntity(usuarioDTO);
+        Movie movie = MovieMapper.toEntity(movieDTO);
 
         Mockito.when(movieDAO.findById("572802")).thenReturn(Optional.of(movie));
         Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
 
         Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(9876L);
+        Mockito.when(authentication.getPrincipal()).thenReturn(usuario);
 
         // Mock del SecurityContext
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
@@ -145,11 +151,11 @@ public class CheckFavoritosUnitTest {
     @Test
     void deleteUserFavs() {
         LOG.info("deleteUserFavs");
-        Usuario usuario = new Usuario(usuarioDTO);
-        Movie movie = new Movie(movieDTO);
+        Usuario usuario = UserMapper.toEntity(usuarioDTO);
+        Movie movie = MovieMapper.toEntity(movieDTO);
 
         Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(9876L);
+        Mockito.when(authentication.getPrincipal()).thenReturn(usuario);
 
         // Mock del SecurityContext
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);

@@ -13,6 +13,7 @@ import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.FavoritosService;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.Paginator;
+import com.todocine.utils.mapper.MovieMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,9 @@ public class FavoritosServiceImpl extends BaseServiceImpl implements FavoritosSe
         Page<Favoritos> favoritos = favoritosDAO.findByIdUsuarioId(getCurrentUserId(), pageable);
 
         if (favoritos.hasContent()) {
-            List<MovieDTO> movieDTOList = favoritos.getContent().stream().map(favs-> new MovieDTO(favs.getId().getMovie())).collect(Collectors.toList());
+            List<MovieDTO> movieDTOList = favoritos.getContent().stream()
+                    .map(favs-> MovieMapper.toDTO(favs.getId().getMovie()))
+                    .collect(Collectors.toList());
 
             paginator.setPage(page);
             paginator.setResults(movieDTOList);
@@ -84,8 +87,8 @@ public class FavoritosServiceImpl extends BaseServiceImpl implements FavoritosSe
                 if (movieMap.get("id") == null)
                     throw new NotFoudException("No existe la película");
                 else {
-                    MovieDTO peli = new MovieDTO(movieMap);
-                    movie = new Movie(peli);
+                    MovieDTO peli = MovieMapper.toDTO(movieMap);
+                    movie = MovieMapper.toEntity(peli);
                     movieDAO.save(movie);
                 }
             }
@@ -95,7 +98,7 @@ public class FavoritosServiceImpl extends BaseServiceImpl implements FavoritosSe
                 usuario.getFavoritos().add(favorito);
                 favoritosDAO.save(favorito);
 
-                return new MovieDTO(movie);
+                return MovieMapper.toDTO(movie);
 
             } else
                 throw new BadRequestException("La película ya está en favoritos");

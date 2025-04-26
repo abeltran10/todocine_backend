@@ -34,12 +34,6 @@ public class VotoDTO {
         this.voto = voto;
     }
 
-    public VotoDTO(Voto voto) {
-        this.usuarioId = voto.getId().getUsuario().getId();
-        this.movieId = voto.getId().getMovie().getId();
-        this.voto = voto.getVoto();
-    }
-
     public Long getUsuarioId() {
         return usuarioId;
     }

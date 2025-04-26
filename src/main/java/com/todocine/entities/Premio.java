@@ -33,12 +33,6 @@ public class Premio {
         this.titulo = titulo;
     }
 
-    public Premio(PremioDTO premioDTO) {
-        this.id = premioDTO.getId();
-        this.codigo = premioDTO.getCodigo();
-        this.titulo = premioDTO.getTitulo();
-    }
-
     public Long getId() {
         return id;
     }

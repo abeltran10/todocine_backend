@@ -14,6 +14,7 @@ import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.TMDBService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;
+import com.todocine.utils.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,18 +63,6 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     }
 
 
-
-    @Override
-    public UsuarioDTO getUsuarioById(Long id) throws NotFoudException {
-        Usuario usuario = usuarioDAO.findById(id).get();
-
-        if (usuario == null)
-            throw new NotFoudException("No existe el usuario");
-        else {
-            return new UsuarioDTO(usuario);
-        }
-    }
-
     @Override
     @Transactional(readOnly = true)
     public UsuarioDTO getUsuarioByName(String username) throws NotFoudException, BadRequestException {
@@ -86,7 +75,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
         else if (!getCurrentUserId().equals(usuario.getId()))
             throw new BadRequestException("El usuario solicitado no es el de la sesión");
         else {
-            UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+            UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
 
             return usuarioDTO;
         }
@@ -109,7 +98,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
             usuarioDAO.save(usuario);
 
-            return new UsuarioDTO(usuario);
+            return UserMapper.toDTO(usuario);
         } else {
             throw new BadRequestException("Un usuario con ese nombre ya existe");
         }
@@ -126,14 +115,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
             try {
                 usuario = usuarioDAO.findById(id).get();
                 usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
-            /*usuario.setEnabled(usuarioDTO.getEnabled());
-            usuario.setAccountNonExpired(usuarioDTO.getAccountNonExpired());
-            usuario.setAccountNonLocked(usuarioDTO.getAccountNonLocked());
-            usuario.setCredentialsNonExpired(usuarioDTO.getCredentialsNonExpired());*/
 
                 usuarioDAO.save(usuario);
 
-                return new UsuarioDTO(usuario);
+                return UserMapper.toDTO(usuario);
             } catch (NoSuchElementException ex) {
                 throw new NotFoudException("No existe el usuario");
             }
@@ -145,11 +130,11 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
 
     @Override
-    public UsuarioDTO getUsuario(Long id) throws BadRequestException {
+    public UsuarioDTO getUsuarioById(Long id) throws BadRequestException {
         if (getCurrentUserId().equals(id)) {
             Usuario usuario = usuarioDAO.findById(id).get();
 
-            UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
+            UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
 
             return usuarioDTO;
         } else {

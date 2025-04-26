@@ -75,22 +75,6 @@ public class UsuarioDTO {
         this.votos = votos;
     }
 
-    public UsuarioDTO(Usuario usuario) {
-        this.id = usuario.getId();
-        this.username = usuario.getUsername();
-        this.password = usuario.getPassword();
-        this.accountNonExpired = usuario.getAccountNonExpired();
-        this.accountNonLocked = usuario.getAccountNonLocked();
-        this.credentialsNonExpired = usuario.getCredentialsNonExpired();
-        this.enabled = usuario.getEnabled();
-        this.favoritos = usuario.getFavoritos().stream().map(fav ->
-                new FavoritosDTO(fav.getId().getUsuario().getId(), fav.getId().getMovie().getId()))
-                .collect(Collectors.toList());
-        if (this.favoritos == null) this.favoritos = new ArrayList<>();
-
-        this.votos = new ArrayList<>();
-    }
-
     public Long getId() {
         return id;
     }

@@ -7,6 +7,7 @@ import com.todocine.dto.PremioDTO;
 import com.todocine.entities.*;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
+import com.todocine.utils.mapper.MovieMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -47,6 +48,8 @@ public class CheckPremioControllerTest {
     @Autowired
     private PremioController premioController;
 
+    private Long premioId;
+
     @BeforeAll
     void setUp() {
         ganadorDAO.deleteAll();
@@ -55,13 +58,14 @@ public class CheckPremioControllerTest {
         favoritosDAO.deleteAll();
         movieDAO.deleteAll();
 
-        Movie movie = new Movie(movieService.getMovieById("906126"));
+        Movie movie = MovieMapper.toEntity(movieService.getMovieById("906126"));
         movieDAO.save(movie);
 
-        Premio premio = new Premio(1L, 1, "Goya");
+        Premio premio = new Premio(null, 1, "Goya");
         premioDAO.save(premio);
+        premioId = premio.getId();
 
-        Categoria categoria = new Categoria(1L, "Mejor película");
+        Categoria categoria = new Categoria(null, "Mejor película");
         categoriaDAO.save(categoria);
 
         GanadorId ganadorId = new GanadorId(premio, categoria, movie, 2024);
@@ -75,9 +79,11 @@ public class CheckPremioControllerTest {
 
     @Test
     void getPremioById() {
-        ResponseEntity<List<GanadorDTO>> responseEntity = premioController.getPremioByCodigoAnyo(1L, 2024);
+        ResponseEntity<List<GanadorDTO>> responseEntity = premioController.getPremioByCodigoAnyo(premioId, 2024);
 
-        assertEquals("La sociedad de la nieve", responseEntity.getBody().get(0).getMovie().getTitle());
+        List<GanadorDTO> ganadorDTOList = responseEntity.getBody();
+
+        assertEquals("La sociedad de la nieve", ganadorDTOList.get(0).getMovie().getTitle());
 
     }
 

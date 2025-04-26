@@ -7,6 +7,7 @@ import com.todocine.dto.GanadorDTO;
 import com.todocine.dto.PremioDTO;
 import com.todocine.entities.*;
 import com.todocine.service.impl.PremioServiceImpl;
+import com.todocine.utils.mapper.PremioMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,7 +70,7 @@ public class CheckPremioUnitarioTest {
     void getPremioByCodigo() {
         LOG.info("getPremioByCodigo");
 
-        PremioDTO premioDTO = new PremioDTO(premio);
+        PremioDTO premioDTO = PremioMapper.toDTO(premio);
 
         Mockito.when(ganadorDAO.findByIdPremioIdAndIdAnyo(1L,2024)).thenReturn(Arrays.asList(ganador));
 

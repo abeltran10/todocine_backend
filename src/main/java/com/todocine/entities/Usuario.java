@@ -55,6 +55,8 @@ public class Usuario implements UserDetails {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
+        this.favoritos = new ArrayList<>();
+        this.votos = new ArrayList<>();
     }
 
 
@@ -67,19 +69,7 @@ public class Usuario implements UserDetails {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
-    }
-
-    public Usuario(UsuarioDTO usuarioDTO) {
-        this.id = usuarioDTO.getId();
-        this.username = usuarioDTO.getUsername();
-        this.password = usuarioDTO.getPassword();
-        this.accountNonExpired = usuarioDTO.getAccountNonExpired();
-        this.accountNonLocked = usuarioDTO.getAccountNonLocked();
-        this.credentialsNonExpired = usuarioDTO.getCredentialsNonExpired();
-        this.enabled = usuarioDTO.getEnabled();
-        this.favoritos = usuarioDTO.getFavoritos().stream().map(fav ->
-                new Favoritos(new FavoritosId(new Usuario(fav.getUsuarioId()), new Movie(fav.getMovieId()))))
-                .collect(Collectors.toList());
+        this.favoritos = new ArrayList<>();
         this.votos = new ArrayList<>();
     }
 

@@ -13,6 +13,7 @@ import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.service.impl.UserServiceImpl;
 import com.todocine.utils.Paginator;
+import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +29,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -76,8 +80,19 @@ public class CheckUsuarioUnitTest {
     void findUser() {
         LOG.info("findUser");
 
-        Usuario usuario = new Usuario(usuarioDTO);
+        Usuario usuario = UserMapper.toEntity(usuarioDTO);
         usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
+
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authentication.getPrincipal()).thenReturn(usuario);
+
+        // Mock del SecurityContext
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        // Setear el contexto de seguridad
+        SecurityContextHolder.setContext(securityContext);
+
         Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuario);
 
         UsuarioDTO test = usuarioService.getUsuarioByName("test");
@@ -88,7 +103,7 @@ public class CheckUsuarioUnitTest {
     void createSameUser() {
         LOG.info("createSameUser");
 
-        Usuario usuario = new Usuario(usuarioDTO);
+        Usuario usuario = UserMapper.toEntity(usuarioDTO);
         usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
         Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuario);
 
@@ -104,8 +119,18 @@ public class CheckUsuarioUnitTest {
     void updateUser() {
         LOG.info("updateUser");
 
-        Usuario usuario = new Usuario(usuarioDTO);
+        Usuario usuario = UserMapper.toEntity(usuarioDTO);
         usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
+
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authentication.getPrincipal()).thenReturn(usuario);
+
+        // Mock del SecurityContext
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        // Setear el contexto de seguridad
+        SecurityContextHolder.setContext(securityContext);
 
         Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
 

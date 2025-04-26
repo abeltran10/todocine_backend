@@ -14,6 +14,8 @@ import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.Paginator;
+import com.todocine.utils.mapper.MovieMapper;
+import com.todocine.utils.mapper.VotoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -46,11 +47,11 @@ public class MovieServiceImpl implements MovieService {
             Map<String, Object> movieMap = tmdbService.getMovieById(id);
 
             if (movieMap.get("id") != null) {
-                MovieDTO movieDTO = new MovieDTO(movieMap);
+                MovieDTO movieDTO = MovieMapper.toDTO(movieMap);
                 Movie movie = movieDAO.findById(id).orElse(null);
 
                 if (movie != null) {
-                    MovieDTO movieDTO1 = new MovieDTO(movie);
+                    MovieDTO movieDTO1 = MovieMapper.toDTO(movie);
                     movieDTO.setVotos(movieDTO1.getVotos());
                     movieDTO.setVotosMediaTC(movieDTO1.getVotosMediaTC());
                     movieDTO.setTotalVotosTC(movieDTO1.getTotalVotosTC());
@@ -77,9 +78,13 @@ public class MovieServiceImpl implements MovieService {
             else {
                 Paginator<MovieDTO> moviePage = new Paginator<>(map);
                 List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
-                        .map(item -> new MovieDTO(item)).collect(Collectors.toList());
+                        .map(MovieMapper::toDTO)
+                        .toList();
 
-                List<MovieDTO> page = results.stream().limit(21).skip((pagina - 1) * 21 ).collect(Collectors.toList());
+                List<MovieDTO> page = results.stream()
+                        .limit(21)
+                        .skip((pagina - 1) * 21 )
+                        .toList();
 
                 moviePage.setPage(pagina);
                 moviePage.setResults(page);
@@ -109,9 +114,13 @@ public class MovieServiceImpl implements MovieService {
             else {
                 Paginator<MovieDTO> moviePage = new Paginator<>(map);
                 List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
-                        .map(item -> new MovieDTO(item)).collect(Collectors.toList());
+                        .map(MovieMapper::toDTO)
+                        .toList();
 
-                List<MovieDTO> page = results.stream().limit(21).skip((pagina - 1) * 21 ).collect(Collectors.toList());
+                List<MovieDTO> page = results.stream()
+                        .limit(21)
+                        .skip((pagina - 1) * 21 )
+                        .toList();
 
                 moviePage.setPage(pagina);
                 moviePage.setResults(page);
@@ -136,11 +145,11 @@ public class MovieServiceImpl implements MovieService {
         try {
             Map<String, Object> map = tmdbService.getMovieById(movieId);
             if (map.get("id") != null) {
-                movieDTO = new MovieDTO(map);
+                movieDTO = MovieMapper.toDTO(map);
                 movieEntity = movieDAO.findById(movieId).orElse(null);
 
                 if (movieEntity == null)
-                    movieEntity = new Movie(movieDTO);
+                    movieEntity = MovieMapper.toEntity(movieDTO);
                     movieDAO.save(movieEntity);
 
                 if (movieEntity != null) {
@@ -152,7 +161,7 @@ public class MovieServiceImpl implements MovieService {
                         actualizarMediaVotos(movieEntity, votoDTO.getVoto(), voto.getVoto());
                         voto.setVoto(votoDTO.getVoto());
                     } else {
-                        voto = new Voto(votoDTO);
+                        voto = VotoMapper.toEntity(votoDTO);
 
                         calcularMediaVotos(movieEntity, votoDTO.getVoto());
                     }
@@ -163,7 +172,10 @@ public class MovieServiceImpl implements MovieService {
 
                     movieDAO.save(movieEntity);
 
-                    List<VotoDTO> currentVotes = movieEntity.getVotosTC().stream().map(v -> new VotoDTO(v)).collect(Collectors.toList());
+                    List<VotoDTO> currentVotes = movieEntity.getVotosTC().stream()
+                            .map(VotoMapper::toDTO)
+                            .toList();
+
                     movieDTO.setVotos(currentVotes);
                     movieDTO.setTotalVotosTC(movieEntity.getTotalVotosTC());
                     movieDTO.setVotosMediaTC(movieEntity.getVotosMediaTC());

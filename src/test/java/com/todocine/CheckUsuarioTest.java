@@ -14,12 +14,20 @@ import com.todocine.exceptions.BadRequestException;
 import com.todocine.service.MovieService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;
+import com.todocine.utils.mapper.MovieMapper;
+import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +83,7 @@ public class CheckUsuarioTest {
         Favoritos favorito = new Favoritos(new FavoritosId(usuario,movie));
 
         movie = movieDAO.save(movie);
-        movieDTO = new MovieDTO(movie);
+        movieDTO = MovieMapper.toDTO(movie);
 
         usuario.setFavoritos(new ArrayList<>());
         usuario.getFavoritos().add(favorito);
@@ -83,15 +91,17 @@ public class CheckUsuarioTest {
 
         favoritosDAO.save(favorito);
 
-        usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setId(usuario.getId());
-        usuarioDTO.setUsername(usuario.getUsername());
-        usuarioDTO.setPassword(usuario.getPassword());
+        usuarioDTO = UserMapper.toDTO(usuario);
     }
 
     @Test
     void findUser() {
         LOG.info("findUser");
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(UserMapper.toEntity(usuarioDTO), usuarioDTO.getPassword());
+        SecurityContext securityContext = new SecurityContextImpl();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
 
         UsuarioDTO test = usuarioService.getUsuarioByName("test");
         assertEquals(usuarioDTO.getId(), test.getId());
@@ -123,6 +133,12 @@ public class CheckUsuarioTest {
     @Test
     void updateUser() {
         LOG.info("updateUser");
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(UserMapper.toEntity(usuarioDTO), usuarioDTO.getPassword());
+        SecurityContext securityContext = new SecurityContextImpl();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
         usuarioDTO.setPassword("abcd");
         UsuarioDTO usuarioDTO1 = usuarioService.updateUsuario(usuarioDTO.getId(), usuarioDTO);
 
