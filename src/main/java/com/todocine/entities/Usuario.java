@@ -42,10 +42,14 @@ public class Usuario implements UserDetails {
     private List<Voto> votos;
 
     public Usuario() {
+        this.favoritos = new ArrayList<>();
+        this.votos = new ArrayList<>();
     }
 
     public Usuario(Long id) {
         this.id = id;
+        this.favoritos = new ArrayList<>();
+        this.votos = new ArrayList<>();
     }
 
     public Usuario(String username, String password) {

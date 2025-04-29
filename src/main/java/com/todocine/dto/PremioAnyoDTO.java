@@ -12,6 +12,7 @@ public class PremioAnyoDTO {
     private List<Integer> anyos;
 
     public PremioAnyoDTO() {
+        this.anyos = new ArrayList<>();
     }
 
     public PremioAnyoDTO(Long id, String titulo) {

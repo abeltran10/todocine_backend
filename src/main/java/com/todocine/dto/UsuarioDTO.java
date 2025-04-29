@@ -42,12 +42,16 @@ public class UsuarioDTO {
 
     public UsuarioDTO(Long id) {
         this.id = id;
+        this.favoritos = new ArrayList<>();
+        this.votos = new ArrayList<>();
     }
 
     public UsuarioDTO(Long id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.favoritos = new ArrayList<>();
+        this.votos = new ArrayList<>();
     }
 
     public UsuarioDTO(String username, String password) {
