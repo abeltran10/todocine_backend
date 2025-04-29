@@ -29,6 +29,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class CheckUsuarioTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioTest.class);
     @Autowired
@@ -92,17 +94,16 @@ public class CheckUsuarioTest {
         favoritosDAO.save(favorito);
 
         usuarioDTO = UserMapper.toDTO(usuario);
-    }
-
-    @Test
-    void findUser() {
-        LOG.info("findUser");
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(UserMapper.toEntity(usuarioDTO), usuarioDTO.getPassword());
         SecurityContext securityContext = new SecurityContextImpl();
         securityContext.setAuthentication(authentication);
         SecurityContextHolder.setContext(securityContext);
+    }
 
+    @Test
+    void findUser() {
+        LOG.info("findUser");
         UsuarioDTO test = usuarioService.getUsuarioByName("test");
         assertEquals(usuarioDTO.getId(), test.getId());
     }
@@ -110,11 +111,8 @@ public class CheckUsuarioTest {
     @Test
     void addUsuario() throws BadRequestException {
         LOG.info("addUsuario");
-
         UsuarioDTO usuarioDTO1 = new UsuarioDTO("test2", "1234");
-
         usuarioDTO1 = usuarioService.insertUsuario(usuarioDTO1);
-
         assertTrue(usuarioDTO1.getId() != null);
     }
 
@@ -133,11 +131,6 @@ public class CheckUsuarioTest {
     @Test
     void updateUser() {
         LOG.info("updateUser");
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(UserMapper.toEntity(usuarioDTO), usuarioDTO.getPassword());
-        SecurityContext securityContext = new SecurityContextImpl();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
 
         usuarioDTO.setPassword("abcd");
         UsuarioDTO usuarioDTO1 = usuarioService.updateUsuario(usuarioDTO.getId(), usuarioDTO);

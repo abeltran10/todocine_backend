@@ -13,10 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CheckPremiosTest {
 
@@ -42,6 +44,7 @@ public class CheckPremiosTest {
     private MovieService movieService;
 
     private Premio p = null;
+
     @BeforeAll
     void setUp() {
         ganadorDAO.deleteAll();

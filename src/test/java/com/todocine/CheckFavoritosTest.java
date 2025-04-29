@@ -11,12 +11,21 @@ import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.service.FavoritosService;
 import com.todocine.utils.Paginator;
+import com.todocine.utils.mapper.MovieMapper;
+import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -28,8 +37,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class CheckFavoritosTest {
-   /* public static Logger LOG = LoggerFactory.getLogger(CheckFavoritosTest.class);
+    public static Logger LOG = LoggerFactory.getLogger(CheckFavoritosTest.class);
 
     @Autowired
     private FavoritosService favoritosService;
@@ -64,7 +74,7 @@ public class CheckFavoritosTest {
         Favoritos favorito = new Favoritos(new FavoritosId(usuario, movie));
 
         movie = movieDAO.save(movie);
-        movieDTO = new MovieDTO(movie);
+        movieDTO = MovieMapper.toDTO(movie);
 
         usuario.setFavoritos(new ArrayList<>());
         usuario.getFavoritos().add(favorito);
@@ -72,10 +82,13 @@ public class CheckFavoritosTest {
 
         favoritosDAO.save(favorito);
 
-        usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setId(usuario.getId());
-        usuarioDTO.setUsername(usuario.getUsername());
-        usuarioDTO.setPassword(usuario.getPassword());
+        usuarioDTO = UserMapper.toDTO(usuario);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(UserMapper.toEntity(usuarioDTO), usuarioDTO.getPassword());
+        SecurityContext securityContext = new SecurityContextImpl();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
     }
 
     @Test
@@ -112,5 +125,5 @@ public class CheckFavoritosTest {
         Usuario usuario = usuarioDAO.findByUsername(usuarioDTO.getUsername());
 
         assertTrue(usuario.getFavoritos().isEmpty());
-    }*/
+    }
 }
