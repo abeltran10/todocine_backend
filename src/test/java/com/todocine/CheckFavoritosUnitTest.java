@@ -109,7 +109,7 @@ public class CheckFavoritosUnitTest {
 
         Mockito.when(favoritosDAO.findByIdUsuarioId(9876L, pageable)).thenReturn(favoritosPage);
 
-        Paginator<MovieDTO> paginator = favoritosService.getUsuarioFavs(1);
+        Paginator<MovieDTO> paginator = favoritosService.getUsuarioFavs(usuarioDTO.getId(), 1);
         assertTrue(paginator != null);
         assertTrue(paginator.getResults().size() == 1);
         assertEquals("906126", paginator.getResults().get(0).getId());
@@ -145,7 +145,7 @@ public class CheckFavoritosUnitTest {
         Mockito.when(movieDAO.findById("572802")).thenReturn(Optional.of(movie));
         Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
 
-        MovieDTO movieDTO1 = favoritosService.addFavoritos(movieDTO);
+        MovieDTO movieDTO1 = favoritosService.addFavoritos(usuarioDTO.getId(), movieDTO);
 
         assertEquals("572802", movieDTO1.getId());
 
@@ -171,7 +171,7 @@ public class CheckFavoritosUnitTest {
         Mockito.when(movieDAO.findById("906126")).thenReturn(Optional.of(movie));
         Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
         
-        favoritosService.deleteFavoritos(movieDTO.getId());
+        favoritosService.deleteFavoritos(usuarioDTO.getId(), movieDTO.getId());
 
         assertTrue(usuario.getFavoritos().isEmpty());
     }

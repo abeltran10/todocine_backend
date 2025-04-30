@@ -14,5 +14,4 @@ public interface MovieService {
 
     Paginator getMoviesPlayingNow(String country, Integer pagina) throws NotFoudException, BadGatewayException;
 
-    MovieDTO updateVote(String movieId, Long usuarioId, VotoDTO votoDTO) throws BadGatewayException, NotFoudException;
 }

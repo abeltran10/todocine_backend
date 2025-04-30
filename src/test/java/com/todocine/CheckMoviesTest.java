@@ -10,8 +10,10 @@ import com.todocine.entities.Usuario;
 import com.todocine.entities.Voto;
 import com.todocine.entities.VotoId;
 import com.todocine.service.MovieService;
+import com.todocine.service.VotoService;
 import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.MovieMapper;
+import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -19,6 +21,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,6 +48,9 @@ public class CheckMoviesTest {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private VotoService votoService;
 
     private Usuario usuario;
 
@@ -88,9 +98,14 @@ public class CheckMoviesTest {
     void addVote() {
         LOG.info("addVote");
 
+        Authentication authentication = new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword());
+        SecurityContext securityContext = new SecurityContextImpl();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
         VotoDTO votoDTO = new VotoDTO(usuario.getId(), "906126", 3D);
 
-        MovieDTO movieDTO = movieService.updateVote("906126", usuario.getId(), votoDTO);
+        MovieDTO movieDTO = votoService.updateVote("906126", votoDTO);
 
         assertEquals(3D, movieDTO.getVotosMediaTC());
     }
@@ -101,12 +116,17 @@ public class CheckMoviesTest {
 
         votoDAO.deleteAll();
 
+        Authentication authentication = new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword());
+        SecurityContext securityContext = new SecurityContextImpl();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
         Voto voto = new Voto(new VotoId(usuario, new Movie("906126")), 3D);
         votoDAO.save(voto);
 
         VotoDTO votoDTO = new VotoDTO(usuario.getId(), "906126", 5D);
 
-        MovieDTO movieDTO = movieService.updateVote("906126", usuario.getId(), votoDTO);
+        MovieDTO movieDTO = votoService.updateVote("906126", votoDTO);
 
         assertEquals(5D, movieDTO.getVotosMediaTC());
     }

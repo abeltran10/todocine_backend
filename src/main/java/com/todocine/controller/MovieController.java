@@ -5,6 +5,7 @@ import com.todocine.dto.VotoDTO;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
+import com.todocine.service.VotoService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,8 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/movie")
 public class MovieController {
     Logger LOG = LoggerFactory.getLogger(MovieController.class);
+
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private VotoService votoService;
 
     @GetMapping("/search")
     public ResponseEntity<Paginator<MovieDTO>> getMovieByName(@NotBlank @RequestParam("name") String name, @RequestParam("page") Integer pagina)
@@ -45,12 +50,11 @@ public class MovieController {
         return responseEntity;
     }
 
-    @PutMapping("/{id}/vote/{usuarioId}")
-    public ResponseEntity<MovieDTO> actualizarVoto(@NotBlank @PathVariable("id") String movieId, @NotNull @PathVariable("usuarioId") Long usuarioId, @RequestBody VotoDTO votoDTO)
+    @PutMapping("/{id}/vote")
+    public ResponseEntity<MovieDTO> actualizarVoto(@NotBlank @PathVariable("id") String movieId, @RequestBody VotoDTO votoDTO)
             throws NotFoudException {
-        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.updateVote(movieId, usuarioId, votoDTO), HttpStatus.OK);
+        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(votoService.updateVote(movieId, votoDTO), HttpStatus.OK);
         return responseEntity;
     }
-
 
 }

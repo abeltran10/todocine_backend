@@ -95,7 +95,7 @@ public class CheckFavoritosTest {
     void findUserFavs() {
         LOG.info("findUserFavs");
 
-        Paginator<MovieDTO> paginator = favoritosService.getUsuarioFavs(1);
+        Paginator<MovieDTO> paginator = favoritosService.getUsuarioFavs(usuarioDTO.getId(), 1);
         assertTrue(paginator != null);
         assertTrue(paginator.getResults().size() == 1);
         assertEquals("906126", paginator.getResults().get(0).getId());
@@ -109,7 +109,7 @@ public class CheckFavoritosTest {
                 , "/d9Hv3b37ZErby79f4iqTZ8doaTp.jpg", "overview", "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
                 , new ArrayList<>(), new ArrayList<>(), 0, 0D);
 
-        MovieDTO movieDTO1 = favoritosService.addFavoritos(movieDTO);
+        MovieDTO movieDTO1 = favoritosService.addFavoritos(usuarioDTO.getId(), movieDTO);
 
         assertEquals("572802", movieDTO1.getId());
 
@@ -120,7 +120,7 @@ public class CheckFavoritosTest {
     void deleteFavs() {
         LOG.info("deleteUserFavs");
 
-        favoritosService.deleteFavoritos(movieDTO.getId());
+        favoritosService.deleteFavoritos(usuarioDTO.getId(), movieDTO.getId());
 
         Usuario usuario = usuarioDAO.findByUsername(usuarioDTO.getUsername());
 

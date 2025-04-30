@@ -4,8 +4,10 @@ import com.todocine.dao.MovieDAO;
 import com.todocine.dao.VotoDAO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.VotoDTO;
+import com.todocine.entities.Usuario;
 import com.todocine.service.TMDBService;
 import com.todocine.service.impl.MovieServiceImpl;
+import com.todocine.service.impl.VotoServiceImpl;
 import com.todocine.utils.Paginator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
@@ -46,6 +51,9 @@ public class CheckMoviesUnitTest {
 
     @InjectMocks
     private MovieServiceImpl movieService;
+
+    @InjectMocks
+    private VotoServiceImpl votoService;
 
     private static MovieDTO movieDTO;
 
@@ -139,11 +147,21 @@ public class CheckMoviesUnitTest {
 
         VotoDTO votoDTO = new VotoDTO(1L, "13", 2D);
 
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authentication.getPrincipal()).thenReturn(new Usuario(1L));
+
+        // Mock del SecurityContext
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        // Setear el contexto de seguridad
+        SecurityContextHolder.setContext(securityContext);
+
         try {
             Mockito.when(tmdbService.getMovieById("13")).thenReturn(map);
             Mockito.when(movieDAO.findById("13")).thenReturn(Optional.ofNullable(null));
 
-            MovieDTO movieDTO2 = movieService.updateVote("13", 1L, votoDTO);
+            MovieDTO movieDTO2 = votoService.updateVote("13", votoDTO);
 
             assertEquals(1, movieDTO2.getTotalVotosTC());
             assertEquals(2, movieDTO2.getVotosMediaTC());
