@@ -1,14 +1,16 @@
 package com.todocine;
 
+import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
-import com.todocine.dao.VotoDAO;
 import com.todocine.dto.MovieDTO;
-import com.todocine.dto.VotoDTO;
+import com.todocine.dto.MovieDetailDTO;
+import com.todocine.entities.UserMovieId;
+import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.service.TMDBService;
 import com.todocine.service.impl.MovieServiceImpl;
-import com.todocine.service.impl.VotoServiceImpl;
 import com.todocine.utils.Paginator;
+import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -44,16 +46,13 @@ public class CheckMoviesUnitTest {
     private MovieDAO movieDAO;
 
     @Mock
-    private VotoDAO votoDAO;
+    private TMDBService tmdbService;
 
     @Mock
-    private TMDBService tmdbService;
+    private UsuarioMovieDAO favoritosDAO;
 
     @InjectMocks
     private MovieServiceImpl movieService;
-
-    @InjectMocks
-    private VotoServiceImpl votoService;
 
     private static MovieDTO movieDTO;
 
@@ -69,16 +68,27 @@ public class CheckMoviesUnitTest {
     void findMovieById() {
         LOG.info("findMovieById");
 
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(authentication.getPrincipal()).thenReturn(new Usuario(1L));
+
+        // Mock del SecurityContext
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        // Setear el contexto de seguridad
+        SecurityContextHolder.setContext(securityContext);
+
         Map<String, Object> movieMap = new HashMap<>();
         movieMap.put("id", "13");
         movieMap.put("original_title", "Fantasía");
 
         try {
             Mockito.when(tmdbService.getMovieById("13")).thenReturn(movieMap);
-            MovieDTO movieDTO = movieService.getMovieById("13");
+            Mockito.when(movieDAO.findById("13")).thenReturn(Optional.empty());
+            MovieDetailDTO movieDetailDTO = movieService.getMovieDetailById("13");
 
-            assertEquals("13", movieDTO.getId());
-            assertEquals("Fantasía", movieDTO.getOriginalTitle());
+            assertEquals("13", movieDetailDTO.getId());
+            assertEquals("Fantasía", movieDetailDTO.getOriginalTitle());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -135,41 +145,6 @@ public class CheckMoviesUnitTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Test
-    void addVoto() {
-        LOG.info("addVoto");
-
-        Map<String, Object> map =  new HashMap<>();
-        map.put("id","13");
-        map.put("original_title", "Fantasia");
-
-        VotoDTO votoDTO = new VotoDTO(1L, "13", 2D);
-
-        Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(new Usuario(1L));
-
-        // Mock del SecurityContext
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-
-        // Setear el contexto de seguridad
-        SecurityContextHolder.setContext(securityContext);
-
-        try {
-            Mockito.when(tmdbService.getMovieById("13")).thenReturn(map);
-            Mockito.when(movieDAO.findById("13")).thenReturn(Optional.ofNullable(null));
-
-            MovieDTO movieDTO2 = votoService.updateVote("13", votoDTO);
-
-            assertEquals(1, movieDTO2.getTotalVotosTC());
-            assertEquals(2, movieDTO2.getVotosMediaTC());
-            assertEquals("13", movieDTO2.getId());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
 }

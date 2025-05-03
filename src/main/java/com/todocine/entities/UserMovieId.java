@@ -7,7 +7,7 @@ import jakarta.persistence.ManyToOne;
 import java.util.Objects;
 
 @Embeddable
-public class VotoId {
+public class UserMovieId {
 
     @ManyToOne
     @JoinColumn(name = "usuario", referencedColumnName = "ID")
@@ -17,10 +17,10 @@ public class VotoId {
     @JoinColumn(name = "movie", referencedColumnName = "ID")
     private Movie movie;
 
-    public VotoId() {
+    public UserMovieId() {
     }
 
-    public VotoId(Usuario usuario, Movie movie) {
+    public UserMovieId(Usuario usuario, Movie movie) {
         this.usuario = usuario;
         this.movie = movie;
     }
@@ -45,20 +45,12 @@ public class VotoId {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VotoId votoId = (VotoId) o;
-        return usuario.equals(votoId.usuario) && movie.equals(votoId.movie);
+        UserMovieId that = (UserMovieId) o;
+        return usuario.equals(that.usuario) && movie.equals(that.movie);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(usuario, movie);
-    }
-
-    @Override
-    public String toString() {
-        return "VotoId{" +
-                "usuario=" + usuario.getId() +
-                ", movie=" + movie.getId() +
-                '}';
     }
 }

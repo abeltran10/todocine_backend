@@ -3,16 +3,11 @@ package com.todocine.utils.mapper;
 import com.todocine.dto.GenreDTO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.VideoDTO;
-import com.todocine.dto.VotoDTO;
 import com.todocine.entities.Movie;
-import com.todocine.entities.Usuario;
-import com.todocine.entities.Voto;
-import com.todocine.entities.VotoId;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MovieMapper {
 
@@ -48,8 +43,6 @@ public class MovieMapper {
         movieDTO.setVoteCount(movie.getVoteCount());
         movieDTO.setVoteAverage(movie.getVoteAverage());
         movieDTO.setOriginalLanguage(movie.getOriginalLanguage());
-        List<VotoDTO> votoDTOS = VotoMapper.toDTOList(movie.getVotosTC());
-        movieDTO.setVotos(votoDTOS);
         movieDTO.setVotosMediaTC(movie.getVotosMediaTC());
         movieDTO.setTotalVotosTC(movie.getTotalVotosTC());
 
@@ -107,7 +100,6 @@ public class MovieMapper {
              movieDTO.setVideos(videoDTOList);
         }
 
-        movieDTO.setVotos(new ArrayList<>());
         movieDTO.setTotalVotosTC(0);
         movieDTO.setVotosMediaTC(0D);
 

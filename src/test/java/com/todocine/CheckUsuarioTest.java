@@ -1,24 +1,17 @@
 package com.todocine;
 
 import com.todocine.dao.CategoriaDAO;
-import com.todocine.dao.FavoritosDAO;
+import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.entities.Favoritos;
-import com.todocine.entities.FavoritosId;
-import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.service.MovieService;
 import com.todocine.service.UsuarioService;
-import com.todocine.utils.Paginator;
-import com.todocine.utils.mapper.MovieMapper;
 import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -56,7 +47,7 @@ public class CheckUsuarioTest {
     private MovieDAO movieDAO;
 
     @Autowired
-    private FavoritosDAO favoritosDAO;
+    private UsuarioMovieDAO favoritosDAO;
 
     @Autowired
     private MovieService movieService;
@@ -66,32 +57,27 @@ public class CheckUsuarioTest {
 
     private UsuarioDTO usuarioDTO;
 
-    private MovieDTO movieDTO;
 
     @BeforeEach
     void before() {
-        usuarioDAO.deleteAll();
         favoritosDAO.deleteAll();
+        usuarioDAO.deleteAll();
         movieDAO.deleteAll();
 
         Usuario usuario = new Usuario("test", "1234");
 
         List<Usuario> usuarioList = Arrays.asList(usuario);
 
-        Movie movie = new Movie("906126","La sociedad de la nieve"
+       /* Movie movie = new Movie("906126","La sociedad de la nieve"
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
                 , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
-                , 1284.858, 467, 8.158, "es", new ArrayList<>(), 0, 0D) ;
+                , 1284.858, 467, 8.158, "es", 0, 0D) ;
         Favoritos favorito = new Favoritos(new FavoritosId(usuario,movie));
 
         movie = movieDAO.save(movie);
-        movieDTO = MovieMapper.toDTO(movie);
+        movieDTO = MovieMapper.toDTO(movie);*/
 
-        usuario.setFavoritos(new ArrayList<>());
-        usuario.getFavoritos().add(favorito);
         usuario = usuarioDAO.save(usuario);
-
-        favoritosDAO.save(favorito);
 
         usuarioDTO = UserMapper.toDTO(usuario);
 

@@ -1,10 +1,12 @@
 package com.todocine;
 
 import com.todocine.dao.*;
+import com.todocine.dto.MovieDTO;
 import com.todocine.entities.Categoria;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Premio;
 import com.todocine.service.MovieService;
+import com.todocine.service.TMDBService;
 import com.todocine.utils.mapper.MovieMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,7 +38,7 @@ public class CheckPremiosTest {
     private MovieDAO movieDAO;
 
     @Autowired
-    private FavoritosDAO favoritosDAO;
+    private UsuarioMovieDAO favoritosDAO;
 
     @Autowired
     private GanadorDAO ganadorDAO;
@@ -42,6 +46,9 @@ public class CheckPremiosTest {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private TMDBService tmdbService;
 
     private Premio p = null;
 
@@ -53,8 +60,14 @@ public class CheckPremiosTest {
         favoritosDAO.deleteAll();
         movieDAO.deleteAll();
 
-        Movie movie = MovieMapper.toEntity(movieService.getMovieById("906126"));
-        movieDAO.save(movie);
+        Movie movie = null;
+        try {
+            MovieDTO movieDTO = MovieMapper.toDTO(tmdbService.getMovieById("906126"));
+            movie = MovieMapper.toEntity(movieDTO);
+            movieDAO.save(movie);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         p = new Premio(null, 1, "Goya");
         premioDAO.save(p);

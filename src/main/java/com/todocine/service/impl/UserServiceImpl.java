@@ -1,26 +1,15 @@
 package com.todocine.service.impl;
 
-import com.todocine.dao.FavoritosDAO;
-import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.entities.Favoritos;
-import com.todocine.entities.FavoritosId;
-import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
-import com.todocine.service.TMDBService;
 import com.todocine.service.UsuarioService;
-import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,12 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
@@ -94,7 +78,6 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
             usuario.setCredentialsNonExpired(true);
             usuario.setAccountNonLocked(true);
             usuario.setAccountNonExpired(true);
-            usuario.setFavoritos(new ArrayList<>());
 
             usuarioDAO.save(usuario);
 

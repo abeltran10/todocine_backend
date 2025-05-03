@@ -2,36 +2,36 @@ package com.todocine.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.todocine.entities.Voto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VotoDTO {
+public class UsuarioMovieDTO {
 
     @JsonProperty("usuarioId")
-    @NotNull
     private Long usuarioId;
 
+    @JsonProperty("movieId")
     @NotBlank
     private String movieId;
 
-    @JsonProperty("voto")
+    @JsonProperty("favoritos")
     @NotNull
+    private Boolean favoritos;
+
+    @JsonProperty("vista")
+    @NotNull
+    private Boolean vista;
+
+    @JsonProperty("voto")
     private Double voto;
 
-    public VotoDTO() {
+    public UsuarioMovieDTO() {
     }
 
-    public VotoDTO(Long usuarioId, String movieId) {
+    public UsuarioMovieDTO(Long usuarioId, String movieId) {
         this.usuarioId = usuarioId;
         this.movieId = movieId;
-    }
-
-    public VotoDTO(Long usuarioId, String movieId, Double voto) {
-        this.usuarioId = usuarioId;
-        this.movieId = movieId;
-        this.voto = voto;
     }
 
     public Long getUsuarioId() {
@@ -50,20 +50,27 @@ public class VotoDTO {
         this.movieId = movieId;
     }
 
+    public Boolean getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(Boolean favoritos) {
+        this.favoritos = favoritos;
+    }
+
+    public Boolean getVista() {
+        return vista;
+    }
+
+    public void setVista(Boolean vista) {
+        this.vista = vista;
+    }
+
     public Double getVoto() {
         return voto;
     }
 
     public void setVoto(Double voto) {
         this.voto = voto;
-    }
-
-    @Override
-    public String toString() {
-        return "VotoDTO{" +
-                "usuarioId=" + usuarioId +
-                ", movieId='" + movieId + '\'' +
-                ", voto=" + voto +
-                '}';
     }
 }

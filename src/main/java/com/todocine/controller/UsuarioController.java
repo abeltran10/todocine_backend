@@ -1,11 +1,10 @@
 package com.todocine.controller;
 
-import com.todocine.dto.MovieDTO;
+import com.todocine.dto.MovieDetailDTO;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.dto.VotoDTO;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
-import com.todocine.service.FavoritosService;
+import com.todocine.service.UsuarioMovieService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;
@@ -27,7 +26,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @Autowired
-    private FavoritosService favoritosService;
+    private UsuarioMovieService usuarioMovieService;
 
 
     @GetMapping("/{id}")
@@ -57,25 +56,9 @@ public class UsuarioController {
     }
 
     @GetMapping("/{userId}/movie")
-    public ResponseEntity<Paginator<MovieDTO>> getUsuarioFavs(@NotNull @PathVariable("userId") Long userId, @RequestParam("page") Integer pagina) throws NotFoudException {
-        ResponseEntity<Paginator<MovieDTO>> responseEntity = new ResponseEntity<>(favoritosService.getUsuarioFavs(userId, pagina), HttpStatus.OK);
+    public ResponseEntity<Paginator<MovieDetailDTO>> getUsuarioFavs(@NotNull @PathVariable("userId") Long userId, @RequestParam("page") Integer pagina) throws NotFoudException {
+        ResponseEntity<Paginator<MovieDetailDTO>> responseEntity = new ResponseEntity<>(usuarioMovieService.getUsuarioFavs(userId, pagina), HttpStatus.OK);
         return responseEntity;
-    }
-
-    @PostMapping("/{userId}/movie")
-    public ResponseEntity<MovieDTO> addFavoritos(@NotNull @PathVariable("userId") Long userId, @Valid @RequestBody MovieDTO movieDTO) throws BadRequestException, NotFoudException {
-        logger.info("addFavoritosByUserId");
-        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(favoritosService.addFavoritos(userId, movieDTO), HttpStatus.CREATED);
-        return responseEntity;
-    }
-
-    @DeleteMapping("/{userId}/movie/{movieId}")
-    public ResponseEntity deleteFavoritosByUserId(@NotNull @PathVariable("userId") Long userId,
-                                                  @NotBlank @PathVariable("movieId") String movieId) throws BadRequestException, NotFoudException {
-        logger.info("deleteFavoritosByUserId");
-        favoritosService.deleteFavoritos(userId, movieId);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

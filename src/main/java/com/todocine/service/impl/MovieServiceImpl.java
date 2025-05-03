@@ -1,21 +1,18 @@
 package com.todocine.service.impl;
 
 
+import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
-import com.todocine.dao.VotoDAO;
 import com.todocine.dto.MovieDTO;
-import com.todocine.dto.VotoDTO;
-import com.todocine.entities.Movie;
-import com.todocine.entities.Usuario;
-import com.todocine.entities.Voto;
-import com.todocine.entities.VotoId;
+import com.todocine.dto.MovieDetailDTO;
+import com.todocine.entities.*;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.MovieMapper;
-import com.todocine.utils.mapper.VotoMapper;
+import com.todocine.utils.mapper.UsuarioMovieMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class MovieServiceImpl implements MovieService {
+public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
 
     Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
 
@@ -38,11 +35,15 @@ public class MovieServiceImpl implements MovieService {
     private MovieDAO movieDAO;
 
     @Autowired
-    private VotoDAO votoDAO;
+    private UsuarioMovieDAO usuarioMovieDAO;
 
     @Override
     @Transactional(readOnly = true)
-    public MovieDTO getMovieById(String id) throws NotFoudException, BadGatewayException {
+    public MovieDetailDTO getMovieDetailById(String id) throws NotFoudException, BadGatewayException {
+        Boolean favorito = false;
+        Boolean vista = false;
+        Double voto = null;
+
         try {
             Map<String, Object> movieMap = tmdbService.getMovieById(id);
 
@@ -52,12 +53,21 @@ public class MovieServiceImpl implements MovieService {
 
                 if (movie != null) {
                     MovieDTO movieDTO1 = MovieMapper.toDTO(movie);
-                    movieDTO.setVotos(movieDTO1.getVotos());
                     movieDTO.setVotosMediaTC(movieDTO1.getVotosMediaTC());
                     movieDTO.setTotalVotosTC(movieDTO1.getTotalVotosTC());
                 }
 
-                return movieDTO;
+                UserMovieId userMovieId = new UserMovieId(new Usuario(getCurrentUserId()), MovieMapper.toEntity(movieDTO));
+
+                UsuarioMovie usuarioMovie = usuarioMovieDAO.findById(userMovieId).orElse(null);
+
+                if (usuarioMovie != null) {
+                    favorito = usuarioMovie.getFavoritos().equals("S");
+                    vista = usuarioMovie.getVista().equals("S");
+                    voto = usuarioMovie.getVoto();
+                }
+
+                return new MovieDetailDTO(movieDTO, favorito, voto, vista);
 
             } else {
                 throw new NotFoudException("No se ha encontrado la película");
@@ -81,16 +91,7 @@ public class MovieServiceImpl implements MovieService {
                         .map(MovieMapper::toDTO)
                         .toList();
 
-                List<MovieDTO> page = results.stream()
-                        .limit(21)
-                        .skip((pagina - 1) * 21 )
-                        .toList();
-
-                moviePage.setPage(pagina);
-                moviePage.setResults(page);
-                moviePage.setTotalPages((results.size() / (21 + 1)) + 1);
-                moviePage.setTotalResults(results.size());
-
+                moviePage.setResults(results);
 
                 logger.info(moviePage.toString());
 
@@ -117,15 +118,7 @@ public class MovieServiceImpl implements MovieService {
                         .map(MovieMapper::toDTO)
                         .toList();
 
-                List<MovieDTO> page = results.stream()
-                        .limit(21)
-                        .skip((pagina - 1) * 21 )
-                        .toList();
-
-                moviePage.setPage(pagina);
-                moviePage.setResults(page);
-                moviePage.setTotalPages((results.size() / (21 + 1)) + 1);
-                moviePage.setTotalResults(results.size());
+                moviePage.setResults(results);
 
                 logger.info(moviePage.toString());
 

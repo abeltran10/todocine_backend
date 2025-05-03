@@ -3,10 +3,12 @@ package com.todocine;
 import com.todocine.controller.PremioController;
 import com.todocine.dao.*;
 import com.todocine.dto.GanadorDTO;
-import com.todocine.dto.PremioDTO;
+import com.todocine.dto.MovieDTO;
 import com.todocine.entities.*;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
+import com.todocine.service.TMDBService;
+import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.MovieMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +45,10 @@ public class CheckPremioControllerTest {
     private MovieService movieService;
 
     @Autowired
-    private FavoritosDAO favoritosDAO;
+    private TMDBService tmdbService;
+
+    @Autowired
+    private UsuarioMovieDAO favoritosDAO;
 
     @Autowired
     private GanadorDAO ganadorDAO;
@@ -59,9 +65,16 @@ public class CheckPremioControllerTest {
         premioDAO.deleteAll();
         favoritosDAO.deleteAll();
         movieDAO.deleteAll();
+        Movie movie = null;
 
-        Movie movie = MovieMapper.toEntity(movieService.getMovieById("906126"));
-        movieDAO.save(movie);
+        try {
+            MovieDTO movieDTO = MovieMapper.toDTO(tmdbService.getMovieById("906126"));
+            movie = MovieMapper.toEntity(movieDTO);
+            movieDAO.save(movie);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 
         Premio premio = new Premio(null, 1, "Goya");
         premioDAO.save(premio);
@@ -81,18 +94,18 @@ public class CheckPremioControllerTest {
 
     @Test
     void getPremioById() {
-        ResponseEntity<List<GanadorDTO>> responseEntity = premioController.getPremioByCodigoAnyo(premioId, 2024);
+        ResponseEntity<Paginator<GanadorDTO>> responseEntity = premioController.getPremioByCodigoAnyo(premioId, 2024, 1);
 
-        List<GanadorDTO> ganadorDTOList = responseEntity.getBody();
+        Paginator<GanadorDTO> ganadorDTOList = responseEntity.getBody();
 
-        assertEquals("La sociedad de la nieve", ganadorDTOList.get(0).getMovie().getTitle());
+        assertEquals("La sociedad de la nieve", ganadorDTOList.getResults().get(0).getMovie().getTitle());
 
     }
 
     @Test
     void getPremioByCodigoException() {
         try {
-            premioController.getPremioByCodigoAnyo(0L, 2023);
+            ResponseEntity<Paginator<GanadorDTO>> paginator = premioController.getPremioByCodigoAnyo(0L, 2023, 1);
         } catch (NotFoudException ex) {
             assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
         }

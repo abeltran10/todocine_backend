@@ -1,14 +1,12 @@
 package com.todocine.controller;
 
 import com.todocine.dto.MovieDTO;
-import com.todocine.dto.VotoDTO;
+import com.todocine.dto.MovieDetailDTO;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
-import com.todocine.service.VotoService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +22,6 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @Autowired
-    private VotoService votoService;
 
     @GetMapping("/search")
     public ResponseEntity<Paginator<MovieDTO>> getMovieByName(@NotBlank @RequestParam("name") String name, @RequestParam("page") Integer pagina)
@@ -35,9 +31,9 @@ public class MovieController {
         return responseEntity;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MovieDTO> getMovieById(@NotBlank @PathVariable("id") String id) throws NotFoudException, BadGatewayException {
-        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.getMovieById(id), HttpStatus.OK);
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<MovieDetailDTO> getMovieDetailById(@NotBlank @PathVariable("id") String id) throws NotFoudException, BadGatewayException {
+        ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(movieService.getMovieDetailById(id), HttpStatus.OK);
         return responseEntity;
 
     }
@@ -50,11 +46,5 @@ public class MovieController {
         return responseEntity;
     }
 
-    @PutMapping("/{id}/vote")
-    public ResponseEntity<MovieDTO> actualizarVoto(@NotBlank @PathVariable("id") String movieId, @RequestBody VotoDTO votoDTO)
-            throws NotFoudException {
-        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(votoService.updateVote(movieId, votoDTO), HttpStatus.OK);
-        return responseEntity;
-    }
 
 }

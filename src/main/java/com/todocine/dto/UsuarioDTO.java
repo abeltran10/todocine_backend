@@ -33,25 +33,17 @@ public class UsuarioDTO {
     @JsonIgnore
     private Boolean enabled;
 
-    private List<FavoritosDTO> favoritos;
-
-    private List<VotoDTO> votos;
-
     public UsuarioDTO() {
     }
 
     public UsuarioDTO(Long id) {
         this.id = id;
-        this.favoritos = new ArrayList<>();
-        this.votos = new ArrayList<>();
     }
 
     public UsuarioDTO(Long id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.favoritos = new ArrayList<>();
-        this.votos = new ArrayList<>();
     }
 
     public UsuarioDTO(String username, String password) {
@@ -61,13 +53,10 @@ public class UsuarioDTO {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
-        this.favoritos = new ArrayList<>();
-        this.votos = new ArrayList<>();
     }
 
     public UsuarioDTO(Long id, String username, String password, Boolean accountNonExpired,
-                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<FavoritosDTO> favoritos,
-                      List<VotoDTO> votos) {
+                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -75,8 +64,7 @@ public class UsuarioDTO {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
-        this.favoritos = favoritos;
-        this.votos = votos;
+
     }
 
     public Long getId() {
@@ -149,22 +137,6 @@ public class UsuarioDTO {
         this.enabled = enabled;
     }
 
-    public List<FavoritosDTO> getFavoritos() {
-        return favoritos;
-    }
-
-    public void setFavoritos(List<FavoritosDTO> favoritos) {
-        this.favoritos = favoritos;
-    }
-
-    public List<VotoDTO> getVotos() {
-        return votos;
-    }
-
-    public void setVotos(List<VotoDTO> votoDTOS) {
-        this.votos = votoDTOS;
-    }
-
     @Override
     public String toString() {
         return "Usuario{" +
@@ -175,7 +147,6 @@ public class UsuarioDTO {
                 ", accountNonLocked=" + accountNonLocked +
                 ", credentialsNonExpired=" + credentialsNonExpired +
                 ", enabled=" + enabled +
-                ", favoritos=" + favoritos +
                 '}';
     }
 }

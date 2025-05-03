@@ -12,6 +12,7 @@ public class GanadorMapper {
     public static GanadorDTO toDTO(Ganador ganador) {
         GanadorDTO ganadorDTO = new GanadorDTO();
 
+        ganadorDTO.setPremioCod(ganador.getId().getPremio().getId());
         ganadorDTO.setPremio(ganador.getId().getPremio().getTitulo());
         ganadorDTO.setCategoria(ganador.getId().getCategoria().getNombre());
         ganadorDTO.setMovie(MovieMapper.toDTO(ganador.getId().getMovie()));

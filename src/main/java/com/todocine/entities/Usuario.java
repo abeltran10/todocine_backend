@@ -35,21 +35,11 @@ public class Usuario implements UserDetails {
     @Column
     private Boolean enabled;
 
-    @OneToMany(mappedBy = "id.usuario", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private List<Favoritos> favoritos;
-
-    @OneToMany(mappedBy = "id.usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Voto> votos;
-
     public Usuario() {
-        this.favoritos = new ArrayList<>();
-        this.votos = new ArrayList<>();
     }
 
     public Usuario(Long id) {
         this.id = id;
-        this.favoritos = new ArrayList<>();
-        this.votos = new ArrayList<>();
     }
 
     public Usuario(String username, String password) {
@@ -59,8 +49,6 @@ public class Usuario implements UserDetails {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
-        this.favoritos = new ArrayList<>();
-        this.votos = new ArrayList<>();
     }
 
 
@@ -73,8 +61,6 @@ public class Usuario implements UserDetails {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
-        this.favoritos = new ArrayList<>();
-        this.votos = new ArrayList<>();
     }
 
     public Long getId() {
@@ -159,22 +145,6 @@ public class Usuario implements UserDetails {
         this.enabled = enabled;
     }
 
-    public List<Favoritos> getFavoritos() {
-        return favoritos;
-    }
-
-    public void setFavoritos(List<Favoritos> favoritos) {
-        this.favoritos = favoritos;
-    }
-
-    public List<Voto> getVotos() {
-        return votos;
-    }
-
-    public void setVotos(List<Voto> votos) {
-        this.votos = votos;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -198,7 +168,6 @@ public class Usuario implements UserDetails {
                 ", accountNonLocked=" + accountNonLocked +
                 ", credentialsNonExpired=" + credentialsNonExpired +
                 ", enabled=" + enabled +
-                ", favoritos=" + favoritos +
                 '}';
     }
 }

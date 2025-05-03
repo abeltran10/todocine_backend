@@ -8,6 +8,8 @@ import com.todocine.entities.Ganador;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GanadorDTO {
 
+    private Long premioCod;
+
     private String premio;
 
     private String categoria;
@@ -17,6 +19,14 @@ public class GanadorDTO {
     private MovieDTO movie;
 
     public GanadorDTO() {
+    }
+
+    public Long getPremioCod() {
+        return premioCod;
+    }
+
+    public void setPremioCod(Long premioCod) {
+        this.premioCod = premioCod;
     }
 
     public String getPremio() {

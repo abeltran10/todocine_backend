@@ -7,6 +7,7 @@ import com.todocine.dto.GanadorDTO;
 import com.todocine.dto.PremioDTO;
 import com.todocine.entities.*;
 import com.todocine.service.impl.PremioServiceImpl;
+import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.PremioMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -52,7 +55,6 @@ public class CheckPremioUnitarioTest {
     static void setUp() {
         Movie movie1 = new Movie("123");
         movie1.setTitle("La sociedad de la nieve");
-        movie1.setVotosTC(new ArrayList<>());
 
 
         Categoria categoria2 = new Categoria();
@@ -76,11 +78,16 @@ public class CheckPremioUnitarioTest {
 
         PremioDTO premioDTO = PremioMapper.toDTO(premio);
 
-        Mockito.when(ganadorDAO.findByIdPremioIdAndIdAnyo(1L,2024)).thenReturn(Arrays.asList(ganador));
+        Paginator<GanadorDTO> paginator = new Paginator<>();
+        Pageable pageable = PageRequest.of(0, 21);
+        Page<Ganador> page = new PageImpl<>(Arrays.asList(ganador));
 
-        List<GanadorDTO> ganadores = premioService.getPremioByCodigoAnyo(1L, 2024);
 
-        assertEquals("Mejor Director", ganadores.get(0).getCategoria());
+        Mockito.when(ganadorDAO.findByIdPremioIdAndIdAnyo(1L,2024, pageable)).thenReturn(page);
+
+        Paginator<GanadorDTO> ganadores = premioService.getPremioByCodigoAnyo(1L, 2024, 1);
+
+        assertEquals("Mejor Director", ganadores.getResults().get(0).getCategoria());
     }
 
 }
