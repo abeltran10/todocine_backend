@@ -98,7 +98,7 @@ public class CheckPremioControllerTest {
 
         Paginator<GanadorDTO> ganadorDTOList = responseEntity.getBody();
 
-        assertEquals("La sociedad de la nieve", ganadorDTOList.getResults().get(0).getMovie().getTitle());
+        assertEquals("La sociedad de la nieve", ganadorDTOList.getResults().get(0).getTitle());
 
     }
 
