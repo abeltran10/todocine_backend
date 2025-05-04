@@ -1,29 +1,29 @@
 package com.todocine;
 
 import com.todocine.dao.CategoriaDAO;
-import com.todocine.dao.FavoritosDAO;
+import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dto.MovieDTO;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.entities.Favoritos;
-import com.todocine.entities.FavoritosId;
-import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.service.MovieService;
 import com.todocine.service.UsuarioService;
-import com.todocine.utils.Paginator;
+import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class CheckUsuarioTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioTest.class);
     @Autowired
@@ -46,7 +47,7 @@ public class CheckUsuarioTest {
     private MovieDAO movieDAO;
 
     @Autowired
-    private FavoritosDAO favoritosDAO;
+    private UsuarioMovieDAO favoritosDAO;
 
     @Autowired
     private MovieService movieService;
@@ -56,43 +57,39 @@ public class CheckUsuarioTest {
 
     private UsuarioDTO usuarioDTO;
 
-    private MovieDTO movieDTO;
 
     @BeforeEach
     void before() {
-        usuarioDAO.deleteAll();
         favoritosDAO.deleteAll();
+        usuarioDAO.deleteAll();
         movieDAO.deleteAll();
 
         Usuario usuario = new Usuario("test", "1234");
 
         List<Usuario> usuarioList = Arrays.asList(usuario);
 
-        Movie movie = new Movie("906126","La sociedad de la nieve"
+       /* Movie movie = new Movie("906126","La sociedad de la nieve"
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
                 , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
-                , 1284.858, 467, 8.158, "es", new ArrayList<>(), 0, 0D) ;
+                , 1284.858, 467, 8.158, "es", 0, 0D) ;
         Favoritos favorito = new Favoritos(new FavoritosId(usuario,movie));
 
         movie = movieDAO.save(movie);
-        movieDTO = new MovieDTO(movie);
+        movieDTO = MovieMapper.toDTO(movie);*/
 
-        usuario.setFavoritos(new ArrayList<>());
-        usuario.getFavoritos().add(favorito);
         usuario = usuarioDAO.save(usuario);
 
-        favoritosDAO.save(favorito);
+        usuarioDTO = UserMapper.toDTO(usuario);
 
-        usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setId(usuario.getId());
-        usuarioDTO.setUsername(usuario.getUsername());
-        usuarioDTO.setPassword(usuario.getPassword());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(UserMapper.toEntity(usuarioDTO), usuarioDTO.getPassword());
+        SecurityContext securityContext = new SecurityContextImpl();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
     }
 
     @Test
     void findUser() {
         LOG.info("findUser");
-
         UsuarioDTO test = usuarioService.getUsuarioByName("test");
         assertEquals(usuarioDTO.getId(), test.getId());
     }
@@ -100,11 +97,8 @@ public class CheckUsuarioTest {
     @Test
     void addUsuario() throws BadRequestException {
         LOG.info("addUsuario");
-
         UsuarioDTO usuarioDTO1 = new UsuarioDTO("test2", "1234");
-
         usuarioDTO1 = usuarioService.insertUsuario(usuarioDTO1);
-
         assertTrue(usuarioDTO1.getId() != null);
     }
 
@@ -123,46 +117,11 @@ public class CheckUsuarioTest {
     @Test
     void updateUser() {
         LOG.info("updateUser");
+
         usuarioDTO.setPassword("abcd");
         UsuarioDTO usuarioDTO1 = usuarioService.updateUsuario(usuarioDTO.getId(), usuarioDTO);
 
         assertTrue(passwordEncoder.matches("abcd", usuarioDTO1.getPassword()));
         assertEquals("test", usuarioDTO1.getUsername());
-    }
-
-    @Test
-    void findUserFavs() {
-        LOG.info("findUserFavs");
-
-        Paginator<MovieDTO> paginator = usuarioService.getUsuarioFavs(usuarioDTO.getId(), 1);
-        assertTrue(paginator != null);
-        assertTrue(paginator.getResults().size() == 1);
-        assertEquals("906126", paginator.getResults().get(0).getId());
-    }
-
-    @Test
-    void addFavoritosByUserId() {
-        LOG.info("addFavoritosByUserId");
-
-        MovieDTO movieDTO = new MovieDTO("572802", "Aquaman and the Lost Kingdom", "Aquaman y el reino perdido"
-                , "/d9Hv3b37ZErby79f4iqTZ8doaTp.jpg", "overview", "2023-12-20",1112.367,449, 6.482, new ArrayList<>(), "en"
-                , new ArrayList<>(), new ArrayList<>(), 0, 0D);
-
-        MovieDTO movieDTO1 = usuarioService.addFavoritosByUserId(usuarioDTO.getId(), movieDTO);
-
-        assertEquals("572802", movieDTO1.getId());
-
-    }
-
-    @Test
-    @Transactional
-    void deleteUserFavs() {
-        LOG.info("deleteUserFavs");
-
-        usuarioService.deleteFavoritosByUserId(usuarioDTO.getId(), movieDTO.getId());
-
-        Usuario usuario = usuarioDAO.findByUsername(usuarioDTO.getUsername());
-
-        assertTrue(usuario.getFavoritos().isEmpty());
     }
 }

@@ -34,10 +34,6 @@ public class Movie {
 
     private String originalLanguage;
 
-
-    @OneToMany(mappedBy = "id.movie", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Voto> votosTC = new ArrayList<>();
-
     private Integer totalVotosTC;
 
     private Double votosMediaTC;
@@ -50,7 +46,7 @@ public class Movie {
     }
 
     public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
-                 Double popularity, Integer voteCount, Double voteAverage, String originalLanguage, List<Voto> votosTC,
+                 Double popularity, Integer voteCount, Double voteAverage, String originalLanguage,
                  Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
         this.originalTitle = originalTitle;
@@ -62,28 +58,8 @@ public class Movie {
         this.voteCount = voteCount;
         this.voteAverage = voteAverage;
         this.originalLanguage = originalLanguage;
-        this.votosTC = votosTC;
         this.totalVotosTC = totalVotosTC;
         this.votosMediaTC = votosMediaTC;
-    }
-
-
-    public Movie(MovieDTO movieDTO) {
-        this.id = movieDTO.getId();
-        this.originalTitle = movieDTO.getOriginalTitle();
-        this.title = movieDTO.getTitle();
-        this.posterPath = movieDTO.getPosterPath();
-        this.overview = movieDTO.getOverview();
-        this.releaseDate = movieDTO.getReleaseDate();
-        this.popularity = movieDTO.getPopularity();
-        this.voteCount = movieDTO.getVoteCount();
-        this.voteAverage = movieDTO.getVoteAverage();
-        this.originalLanguage = movieDTO.getOriginalLanguage();
-        this.votosTC = movieDTO.getVotos().stream().map(voto ->
-                new Voto(new VotoId(new Usuario(voto.getUsuarioId()), new Movie(voto.getMovieId()))))
-                .collect(Collectors.toList());
-        this.votosMediaTC = movieDTO.getVotosMediaTC();
-        this.totalVotosTC = movieDTO.getTotalVotosTC();
     }
 
     public String getId() {
@@ -164,14 +140,6 @@ public class Movie {
 
     public void setOriginalLanguage(String originalLanguage) {
         this.originalLanguage = originalLanguage;
-    }
-
-    public List<Voto> getVotosTC() {
-        return votosTC;
-    }
-
-    public void setVotosTC(List<Voto> votosTC) {
-        this.votosTC = votosTC;
     }
 
     public Integer getTotalVotosTC() {

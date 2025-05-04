@@ -28,11 +28,6 @@ public class GenreDTO {
         this.name = name;
     }
 
-    public GenreDTO(Map<String, Object> map) {
-        this.id = String.valueOf(map.get("id"));
-        this.name = (map.containsKey("name")) ? (String) map.get("name") : null;
-    }
-
     public String getId() {
         return id;
     }

@@ -61,10 +61,6 @@ public class MovieDTO {
     @JsonProperty("videos")
     private List<VideoDTO> videoDTOS;
 
-    @JsonProperty("votos")
-    @NotNull
-    private List<VotoDTO> votoDTOS;
-
     @JsonProperty("total_votos_TC")
     @NotNull
     private Integer totalVotosTC;
@@ -82,7 +78,7 @@ public class MovieDTO {
 
     public MovieDTO(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
                     Double popularity, Integer voteCount, Double voteAverage, List<GenreDTO> genreDTOS, String originalLanguage,
-                    List<VideoDTO> videoDTOS, List<VotoDTO> votoDTOS, Integer totalVotosTC, Double votosMediaTC) {
+                    List<VideoDTO> videoDTOS, Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -95,62 +91,14 @@ public class MovieDTO {
         this.genreDTOS = genreDTOS;
         this.originalLanguage = originalLanguage;
         this.videoDTOS = videoDTOS;
-        this.votoDTOS = votoDTOS;
         this.totalVotosTC = totalVotosTC;
         this.votosMediaTC = votosMediaTC;
-    }
-
-    public MovieDTO(Movie movie) {
-        this.id = movie.getId();
-        this.originalTitle = movie.getOriginalTitle();
-        this.title = movie.getTitle();
-        this.posterPath = movie.getPosterPath();
-        this.overview = movie.getOverview();
-        this.releaseDate = movie.getReleaseDate();
-        this.popularity = movie.getPopularity();
-        this.voteCount = movie.getVoteCount();
-        this.voteAverage = movie.getVoteAverage();
-        this.originalLanguage = movie.getOriginalLanguage();
-        this.votoDTOS = movie.getVotosTC().stream().map(voto -> new VotoDTO(voto)).collect(Collectors.toList());
-        this.votosMediaTC = movie.getVotosMediaTC();
-        this.totalVotosTC = movie.getTotalVotosTC();
     }
 
     public MovieDTO(String id, String originalTitle, String posterPath) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.posterPath = posterPath;
-    }
-
-    public MovieDTO(Map<String, Object> map) {
-        this.id = String.valueOf(map.get("id"));
-        this.originalTitle = (String) map.get("original_title");
-        this.title = (String) map.get("title");
-        this.posterPath = (String) map.get("poster_path");
-        this.overview = (String) map.get("overview");
-        this.releaseDate = (String) map.get("release_date");
-        this.popularity = (Double) map.get("popularity");
-        this.voteCount = (Integer) map.get("vote_count");
-        this.voteAverage = (Double) map.get("vote_average");
-
-        if (map.containsKey("genres"))
-            this.genreDTOS = ((List<Map<String, Object>>) map.get("genres")).stream().map(genres -> new GenreDTO(genres)).collect(Collectors.toList());
-        else if (map.containsKey("genre_ids"))
-            this.genreDTOS = ((List<Integer>) map.get("genre_ids")).stream().map(genres -> new GenreDTO(String.valueOf(genres))).collect(Collectors.toList());
-        else
-            this.genreDTOS = new ArrayList<>();
-
-        this.originalLanguage = (String) map.get("original_language");
-
-        Map<String, Object> objectMap = (map.containsKey("videos") && !(map.get("videos").equals("false")))
-                ? (Map<String, Object>) map.get("videos") : null;
-
-        this.videoDTOS = (objectMap != null) ? ((List<Map<String, Object>>) objectMap.get("results")).stream()
-                .map(item -> new VideoDTO(item)).collect(Collectors.toList()) : new ArrayList<>();
-
-        this.votoDTOS = new ArrayList<>();
-        this.totalVotosTC = 0;
-        this.votosMediaTC = 0D;
     }
 
     public MovieDTO(String id, String originalTitle) {
@@ -252,14 +200,6 @@ public class MovieDTO {
 
     public void setVideos(List<VideoDTO> videoDTOS) {
         this.videoDTOS = videoDTOS;
-    }
-
-    public List<VotoDTO> getVotos() {
-        return votoDTOS;
-    }
-
-    public void setVotos(List<VotoDTO> votoDTOS) {
-        this.votoDTOS = votoDTOS;
     }
 
     public Integer getTotalVotosTC() {

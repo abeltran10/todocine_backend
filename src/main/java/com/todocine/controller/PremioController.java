@@ -1,16 +1,15 @@
 package com.todocine.controller;
 
 import com.todocine.dto.GanadorDTO;
+import com.todocine.dto.PremioAnyoDTO;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.PremioService;
+import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,9 +21,18 @@ public class PremioController {
     private PremioService premioService;
 
 
-    @GetMapping("/{codigo}/anyo/{anyo}")
-    public ResponseEntity<List<GanadorDTO>> getPremioByCodigoAnyo(@NotNull @PathVariable("codigo") Integer codigo, @NotNull @PathVariable("anyo") Integer anyo) throws NotFoudException {
-        ResponseEntity<List<GanadorDTO>> responseEntity = new ResponseEntity<>(premioService.getPremioByCodigoAnyo(codigo, anyo), HttpStatus.OK);
+    @GetMapping("/{id}/anyo/{anyo}")
+    public ResponseEntity<Paginator<GanadorDTO>> getPremioByCodigoAnyo(@NotNull @PathVariable("id") Long id,
+                                                                       @NotNull @PathVariable("anyo") Integer anyo,
+                                                                       @NotNull @RequestParam("pagina") Integer page) throws NotFoudException {
+        ResponseEntity<Paginator<GanadorDTO>> responseEntity = new ResponseEntity<>(premioService.getPremioByCodigoAnyo(id, anyo, page), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PremioAnyoDTO>> getPremioAnyos() throws NotFoudException {
+        ResponseEntity<List<PremioAnyoDTO>> responseEntity = new ResponseEntity<>(premioService.getPremioAnyos(), HttpStatus.OK);
 
         return responseEntity;
     }

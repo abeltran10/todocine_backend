@@ -35,12 +35,6 @@ public class Usuario implements UserDetails {
     @Column
     private Boolean enabled;
 
-    @OneToMany(mappedBy = "id.usuario", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private List<Favoritos> favoritos;
-
-    @OneToMany(mappedBy = "id.usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Voto> votos;
-
     public Usuario() {
     }
 
@@ -67,20 +61,6 @@ public class Usuario implements UserDetails {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
-    }
-
-    public Usuario(UsuarioDTO usuarioDTO) {
-        this.id = usuarioDTO.getId();
-        this.username = usuarioDTO.getUsername();
-        this.password = usuarioDTO.getPassword();
-        this.accountNonExpired = usuarioDTO.getAccountNonExpired();
-        this.accountNonLocked = usuarioDTO.getAccountNonLocked();
-        this.credentialsNonExpired = usuarioDTO.getCredentialsNonExpired();
-        this.enabled = usuarioDTO.getEnabled();
-        this.favoritos = usuarioDTO.getFavoritos().stream().map(fav ->
-                new Favoritos(new FavoritosId(new Usuario(fav.getUsuarioId()), new Movie(fav.getMovieId()))))
-                .collect(Collectors.toList());
-        this.votos = new ArrayList<>();
     }
 
     public Long getId() {
@@ -165,22 +145,6 @@ public class Usuario implements UserDetails {
         this.enabled = enabled;
     }
 
-    public List<Favoritos> getFavoritos() {
-        return favoritos;
-    }
-
-    public void setFavoritos(List<Favoritos> favoritos) {
-        this.favoritos = favoritos;
-    }
-
-    public List<Voto> getVotos() {
-        return votos;
-    }
-
-    public void setVotos(List<Voto> votos) {
-        this.votos = votos;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -204,7 +168,6 @@ public class Usuario implements UserDetails {
                 ", accountNonLocked=" + accountNonLocked +
                 ", credentialsNonExpired=" + credentialsNonExpired +
                 ", enabled=" + enabled +
-                ", favoritos=" + favoritos +
                 '}';
     }
 }

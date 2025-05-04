@@ -21,12 +21,6 @@ public class CategoriaDTO {
 
     }
 
-    public CategoriaDTO(Categoria categoria) {
-        this.id = categoria.getId();
-        this.nombre = categoria.getNombre();
-
-    }
-
     public Long getId() {
         return id;
     }

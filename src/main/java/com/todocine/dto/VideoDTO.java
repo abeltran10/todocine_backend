@@ -40,14 +40,6 @@ public class VideoDTO {
         this.type = type;
     }
 
-    public VideoDTO(Map<String, Object> map) {
-        this.id = (String) map.get("id");
-        this.name = (String) map.get("name");
-        this.key = (String) map.get("key");
-        this.site = (String) map.get("site");
-        this.type = (String) map.get("type");
-    }
-
     public String getId() {
         return id;
     }

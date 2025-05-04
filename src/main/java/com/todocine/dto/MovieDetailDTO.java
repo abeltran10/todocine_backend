@@ -1,32 +1,18 @@
 package com.todocine.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GanadorDTO {
+public class MovieDetailDTO {
 
-    @JsonProperty("premioId")
-    private Long premioId;
-
-    @JsonProperty("premio")
-    private String premio;
-
-    @JsonProperty("categoria")
-    private String categoria;
-
-    @JsonProperty("anyo")
-    private Integer anyo;
-
-    @JsonProperty("movieId")
+    @JsonProperty("id")
     @NotBlank
-    private String movieId;
+    private String id;
 
     @JsonProperty("original_title")
     @NotBlank
@@ -70,6 +56,15 @@ public class GanadorDTO {
     @JsonProperty("videos")
     private List<VideoDTO> videoDTOS;
 
+    @JsonProperty("favoritos")
+    private Boolean favoritos;
+
+    @JsonProperty("voto")
+    private Double voto;
+
+    @JsonProperty("vista")
+    private Boolean vista;
+
     @JsonProperty("total_votos_TC")
     @NotNull
     private Integer totalVotosTC;
@@ -78,48 +73,35 @@ public class GanadorDTO {
     @NotNull
     private Double votosMediaTC;
 
-
-    public GanadorDTO() {
+    public MovieDetailDTO() {
     }
 
-    public Long getPremioId() {
-        return premioId;
+    public MovieDetailDTO(MovieDTO movieDTO, Boolean favoritos, Double voto, Boolean vista) {
+        this.id = movieDTO.getId();
+        this.originalTitle = movieDTO.getOriginalTitle();
+        this.title = movieDTO.getTitle();
+        this.posterPath = movieDTO.getPosterPath();
+        this.overview = movieDTO.getOverview();
+        this.releaseDate = movieDTO.getReleaseDate();
+        this.popularity = movieDTO.getPopularity();
+        this.voteCount = movieDTO.getVoteCount();
+        this.voteAverage = movieDTO.getVoteAverage();
+        this.genreDTOS = movieDTO.getGenres();
+        this.originalLanguage = movieDTO.getOriginalLanguage();
+        this.videoDTOS = movieDTO.getVideos();
+        this.totalVotosTC = movieDTO.getTotalVotosTC();
+        this.votosMediaTC = movieDTO.getVotosMediaTC();
+        this.favoritos = favoritos;
+        this.voto = voto;
+        this.vista = vista;
     }
 
-    public void setPremioId(Long premioId) {
-        this.premioId = premioId;
+    public String getId() {
+        return id;
     }
 
-    public String getPremio() {
-        return premio;
-    }
-
-    public void setPremio(String premio) {
-        this.premio = premio;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public Integer getAnyo() {
-        return anyo;
-    }
-
-    public void setAnyo(Integer anyo) {
-        this.anyo = anyo;
-    }
-
-    public String getMovieId() {
-        return movieId;
-    }
-
-    public void setMovieId(String movieId) {
-        this.movieId = movieId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getOriginalTitle() {
@@ -208,6 +190,30 @@ public class GanadorDTO {
 
     public void setVideoDTOS(List<VideoDTO> videoDTOS) {
         this.videoDTOS = videoDTOS;
+    }
+
+    public Boolean getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(Boolean favoritos) {
+        this.favoritos = favoritos;
+    }
+
+    public Double getVoto() {
+        return voto;
+    }
+
+    public void setVoto(Double voto) {
+        this.voto = voto;
+    }
+
+    public Boolean getVista() {
+        return vista;
+    }
+
+    public void setVista(Boolean vista) {
+        this.vista = vista;
     }
 
     public Integer getTotalVotosTC() {
