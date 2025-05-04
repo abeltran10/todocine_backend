@@ -12,6 +12,7 @@ Todo Cine is an API REST developed with [Java and Springboot in backend](https:/
 application.properties loads properties from three files, one per environment (prod, dev, test) and Constants file is missing in order you can create it for your need
 
 ## Releases
+- [v4.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/v4.0.0)
 - [v3.7.0](https://github.com/abeltran10/todocine_backend/releases/tag/v3.7.0)
 - [v3.6.0](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.0)
 - [RC-3.5.1](https://github.com/abeltran10/todocine_backend/releases/tag/RC-3.5.1)
@@ -25,17 +26,20 @@ application.properties loads properties from three files, one per environment (p
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.7.0) compressed file 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v4.0.0) compressed file 
 - Add application.properties and Constants.java files to project
 - Execute [mvn clean install] command and deploy .jar file generated in one server. [Heroku](https://heroku.com) is a free choice
 
 ## Notes
-App has been migrated to SQL database. NoSQL database was for learning purpose but no I use SQL because it makes more sense.
+App has been migrated to SQL database. NoSQL database was for learning purpose but now I use SQL because it makes more sense.
 
 ## Demo
 
-Demo v3.7.0 stable release
-[TodoCine-v3.7.0.webm](https://github.com/user-attachments/assets/d0bb81a8-3d74-44c9-b8d8-fa5e0a5fe3dc)
+Demo v4.0.0 stable release
+
+[TodoCine-v4.0.0.webm](https://github.com/user-attachments/assets/c3e6e615-d051-45d4-b671-46012453f8c4)
+
+
 
 
 
