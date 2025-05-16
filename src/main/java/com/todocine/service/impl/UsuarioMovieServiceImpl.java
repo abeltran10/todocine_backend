@@ -47,7 +47,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional(readOnly = true)
-    public Paginator<MovieDetailDTO> getUsuarioFavs(Long userId, Integer page) throws NotFoudException {
+    public Paginator<MovieDetailDTO> getUsuarioFavs(Long userId, Integer page) throws BadRequestException, NotFoudException {
         Paginator<MovieDetailDTO> paginator = new Paginator<>();
         Pageable pageable = PageRequest.of(page - 1, 21);
 
@@ -76,7 +76,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                 throw new NotFoudException("No hay favoritos para el usuario");
             }
         } else {
-            throw new NotFoudException("El usuario no es el de la sesión");
+            throw new BadRequestException("El usuario no es el de la sesión");
         }
     }
 
@@ -135,7 +135,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                 throw new NotFoudException("No existe la película");
             }
         } else {
-            throw new NotFoudException("El usuario no es el de la sesión");
+            throw new BadRequestException("El usuario no es el de la sesión");
         }
 
     }

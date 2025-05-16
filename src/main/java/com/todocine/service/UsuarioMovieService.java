@@ -8,7 +8,7 @@ import com.todocine.utils.Paginator;
 
 public interface UsuarioMovieService {
 
-    public Paginator<MovieDetailDTO> getUsuarioFavs(Long userId, Integer page) throws NotFoudException;
+    public Paginator<MovieDetailDTO> getUsuarioFavs(Long userId, Integer page) throws BadRequestException, NotFoudException;
 
     public MovieDetailDTO updateUsuarioMovie(Long userId, String movieId, UsuarioMovieDTO usuarioMovieDTO) throws BadRequestException, NotFoudException;
 }
