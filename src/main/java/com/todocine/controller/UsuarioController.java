@@ -56,8 +56,12 @@ public class UsuarioController {
     }
 
     @GetMapping("/{userId}/movie")
-    public ResponseEntity<Paginator<MovieDetailDTO>> getUsuarioFavs(@NotNull @PathVariable("userId") Long userId, @RequestParam("page") Integer pagina) throws NotFoudException {
-        ResponseEntity<Paginator<MovieDetailDTO>> responseEntity = new ResponseEntity<>(usuarioMovieService.getUsuarioFavs(userId, pagina), HttpStatus.OK);
+    public ResponseEntity<Paginator<MovieDetailDTO>> getUsuarioMovies(@NotNull @PathVariable("userId") Long userId,
+                                                                      @RequestParam("vista") String vista,
+                                                                      @RequestParam("page") Integer pagina)
+            throws BadRequestException, NotFoudException {
+
+        ResponseEntity<Paginator<MovieDetailDTO>> responseEntity = new ResponseEntity<>(usuarioMovieService.getUsuarioMovies(userId, vista, pagina), HttpStatus.OK);
         return responseEntity;
     }
 

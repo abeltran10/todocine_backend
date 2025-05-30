@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 public class UsuarioMovieDTO {
 
     @JsonProperty("usuarioId")
+    @NotNull
     private Long usuarioId;
 
     @JsonProperty("movieId")

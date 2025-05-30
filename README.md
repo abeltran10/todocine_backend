@@ -11,19 +11,8 @@ Todo Cine is an API REST developed with [Java and Springboot in backend](https:/
 
 application.properties loads properties from three files, one per environment (prod, dev, test) and Constants file is missing in order you can create it for your need
 
-## Releases
-- [v5.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/v5.0.0)
-- [v4.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/v4.0.0)
-- [v3.7.0](https://github.com/abeltran10/todocine_backend/releases/tag/v3.7.0)
-- [v3.6.0](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.0)
-- [RC-3.5.1](https://github.com/abeltran10/todocine_backend/releases/tag/RC-3.5.1)
-- [RC-3.5.0](https://github.com/abeltran10/todocine_backend/releases/tag/RC-3.5.0)
-- [v3.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/v3.0.0)
-- [RC-3.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/RC-3.0.0)
-- [RC-2.1.0](https://github.com/abeltran10/todocine_backend/releases/tag/RC-2.1.0)
-- [RC-2.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/RC-2.0.0)
-- [v2.0](https://github.com/abeltran10/todocine_backend/releases/tag/v2.0)
-- [v1.0](https://github.com/abeltran10/todocine_backend/releases/tag/v1.0)
+## Last release
+- [v5.1.0](https://github.com/abeltran10/todocine_backend/releases/tag/v5.1.0)
 
 ## Install
 
@@ -36,9 +25,10 @@ App has been migrated to SQL database. NoSQL database was for learning purpose b
 
 ## Demo
 
-Demo v5.0.0 stable release
+Demo v5.1.0 stable release
 
-[TodoCine-v5.0.0.webm](https://github.com/user-attachments/assets/d7ab2b2c-6b1f-40e1-849a-dbce09d899bd)
+[TodoCine-v5.1.0.webm](https://github.com/user-attachments/assets/3bc70bca-cd18-4f84-a071-90da0a1ee0d5)
+
 
 
 

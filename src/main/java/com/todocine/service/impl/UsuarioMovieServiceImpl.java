@@ -3,6 +3,7 @@ package com.todocine.service.impl;
 import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
+import com.todocine.dao.UsuarioMovieRepo;
 import com.todocine.dto.UsuarioMovieDTO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.MovieDetailDTO;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,38 +47,65 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
     @Autowired
     private MovieDAO movieDAO;
 
+    @Autowired
+    private UsuarioMovieRepo usuarioMovieRepo;
+
     @Override
     @Transactional(readOnly = true)
-    public Paginator<MovieDetailDTO> getUsuarioFavs(Long userId, Integer page) throws NotFoudException {
+    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, String vista, Integer page) throws BadRequestException, NotFoudException {
+        int pagina = page - 1;
         Paginator<MovieDetailDTO> paginator = new Paginator<>();
-        Pageable pageable = PageRequest.of(page - 1, 21);
+        Paginator<UsuarioMovie> usuarioMoviePaginator = new Paginator<>();
+        List<MovieDetailDTO> movieDetailDTOS = new ArrayList<>();
+        Pageable pageable = PageRequest.of(pagina, 21);
 
         if (getCurrentUserId().equals(userId)) {
-            Page<UsuarioMovie> usuarioMovies = usuarioMovieDAO.findByIdUsuarioIdAndFavoritos(userId, "S", pageable);
+            if (vista != null && !"".equals(vista)) {
+                usuarioMoviePaginator = usuarioMovieRepo.getUserMoviesByFilter(userId, vista, 21, (pagina) * 21);
 
-            if (usuarioMovies.hasContent()) {
-               List<MovieDetailDTO> movieDetailDTOS = usuarioMovies.getContent().stream()
-                        .map( usuarioMovie -> {
-                            Movie movie = movieDAO.findById(usuarioMovie.getId().getMovie().getId()).orElse(null);
+                if (!usuarioMoviePaginator.getResults().isEmpty()) {
+                    movieDetailDTOS = usuarioMoviePaginator.getResults().stream()
+                            .map(usuarioMovie -> {
+                                Movie movie = usuarioMovie.getId().getMovie();
 
-                            MovieDetailDTO movieDetailDTO = new MovieDetailDTO(MovieMapper.toDTO(movie),
-                                    true, usuarioMovie.getVoto() , usuarioMovie.getVista().equals("S"));
+                                MovieDetailDTO movieDetailDTO = new MovieDetailDTO(MovieMapper.toDTO(movie),
+                                        true, usuarioMovie.getVoto(), usuarioMovie.getVista().equals("S"));
 
-                            return movieDetailDTO;
-                        }).toList();
+                                return movieDetailDTO;
+                            }).toList();
 
-                paginator.setPage(page);
-                paginator.setResults(movieDetailDTOS);
-                paginator.setTotalPages(usuarioMovies.getTotalPages());
-                paginator.setTotalResults((int)usuarioMovies.getTotalElements());
-
-                return paginator;
-
+                    paginator.setTotalPages(usuarioMoviePaginator.getTotalPages());
+                    paginator.setTotalResults(usuarioMoviePaginator.getTotalResults());
+                }
             } else {
-                throw new NotFoudException("No hay favoritos para el usuario");
+                Page<UsuarioMovie> usuarioMovies = usuarioMovieDAO.findByIdUsuarioIdAndFavoritos(userId, "S", pageable);
+
+                if (!usuarioMovies.getContent().isEmpty()) {
+                    movieDetailDTOS = usuarioMovies.getContent().stream()
+                            .map( usuarioMovie -> {
+                                Movie movie = usuarioMovie.getId().getMovie();
+
+                                MovieDetailDTO movieDetailDTO = new MovieDetailDTO(MovieMapper.toDTO(movie),
+                                        true, usuarioMovie.getVoto() , usuarioMovie.getVista().equals("S"));
+
+                                return movieDetailDTO;
+                                    }).toList();
+
+                    paginator.setTotalPages(usuarioMovies.getTotalPages());
+                    paginator.setTotalResults((int)usuarioMovies.getTotalElements());
+                }
             }
+
+            if (movieDetailDTOS.isEmpty())
+                throw new NotFoudException("No hay favoritos para el usuario");
+
+            paginator.setPage(page);
+            paginator.setResults(movieDetailDTOS);
+
+            return paginator;
+
         } else {
-            throw new NotFoudException("El usuario no es el de la sesión");
+            throw new BadRequestException("El usuario no es el de la sesión");
         }
     }
 
@@ -135,7 +164,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                 throw new NotFoudException("No existe la película");
             }
         } else {
-            throw new NotFoudException("El usuario no es el de la sesión");
+            throw new BadRequestException("El usuario no es el de la sesión");
         }
 
     }

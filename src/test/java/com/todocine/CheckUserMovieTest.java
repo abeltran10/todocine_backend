@@ -93,7 +93,7 @@ public class CheckUserMovieTest {
     void findUserFavs() {
         LOG.info("findUserFavs");
 
-        Paginator<MovieDetailDTO> paginator = usuarioMovieService.getUsuarioFavs(usuarioDTO.getId(), 1);
+        Paginator<MovieDetailDTO> paginator = usuarioMovieService.getUsuarioMovies(usuarioDTO.getId(), null, 1);
         assertTrue(paginator != null);
         assertTrue(paginator.getResults().size() == 1);
         assertEquals("906126", paginator.getResults().get(0).getId());
