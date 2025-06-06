@@ -1,5 +1,6 @@
 package com.todocine.controller;
 
+import com.todocine.configuration.Constants;
 import com.todocine.dto.MovieDetailDTO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.exceptions.BadRequestException;
@@ -16,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/usuario")
@@ -60,8 +64,10 @@ public class UsuarioController {
                                                                       @RequestParam("vista") String vista,
                                                                       @RequestParam("page") Integer pagina)
             throws BadRequestException, NotFoudException {
+        Map<String, String> filters = new HashMap<>();
+        filters.put(Constants.VISTA_FILTER, vista);
 
-        ResponseEntity<Paginator<MovieDetailDTO>> responseEntity = new ResponseEntity<>(usuarioMovieService.getUsuarioMovies(userId, vista, pagina), HttpStatus.OK);
+        ResponseEntity<Paginator<MovieDetailDTO>> responseEntity = new ResponseEntity<>(usuarioMovieService.getUsuarioMovies(userId, filters, pagina), HttpStatus.OK);
         return responseEntity;
     }
 

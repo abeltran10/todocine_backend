@@ -52,53 +52,33 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional(readOnly = true)
-    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, String vista, Integer page) throws BadRequestException, NotFoudException {
+    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, Integer page) throws BadRequestException, NotFoudException {
         int pagina = page - 1;
         Paginator<MovieDetailDTO> paginator = new Paginator<>();
         Paginator<UsuarioMovie> usuarioMoviePaginator = new Paginator<>();
         List<MovieDetailDTO> movieDetailDTOS = new ArrayList<>();
-        Pageable pageable = PageRequest.of(pagina, 21);
 
         if (getCurrentUserId().equals(userId)) {
-            if (vista != null && !"".equals(vista)) {
-                usuarioMoviePaginator = usuarioMovieRepo.getUserMoviesByFilter(userId, vista, 21, (pagina) * 21);
 
-                if (!usuarioMoviePaginator.getResults().isEmpty()) {
-                    movieDetailDTOS = usuarioMoviePaginator.getResults().stream()
-                            .map(usuarioMovie -> {
-                                Movie movie = usuarioMovie.getId().getMovie();
+            usuarioMoviePaginator = usuarioMovieRepo.getUserMoviesByFilter(userId, filters, 21, (pagina) * 21);
 
-                                MovieDetailDTO movieDetailDTO = new MovieDetailDTO(MovieMapper.toDTO(movie),
-                                        true, usuarioMovie.getVoto(), usuarioMovie.getVista().equals("S"));
+            if (!usuarioMoviePaginator.getResults().isEmpty()) {
+                movieDetailDTOS = usuarioMoviePaginator.getResults().stream()
+                        .map(usuarioMovie -> {
+                            Movie movie = usuarioMovie.getId().getMovie();
 
-                                return movieDetailDTO;
-                            }).toList();
+                            MovieDetailDTO movieDetailDTO = new MovieDetailDTO(MovieMapper.toDTO(movie),
+                                    true, usuarioMovie.getVoto(), usuarioMovie.getVista().equals("S"));
 
-                    paginator.setTotalPages(usuarioMoviePaginator.getTotalPages());
-                    paginator.setTotalResults(usuarioMoviePaginator.getTotalResults());
-                }
-            } else {
-                Page<UsuarioMovie> usuarioMovies = usuarioMovieDAO.findByIdUsuarioIdAndFavoritos(userId, "S", pageable);
-
-                if (!usuarioMovies.getContent().isEmpty()) {
-                    movieDetailDTOS = usuarioMovies.getContent().stream()
-                            .map( usuarioMovie -> {
-                                Movie movie = usuarioMovie.getId().getMovie();
-
-                                MovieDetailDTO movieDetailDTO = new MovieDetailDTO(MovieMapper.toDTO(movie),
-                                        true, usuarioMovie.getVoto() , usuarioMovie.getVista().equals("S"));
-
-                                return movieDetailDTO;
-                                    }).toList();
-
-                    paginator.setTotalPages(usuarioMovies.getTotalPages());
-                    paginator.setTotalResults((int)usuarioMovies.getTotalElements());
-                }
+                            return movieDetailDTO;
+                        }).toList();
             }
 
             if (movieDetailDTOS.isEmpty())
                 throw new NotFoudException("No hay favoritos para el usuario");
 
+            paginator.setTotalPages(usuarioMoviePaginator.getTotalPages());
+            paginator.setTotalResults(usuarioMoviePaginator.getTotalResults());
             paginator.setPage(page);
             paginator.setResults(movieDetailDTOS);
 
@@ -133,23 +113,13 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                  UserMovieId userMovieId = new UserMovieId(new Usuario(userId), movie);
                  UsuarioMovie usuarioMovie = usuarioMovieDAO.findById(userMovieId).orElse(null);
 
-                 if (usuarioMovie != null) {
-                     if (usuarioMovie.getVoto() != null &&
-                             (usuarioMovieDTO.getVoto() != null && !usuarioMovieDTO.getVoto().equals(0.0D)))
-                         actualizarMediaVotos(movie, usuarioMovieDTO.getVoto(), usuarioMovie.getVoto());
-                     else if (usuarioMovieDTO.getVoto() != null && !usuarioMovieDTO.getVoto().equals(0.0D))
-                         calcularMediaVotos(movie, usuarioMovieDTO.getVoto());
+                 if (usuarioMovie != null && usuarioMovie.getVoto() != null &&
+                        (usuarioMovieDTO.getVoto() != null && !usuarioMovieDTO.getVoto().equals(0.0D)))
+                    actualizarMediaVotos(movie, usuarioMovieDTO.getVoto(), usuarioMovie.getVoto());
+                 else if (usuarioMovieDTO.getVoto() != null && !usuarioMovieDTO.getVoto().equals(0.0D))
+                    calcularMediaVotos(movie, usuarioMovieDTO.getVoto());
 
-                     usuarioMovie.setFavoritos(usuarioMovieDTO.getFavoritos() ? "S" : "N");
-                     usuarioMovie.setVista(usuarioMovieDTO.getVista() ? "S" : "N");
-                     usuarioMovie.setVoto(usuarioMovieDTO.getVoto());
-
-                 } else {
-                     if (usuarioMovieDTO.getVoto() != null && !usuarioMovieDTO.getVoto().equals(0.0D))
-                        calcularMediaVotos(movie, usuarioMovieDTO.getVoto());
-
-                     usuarioMovie = UsuarioMovieMapper.toEntity(usuarioMovieDTO);
-                 }
+                 usuarioMovie = UsuarioMovieMapper.toEntity(usuarioMovieDTO);
 
                  movieDAO.save(movie);
 
