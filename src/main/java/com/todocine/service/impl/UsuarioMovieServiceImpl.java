@@ -10,6 +10,7 @@ import com.todocine.dto.MovieDetailDTO;
 import com.todocine.entities.*;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.UsuarioMovieService;
 import com.todocine.service.TMDBService;
@@ -52,7 +53,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional(readOnly = true)
-    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, Integer page) throws BadRequestException, NotFoudException {
+    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, Integer page) throws ForbiddenException, NotFoudException {
         int pagina = page - 1;
         Paginator<MovieDetailDTO> paginator = new Paginator<>();
         Paginator<UsuarioMovie> usuarioMoviePaginator = new Paginator<>();
@@ -85,13 +86,13 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
             return paginator;
 
         } else {
-            throw new BadRequestException("El usuario no es el de la sesión");
+            throw new ForbiddenException("El usuario no es el de la sesión");
         }
     }
 
     @Override
     @Transactional
-    public MovieDetailDTO updateUsuarioMovie(Long userId, String movieId, UsuarioMovieDTO usuarioMovieDTO) throws BadRequestException, NotFoudException {
+    public MovieDetailDTO updateUsuarioMovie(Long userId, String movieId, UsuarioMovieDTO usuarioMovieDTO) throws ForbiddenException, NotFoudException, BadGatewayException {
         if (getCurrentUserId().equals(userId)) {
             Movie movie = null;
             MovieDTO movieDTO = null;
@@ -131,10 +132,10 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                  return new MovieDetailDTO(movieDTO, usuarioMovieDTO.getFavoritos(), usuarioMovieDTO.getVoto(), usuarioMovieDTO.getVista());
 
             } catch (IOException ex) {
-                throw new NotFoudException("No existe la película");
+                throw new BadGatewayException("La respuesta de TMDB ha fallado");
             }
         } else {
-            throw new BadRequestException("El usuario no es el de la sesión");
+            throw new ForbiddenException("El usuario no es el de la sesión");
         }
 
     }

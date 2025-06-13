@@ -3,7 +3,9 @@ package com.todocine.service.impl;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Usuario;
+import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.mapper.UserMapper;
@@ -89,7 +91,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException, BadRequestException {
+    public UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException, ForbiddenException {
        log.info("updateUsuario");
         Usuario usuario = null;
 
@@ -106,14 +108,14 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
                 throw new NotFoudException("No existe el usuario");
             }
         } else {
-            throw new BadRequestException("El usuario no es el de la sesión");
+            throw new ForbiddenException("El usuario no es el de la sesión");
         }
 
     }
 
 
     @Override
-    public UsuarioDTO getUsuarioById(Long id) throws BadRequestException {
+    public UsuarioDTO getUsuarioById(Long id) throws ForbiddenException {
         if (getCurrentUserId().equals(id)) {
             Usuario usuario = usuarioDAO.findById(id).get();
 
@@ -121,7 +123,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
             return usuarioDTO;
         } else {
-            throw new BadRequestException("El usuario no es el de la sesión");
+            throw new ForbiddenException("El usuario no es el de la sesión");
         }
     }
 }
