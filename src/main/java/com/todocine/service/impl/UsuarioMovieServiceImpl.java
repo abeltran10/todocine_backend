@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.todocine.configuration.Constants.*;
+
 @Service
 public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioMovieService {
     Logger log = LoggerFactory.getLogger(UsuarioMovieServiceImpl.class);
@@ -76,7 +78,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
             }
 
             if (movieDetailDTOS.isEmpty())
-                throw new NotFoudException("No hay favoritos para el usuario");
+                throw new NotFoudException(FAVORITOS_NOTFOUND);
 
             paginator.setTotalPages(usuarioMoviePaginator.getTotalPages());
             paginator.setTotalResults(usuarioMoviePaginator.getTotalResults());
@@ -86,7 +88,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
             return paginator;
 
         } else {
-            throw new ForbiddenException("El usuario no es el de la sesión");
+            throw new ForbiddenException(USER_FORBIDDEN);
         }
     }
 
@@ -100,7 +102,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
              try {
                  Map<String, Object> movieMap = tmdbService.getMovieById(usuarioMovieDTO.getMovieId());
                  if (movieMap.get("id") == null)
-                     throw new NotFoudException("No existe la película");
+                     throw new NotFoudException(MOVIE_NOTFOUND);
                  else {
                      movie = movieDAO.findById(movieId).orElse(null);
                      movieDTO = MovieMapper.toDTO(movieMap);
@@ -132,10 +134,10 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                  return new MovieDetailDTO(movieDTO, usuarioMovieDTO.getFavoritos(), usuarioMovieDTO.getVoto(), usuarioMovieDTO.getVista());
 
             } catch (IOException ex) {
-                throw new BadGatewayException("La respuesta de TMDB ha fallado");
+                throw new BadGatewayException(TMDB_ERROR);
             }
         } else {
-            throw new ForbiddenException("El usuario no es el de la sesión");
+            throw new ForbiddenException(USER_FORBIDDEN);
         }
 
     }

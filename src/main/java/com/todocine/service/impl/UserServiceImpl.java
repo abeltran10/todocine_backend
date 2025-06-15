@@ -3,7 +3,6 @@ package com.todocine.service.impl;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Usuario;
-import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
@@ -20,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+
+import static com.todocine.configuration.Constants.*;
 
 @Service
 public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
@@ -42,7 +43,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
         Usuario usuario = usuarioDAO.findByUsername(username);
 
         if (usuario == null)
-            throw new UsernameNotFoundException("Usuario o contraseña incorrectos");
+            throw new UsernameNotFoundException(USER_PASSWORD_ERROR);
         else
             return usuario;
 
@@ -57,9 +58,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
         Usuario usuario = usuarioDAO.findByUsername(username);
 
         if (usuario == null)
-            throw new NotFoudException("No existe el usuario con ese nombre");
+            throw new NotFoudException(USER_NOTFOUND);
         else if (!getCurrentUserId().equals(usuario.getId()))
-            throw new BadRequestException("El usuario solicitado no es el de la sesión");
+            throw new BadRequestException(USER_FORBIDDEN);
         else {
             UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
 
@@ -85,7 +86,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
             return UserMapper.toDTO(usuario);
         } else {
-            throw new BadRequestException("Un usuario con ese nombre ya existe");
+            throw new BadRequestException(USER_EXISTS);
         }
     }
 
@@ -105,10 +106,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
                 return UserMapper.toDTO(usuario);
             } catch (NoSuchElementException ex) {
-                throw new NotFoudException("No existe el usuario");
+                throw new NotFoudException(USER_NOTFOUND);
             }
         } else {
-            throw new ForbiddenException("El usuario no es el de la sesión");
+            throw new ForbiddenException(USER_FORBIDDEN);
         }
 
     }
@@ -123,7 +124,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
             return usuarioDTO;
         } else {
-            throw new ForbiddenException("El usuario no es el de la sesión");
+            throw new ForbiddenException(USER_FORBIDDEN);
         }
     }
 }

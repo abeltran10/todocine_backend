@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static com.todocine.configuration.Constants.*;
+
 @Service
 public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
 
@@ -70,10 +72,10 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                 return new MovieDetailDTO(movieDTO, favorito, voto, vista);
 
             } else {
-                throw new NotFoudException("No se ha encontrado la película");
+                throw new NotFoudException(MOVIE_NOTFOUND);
             }
         } catch (IOException ex) {
-            throw new BadGatewayException("La respuesta de TMDB ha fallado");
+            throw new BadGatewayException(TMDB_ERROR);
         }
     }
 
@@ -84,7 +86,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
             Map<String, Object> map = tmdbService.getMoviesByName(name, pagina);
 
             if (map.get("results") == null)
-                throw new NotFoudException("No se ha encontrado la película con ese nombre");
+                throw new NotFoudException(MOVIE_NOTFOUND);
             else {
                 Paginator<MovieDTO> moviePage = new Paginator<>(map);
                 List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
@@ -99,7 +101,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
             }
 
         } catch (IOException e) {
-            throw new BadGatewayException("La respuesta de TMDB ha fallado");
+            throw new BadGatewayException(TMDB_ERROR);
         }
 
     }
@@ -111,7 +113,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
             Map<String, Object> map = tmdbService.getMoviesPlayingNow(country, pagina);
 
             if (map.get("results") == null)
-                throw new NotFoudException("No se ha encontrado la cartelera para esa región");
+                throw new NotFoudException(CARTELERA_NOTFOUND);
             else {
                 Paginator<MovieDTO> moviePage = new Paginator<>(map);
                 List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
@@ -125,7 +127,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                 return moviePage;
             }
         } catch (IOException e) {
-            throw new BadGatewayException("La respuesta de TMDB ha fallado");
+            throw new BadGatewayException(TMDB_ERROR);
         }
     }
 
