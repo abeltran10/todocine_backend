@@ -63,10 +63,12 @@ public class UsuarioController {
     @GetMapping("/{userId}/movie")
     public ResponseEntity<Paginator<MovieDetailDTO>> getUsuarioMovies(@NotNull @PathVariable("userId") Long userId,
                                                                       @RequestParam("vista") String vista,
+                                                                      @RequestParam("votada") String votada,
                                                                       @RequestParam("page") Integer pagina)
             throws ForbiddenException, NotFoudException {
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.VISTA_FILTER, vista);
+        filters.put(Constants.VOTADA_FILTER, votada);
 
         ResponseEntity<Paginator<MovieDetailDTO>> responseEntity = new ResponseEntity<>(usuarioMovieService.getUsuarioMovies(userId, filters, pagina), HttpStatus.OK);
         return responseEntity;

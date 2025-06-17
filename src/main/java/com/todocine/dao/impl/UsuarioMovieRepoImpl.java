@@ -30,10 +30,21 @@ public class UsuarioMovieRepoImpl extends BaseRepoImpl implements UsuarioMovieRe
                 .where(usuarioMovie.id.usuario.id.eq(usuarioId).and(usuarioMovie.favoritos.equalsIgnoreCase("s")));
 
         long total = 0L;
+
         if (filters.get(Constants.VISTA_FILTER) != null && !"".equals(filters.get(Constants.VISTA_FILTER))) {
             count = count.where(usuarioMovie.vista.equalsIgnoreCase(filters.get(Constants.VISTA_FILTER)));
 
             q = q.where(usuarioMovie.vista.equalsIgnoreCase(filters.get(Constants.VISTA_FILTER)));
+        }
+
+        if ("s".equalsIgnoreCase(filters.get(Constants.VOTADA_FILTER))) {
+            count = count.where(usuarioMovie.voto.isNotNull());
+
+            q = q.where(usuarioMovie.voto.isNotNull());
+        } else if ("n".equalsIgnoreCase(filters.get(Constants.VOTADA_FILTER))) {
+            count = count.where(usuarioMovie.voto.isNull());
+
+            q = q.where(usuarioMovie.voto.isNull());
         }
 
         total = count.fetchOne();
