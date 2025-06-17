@@ -1,5 +1,6 @@
 package com.todocine;
 
+import com.todocine.configuration.Constants;
 import com.todocine.controller.PremioController;
 import com.todocine.dao.*;
 import com.todocine.dto.GanadorDTO;
@@ -107,7 +108,7 @@ public class CheckPremioControllerTest {
         try {
             ResponseEntity<Paginator<GanadorDTO>> paginator = premioController.getPremioByCodigoAnyo(0L, 2023, 1);
         } catch (NotFoudException ex) {
-            assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+            assertEquals(Constants.PREMIO_NOTFOUND, ex.getMessage());
         }
 
 

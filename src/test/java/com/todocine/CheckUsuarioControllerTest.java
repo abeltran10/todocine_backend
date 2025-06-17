@@ -41,8 +41,7 @@ public class CheckUsuarioControllerTest {
         } catch (BadRequestException ex) {
 
             assertAll(
-                    () -> assertEquals("Ya existe el usuario", ex.getReason()),
-                    () -> assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode())
+                    () -> assertEquals("Ya existe el usuario", ex.getMessage())
             );
         }
     }
