@@ -1,15 +1,11 @@
 package com.todocine;
 
-import com.todocine.configuration.Constants;
 import com.todocine.controller.PremioController;
 import com.todocine.dao.*;
-import com.todocine.dto.GanadorDTO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.entities.*;
-import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
-import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.MovieMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,21 +13,26 @@ import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CheckPremioControllerTest {
-    public static Logger LOG = LoggerFactory.getLogger(CheckPremioControllerTest.class);
+public class CheckPremioTest {
+    public static Logger LOG = LoggerFactory.getLogger(CheckPremioTest.class);
 
     @Autowired
     private PremioDAO premioDAO;
@@ -58,6 +59,14 @@ public class CheckPremioControllerTest {
     private PremioController premioController;
 
     private Long premioId;
+
+    @Autowired
+    private UsuarioDAO usuarioDAO;
+
+    private Usuario usuario;
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @BeforeAll
     void setUp() {
@@ -90,25 +99,35 @@ public class CheckPremioControllerTest {
 
         ganadorDAO.save(ganador);
 
+        usuarioDAO.deleteAll();
+
+        usuario = new Usuario("test", "1234");
+        usuarioDAO.save(usuario);
+
 
     }
 
     @Test
     void getPremioById() {
-        ResponseEntity<Paginator<GanadorDTO>> responseEntity = premioController.getPremioByCodigoAnyo(premioId, 2024, 1);
 
-        Paginator<GanadorDTO> ganadorDTOList = responseEntity.getBody();
-
-        assertEquals("La sociedad de la nieve", ganadorDTOList.getResults().get(0).getTitle());
-
+        try {
+            mockMvc.perform(get("/premio/" + premioId +"/anyo/2024?pagina=1")
+                            .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.results[0].title").value("La sociedad de la nieve"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void getPremioByCodigoException() {
         try {
-            ResponseEntity<Paginator<GanadorDTO>> paginator = premioController.getPremioByCodigoAnyo(0L, 2023, 1);
-        } catch (NotFoudException ex) {
-            assertEquals(Constants.PREMIO_NOTFOUND, ex.getMessage());
+            mockMvc.perform(get("/premio/0/anyo/2023?pagina=1")
+                            .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
+                    .andExpect(status().isNotFound());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
 

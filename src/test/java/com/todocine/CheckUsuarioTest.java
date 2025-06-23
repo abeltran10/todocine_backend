@@ -1,5 +1,6 @@
 package com.todocine;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.dao.CategoriaDAO;
 import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
@@ -15,7 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -23,15 +26,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 public class CheckUsuarioTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioTest.class);
     @Autowired
@@ -55,7 +65,13 @@ public class CheckUsuarioTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private UsuarioDTO usuarioDTO;
+    private Usuario usuario;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
 
     @BeforeEach
@@ -64,53 +80,57 @@ public class CheckUsuarioTest {
         usuarioDAO.deleteAll();
         movieDAO.deleteAll();
 
-        Usuario usuario = new Usuario("test", "1234");
-
-        List<Usuario> usuarioList = Arrays.asList(usuario);
-
-       /* Movie movie = new Movie("906126","La sociedad de la nieve"
-                , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
-                , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
-                , 1284.858, 467, 8.158, "es", 0, 0D) ;
-        Favoritos favorito = new Favoritos(new FavoritosId(usuario,movie));
-
-        movie = movieDAO.save(movie);
-        movieDTO = MovieMapper.toDTO(movie);*/
+        usuario = new Usuario("test", "1234");
 
         usuario = usuarioDAO.save(usuario);
-
-        usuarioDTO = UserMapper.toDTO(usuario);
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(UserMapper.toEntity(usuarioDTO), usuarioDTO.getPassword());
-        SecurityContext securityContext = new SecurityContextImpl();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
     }
 
     @Test
     void findUser() {
         LOG.info("findUser");
-        UsuarioDTO test = usuarioService.getUsuarioByName("test");
-        assertEquals(usuarioDTO.getId(), test.getId());
+
+        try {
+            mockMvc.perform(get("/usuario/username/test")
+                            .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").value(usuario.getId()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    void addUsuario() throws BadRequestException {
+    void addUsuario() {
         LOG.info("addUsuario");
-        UsuarioDTO usuarioDTO1 = new UsuarioDTO("test2", "1234");
-        usuarioDTO1 = usuarioService.insertUsuario(usuarioDTO1);
-        assertTrue(usuarioDTO1.getId() != null);
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO("test2", "1234");
+
+        try {
+            mockMvc.perform(post("/usuario")
+                            .content(objectMapper.writeValueAsString(usuarioDTO))             // Body JSON
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.username").value(usuarioDTO.getUsername()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void createSameUser() {
         LOG.info("createSameUser");
 
+        UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
+
         try {
-            usuarioService.insertUsuario(usuarioDTO);
-        } catch (BadRequestException ex) {
-            LOG.info(ex.getMessage());
-            assertTrue(ex.getMessage().contains("Un usuario con ese nombre ya existe"));
+            mockMvc.perform(post("/usuario")
+                            .content(objectMapper.writeValueAsString(usuarioDTO))             // Body JSON
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
+                    .andExpect(status().isBadRequest());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -118,10 +138,23 @@ public class CheckUsuarioTest {
     void updateUser() {
         LOG.info("updateUser");
 
+        UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
         usuarioDTO.setPassword("abcd");
-        UsuarioDTO usuarioDTO1 = usuarioService.updateUsuario(usuarioDTO.getId(), usuarioDTO);
 
-        assertTrue(passwordEncoder.matches("abcd", usuarioDTO1.getPassword()));
-        assertEquals("test", usuarioDTO1.getUsername());
+        try {
+            MvcResult result = mockMvc.perform(put("/usuario/" + usuarioDTO.getId())
+                            .content(objectMapper.writeValueAsString(usuarioDTO))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String json = result.getResponse().getContentAsString();
+            UsuarioDTO usuarioDTO1 = objectMapper.readValue(json, UsuarioDTO.class);
+
+            assertTrue(passwordEncoder.matches("abcd", usuarioDTO1.getPassword()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
