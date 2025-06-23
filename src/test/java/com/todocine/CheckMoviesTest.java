@@ -1,5 +1,11 @@
 package com.todocine;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+
+
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.MovieDTO;
@@ -16,6 +22,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +30,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.io.IOException;
 
@@ -31,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CheckMoviesTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckMoviesTest.class);
@@ -42,12 +52,12 @@ public class CheckMoviesTest {
     private UsuarioDAO usuarioDAO;
 
     @Autowired
-    private MovieService movieService;
-
-    @Autowired
     private TMDBService tmdbService;
 
     private Usuario usuario;
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @BeforeAll
     void setUp() {
@@ -69,32 +79,44 @@ public class CheckMoviesTest {
     void findMovieById() {
         LOG.info("findMovieById");
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword());
-        SecurityContext securityContext = new SecurityContextImpl();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
-
-        MovieDetailDTO movieDetailDTO = movieService.getMovieDetailById("906126");
-
-        assertEquals("906126", movieDetailDTO.getId());
+        try {
+            mockMvc.perform(get("/movie/906126/detail")
+                     .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").value("906126"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void findMovieByName() {
         LOG.info("findMovieByName");
 
-        Paginator<MovieDTO> paginator = movieService.getMovieByName("star wars", 1);
+        try {
+            mockMvc.perform(get("/movie/search?name=star wars&page=1")
+                            .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.results").isNotEmpty());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        assertTrue(paginator.getResults() != null);
     }
 
     @Test
     void findMoviesPlayingNow() {
         LOG.info("findMoviesPlayingNow");
 
-        Paginator<MovieDTO> paginator = movieService.getMoviesPlayingNow("ES", 1);
+        try {
+            mockMvc.perform(get("/movie/now?region=ES&page=1")
+                            .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.results").isNotEmpty());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        assertTrue(paginator.getResults() != null);
     }
 
 }

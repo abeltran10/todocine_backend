@@ -3,7 +3,9 @@ package com.todocine.controller;
 
 import com.todocine.dto.UsuarioMovieDTO;
 import com.todocine.dto.MovieDetailDTO;
+import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.UsuarioMovieService;
 import jakarta.validation.Valid;
@@ -24,7 +26,8 @@ public class UsuarioMovieController {
     @PutMapping("/{movieId}")
     public ResponseEntity<MovieDetailDTO> updateUsuarioMovie(@NotNull @PathVariable("userId") Long userId,
                                                              @NotBlank @PathVariable("movieId") String movieId,
-                                                             @Valid @RequestBody UsuarioMovieDTO usuarioMovieDTO) throws NotFoudException, BadRequestException {
+                                                             @Valid @RequestBody UsuarioMovieDTO usuarioMovieDTO)
+            throws NotFoudException, ForbiddenException, BadGatewayException {
         ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(usuarioMovieService.updateUsuarioMovie(userId, movieId, usuarioMovieDTO), HttpStatus.OK);
         return responseEntity;
     }

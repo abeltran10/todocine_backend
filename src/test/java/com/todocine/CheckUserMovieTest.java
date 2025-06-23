@@ -1,5 +1,6 @@
 package com.todocine;
 
+import com.todocine.dao.GanadorDAO;
 import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,20 +28,24 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 public class CheckUserMovieTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUserMovieTest.class);
-
-    @Autowired
-    private UsuarioMovieService usuarioMovieService;
 
     @Autowired
     private UsuarioMovieDAO usuarioMovieDAO;
@@ -50,17 +56,24 @@ public class CheckUserMovieTest {
     @Autowired
     private MovieDAO movieDAO;
 
+    @Autowired
+    private GanadorDAO ganadorDAO;
+
     private MovieDTO movieDTO;
 
-    private UsuarioDTO usuarioDTO;
+    private Usuario usuario;
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @BeforeEach
     void before() {
+        ganadorDAO.deleteAll();
         usuarioMovieDAO.deleteAll();
         usuarioDAO.deleteAll();
         movieDAO.deleteAll();
 
-        Usuario usuario = new Usuario("test", "1234");
+        usuario = new Usuario("test", "1234");
 
         List<Usuario> usuarioList = Arrays.asList(usuario);
 
@@ -80,23 +93,21 @@ public class CheckUserMovieTest {
 
         usuarioMovieDAO.save(usuarioMovie);
 
-        usuarioDTO = UserMapper.toDTO(usuario);
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(UserMapper.toEntity(usuarioDTO), usuarioDTO.getPassword());
-        SecurityContext securityContext = new SecurityContextImpl();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
-
     }
 
     @Test
     void findUserFavs() {
         LOG.info("findUserFavs");
 
-        Paginator<MovieDetailDTO> paginator = usuarioMovieService.getUsuarioMovies(usuarioDTO.getId(), null, 1);
-        assertTrue(paginator != null);
-        assertTrue(paginator.getResults().size() == 1);
-        assertEquals("906126", paginator.getResults().get(0).getId());
+        try {
+            mockMvc.perform(get("/usuario/" + usuario.getId() + "/movie?vista=&votada=&page=1")
+                            .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.results").isNotEmpty())
+                    .andExpect(jsonPath("$.results[0].id").value("906126"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

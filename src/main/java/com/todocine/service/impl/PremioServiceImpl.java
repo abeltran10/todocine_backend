@@ -24,6 +24,9 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.todocine.configuration.Constants.PREMIOS_NOTFOUND;
+import static com.todocine.configuration.Constants.PREMIO_NOTFOUND;
+
 @Service
 public class PremioServiceImpl implements PremioService {
 
@@ -54,7 +57,7 @@ public class PremioServiceImpl implements PremioService {
                 return paginator;
         }
 
-        throw new NotFoudException("Premio no encontrado");
+        throw new NotFoudException(PREMIO_NOTFOUND);
 
     }
 
@@ -76,7 +79,7 @@ public class PremioServiceImpl implements PremioService {
 
             return new ArrayList<>(premioMap.values());
         } else {
-            throw new NotFoudException("No se han encontrado premios");
+            throw new NotFoudException(PREMIOS_NOTFOUND);
         }
     }
 }
