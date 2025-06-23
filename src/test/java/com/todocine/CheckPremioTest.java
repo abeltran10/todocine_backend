@@ -44,9 +44,6 @@ public class CheckPremioTest {
     private MovieDAO movieDAO;
 
     @Autowired
-    private MovieService movieService;
-
-    @Autowired
     private TMDBService tmdbService;
 
     @Autowired
@@ -54,9 +51,6 @@ public class CheckPremioTest {
 
     @Autowired
     private GanadorDAO ganadorDAO;
-
-    @Autowired
-    private PremioController premioController;
 
     private Long premioId;
 

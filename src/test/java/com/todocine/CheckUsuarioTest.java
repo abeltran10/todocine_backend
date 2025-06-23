@@ -44,8 +44,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class CheckUsuarioTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioTest.class);
-    @Autowired
-    private UsuarioService usuarioService;
 
     @Autowired
     private UsuarioDAO usuarioDAO;
@@ -58,9 +56,6 @@ public class CheckUsuarioTest {
 
     @Autowired
     private UsuarioMovieDAO favoritosDAO;
-
-    @Autowired
-    private MovieService movieService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

@@ -48,9 +48,6 @@ public class CheckUserMovieTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUserMovieTest.class);
 
     @Autowired
-    private UsuarioMovieService usuarioMovieService;
-
-    @Autowired
     private UsuarioMovieDAO usuarioMovieDAO;
 
     @Autowired
