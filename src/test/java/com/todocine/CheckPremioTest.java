@@ -105,7 +105,7 @@ public class CheckPremioTest {
     void getPremioById() {
 
         try {
-            mockMvc.perform(get("/premio/" + premioId +"/anyo/2024?pagina=1")
+            mockMvc.perform(get("/premios/" + premioId +"/anyos/2024?pagina=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.results[0].title").value("La sociedad de la nieve"));
@@ -117,7 +117,7 @@ public class CheckPremioTest {
     @Test
     void getPremioByCodigoException() {
         try {
-            mockMvc.perform(get("/premio/0/anyo/2023?pagina=1")
+            mockMvc.perform(get("/premios/0/anyos/2023?pagina=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isNotFound());
         } catch (Exception e) {

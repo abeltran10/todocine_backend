@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/premio")
+@RequestMapping("/premios")
 public class PremioController {
 
     @Autowired
     private PremioService premioService;
 
 
-    @GetMapping("/{id}/anyo/{anyo}")
+    @GetMapping("/{id}/anyos/{anyo}")
     public ResponseEntity<Paginator<GanadorDTO>> getPremioByCodigoAnyo(@NotNull @PathVariable("id") Long id,
                                                                        @NotNull @PathVariable("anyo") Integer anyo,
                                                                        @NotNull @RequestParam("pagina") Integer page) throws NotFoudException {

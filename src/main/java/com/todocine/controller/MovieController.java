@@ -1,8 +1,10 @@
 package com.todocine.controller;
 
+import com.todocine.configuration.Constants;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.MovieDetailDTO;
 import com.todocine.exceptions.BadGatewayException;
+import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
 import com.todocine.utils.Paginator;
@@ -14,8 +16,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping("/movie")
+@RequestMapping("/movies")
 public class MovieController {
     Logger LOG = LoggerFactory.getLogger(MovieController.class);
 
@@ -23,27 +28,26 @@ public class MovieController {
     private MovieService movieService;
 
 
-    @GetMapping("/search")
-    public ResponseEntity<Paginator<MovieDTO>> getMovieByName(@NotBlank @RequestParam("name") String name, @RequestParam("page") Integer pagina)
-            throws NotFoudException, BadGatewayException {
-        Paginator<MovieDTO> paginator = movieService.getMovieByName(name, pagina);
+    @GetMapping
+    public ResponseEntity<Paginator<MovieDTO>> getMovies(@RequestParam("name") String name, @RequestParam("status") String status,
+                                                         @RequestParam("region") String region, @RequestParam("page") Integer pagina)
+            throws NotFoudException, BadRequestException, BadGatewayException {
+
+        Map<String, String> filters = new HashMap<>();
+        filters.put(Constants.MOVIE_NAME, name);
+        filters.put(Constants.MOVIE_STATUS, status);
+        filters.put(Constants.MOVIE_REGION, region);
+
+        Paginator<MovieDTO> paginator = movieService.getMovies(filters, pagina);
         ResponseEntity<Paginator<MovieDTO>> responseEntity = new ResponseEntity<>(paginator, HttpStatus.OK);
         return responseEntity;
     }
 
-    @GetMapping("/{id}/detail")
+    @GetMapping("/{id}")
     public ResponseEntity<MovieDetailDTO> getMovieDetailById(@NotBlank @PathVariable("id") String id) throws NotFoudException, BadGatewayException {
         ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(movieService.getMovieDetailById(id), HttpStatus.OK);
         return responseEntity;
 
-    }
-
-    @GetMapping("/now")
-    public ResponseEntity<Paginator<MovieDTO>> getMoviesPlayingNow(@NotBlank @RequestParam("region") String region, @RequestParam("page") Integer pagina)
-            throws NotFoudException, BadGatewayException {
-        Paginator<MovieDTO> paginator = movieService.getMoviesPlayingNow(region, pagina);
-        ResponseEntity<Paginator<MovieDTO>> responseEntity = new ResponseEntity<>(paginator, HttpStatus.OK);
-        return responseEntity;
     }
 
 

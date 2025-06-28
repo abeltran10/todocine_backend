@@ -142,7 +142,6 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     }
 
-
     private void actualizarMediaVotos(Movie movieEntity, Double newVote, Double oldVoto) {
         Double total = movieEntity.getVotosMediaTC() * movieEntity.getTotalVotosTC();
         Double totalOld = total - oldVoto;
@@ -160,5 +159,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
         Double votosMedia = Math.round(((total + voto) / totalVotosTC) * 10.0) / 10.0;
         movieEntity.setVotosMediaTC(votosMedia);
     }
+
+
 
 }

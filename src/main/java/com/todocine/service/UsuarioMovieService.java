@@ -7,6 +7,7 @@ import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.utils.Paginator;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Map;
 

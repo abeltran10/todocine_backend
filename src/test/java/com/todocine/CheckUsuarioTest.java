@@ -85,7 +85,7 @@ public class CheckUsuarioTest {
         LOG.info("findUser");
 
         try {
-            mockMvc.perform(get("/usuario/username/test")
+            mockMvc.perform(get("/usuarios?username=test")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(usuario.getId()));
@@ -101,7 +101,7 @@ public class CheckUsuarioTest {
         UsuarioDTO usuarioDTO = new UsuarioDTO("test2", "1234");
 
         try {
-            mockMvc.perform(post("/usuario")
+            mockMvc.perform(post("/usuarios")
                             .content(objectMapper.writeValueAsString(usuarioDTO))             // Body JSON
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
@@ -119,7 +119,7 @@ public class CheckUsuarioTest {
         UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
 
         try {
-            mockMvc.perform(post("/usuario")
+            mockMvc.perform(post("/usuarios")
                             .content(objectMapper.writeValueAsString(usuarioDTO))             // Body JSON
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
@@ -137,7 +137,7 @@ public class CheckUsuarioTest {
         usuarioDTO.setPassword("abcd");
 
         try {
-            MvcResult result = mockMvc.perform(put("/usuario/" + usuarioDTO.getId())
+            MvcResult result = mockMvc.perform(put("/usuarios/" + usuarioDTO.getId())
                             .content(objectMapper.writeValueAsString(usuarioDTO))
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
