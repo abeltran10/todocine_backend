@@ -18,7 +18,7 @@ public class UsuarioMovieMapper {
         UsuarioMovie usuarioMovie = new UsuarioMovie(new UserMovieId(usuario, movie));
         usuarioMovie.setFavoritos(usuarioMovieDTO.getFavoritos() ? "S" : "N");
         usuarioMovie.setVista(usuarioMovieDTO.getVista() ? "S" : "N");
-        usuarioMovie.setVoto(usuarioMovie.getVoto());
+        usuarioMovie.setVoto(usuarioMovieDTO.getVoto());
 
         return usuarioMovie;
     }
