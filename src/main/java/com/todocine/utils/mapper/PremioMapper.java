@@ -10,7 +10,6 @@ public class PremioMapper {
 
         premio.setId(premioDTO.getId());
         premio.setTitulo(premioDTO.getTitulo());
-        premio.setCodigo(premioDTO.getCodigo());
 
         return premio;
     }
@@ -18,7 +17,6 @@ public class PremioMapper {
     public static PremioDTO toDTO(Premio premio) {
         PremioDTO premioDTO = new PremioDTO(premio.getId());
         premioDTO.setTitulo(premio.getTitulo());
-        premioDTO.setCodigo(premio.getCodigo());
 
         return premioDTO;
     }

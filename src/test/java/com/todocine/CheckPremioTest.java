@@ -80,7 +80,7 @@ public class CheckPremioTest {
         }
 
 
-        Premio premio = new Premio(null, 1, "Goya");
+        Premio premio = new Premio(null, "Goya");
         premioDAO.save(premio);
         premioId = premio.getId();
 
