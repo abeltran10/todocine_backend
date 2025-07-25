@@ -1,16 +1,14 @@
 package com.todocine;
 
+import com.todocine.configuration.Constants;
 import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.MovieDetailDTO;
-import com.todocine.entities.UserMovieId;
-import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.service.TMDBService;
 import com.todocine.service.impl.MovieServiceImpl;
 import com.todocine.utils.Paginator;
-import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -109,9 +107,14 @@ public class CheckMoviesUnitTest {
         results.put("total_pages", 1);
         results.put("total_results", 1);
 
+        Map<String, String> filters = new HashMap<>();
+        filters.put(Constants.MOVIE_NAME, "Fantasía");
+        filters.put(Constants.MOVIE_STATUS, "");
+        filters.put(Constants.MOVIE_REGION, "");
+
         try {
             Mockito.when(tmdbService.getMoviesByName("Fantasía", 1)).thenReturn(results);
-            Paginator<MovieDTO> paginator = movieService.getMovieByName("Fantasía", 1);
+            Paginator<MovieDTO> paginator = movieService.getMovies(filters, 1);
 
             assertTrue(paginator.getResults() != null);
             assertEquals("Fantasía", paginator.getResults().get(0).getOriginalTitle());
@@ -119,32 +122,6 @@ public class CheckMoviesUnitTest {
             throw new RuntimeException(e);
         }
 
-    }
-
-    @Test
-    void findMoviesPlayingNow() {
-        LOG.info("findMoviesPlayingNow");
-
-        Map<String, Object> movieMap = new HashMap<>();
-        Map<String, Object> results = new HashMap<>();
-
-        movieMap.put("id", "13");
-        movieMap.put("original_title", "Fantasía");
-
-        results.put("results", Arrays.asList(movieMap));
-        results.put("page", 1);
-        results.put("total_pages", 1);
-        results.put("total_results", 1);
-
-        try {
-            Mockito.when(tmdbService.getMoviesPlayingNow("ES", 1)).thenReturn(results);
-            Paginator<MovieDTO> paginator = movieService.getMoviesPlayingNow("ES", 1);
-
-            assertTrue(paginator.getResults() != null);
-            assertEquals("Fantasía", paginator.getResults().get(0).getOriginalTitle());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }

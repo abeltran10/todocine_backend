@@ -18,7 +18,8 @@ import java.util.Map;
 public class UsuarioMovieRepoImpl extends BaseRepoImpl implements UsuarioMovieRepo {
     private static final QUsuarioMovie usuarioMovie = QUsuarioMovie.usuarioMovie;
     @Override
-    public Paginator<UsuarioMovie> getUserMoviesByFilter(Long usuarioId, Map<String, String> filters, int limit, int offset) {
+    public Paginator<UsuarioMovie> getUserMoviesByFilter(Long usuarioId, Map<String, String> filters, String orderBy,
+                                                         int limit, int offset) {
         List<UsuarioMovie> resultList = new ArrayList<>();
         Paginator<UsuarioMovie> paginator = new Paginator<>();
         JPAQueryFactory queryFactory = new JPAQueryFactory(JPQLTemplates.DEFAULT, entityManager);
@@ -46,6 +47,11 @@ public class UsuarioMovieRepoImpl extends BaseRepoImpl implements UsuarioMovieRe
 
             q = q.where(usuarioMovie.voto.isNull());
         }
+
+        if (Constants.ORDER_TITULO.equalsIgnoreCase(orderBy))
+            q = q.orderBy(usuarioMovie.id.movie.title.asc());
+        else if (Constants.ORDER_ANYO.equalsIgnoreCase(orderBy))
+            q = q.orderBy(usuarioMovie.id.movie.releaseDate.asc());
 
         total = count.fetchOne();
         resultList = q.limit(limit).offset(offset).fetch();

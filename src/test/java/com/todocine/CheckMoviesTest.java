@@ -80,7 +80,7 @@ public class CheckMoviesTest {
         LOG.info("findMovieById");
 
         try {
-            mockMvc.perform(get("/movie/906126/detail")
+            mockMvc.perform(get("/movie/906126")
                      .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value("906126"));
@@ -94,7 +94,7 @@ public class CheckMoviesTest {
         LOG.info("findMovieByName");
 
         try {
-            mockMvc.perform(get("/movie/search?name=star wars&page=1")
+            mockMvc.perform(get("/movies?name=star wars&page=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.results").isNotEmpty());
@@ -109,7 +109,7 @@ public class CheckMoviesTest {
         LOG.info("findMoviesPlayingNow");
 
         try {
-            mockMvc.perform(get("/movie/now?region=ES&page=1")
+            mockMvc.perform(get("/movies?status=now&region=ES&page=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.results").isNotEmpty());

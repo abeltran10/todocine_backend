@@ -1,12 +1,14 @@
 package com.todocine.service.impl;
 
 
+import com.todocine.configuration.Constants;
 import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.MovieDetailDTO;
 import com.todocine.entities.*;
 import com.todocine.exceptions.BadGatewayException;
+import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,10 +83,18 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
     }
 
     @Override
-    public Paginator getMovieByName(String name, Integer pagina) throws NotFoudException, BadGatewayException {
+    public Paginator getMovies(Map<String, String> filters, Integer pagina) throws NotFoudException, BadRequestException, BadGatewayException {
+        Map<String, Object> map = new HashMap<>();
+
         try {
 
-            Map<String, Object> map = tmdbService.getMoviesByName(name, pagina);
+            if (!filters.get(MOVIE_NAME).isBlank()) {
+                map = tmdbService.getMoviesByName(filters.get(MOVIE_NAME), pagina);
+            } else if (!filters.get(MOVIE_STATUS).isBlank() && !filters.get(MOVIE_REGION).isBlank()) {
+                map = tmdbService.getMoviesPlayingNow(filters.get(MOVIE_REGION), pagina);
+            } else {
+                throw new BadRequestException(MOVIE_SEARCH_BADREQUEST);
+            }
 
             if (map.get("results") == null)
                 throw new NotFoudException(MOVIE_NOTFOUND);
@@ -100,32 +111,6 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                 return moviePage;
             }
 
-        } catch (IOException e) {
-            throw new BadGatewayException(TMDB_ERROR);
-        }
-
-    }
-
-    @Override
-    public Paginator getMoviesPlayingNow(String country, Integer pagina) throws NotFoudException, BadGatewayException {
-        try {
-
-            Map<String, Object> map = tmdbService.getMoviesPlayingNow(country, pagina);
-
-            if (map.get("results") == null)
-                throw new NotFoudException(CARTELERA_NOTFOUND);
-            else {
-                Paginator<MovieDTO> moviePage = new Paginator<>(map);
-                List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
-                        .map(MovieMapper::toDTO)
-                        .toList();
-
-                moviePage.setResults(results);
-
-                logger.info(moviePage.toString());
-
-                return moviePage;
-            }
         } catch (IOException e) {
             throw new BadGatewayException(TMDB_ERROR);
         }

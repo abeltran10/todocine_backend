@@ -15,8 +15,6 @@ public class Premio {
     @SequenceGenerator(name = "sequence_entity_generator", allocationSize = 1, sequenceName = "sequence_entity_generator")
     private Long id;
 
-    private Integer codigo;
-
     private String titulo;
 
     public Premio() {
@@ -27,9 +25,8 @@ public class Premio {
     }
 
 
-    public Premio(Long id, Integer codigo, String titulo) {
+    public Premio(Long id, String titulo) {
         this.id = id;
-        this.codigo = codigo;
         this.titulo = titulo;
     }
 
@@ -39,14 +36,6 @@ public class Premio {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
     }
 
     public String getTitulo() {

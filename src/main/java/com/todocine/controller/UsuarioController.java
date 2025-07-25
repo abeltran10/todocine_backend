@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/usuarios")
 public class UsuarioController {
     private Logger logger = LoggerFactory.getLogger(UsuarioController.class);
 
@@ -40,8 +40,8 @@ public class UsuarioController {
         return responseEntity;
     }
 
-    @GetMapping("/username/{username}")
-    public ResponseEntity<UsuarioDTO> getUsuarioByName(@NotBlank @PathVariable("username") String username) throws NotFoudException, BadRequestException {
+    @GetMapping
+    public ResponseEntity<UsuarioDTO> getUsuarios(@NotBlank @RequestParam("username") String username) throws NotFoudException, BadRequestException {
         logger.info("getUsuarioByName controller");
         ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.getUsuarioByName(username), HttpStatus.OK);
         return responseEntity;
@@ -60,17 +60,18 @@ public class UsuarioController {
         return responseEntity;
     }
 
-    @GetMapping("/{userId}/movie")
+    @GetMapping("/{userId}/movies")
     public ResponseEntity<Paginator<MovieDetailDTO>> getUsuarioMovies(@NotNull @PathVariable("userId") Long userId,
                                                                       @RequestParam("vista") String vista,
                                                                       @RequestParam("votada") String votada,
+                                                                      @RequestParam("orderBy") String orderBy,
                                                                       @RequestParam("page") Integer pagina)
             throws ForbiddenException, NotFoudException {
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.VISTA_FILTER, vista);
         filters.put(Constants.VOTADA_FILTER, votada);
 
-        ResponseEntity<Paginator<MovieDetailDTO>> responseEntity = new ResponseEntity<>(usuarioMovieService.getUsuarioMovies(userId, filters, pagina), HttpStatus.OK);
+        ResponseEntity<Paginator<MovieDetailDTO>> responseEntity = new ResponseEntity<>(usuarioMovieService.getUsuarioMovies(userId, filters, orderBy, pagina), HttpStatus.OK);
         return responseEntity;
     }
 

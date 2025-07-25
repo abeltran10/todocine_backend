@@ -102,7 +102,7 @@ public class CheckUserMovieUnitTest {
         Mockito.when(usuarioMovieDAO.findByIdUsuarioIdAndFavoritos(9876L, "S", pageable)).thenReturn(usuarioMovies);
         Mockito.when(movieDAO.findById(movie.getId())).thenReturn(Optional.of(movie));
 
-        Paginator<MovieDetailDTO> paginator = usuarioMovieService.getUsuarioMovies(usuarioDTO.getId(), null, 1);
+        Paginator<MovieDetailDTO> paginator = usuarioMovieService.getUsuarioMovies(usuarioDTO.getId(), null, null, 1);
         assertNotNull(paginator);
         assertEquals(1, paginator.getResults().size());
         assertEquals("906126", paginator.getResults().get(0).getId());

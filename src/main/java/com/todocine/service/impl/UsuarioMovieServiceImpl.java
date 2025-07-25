@@ -55,7 +55,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional(readOnly = true)
-    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, Integer page) throws ForbiddenException, NotFoudException {
+    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, String orderBy, Integer page) throws ForbiddenException, NotFoudException {
         int pagina = page - 1;
         Paginator<MovieDetailDTO> paginator = new Paginator<>();
         Paginator<UsuarioMovie> usuarioMoviePaginator = new Paginator<>();
@@ -63,7 +63,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
         if (getCurrentUserId().equals(userId)) {
 
-            usuarioMoviePaginator = usuarioMovieRepo.getUserMoviesByFilter(userId, filters, 21, (pagina) * 21);
+            usuarioMoviePaginator = usuarioMovieRepo.getUserMoviesByFilter(userId, filters, orderBy,21, (pagina) * 21);
 
             if (!usuarioMoviePaginator.getResults().isEmpty()) {
                 movieDetailDTOS = usuarioMoviePaginator.getResults().stream()
@@ -142,7 +142,6 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     }
 
-
     private void actualizarMediaVotos(Movie movieEntity, Double newVote, Double oldVoto) {
         Double total = movieEntity.getVotosMediaTC() * movieEntity.getTotalVotosTC();
         Double totalOld = total - oldVoto;
@@ -160,5 +159,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
         Double votosMedia = Math.round(((total + voto) / totalVotosTC) * 10.0) / 10.0;
         movieEntity.setVotosMediaTC(votosMedia);
     }
+
+
 
 }

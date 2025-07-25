@@ -1,1 +1,1 @@
-Insert into PREMIO (ID,CODIGO,TITULO) values ('1','1','Goya');
+Insert into PREMIO (ID, TITULO) values ('1', 'Goya');

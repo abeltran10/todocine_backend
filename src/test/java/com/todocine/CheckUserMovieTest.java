@@ -100,7 +100,7 @@ public class CheckUserMovieTest {
         LOG.info("findUserFavs");
 
         try {
-            mockMvc.perform(get("/usuario/" + usuario.getId() + "/movie?vista=&votada=&page=1")
+            mockMvc.perform(get("/usuarios/" + usuario.getId() + "/movies?vista=&votada=&page=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.results").isNotEmpty())
