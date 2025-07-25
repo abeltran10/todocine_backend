@@ -12,7 +12,7 @@ Todo Cine is an API REST developed with [Java and Springboot in backend](https:/
 application.properties loads properties from three files, one per environment (prod, dev, test) and Constants file is missing in order you can create it for your need
 
 ## Last release
-- [v5.1.1](https://github.com/abeltran10/todocine_backend/releases/tag/v5.1.2)
+- [v5.1.2](https://github.com/abeltran10/todocine_backend/releases/tag/v5.1.2)
 
 ## Install
 
