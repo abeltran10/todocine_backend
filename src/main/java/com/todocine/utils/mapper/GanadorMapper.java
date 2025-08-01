@@ -28,7 +28,6 @@ public class GanadorMapper {
         ganadorDTO.setTotalVotosTC(ganador.getId().getMovie().getTotalVotosTC());
         ganadorDTO.setVoteAverage(ganador.getId().getMovie().getVoteAverage());
         ganadorDTO.setVoteCount(ganador.getId().getMovie().getVoteCount());
-        ganadorDTO.setTotalVotosTC(ganador.getId().getMovie().getTotalVotosTC());
 
         return ganadorDTO;
     }
