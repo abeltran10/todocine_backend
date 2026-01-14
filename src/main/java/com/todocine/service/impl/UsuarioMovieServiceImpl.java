@@ -78,7 +78,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
             }
 
             if (movieDetailDTOS.isEmpty())
-                throw new NotFoudException(FAVORITOS_NOTFOUND);
+                return paginator;
 
             paginator.setTotalPages(usuarioMoviePaginator.getTotalPages());
             paginator.setTotalResults(usuarioMoviePaginator.getTotalResults());

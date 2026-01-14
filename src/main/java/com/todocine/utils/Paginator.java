@@ -26,6 +26,7 @@ public class Paginator<T> {
     private Integer totalResults;
 
     public Paginator() {
+        this.results = new ArrayList<>();
     }
 
     public Paginator(Integer page, List<T> results, Integer totalPages, Integer totalResults) {
