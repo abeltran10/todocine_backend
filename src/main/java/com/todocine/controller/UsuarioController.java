@@ -66,7 +66,7 @@ public class UsuarioController {
                                                                       @RequestParam("votada") String votada,
                                                                       @RequestParam("orderBy") String orderBy,
                                                                       @RequestParam("page") Integer pagina)
-            throws ForbiddenException, NotFoudException {
+            throws ForbiddenException {
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.VISTA_FILTER, vista);
         filters.put(Constants.VOTADA_FILTER, votada);

@@ -12,6 +12,6 @@ public interface MovieService {
 
     MovieDetailDTO getMovieDetailById(String id) throws NotFoudException, BadGatewayException;
 
-    Paginator getMovies(Map<String, String> filters, Integer pagina) throws NotFoudException, BadRequestException, BadGatewayException;
+    Paginator getMovies(Map<String, String> filters, Integer pagina) throws BadRequestException, BadGatewayException;
 
 }

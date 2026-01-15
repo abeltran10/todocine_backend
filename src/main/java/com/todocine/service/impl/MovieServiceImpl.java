@@ -83,9 +83,9 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
     }
 
     @Override
-    public Paginator getMovies(Map<String, String> filters, Integer pagina) throws NotFoudException, BadRequestException, BadGatewayException {
+    public Paginator getMovies(Map<String, String> filters, Integer pagina) throws BadRequestException, BadGatewayException {
         Map<String, Object> map = new HashMap<>();
-
+        Paginator<MovieDTO> moviePage = new Paginator<>();
         try {
 
             if (!filters.get(MOVIE_NAME).isBlank()) {
@@ -97,9 +97,9 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
             }
 
             if (map.get("results") == null)
-                throw new NotFoudException(MOVIE_NOTFOUND);
+                return moviePage;
             else {
-                Paginator<MovieDTO> moviePage = new Paginator<>(map);
+                moviePage = new Paginator<>(map);
                 List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
                         .map(MovieMapper::toDTO)
                         .toList();
