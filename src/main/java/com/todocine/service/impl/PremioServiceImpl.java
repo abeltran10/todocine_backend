@@ -61,25 +61,4 @@ public class PremioServiceImpl implements PremioService {
 
     }
 
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<PremioAnyoDTO> getPremioAnyos() throws NotFoudException {
-        Map<Long, PremioAnyoDTO> premioMap = new HashMap<>();
-        List<Object[]> obj = premioDAO.getPremiosAnyo();
-
-        if (obj != null && !obj.isEmpty()) {
-            for (Object[] row : obj) {
-              Long id = (Long) row[0];
-              String titulo = (String) row[1];
-              Integer anyo = ((BigDecimal) row[2]).intValue();
-
-              premioMap.computeIfAbsent(id, k-> new PremioAnyoDTO(id, titulo)).getAnyos().add(anyo);
-            }
-
-            return new ArrayList<>(premioMap.values());
-        } else {
-            throw new NotFoudException(PREMIOS_NOTFOUND);
-        }
-    }
 }
