@@ -25,3 +25,5 @@ Insert into CATEGORIA (ID,NOMBRE) values ('24','Guión adaptado');
 Insert into CATEGORIA (ID,NOMBRE) values ('25','Guión original');
 Insert into CATEGORIA (ID,NOMBRE) values ('26','Película europea');
 Insert into CATEGORIA (ID,NOMBRE) values ('27','Película documental');
+Insert into CATEGORIA (ID,NOMBRE) values ('28','Película de habla no inglesa');
+Insert into CATEGORIA (ID,NOMBRE) values ('29','Banda sonora');
