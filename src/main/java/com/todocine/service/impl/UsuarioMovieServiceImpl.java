@@ -55,7 +55,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional(readOnly = true)
-    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, String orderBy, Integer page) throws ForbiddenException, NotFoudException {
+    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, String orderBy, Integer page) throws ForbiddenException {
         int pagina = page - 1;
         Paginator<MovieDetailDTO> paginator = new Paginator<>();
         Paginator<UsuarioMovie> usuarioMoviePaginator = new Paginator<>();
@@ -78,7 +78,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
             }
 
             if (movieDetailDTOS.isEmpty())
-                throw new NotFoudException(FAVORITOS_NOTFOUND);
+                return paginator;
 
             paginator.setTotalPages(usuarioMoviePaginator.getTotalPages());
             paginator.setTotalResults(usuarioMoviePaginator.getTotalResults());
@@ -122,7 +122,13 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                  else if (usuarioMovieDTO.getVoto() != null && !usuarioMovieDTO.getVoto().equals(0.0D))
                     calcularMediaVotos(movie, usuarioMovieDTO.getVoto());
 
-                 usuarioMovie = UsuarioMovieMapper.toEntity(usuarioMovieDTO);
+                 if (usuarioMovie == null)
+                     usuarioMovie = UsuarioMovieMapper.toEntity(usuarioMovieDTO);
+                 else {
+                     usuarioMovie.setFavoritos(usuarioMovieDTO.getFavoritos() ? "S" : "N");
+                     usuarioMovie.setVista(usuarioMovieDTO.getVista() ? "S" : "N");
+                     usuarioMovie.setVoto(usuarioMovieDTO.getVoto() != null ? usuarioMovieDTO.getVoto() : usuarioMovie.getVoto());
+                 }
 
                  movieDAO.save(movie);
 
@@ -131,7 +137,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                  movieDTO.setVotosMediaTC(movie.getVotosMediaTC());
                  movieDTO.setTotalVotosTC(movie.getTotalVotosTC());
 
-                 return new MovieDetailDTO(movieDTO, usuarioMovieDTO.getFavoritos(), usuarioMovieDTO.getVoto(), usuarioMovieDTO.getVista());
+                 return new MovieDetailDTO(movieDTO, usuarioMovieDTO.getFavoritos(), usuarioMovie.getVoto(), usuarioMovieDTO.getVista());
 
             } catch (IOException ex) {
                 throw new BadGatewayException(TMDB_ERROR);

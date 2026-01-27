@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.todocine.configuration.Constants.*;
@@ -40,40 +42,41 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username);
 
-        Usuario usuario = usuarioDAO.findByUsername(username);
+        List<Usuario> usuario = usuarioDAO.findByUsername(username);
 
         if (usuario == null)
             throw new UsernameNotFoundException(USER_PASSWORD_ERROR);
         else
-            return usuario;
+            return usuario.get(0);
 
     }
 
 
     @Override
     @Transactional(readOnly = true)
-    public UsuarioDTO getUsuarioByName(String username) throws NotFoudException, BadRequestException {
+    public List<UsuarioDTO> getUsuarioByName(String username) throws BadRequestException {
         log.info("getUsuarioByName");
 
-        Usuario usuario = usuarioDAO.findByUsername(username);
+        List<UsuarioDTO> usuarioDTOS = new ArrayList<>();
 
-        if (usuario == null)
-            throw new NotFoudException(USER_NOTFOUND);
-        else if (!getCurrentUserId().equals(usuario.getId()))
+        List<Usuario> usuarios = usuarioDAO.findByUsername(username);
+
+        if (usuarios.isEmpty())
+            return usuarioDTOS;
+        else if (getCurrentUserId() == null)
             throw new BadRequestException(USER_FORBIDDEN);
         else {
-            UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
-
-            return usuarioDTO;
+            return usuarios.stream().map(UserMapper::toDTO).toList();
         }
     }
 
     @Override
     @Transactional
     public UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws BadRequestException {
-        Usuario usuario = usuarioDAO.findByUsername(usuarioDTO.getUsername());
+        Usuario usuario = null;
+        List<Usuario> usuarios = usuarioDAO.findByUsername(usuarioDTO.getUsername());
 
-        if (usuario == null) {
+        if (usuarios.isEmpty()) {
             usuario = new Usuario();
             usuario.setUsername(usuarioDTO.getUsername());
             usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));

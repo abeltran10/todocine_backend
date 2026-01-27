@@ -6,9 +6,11 @@ import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 public interface UsuarioService extends UserDetailsService {
 
-    UsuarioDTO getUsuarioByName (String username) throws NotFoudException, BadRequestException;
+    List<UsuarioDTO> getUsuarioByName (String username) throws BadRequestException;
 
     UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws BadRequestException;
 

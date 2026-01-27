@@ -30,10 +30,4 @@ public class PremioController {
         return responseEntity;
     }
 
-    @GetMapping
-    public ResponseEntity<List<PremioAnyoDTO>> getPremioAnyos() throws NotFoudException {
-        ResponseEntity<List<PremioAnyoDTO>> responseEntity = new ResponseEntity<>(premioService.getPremioAnyos(), HttpStatus.OK);
-
-        return responseEntity;
-    }
 }

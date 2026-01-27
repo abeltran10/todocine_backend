@@ -54,11 +54,12 @@ public class UsuarioMovieRepoImpl extends BaseRepoImpl implements UsuarioMovieRe
             q = q.orderBy(usuarioMovie.id.movie.releaseDate.asc());
 
         total = count.fetchOne();
+
         resultList = q.limit(limit).offset(offset).fetch();
 
         paginator.setResults(resultList);
-        paginator.setTotalResults((int)total);
-        paginator.setTotalPages((int) total / (limit + 1) + 1);
+        paginator.setTotalResults((int) total);
+        paginator.setTotalPages((int) Math.ceil(total/(double)limit));
 
         return paginator;
     }

@@ -1,8 +1,10 @@
 package com.todocine;
 
+import com.todocine.configuration.Constants;
 import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
+import com.todocine.dao.UsuarioMovieRepo;
 import com.todocine.dto.MovieDTO;
 import com.todocine.dto.MovieDetailDTO;
 import com.todocine.dto.UsuarioDTO;
@@ -31,10 +33,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
+import static com.todocine.configuration.Constants.MOVIE_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,10 +46,7 @@ public class CheckUserMovieUnitTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUserMovieUnitTest.class);
 
     @Mock
-    private UsuarioMovieDAO usuarioMovieDAO;
-
-    @Mock
-    private MovieDAO movieDAO;
+    private UsuarioMovieRepo usuarioMovieRepo;
 
     @Mock
     private UsuarioDAO usuarioDAO;
@@ -90,17 +88,16 @@ public class CheckUserMovieUnitTest {
         SecurityContextHolder.setContext(securityContext);
 
         Movie movie = MovieMapper.toEntity(movieDTO);
-        Pageable pageable = PageRequest.of(0, 21);
 
         UsuarioMovie usuarioMovie = new UsuarioMovie(new UserMovieId(new Usuario(usuarioDTO.getId()), movie));
         usuarioMovie.setVista("N");
         usuarioMovie.setFavoritos("S");
         usuarioMovie.setVoto(null);
 
-        Page<UsuarioMovie> usuarioMovies = new PageImpl<>(Arrays.asList(usuarioMovie));
+        Paginator<UsuarioMovie> usuarioMovies = new Paginator<>();
+        usuarioMovies.setResults(Arrays.asList(usuarioMovie));
 
-        Mockito.when(usuarioMovieDAO.findByIdUsuarioIdAndFavoritos(9876L, "S", pageable)).thenReturn(usuarioMovies);
-        Mockito.when(movieDAO.findById(movie.getId())).thenReturn(Optional.of(movie));
+        Mockito.when(usuarioMovieRepo.getUserMoviesByFilter(usuarioDTO.getId(), null, null,21, 0)).thenReturn(usuarioMovies);
 
         Paginator<MovieDetailDTO> paginator = usuarioMovieService.getUsuarioMovies(usuarioDTO.getId(), null, null, 1);
         assertNotNull(paginator);

@@ -12,6 +12,5 @@ import java.util.List;
 public interface PremioService {
 
     Paginator<GanadorDTO> getPremioByCodigoAnyo(Long id, Integer anyo, Integer page) throws NotFoudException;
-    List<PremioAnyoDTO> getPremioAnyos() throws NotFoudException;
 
 }

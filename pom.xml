@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.1</version>
+		<version>3.5.9</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.todocine</groupId>
@@ -67,18 +67,28 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.querydsl</groupId>
+			<groupId>jakarta.inject</groupId>
+			<artifactId>jakarta.inject-api</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.openfeign.querydsl</groupId>
 			<artifactId>querydsl-apt</artifactId>
-			<version>5.0.0</version>
+			<version>6.10.1</version>
 			<classifier>jakarta</classifier>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>com.querydsl</groupId>
+			<groupId>io.github.openfeign.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
-			<classifier>jakarta</classifier>
-			<version>5.0.0</version>
+			<version>6.10.1</version>
 		</dependency>
     </dependencies>
 	<profiles>
