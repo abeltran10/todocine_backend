@@ -24,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -73,10 +74,10 @@ public class CheckUsuarioUnitTest {
         // Setear el contexto de seguridad
         SecurityContextHolder.setContext(securityContext);
 
-        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuario);
+        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(List.of(usuario));
 
-        UsuarioDTO test = usuarioService.getUsuarioByName("test");
-        assertEquals(9876L, test.getId());
+        List<UsuarioDTO> test = usuarioService.getUsuarioByName("test");
+        assertEquals(9876L, test.get(0).getId());
     }
 
     @Test
@@ -85,7 +86,7 @@ public class CheckUsuarioUnitTest {
 
         Usuario usuario = UserMapper.toEntity(usuarioDTO);
         usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
-        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuario);
+        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(List.of(usuario));
 
         try {
             usuarioService.insertUsuario(usuarioDTO);

@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -41,9 +42,9 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<UsuarioDTO> getUsuarios(@NotBlank @RequestParam("username") String username) throws NotFoudException, BadRequestException {
+    public ResponseEntity<List<UsuarioDTO>> getUsuarios(@NotBlank @RequestParam("username") String username) throws BadRequestException {
         logger.info("getUsuarioByName controller");
-        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.getUsuarioByName(username), HttpStatus.OK);
+        ResponseEntity<List<UsuarioDTO>> responseEntity = new ResponseEntity<>(usuarioService.getUsuarioByName(username), HttpStatus.OK);
         return responseEntity;
     }
 
