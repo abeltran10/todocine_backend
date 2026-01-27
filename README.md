@@ -8,15 +8,15 @@ Todo Cine is a web app to manage movies from [TMDB](https://www.themoviedb.org/)
 
 Todo Cine is an API REST developed with [Java and Springboot in backend](https://github.com/abeltran10/todocine_backend) and there are two frontends one with [Javascript's react framework in frontend](https://github.com/abeltran10/todo_cine_frontend) and another with [Angular](https://github.com/abeltran10/todocine_front_angular). It's SQL database. I had to add hibernate-community-dialects in pom because my SQL server is no longer supported.
 
-
 application.properties loads properties from three files, one per environment (prod, dev, test) and Constants file is missing in order you can create it for your need
 
+
 ## Last release
-- [v5.1.2](https://github.com/abeltran10/todocine_backend/releases/tag/v5.1.2)
+- [v6.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.0)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v5.1.2) compressed file 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.0) compressed file 
 - Add application.properties and Constants.java files to project
 - Execute [mvn clean install] command and deploy .jar file generated in one server. [Heroku](https://heroku.com) is a free choice
 
