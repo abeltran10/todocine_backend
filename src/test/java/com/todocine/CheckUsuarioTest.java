@@ -88,7 +88,7 @@ public class CheckUsuarioTest {
             mockMvc.perform(get("/usuarios?username=test")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.id").value(usuario.getId()));
+                    .andExpect(jsonPath("$[0].id").value(usuario.getId()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
