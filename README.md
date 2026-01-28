@@ -12,11 +12,11 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v6.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.0)
+- [v6.0.1](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.1)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.0) compressed file 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.1) compressed file 
 - Add application.properties and Constants.java files to project
 - Execute [mvn clean install] command and deploy .jar file generated in one server. [Heroku](https://heroku.com) is a free choice
 
