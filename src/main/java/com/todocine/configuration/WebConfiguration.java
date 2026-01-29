@@ -15,10 +15,13 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -62,31 +65,60 @@ public class WebConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        logger.info(Arrays.stream(resources).collect(Collectors.toList()).toString());
-        logger.info(Arrays.stream(paths).collect(Collectors.toList()).toString());
+        AuthenticationConfiguration authenticationManagerConfiguration =
+                http.getSharedObject(AuthenticationConfiguration.class);
 
-        AuthenticationConfiguration authenticationManagerConfiguration = http.getSharedObject(AuthenticationConfiguration.class);
+        AuthenticationManager authenticationManager =
+                authenticationManager(authenticationManagerConfiguration);
 
-        http.cors(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(request -> request
+        http
+                //CORS primero
+                .cors(Customizer.withDefaults())
+
+                //JWT => sin CSRF ni sesión
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                //Manejo explícito del 401 (con CORS)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        })
+                )
+
+                //Autorización
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(resources).permitAll()
                         .requestMatchers(paths).permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(form -> form.loginPage("/")
-                        .loginProcessingUrl("/login")
-                        .failureUrl("/login?error=true"))
-                .logout(logout -> logout.logoutUrl("/logout")
-                        .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                }))
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(authenticationManagerConfiguration)))
-                .addFilter(new JWTAuthorisationFilter(authenticationManager(authenticationManagerConfiguration)));
+                        .anyRequest().authenticated()
+                )
+
+                //Nada de formLogin en JWT
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+
+                //Logout “dummy” (cliente borra el token)
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessHandler((request, response, authentication) ->
+                                response.setStatus(HttpServletResponse.SC_OK)
+                        )
+                )
+
+                //JWT filters con orden correcto
+                .addFilter(new JWTAuthenticationFilter(authenticationManager))
+                .addFilterBefore(
+                        new JWTAuthorisationFilter(authenticationManager),
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
-
     }
+
 
 
 }
