@@ -104,13 +104,12 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                  if (movieMap.get("id") == null)
                      throw new NotFoudException(MOVIE_NOTFOUND);
                  else {
-                     movie = movieDAO.findById(movieId).orElse(null);
                      movieDTO = MovieMapper.toDTO(movieMap);
 
-                     if (movie == null) {
-                        movie = MovieMapper.toEntity(movieDTO);
-                        movieDAO.save(movie);
-                     }
+                     movie = MovieMapper.toEntity(movieDTO);
+
+                     //update movie even it is already saved
+                     movieDAO.save(movie);
                  }
 
                  UserMovieId userMovieId = new UserMovieId(new Usuario(userId), movie);
