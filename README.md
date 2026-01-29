@@ -12,11 +12,11 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v6.0.2](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.2)
+- [v6.0.3](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.3)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.2) compressed file 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.3) compressed file 
 - Add application.properties and Constants.java files to project
 - Execute [mvn clean install] command and deploy .jar file generated in one server. [Heroku](https://heroku.com) is a free choice
 
@@ -25,9 +25,10 @@ App has been migrated to SQL database. NoSQL database was for learning purpose b
 
 ## Demo
 
-Demo v6.0.2 release
+Demo v6.0.3 release
 
-[TodoCine-Angular[v6.0.2].webm](https://github.com/user-attachments/assets/10731483-a346-42c1-ab7f-4c2f86b5112e)
+
+[TodoCine-Angular[v6.0.3].webm](https://github.com/user-attachments/assets/1abf2125-859e-49ce-bb11-f25f95a9d12a)
 
 
 
