@@ -57,9 +57,8 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                 Movie movie = movieDAO.findById(id).orElse(null);
 
                 if (movie != null) {
-                    MovieDTO movieDTO1 = MovieMapper.toDTO(movie);
-                    movieDTO.setVotosMediaTC(movieDTO1.getVotosMediaTC());
-                    movieDTO.setTotalVotosTC(movieDTO1.getTotalVotosTC());
+                    movieDTO.setVotosMediaTC(movie.getVotosMediaTC());
+                    movieDTO.setTotalVotosTC(movie.getTotalVotosTC());
                 }
 
                 UserMovieId userMovieId = new UserMovieId(new Usuario(getCurrentUserId()), MovieMapper.toEntity(movieDTO));
