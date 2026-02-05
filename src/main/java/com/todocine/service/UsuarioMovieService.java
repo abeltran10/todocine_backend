@@ -18,4 +18,6 @@ public interface UsuarioMovieService {
 
     public MovieDetailDTO updateUsuarioMovie(Long userId, String movieId, UsuarioMovieDTO usuarioMovieDTO)
             throws ForbiddenException, NotFoudException, BadGatewayException;
+
+    //public void deleteUsuarioMovie(Long userId, String movieId) throws ForbiddenException, NotFoudException;
 }
