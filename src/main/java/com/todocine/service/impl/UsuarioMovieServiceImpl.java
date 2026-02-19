@@ -93,7 +93,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional
-    public MovieDetailDTO updateUsuarioMovie(Long userId, String movieId, UsuarioMovieDTO usuarioMovieDTO) throws ForbiddenException, NotFoudException, BadGatewayException {
+    public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO) throws ForbiddenException, NotFoudException, BadGatewayException {
         if (getCurrentUserId().equals(userId)) {
             Movie movie = null;
             MovieDTO movieDTO = null;
@@ -167,7 +167,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     /*@Override
     @Transactional
-    public void deleteUsuarioMovie(Long userId, String movieId) throws ForbiddenException, NotFoudException {
+    public void deleteUsuarioMovie(Long userId, Long movieId) throws ForbiddenException, NotFoudException {
         if (getCurrentUserId().equals(userId)) {
             Usuario u = new Usuario(userId);
             Movie m = new Movie(movieId);

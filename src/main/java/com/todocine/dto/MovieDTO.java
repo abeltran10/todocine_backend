@@ -17,7 +17,7 @@ public class MovieDTO {
 
     @JsonProperty("id")
     @NotBlank
-    private String id;
+    private Long id;
 
     @JsonProperty("original_title")
     @NotBlank
@@ -72,11 +72,11 @@ public class MovieDTO {
     public MovieDTO() {
     }
 
-    public MovieDTO(String id) {
+    public MovieDTO(Long id) {
         this.id = id;
     }
 
-    public MovieDTO(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
+    public MovieDTO(Long id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
                     Double popularity, Integer voteCount, Double voteAverage, List<GenreDTO> genreDTOS, String originalLanguage,
                     List<VideoDTO> videoDTOS, Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
@@ -95,22 +95,22 @@ public class MovieDTO {
         this.votosMediaTC = votosMediaTC;
     }
 
-    public MovieDTO(String id, String originalTitle, String posterPath) {
+    public MovieDTO(Long id, String originalTitle, String posterPath) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.posterPath = posterPath;
     }
 
-    public MovieDTO(String id, String originalTitle) {
+    public MovieDTO(Long id, String originalTitle) {
         this.id = id;
         this.originalTitle = originalTitle;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

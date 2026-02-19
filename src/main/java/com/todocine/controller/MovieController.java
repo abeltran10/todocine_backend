@@ -44,7 +44,7 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieDetailDTO> getMovieDetailById(@NotBlank @PathVariable("id") String id) throws NotFoudException, BadGatewayException {
+    public ResponseEntity<MovieDetailDTO> getMovieDetailById(@NotBlank @PathVariable("id") Long id) throws NotFoudException, BadGatewayException {
         ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(movieService.getMovieDetailById(id), HttpStatus.OK);
         return responseEntity;
 

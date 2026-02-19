@@ -44,7 +44,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
 
     @Override
     @Transactional(readOnly = true)
-    public MovieDetailDTO getMovieDetailById(String id) throws NotFoudException, BadGatewayException {
+    public MovieDetailDTO getMovieDetailById(Long id) throws NotFoudException, BadGatewayException {
         Boolean favorito = false;
         Boolean vista = false;
         Double voto = null;
