@@ -9,6 +9,7 @@ import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieDetailDTO> getMovieDetailById(@NotBlank @PathVariable("id") Long id) throws NotFoudException, BadGatewayException {
+    public ResponseEntity<MovieDetailDTO> getMovieDetailById(@NotNull @PathVariable("id") Long id) throws NotFoudException, BadGatewayException {
         ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(movieService.getMovieDetailById(id), HttpStatus.OK);
         return responseEntity;
 

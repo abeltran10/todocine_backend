@@ -77,7 +77,7 @@ public class CheckMoviesUnitTest {
         SecurityContextHolder.setContext(securityContext);
 
         Map<String, Object> movieMap = new HashMap<>();
-        movieMap.put("id", "13");
+        movieMap.put("id", 13);
         movieMap.put("original_title", "Fantasía");
 
         try {
@@ -99,7 +99,7 @@ public class CheckMoviesUnitTest {
         Map<String, Object> movieMap = new HashMap<>();
         Map<String, Object> results = new HashMap<>();
 
-        movieMap.put("id", "13");
+        movieMap.put("id", 13);
         movieMap.put("original_title", "Fantasía");
 
         results.put("results", Arrays.asList(movieMap));

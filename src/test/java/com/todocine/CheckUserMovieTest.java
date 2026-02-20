@@ -77,7 +77,7 @@ public class CheckUserMovieTest {
 
         List<Usuario> usuarioList = Arrays.asList(usuario);
 
-        Movie movie = new Movie("906126", "La sociedad de la nieve"
+        Movie movie = new Movie(906126L, "La sociedad de la nieve"
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
                 , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
                 , 1284.858, 467, 8.158, "es",  0, 0D);

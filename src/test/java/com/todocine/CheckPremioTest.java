@@ -72,7 +72,7 @@ public class CheckPremioTest {
         Movie movie = null;
 
         try {
-            MovieDTO movieDTO = MovieMapper.toDTO(tmdbService.getMovieById("906126"));
+            MovieDTO movieDTO = MovieMapper.toDTO(tmdbService.getMovieById(906126L));
             movie = MovieMapper.toEntity(movieDTO);
             movieDAO.save(movie);
         } catch (IOException e) {

@@ -53,7 +53,7 @@ public class CheckPremioUnitarioTest {
 
     @BeforeAll
     static void setUp() {
-        Movie movie1 = new Movie("123");
+        Movie movie1 = new Movie(123L);
         movie1.setTitle("La sociedad de la nieve");
 
 
