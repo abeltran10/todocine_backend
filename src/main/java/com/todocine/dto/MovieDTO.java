@@ -16,7 +16,7 @@ public class MovieDTO {
 
 
     @JsonProperty("id")
-    @NotBlank
+    @NotNull
     private Long id;
 
     @JsonProperty("original_title")

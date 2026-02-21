@@ -25,7 +25,7 @@ public class UsuarioMovieController {
 
     @PutMapping("/{movieId}")
     public ResponseEntity<MovieDetailDTO> updateUsuarioMovie(@NotNull @PathVariable("userId") Long userId,
-                                                             @NotBlank @PathVariable("movieId") Long movieId,
+                                                             @NotNull @PathVariable("movieId") Long movieId,
                                                              @Valid @RequestBody UsuarioMovieDTO usuarioMovieDTO)
             throws NotFoudException, ForbiddenException, BadGatewayException {
         ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(usuarioMovieService.updateUsuarioMovie(userId,

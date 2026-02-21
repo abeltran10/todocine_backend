@@ -13,7 +13,7 @@ public class UsuarioMovieDTO {
     private Long usuarioId;
 
     @JsonProperty("movieId")
-    @NotBlank
+    @NotNull
     private Long movieId;
 
     @JsonProperty("favoritos")

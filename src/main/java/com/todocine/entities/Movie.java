@@ -21,7 +21,7 @@ public class Movie {
 
     private String posterPath;
 
-    @Column(length = 700)
+    @Column(length = 980)
     private String overview;
 
     private String releaseDate;
