@@ -35,7 +35,7 @@ public class UsuarioMovieController {
 
     /*@DeleteMapping("/{movieId}")
     public ResponseEntity<Void> deleteUsuarioMovie(@NotNull @PathVariable("userId") Long userId,
-                                               @NotBlank @PathVariable("movieId") Long movieId) throws NotFoudException,
+                                               @NotNull @PathVariable("movieId") Long movieId) throws NotFoudException,
             ForbiddenException {
 
             usuarioMovieService.deleteUsuarioMovie(userId, movieId);

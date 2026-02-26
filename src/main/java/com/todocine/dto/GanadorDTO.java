@@ -25,7 +25,7 @@ public class GanadorDTO {
     private Integer anyo;
 
     @JsonProperty("movieId")
-    @NotBlank
+    @NotNull
     private Long movieId;
 
     @JsonProperty("original_title")
