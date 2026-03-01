@@ -62,11 +62,9 @@ public class MovieDTO {
     private List<VideoDTO> videoDTOS;
 
     @JsonProperty("total_votos_TC")
-    @NotNull
     private Integer totalVotosTC;
 
     @JsonProperty("votos_media_TC")
-    @NotNull
     private Double votosMediaTC;
 
     public MovieDTO() {
