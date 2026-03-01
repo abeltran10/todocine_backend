@@ -84,6 +84,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
             usuario.setCredentialsNonExpired(true);
             usuario.setAccountNonLocked(true);
             usuario.setAccountNonExpired(true);
+            usuario.setRol("USUARIO");
 
             usuarioDAO.save(usuario);
 
@@ -119,13 +120,17 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
 
     @Override
-    public UsuarioDTO getUsuarioById(Long id) throws ForbiddenException {
+    public UsuarioDTO getUsuarioById(Long id) throws ForbiddenException, NotFoudException {
         if (getCurrentUserId().equals(id)) {
-            Usuario usuario = usuarioDAO.findById(id).get();
 
-            UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
+            try {
+                Usuario usuario = usuarioDAO.findById(id).get();
 
-            return usuarioDTO;
+                return UserMapper.toDTO(usuario);
+            } catch (NoSuchElementException ex) {
+                throw new NotFoudException(USER_NOTFOUND);
+            }
+
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
