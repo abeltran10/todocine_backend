@@ -25,11 +25,23 @@ public class UsuarioMovieController {
 
     @PutMapping("/{movieId}")
     public ResponseEntity<MovieDetailDTO> updateUsuarioMovie(@NotNull @PathVariable("userId") Long userId,
-                                                             @NotBlank @PathVariable("movieId") String movieId,
+                                                             @NotNull @PathVariable("movieId") Long movieId,
                                                              @Valid @RequestBody UsuarioMovieDTO usuarioMovieDTO)
             throws NotFoudException, ForbiddenException, BadGatewayException {
-        ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(usuarioMovieService.updateUsuarioMovie(userId, movieId, usuarioMovieDTO), HttpStatus.OK);
+        ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(usuarioMovieService.updateUsuarioMovie(userId,
+                movieId, usuarioMovieDTO), HttpStatus.OK);
         return responseEntity;
     }
+
+    /*@DeleteMapping("/{movieId}")
+    public ResponseEntity<Void> deleteUsuarioMovie(@NotNull @PathVariable("userId") Long userId,
+                                               @NotNull @PathVariable("movieId") Long movieId) throws NotFoudException,
+            ForbiddenException {
+
+            usuarioMovieService.deleteUsuarioMovie(userId, movieId);
+
+            ResponseEntity<Void> responseEntity = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return responseEntity;
+    }*/
 
 }

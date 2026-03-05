@@ -16,6 +16,8 @@ public interface UsuarioMovieService {
     public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String, String> filters, String orderBy, Integer page)
             throws ForbiddenException;
 
-    public MovieDetailDTO updateUsuarioMovie(Long userId, String movieId, UsuarioMovieDTO usuarioMovieDTO)
+    public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO)
             throws ForbiddenException, NotFoudException, BadGatewayException;
+
+    //public void deleteUsuarioMovie(Long userId, Long movieId) throws ForbiddenException, NotFoudException;
 }

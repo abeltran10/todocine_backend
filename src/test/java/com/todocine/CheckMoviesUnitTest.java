@@ -58,7 +58,7 @@ public class CheckMoviesUnitTest {
     static void setUp() {
         LOG.info("setUp");
 
-        movieDTO = new MovieDTO("13", "Fantasía");
+        movieDTO = new MovieDTO(13L, "Fantasía");
 
     }
 
@@ -77,15 +77,15 @@ public class CheckMoviesUnitTest {
         SecurityContextHolder.setContext(securityContext);
 
         Map<String, Object> movieMap = new HashMap<>();
-        movieMap.put("id", "13");
+        movieMap.put("id", 13);
         movieMap.put("original_title", "Fantasía");
 
         try {
-            Mockito.when(tmdbService.getMovieById("13")).thenReturn(movieMap);
-            Mockito.when(movieDAO.findById("13")).thenReturn(Optional.empty());
-            MovieDetailDTO movieDetailDTO = movieService.getMovieDetailById("13");
+            Mockito.when(tmdbService.getMovieById(13L)).thenReturn(movieMap);
+            Mockito.when(movieDAO.findById(13L)).thenReturn(Optional.empty());
+            MovieDetailDTO movieDetailDTO = movieService.getMovieDetailById(13L);
 
-            assertEquals("13", movieDetailDTO.getId());
+            assertEquals(13L, movieDetailDTO.getId());
             assertEquals("Fantasía", movieDetailDTO.getOriginalTitle());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -99,7 +99,7 @@ public class CheckMoviesUnitTest {
         Map<String, Object> movieMap = new HashMap<>();
         Map<String, Object> results = new HashMap<>();
 
-        movieMap.put("id", "13");
+        movieMap.put("id", 13);
         movieMap.put("original_title", "Fantasía");
 
         results.put("results", Arrays.asList(movieMap));

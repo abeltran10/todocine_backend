@@ -16,5 +16,5 @@ public interface UsuarioService extends UserDetailsService {
 
     UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException, ForbiddenException;
 
-    UsuarioDTO getUsuarioById(Long id) throws ForbiddenException;
+    UsuarioDTO getUsuarioById(Long id) throws ForbiddenException, NotFoudException;
 }

@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.todocine.configuration.Constants.*;
 
@@ -68,7 +69,7 @@ public class JWTAuthorisationFilter extends BasicAuthenticationFilter {
                 Usuario usuario = UserMapper.toEntity(usuarioDTO);
 
                 if (usuario != null) {
-                    return new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), new ArrayList<>());
+                    return new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities());
                 }
             } catch (JsonProcessingException e) {
                 throw new JWTVerificationException(e.getMessage());

@@ -66,11 +66,11 @@ public class CheckMoviesTest {
         usuario = new Usuario("test", "1234");
         usuarioDAO.save(usuario);
         try {
-            MovieDTO movieDTO = MovieMapper.toDTO(tmdbService.getMovieById("906126"));
+            MovieDTO movieDTO = MovieMapper.toDTO(tmdbService.getMovieById(906126L));
             Movie movie = MovieMapper.toEntity(movieDTO);
             movieDAO.save(movie);
 
-            LOG.info(movie.getId());
+            LOG.info(String.valueOf(movie.getId()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

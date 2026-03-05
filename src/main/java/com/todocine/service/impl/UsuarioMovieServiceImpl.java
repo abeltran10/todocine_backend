@@ -77,13 +77,12 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                         }).toList();
             }
 
-            if (movieDetailDTOS.isEmpty())
-                return paginator;
-
-            paginator.setTotalPages(usuarioMoviePaginator.getTotalPages());
-            paginator.setTotalResults(usuarioMoviePaginator.getTotalResults());
-            paginator.setPage(page);
-            paginator.setResults(movieDetailDTOS);
+            if (!movieDetailDTOS.isEmpty()) {
+                paginator.setTotalPages(usuarioMoviePaginator.getTotalPages());
+                paginator.setTotalResults(usuarioMoviePaginator.getTotalResults());
+                paginator.setPage(page);
+                paginator.setResults(movieDetailDTOS);
+            }
 
             return paginator;
 
@@ -94,7 +93,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional
-    public MovieDetailDTO updateUsuarioMovie(Long userId, String movieId, UsuarioMovieDTO usuarioMovieDTO) throws ForbiddenException, NotFoudException, BadGatewayException {
+    public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO) throws ForbiddenException, NotFoudException, BadGatewayException {
         if (getCurrentUserId().equals(userId)) {
             Movie movie = null;
             MovieDTO movieDTO = null;
@@ -166,6 +165,23 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
         movieEntity.setVotosMediaTC(votosMedia);
     }
 
+    /*@Override
+    @Transactional
+    public void deleteUsuarioMovie(Long userId, Long movieId) throws ForbiddenException, NotFoudException {
+        if (getCurrentUserId().equals(userId)) {
+            Usuario u = new Usuario(userId);
+            Movie m = new Movie(movieId);
 
+            UsuarioMovie usuarioMovie = usuarioMovieDAO.findById(new UserMovieId(u, m)).orElse(null);
+
+            if (usuarioMovie != null) {
+                usuarioMovieDAO.delete(usuarioMovie);
+            } else {
+                throw new NotFoudException(FAVORITOS_NOTFOUND);
+            }
+        } else {
+            throw new ForbiddenException(USER_FORBIDDEN);
+        }
+    }*/
 
 }

@@ -44,7 +44,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
 
     @Override
     @Transactional(readOnly = true)
-    public MovieDetailDTO getMovieDetailById(String id) throws NotFoudException, BadGatewayException {
+    public MovieDetailDTO getMovieDetailById(Long id) throws NotFoudException, BadGatewayException {
         Boolean favorito = false;
         Boolean vista = false;
         Double voto = null;
@@ -57,9 +57,8 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                 Movie movie = movieDAO.findById(id).orElse(null);
 
                 if (movie != null) {
-                    MovieDTO movieDTO1 = MovieMapper.toDTO(movie);
-                    movieDTO.setVotosMediaTC(movieDTO1.getVotosMediaTC());
-                    movieDTO.setTotalVotosTC(movieDTO1.getTotalVotosTC());
+                    movieDTO.setVotosMediaTC(movie.getVotosMediaTC());
+                    movieDTO.setTotalVotosTC(movie.getTotalVotosTC());
                 }
 
                 UserMovieId userMovieId = new UserMovieId(new Usuario(getCurrentUserId()), MovieMapper.toEntity(movieDTO));
@@ -96,9 +95,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                 throw new BadRequestException(MOVIE_SEARCH_BADREQUEST);
             }
 
-            if (map.get("results") == null)
-                return moviePage;
-            else {
+            if (map.get("results") != null) {
                 moviePage = new Paginator<>(map);
                 List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
                         .map(MovieMapper::toDTO)
@@ -107,9 +104,9 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                 moviePage.setResults(results);
 
                 logger.info(moviePage.toString());
-
-                return moviePage;
             }
+
+            return moviePage;
 
         } catch (IOException e) {
             throw new BadGatewayException(TMDB_ERROR);

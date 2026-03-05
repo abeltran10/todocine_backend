@@ -25,8 +25,8 @@ public class GanadorDTO {
     private Integer anyo;
 
     @JsonProperty("movieId")
-    @NotBlank
-    private String movieId;
+    @NotNull
+    private Long movieId;
 
     @JsonProperty("original_title")
     @NotBlank
@@ -114,11 +114,11 @@ public class GanadorDTO {
         this.anyo = anyo;
     }
 
-    public String getMovieId() {
+    public Long getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(String movieId) {
+    public void setMovieId(Long movieId) {
         this.movieId = movieId;
     }
 

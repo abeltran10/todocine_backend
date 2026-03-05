@@ -11,6 +11,4 @@ import org.springframework.data.repository.query.Param;
 
 public interface UsuarioMovieDAO extends JpaRepository<UsuarioMovie, UserMovieId> {
 
-    Page<UsuarioMovie> findByIdUsuarioIdAndFavoritos(Long usuarioId, String favoritos, Pageable pageable);
-
 }

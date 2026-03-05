@@ -65,7 +65,7 @@ public class CheckUserMovieUnitTest {
         usuarioDTO = new UsuarioDTO("test", "1234");
         usuarioDTO.setId(9876L);
 
-        movieDTO = new MovieDTO("906126","La sociedad de la nieve"
+        movieDTO = new MovieDTO(906126L,"La sociedad de la nieve"
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
                 , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
                 , 1284.858, 467, 8.158, new ArrayList<>(), "es"
@@ -102,7 +102,7 @@ public class CheckUserMovieUnitTest {
         Paginator<MovieDetailDTO> paginator = usuarioMovieService.getUsuarioMovies(usuarioDTO.getId(), null, null, 1);
         assertNotNull(paginator);
         assertEquals(1, paginator.getResults().size());
-        assertEquals("906126", paginator.getResults().get(0).getId());
+        assertEquals(906126L, paginator.getResults().get(0).getId());
     }
 
 }

@@ -71,6 +71,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(Algorithm.HMAC256(SUPER_SECRET_KEY));
 
         response.addHeader(HEADER_AUTHORIZACION_KEY, TOKEN_BEARER_PREFIX + " " + token);
+
         response.getWriter().write(mapper.writeValueAsString(usuarioDTO));
         response.getWriter().flush();
 

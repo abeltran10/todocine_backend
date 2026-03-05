@@ -24,7 +24,7 @@ public class TMDBServiceImpl implements TMDBService {
 
 
     @Override
-    public Map<String, Object> getMovieById(String id) throws IOException {
+    public Map<String, Object> getMovieById(Long id) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 

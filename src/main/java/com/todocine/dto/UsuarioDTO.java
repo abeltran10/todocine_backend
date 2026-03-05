@@ -33,6 +33,8 @@ public class UsuarioDTO {
     @JsonIgnore
     private Boolean enabled;
 
+    private String rol;
+
     public UsuarioDTO() {
     }
 
@@ -56,7 +58,7 @@ public class UsuarioDTO {
     }
 
     public UsuarioDTO(Long id, String username, String password, Boolean accountNonExpired,
-                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled) {
+                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, String rol) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -64,6 +66,7 @@ public class UsuarioDTO {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
+        this.rol = rol;
 
     }
 
@@ -135,6 +138,14 @@ public class UsuarioDTO {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
     @Override

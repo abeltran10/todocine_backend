@@ -1,10 +1,8 @@
 package com.todocine;
 
-import com.todocine.controller.PremioController;
 import com.todocine.dao.*;
 import com.todocine.dto.MovieDTO;
 import com.todocine.entities.*;
-import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.mapper.MovieMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,8 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CheckPremioTest {
-    public static Logger LOG = LoggerFactory.getLogger(CheckPremioTest.class);
+public class CheckGanadorTest {
+    public static Logger LOG = LoggerFactory.getLogger(CheckGanadorTest.class);
 
     @Autowired
     private PremioDAO premioDAO;
@@ -72,7 +70,7 @@ public class CheckPremioTest {
         Movie movie = null;
 
         try {
-            MovieDTO movieDTO = MovieMapper.toDTO(tmdbService.getMovieById("906126"));
+            MovieDTO movieDTO = MovieMapper.toDTO(tmdbService.getMovieById(906126L));
             movie = MovieMapper.toEntity(movieDTO);
             movieDAO.save(movie);
         } catch (IOException e) {
@@ -105,7 +103,7 @@ public class CheckPremioTest {
     void getPremioById() {
 
         try {
-            mockMvc.perform(get("/premios/" + premioId +"/anyos/2024?pagina=1")
+            mockMvc.perform(get("/ganadores/" + premioId +"/anyos/2024?pagina=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.results[0].title").value("La sociedad de la nieve"));
@@ -117,7 +115,7 @@ public class CheckPremioTest {
     @Test
     void getPremioByCodigoException() {
         try {
-            mockMvc.perform(get("/premios/0/anyos/2023?pagina=1")
+            mockMvc.perform(get("/ganadores/0/anyos/2023?pagina=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isNotFound());
         } catch (Exception e) {

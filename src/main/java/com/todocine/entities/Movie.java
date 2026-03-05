@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class Movie {
 
     @Id
-    private String id;
+    private Long id;
 
     private String originalTitle;
 
@@ -21,7 +21,7 @@ public class Movie {
 
     private String posterPath;
 
-    @Column(length = 700)
+    @Column(length = 980)
     private String overview;
 
     private String releaseDate;
@@ -41,11 +41,11 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String id) {
+    public Movie(Long id) {
         this.id = id;
     }
 
-    public Movie(String id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
+    public Movie(Long id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
                  Double popularity, Integer voteCount, Double voteAverage, String originalLanguage,
                  Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
@@ -62,11 +62,11 @@ public class Movie {
         this.votosMediaTC = votosMediaTC;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
