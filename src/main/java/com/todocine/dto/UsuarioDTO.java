@@ -33,7 +33,6 @@ public class UsuarioDTO {
     @JsonIgnore
     private Boolean enabled;
 
-    @NotBlank
     private String rol;
 
     public UsuarioDTO() {
