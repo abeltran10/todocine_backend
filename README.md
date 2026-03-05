@@ -12,7 +12,7 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v6.0.3](https://github.com/abeltran10/todocine_backend/releases/tag/v6.1.0)
+- [v6.1.0](https://github.com/abeltran10/todocine_backend/releases/tag/v6.1.0)
 
 ## Install
 
