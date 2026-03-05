@@ -8,14 +8,16 @@ import com.todocine.entities.Categoria;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CategoriaDTO {
 
-    @JsonIgnore
     private Long id;
 
 
     @JsonProperty("nombre")
     private String nombre;
 
-    public CategoriaDTO(Long id, Long premioId, String nombre) {
+    public CategoriaDTO() {
+    }
+
+    public CategoriaDTO(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
 

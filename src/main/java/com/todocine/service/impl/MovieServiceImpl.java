@@ -113,20 +113,5 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
         }
     }
 
-    @Override
-    @Transactional
-    public MovieDTO insertMovie(MovieDTO movieDTO) throws BadRequestException {
-       Movie movie = movieDAO.findById(movieDTO.getId()).orElse(null);
-
-       if (movie == null) {
-           movie = MovieMapper.toEntity(movieDTO);
-           movieDAO.save(movie);
-       } else {
-           throw new BadRequestException(MOVIE_EXISTS);
-       }
-
-       return movieDTO;
-    }
-
 }
 

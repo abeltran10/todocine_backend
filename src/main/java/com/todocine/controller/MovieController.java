@@ -53,13 +53,4 @@ public class MovieController {
 
     }
 
-    @PostMapping
-    @PreAuthorize("ADMIN")
-    public ResponseEntity<MovieDTO> insertMovie(@Valid @RequestBody MovieDTO movieDTO) {
-        ResponseEntity<MovieDTO> responseEntity = new ResponseEntity<>(movieService.insertMovie(movieDTO), HttpStatus.CREATED);
-
-        return responseEntity;
-    }
-
-
 }

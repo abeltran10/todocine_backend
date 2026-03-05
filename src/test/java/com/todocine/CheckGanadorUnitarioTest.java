@@ -6,7 +6,7 @@ import com.todocine.dao.PremioDAO;
 import com.todocine.dto.GanadorDTO;
 import com.todocine.dto.PremioDTO;
 import com.todocine.entities.*;
-import com.todocine.service.impl.PremioServiceImpl;
+import com.todocine.service.impl.GanadorServiceImpl;
 import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.PremioMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,9 +34,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CheckPremioUnitarioTest {
+public class CheckGanadorUnitarioTest {
 
-    public static Logger LOG = LoggerFactory.getLogger(CheckPremioUnitarioTest.class);
+    public static Logger LOG = LoggerFactory.getLogger(CheckGanadorUnitarioTest.class);
 
     @Mock
     PremioDAO premioDAO;
@@ -45,7 +45,7 @@ public class CheckPremioUnitarioTest {
     GanadorDAO ganadorDAO;
 
     @InjectMocks
-    PremioServiceImpl premioService;
+    GanadorServiceImpl premioService;
 
     static Premio premio;
 
@@ -85,7 +85,7 @@ public class CheckPremioUnitarioTest {
 
         Mockito.when(ganadorDAO.findByIdPremioIdAndIdAnyo(1L,2024, pageable)).thenReturn(page);
 
-        Paginator<GanadorDTO> ganadores = premioService.getPremioByCodigoAnyo(1L, 2024, 1);
+        Paginator<GanadorDTO> ganadores = premioService.getGanadoresByPremioIdAnyo(1L, 2024, 1);
 
         assertEquals("Mejor Director", ganadores.getResults().get(0).getCategoria());
     }

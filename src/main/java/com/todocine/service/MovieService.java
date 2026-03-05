@@ -16,5 +16,4 @@ public interface MovieService {
 
     Paginator getMovies(Map<String, String> filters, Integer pagina) throws BadRequestException, BadGatewayException;
 
-    MovieDTO insertMovie(MovieDTO movieDTO) throws BadRequestException;
 }
