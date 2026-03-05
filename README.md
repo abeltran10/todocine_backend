@@ -12,23 +12,20 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v6.0.3](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.3)
+- [v6.0.3](https://github.com/abeltran10/todocine_backend/releases/tag/v6.1.0)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.0.3) compressed file. 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.1.0) compressed file. 
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## Notes
-App has been migrated to SQL database. NoSQL database was for learning purpose but now I use SQL because it makes more sense.
-
 ## Demo
 
-Demo v6.0.3 release
+Demo v6.1.0 release
 
+[TodoCine-Angular[v6.1.0].webm](https://github.com/user-attachments/assets/14ba5b37-85af-4e68-a30a-d3b8c93e9754)
 
-[TodoCine-Angular[v6.0.3].webm](https://github.com/user-attachments/assets/1abf2125-859e-49ce-bb11-f25f95a9d12a)
 
 
 
