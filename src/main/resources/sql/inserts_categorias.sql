@@ -27,4 +27,4 @@ INSERT INTO CATEGORIA (ID, NOMBRE) VALUES (26, 'Película europea');
 INSERT INTO CATEGORIA (ID, NOMBRE) VALUES (27, 'Película documental');
 INSERT INTO CATEGORIA (ID, NOMBRE) VALUES (28, 'Película de habla no inglesa');
 INSERT INTO CATEGORIA (ID, NOMBRE) VALUES (29, 'Banda sonora');
-INSERT INTO CATEGORIA (ID,NOMBRE) values (30,'Canción original');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (30,  'Canción original');
