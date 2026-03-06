@@ -3,7 +3,7 @@ package com.todocine;
 
 import com.todocine.dao.GanadorDAO;
 import com.todocine.dao.PremioDAO;
-import com.todocine.dto.GanadorDTO;
+import com.todocine.dto.GanadorDetailDTO;
 import com.todocine.dto.PremioDTO;
 import com.todocine.entities.*;
 import com.todocine.service.impl.GanadorServiceImpl;
@@ -78,14 +78,14 @@ public class CheckGanadorUnitarioTest {
 
         PremioDTO premioDTO = PremioMapper.toDTO(premio);
 
-        Paginator<GanadorDTO> paginator = new Paginator<>();
+        Paginator<GanadorDetailDTO> paginator = new Paginator<>();
         Pageable pageable = PageRequest.of(0, 21);
         Page<Ganador> page = new PageImpl<>(Arrays.asList(ganador));
 
 
         Mockito.when(ganadorDAO.findByIdPremioIdAndIdAnyo(1L,2024, pageable)).thenReturn(page);
 
-        Paginator<GanadorDTO> ganadores = premioService.getGanadoresByPremioIdAnyo(1L, 2024, 1);
+        Paginator<GanadorDetailDTO> ganadores = premioService.getGanadoresByPremioIdAnyo(1L, 2024, 1);
 
         assertEquals("Mejor Director", ganadores.getResults().get(0).getCategoria());
     }
