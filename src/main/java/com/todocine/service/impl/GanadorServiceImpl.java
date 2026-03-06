@@ -1,8 +1,9 @@
 package com.todocine.service.impl;
 
+import com.todocine.dao.CategoriaDAO;
 import com.todocine.dao.GanadorDAO;
 import com.todocine.dao.MovieDAO;
-import com.todocine.dto.GanadorDetailDTO;
+import com.todocine.dao.PremioDAO;
 import com.todocine.dto.GanadorDTO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.entities.*;
@@ -38,17 +39,23 @@ public class GanadorServiceImpl implements GanadorService {
     @Autowired
     private MovieDAO movieDAO;
 
+    @Autowired
+    private PremioDAO premioDAO;
+
+    @Autowired
+    private CategoriaDAO categoriaDAO;
+
     @Override
     @Transactional(readOnly = true)
-    public Paginator<GanadorDetailDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page) throws NotFoudException {
-        Paginator<GanadorDetailDTO> paginator = new Paginator<>();
+    public Paginator<GanadorDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page) throws NotFoudException {
+        Paginator<GanadorDTO> paginator = new Paginator<>();
         Pageable pageable = PageRequest.of(page - 1, 21);
 
         Page<Ganador> ganadores = ganadorDAO.findByIdPremioIdAndIdAnyo(id, anyo, pageable);
 
         if (ganadores.hasContent()) {
-                List<GanadorDetailDTO> ganadoresDTOs = ganadores.getContent().stream()
-                        .map(GanadorDetailDTO::new)
+                List<GanadorDTO> ganadoresDTOs = ganadores.getContent().stream()
+                        .map(GanadorMapper::toDTO)
                         .toList();
 
                 paginator.setPage(page);
@@ -69,8 +76,8 @@ public class GanadorServiceImpl implements GanadorService {
         Ganador ganador = null;
         MovieDTO movieDTO = null;
         Movie movie = null;
-
         GanadorId ganadorId = new GanadorId();
+
         ganadorId.setPremio(new Premio(ganadorDTO.getPremioId()));
         ganadorId.setCategoria(new Categoria(ganadorDTO.getCategoriaId()));
         ganadorId.setAnyo(ganadorDTO.getAnyo());
@@ -79,6 +86,19 @@ public class GanadorServiceImpl implements GanadorService {
         ganador = ganadorDAO.findById(ganadorId).orElse(null);
 
         if (ganador == null) {
+
+            Premio premio = premioDAO.findById(ganadorDTO.getPremioId()).orElse(null);
+
+            if (premio == null) {
+                throw new NotFoudException(PREMIO_NOTFOUND);
+            }
+
+            Categoria categoria = categoriaDAO.findById(ganadorDTO.getCategoriaId()).orElse(null);
+
+            if (categoria == null) {
+                throw new NotFoudException(CARTELERA_NOTFOUND);
+            }
+
             movie = movieDAO.findById(ganadorDTO.getMovieId()).orElse(null);
 
             if (movie == null) {
@@ -97,7 +117,12 @@ public class GanadorServiceImpl implements GanadorService {
                 }
             }
 
+            ganadorId.setPremio(premio);
+            ganadorId.setCategoria(categoria);
+            ganadorId.setMovie(movie);
+
             ganador = new Ganador();
+
             ganador.setId(ganadorId);
 
             ganadorDAO.save(ganador);

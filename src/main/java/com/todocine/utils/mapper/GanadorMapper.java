@@ -1,11 +1,9 @@
 package com.todocine.utils.mapper;
 
 import com.todocine.dto.GanadorDTO;
-import com.todocine.dto.GanadorDetailDTO;
 import com.todocine.entities.Ganador;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GanadorMapper {
 
@@ -13,9 +11,23 @@ public class GanadorMapper {
         GanadorDTO ganadorDTO = new GanadorDTO();
 
         ganadorDTO.setPremioId(ganador.getId().getPremio().getId());
+        ganadorDTO.setPremio(ganador.getId().getPremio().getTitulo());
         ganadorDTO.setCategoriaId(ganador.getId().getCategoria().getId());
+        ganadorDTO.setCategoria(ganador.getId().getCategoria().getNombre());
         ganadorDTO.setAnyo(ganador.getId().getAnyo());
         ganadorDTO.setMovieId(ganador.getId().getMovie().getId());
+        ganadorDTO.setOriginalLanguage(ganador.getId().getMovie().getOriginalLanguage());
+        ganadorDTO.setOriginalTitle(ganador.getId().getMovie().getOriginalTitle());
+        ganadorDTO.setTitle(ganador.getId().getMovie().getTitle());
+        ganadorDTO.setGenreDTOS(new ArrayList<>());
+        ganadorDTO.setVideoDTOS(new ArrayList<>());
+        ganadorDTO.setOverview(ganador.getId().getMovie().getOverview());
+        ganadorDTO.setPopularity(ganador.getId().getMovie().getPopularity());
+        ganadorDTO.setPosterPath(ganador.getId().getMovie().getPosterPath());
+        ganadorDTO.setReleaseDate(ganador.getId().getMovie().getReleaseDate());
+        ganadorDTO.setTotalVotosTC(ganador.getId().getMovie().getTotalVotosTC());
+        ganadorDTO.setVoteAverage(ganador.getId().getMovie().getVoteAverage());
+        ganadorDTO.setVoteCount(ganador.getId().getMovie().getVoteCount());
 
         return ganadorDTO;
     }
