@@ -2,6 +2,7 @@ package com.todocine.controller;
 
 import com.todocine.dto.GanadorDetailDTO;
 import com.todocine.dto.GanadorDTO;
+import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.GanadorService;
@@ -33,7 +34,8 @@ public class GanadorController {
 
     @PostMapping
     @PreAuthorize("ADMIN")
-    public ResponseEntity<GanadorDTO> insertGanador(@Valid @RequestBody GanadorDTO ganadorDTO) throws BadRequestException {
+    public ResponseEntity<GanadorDTO> insertGanador(@Valid @RequestBody GanadorDTO ganadorDTO) throws BadRequestException,
+            NotFoudException, BadGatewayException {
         ResponseEntity<GanadorDTO> responseEntity = new ResponseEntity<>(ganadorService.insertGanador(ganadorDTO), HttpStatus.CREATED);
 
         return responseEntity;

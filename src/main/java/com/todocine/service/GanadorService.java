@@ -12,5 +12,5 @@ public interface GanadorService {
 
     Paginator<GanadorDetailDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page) throws NotFoudException;
 
-    GanadorDTO insertGanador(GanadorDTO ganadorDTO) throws BadRequestException, BadGatewayException;
+    GanadorDTO insertGanador(GanadorDTO ganadorDTO) throws BadRequestException, NotFoudException, BadGatewayException;
 }

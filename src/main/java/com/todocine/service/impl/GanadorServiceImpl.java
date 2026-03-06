@@ -65,7 +65,7 @@ public class GanadorServiceImpl implements GanadorService {
 
     @Override
     @Transactional
-    public GanadorDTO insertGanador(GanadorDTO ganadorDTO) throws BadRequestException, BadGatewayException {
+    public GanadorDTO insertGanador(GanadorDTO ganadorDTO) throws BadRequestException, NotFoudException, BadGatewayException {
         Ganador ganador = null;
         MovieDTO movieDTO = null;
         Movie movie = null;
@@ -84,6 +84,10 @@ public class GanadorServiceImpl implements GanadorService {
             if (movie == null) {
                 try {
                     Map<String, Object> map = tmdbService.getMovieById(ganadorDTO.getMovieId());
+
+                    if (map.get("id") == null)
+                        throw new NotFoudException(MOVIE_NOTFOUND);
+
                     movieDTO = MovieMapper.toDTO(map);
                     movie = MovieMapper.toEntity(movieDTO);
 
