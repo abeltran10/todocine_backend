@@ -47,8 +47,6 @@ public class CheckGanadorUnitarioTest {
     @InjectMocks
     GanadorServiceImpl premioService;
 
-    static Premio premio;
-
     static Ganador ganador;
 
     @BeforeAll
@@ -63,10 +61,12 @@ public class CheckGanadorUnitarioTest {
         Premio premio1 = new Premio(1L);
         premio1.setTitulo("Goya");
 
-        premio = premio1;
+        CategoriaPremio categoriaPremio = new CategoriaPremio();
+        CategoriaPremioId categoriaPremioId = new CategoriaPremioId(categoria2, premio1);
+        categoriaPremio.setId(categoriaPremioId);
 
         Ganador ganador1 = new Ganador();
-        GanadorId ganadorId = new GanadorId(premio1, categoria2, movie1, 2024);
+        GanadorId ganadorId = new GanadorId(categoriaPremio, movie1, 2024);
         ganador1.setId(ganadorId);
 
         ganador = ganador1;
@@ -76,14 +76,12 @@ public class CheckGanadorUnitarioTest {
     void getPremioByCodigo() {
         LOG.info("getPremioByCodigo");
 
-        PremioDTO premioDTO = PremioMapper.toDTO(premio);
-
         Paginator<GanadorDTO> paginator = new Paginator<>();
         Pageable pageable = PageRequest.of(0, 21);
         Page<Ganador> page = new PageImpl<>(Arrays.asList(ganador));
 
 
-        Mockito.when(ganadorDAO.findByIdPremioIdAndIdAnyo(1L,2024, pageable)).thenReturn(page);
+        Mockito.when(ganadorDAO.findById_CategoriaPremio_Id_Premio_IdAndId_Anyo(1L,2024, pageable)).thenReturn(page);
 
         Paginator<GanadorDTO> ganadores = premioService.getGanadoresByPremioIdAnyo(1L, 2024, 1);
 

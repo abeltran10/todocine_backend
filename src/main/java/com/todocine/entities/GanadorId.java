@@ -8,12 +8,11 @@ import java.util.Objects;
 public class GanadorId {
 
     @ManyToOne
-    @JoinColumn(name = "premio", referencedColumnName = "ID")
-    private Premio premio;
-
-    @ManyToOne
-    @JoinColumn(name = "categoria", referencedColumnName = "ID")
-    private Categoria categoria;
+    @JoinColumns({
+            @JoinColumn(name = "categoria", referencedColumnName = "CATEGORIA"),
+            @JoinColumn(name = "premio", referencedColumnName = "PREMIO")
+    })
+    private CategoriaPremio categoriaPremio;
 
     @ManyToOne
     @JoinColumn(name = "movie", referencedColumnName = "ID")
@@ -25,27 +24,18 @@ public class GanadorId {
     public GanadorId() {
     }
 
-    public GanadorId(Premio premio, Categoria categoria, Movie movie, Integer anyo) {
-        this.premio = premio;
-        this.categoria = categoria;
+    public GanadorId(CategoriaPremio categoriaPremio, Movie movie, Integer anyo) {
+        this.categoriaPremio = categoriaPremio;
         this.movie = movie;
         this.anyo = anyo;
     }
 
-    public Premio getPremio() {
-        return premio;
+    public CategoriaPremio getCategoriaPremio() {
+        return categoriaPremio;
     }
 
-    public void setPremio(Premio premio) {
-        this.premio = premio;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setCategoriaPremio(CategoriaPremio categoriaPremio) {
+        this.categoriaPremio = categoriaPremio;
     }
 
     public Movie getMovie() {
@@ -67,12 +57,12 @@ public class GanadorId {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof GanadorId ganadorId)) return false;
-        return Objects.equals(premio, ganadorId.premio) && Objects.equals(categoria, ganadorId.categoria)
+        return Objects.equals(categoriaPremio, ganadorId.categoriaPremio)
                 && Objects.equals(movie, ganadorId.movie) && Objects.equals(anyo, ganadorId.anyo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(premio, categoria, movie, anyo);
+        return Objects.hash(categoriaPremio, movie, anyo);
     }
 }

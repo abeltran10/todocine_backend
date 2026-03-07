@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface GanadorDAO extends JpaRepository<Ganador, GanadorId> {
 
-    Page<Ganador> findByIdPremioIdAndIdAnyo(Long premio, Integer anyo, Pageable pageable);
+    Page<Ganador> findById_CategoriaPremio_Id_Premio_IdAndId_Anyo(Long premio, Integer anyo, Pageable pageable);
 }

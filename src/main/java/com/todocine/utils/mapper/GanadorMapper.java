@@ -10,10 +10,10 @@ public class GanadorMapper {
     public static GanadorDTO toDTO(Ganador ganador) {
         GanadorDTO ganadorDTO = new GanadorDTO();
 
-        ganadorDTO.setPremioId(ganador.getId().getPremio().getId());
-        ganadorDTO.setPremio(ganador.getId().getPremio().getTitulo());
-        ganadorDTO.setCategoriaId(ganador.getId().getCategoria().getId());
-        ganadorDTO.setCategoria(ganador.getId().getCategoria().getNombre());
+        ganadorDTO.setPremioId(ganador.getId().getCategoriaPremio().getId().getPremio().getId());
+        ganadorDTO.setPremio(ganador.getId().getCategoriaPremio().getId().getPremio().getTitulo());
+        ganadorDTO.setCategoriaId(ganador.getId().getCategoriaPremio().getId().getCategoria().getId());
+        ganadorDTO.setCategoria(ganador.getId().getCategoriaPremio().getId().getCategoria().getNombre());
         ganadorDTO.setAnyo(ganador.getId().getAnyo());
         ganadorDTO.setMovieId(ganador.getId().getMovie().getId());
         ganadorDTO.setOriginalLanguage(ganador.getId().getMovie().getOriginalLanguage());

@@ -39,6 +39,9 @@ public class CheckGanadorTest {
     private CategoriaDAO categoriaDAO;
 
     @Autowired
+    private CategoriaPremioDAO categoriaPremioDAO;
+
+    @Autowired
     private MovieDAO movieDAO;
 
     @Autowired
@@ -63,10 +66,12 @@ public class CheckGanadorTest {
     @BeforeAll
     void setUp() {
         ganadorDAO.deleteAll();
+        categoriaPremioDAO.deleteAll();
         categoriaDAO.deleteAll();
         premioDAO.deleteAll();
         favoritosDAO.deleteAll();
         movieDAO.deleteAll();
+
         Movie movie = null;
 
         try {
@@ -85,7 +90,12 @@ public class CheckGanadorTest {
         Categoria categoria = new Categoria(null, "Mejor película");
         categoriaDAO.save(categoria);
 
-        GanadorId ganadorId = new GanadorId(premio, categoria, movie, 2024);
+        CategoriaPremio categoriaPremio = new CategoriaPremio();
+        CategoriaPremioId categoriaPremioId = new CategoriaPremioId(categoria, premio);
+        categoriaPremio.setId(categoriaPremioId);
+        categoriaPremioDAO.save(categoriaPremio);
+
+        GanadorId ganadorId = new GanadorId(categoriaPremio, movie, 2024);
         Ganador ganador = new Ganador();
         ganador.setId(ganadorId);
 
@@ -94,6 +104,7 @@ public class CheckGanadorTest {
         usuarioDAO.deleteAll();
 
         usuario = new Usuario("test", "1234");
+        usuario.setRol("USUARIO");
         usuarioDAO.save(usuario);
 
 
@@ -103,7 +114,7 @@ public class CheckGanadorTest {
     void getPremioById() {
 
         try {
-            mockMvc.perform(get("/ganadores/" + premioId +"/anyos/2024?pagina=1")
+            mockMvc.perform(get("/premios/" + premioId +"/anyos/2024?pagina=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.results[0].title").value("La sociedad de la nieve"));
@@ -115,7 +126,7 @@ public class CheckGanadorTest {
     @Test
     void getPremioByCodigoException() {
         try {
-            mockMvc.perform(get("/ganadores/0/anyos/2023?pagina=1")
+            mockMvc.perform(get("/premios/0/anyos/2023?pagina=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isNotFound());
         } catch (Exception e) {
