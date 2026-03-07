@@ -22,15 +22,6 @@ public class GanadorController {
     private GanadorService ganadorService;
 
 
-    @GetMapping("/{id}/anyos/{anyo}")
-    public ResponseEntity<Paginator<GanadorDTO>> getGanadoresByPremioIdAnyo(@NotNull @PathVariable("id") Long id,
-                                                                            @NotNull @PathVariable("anyo") Integer anyo,
-                                                                            @NotNull @RequestParam("pagina") Integer page) throws NotFoudException {
-        ResponseEntity<Paginator<GanadorDTO>> responseEntity = new ResponseEntity<>(ganadorService.getGanadoresByPremioIdAnyo(id, anyo, page), HttpStatus.OK);
-
-        return responseEntity;
-    }
-
     @PostMapping
     @PreAuthorize("ADMIN")
     public ResponseEntity<GanadorDTO> insertGanador(@Valid @RequestBody GanadorDTO ganadorDTO) throws BadRequestException,
