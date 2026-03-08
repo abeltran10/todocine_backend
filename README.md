@@ -458,6 +458,9 @@ Requiere rol de ADMIN.
 
 ## Entity-Relation Diagram
 
+<img width="1566" height="698" alt="Captura desde 2026-03-07 18-02-40" src="https://github.com/user-attachments/assets/0d89ccbc-b00f-4bf1-8e80-e2aa9193af08" />
+
+
 ## Demo
 
 Demo v6.1.0 release
