@@ -1,12 +1,12 @@
 openapi: 3.0.3
 info:
-  title: "API de Todo Cine"
-  description: "API gestionada con Spring Boot, seguridad JWT y catálogo de películas con manejo de excepciones."
+  title: "Todo Cine API"
+  description: "API managed with Spring Boot, JWT security, and movie catalog with custom exception handling."
   version: "1.0.0"
 
 servers:
   - url: "http://localhost:8080/api"
-    description: "Servidor Local"
+    description: "Local Server"
 
 security:
   - BearerAuth: []
@@ -14,20 +14,20 @@ security:
 paths:
   /usuarios:
     get:
-      summary: "Buscar usuarios por nombre"
-      tags: ["Usuarios"]
+      summary: "Search users by name"
+      tags: ["Users"]
       security:
         - BearerAuth: []
       parameters:
         - name: "username"
-          description: "Nombre de usuario para la búsqueda"
+          description: "Username for the search query"
           in: query
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: "OK - Lista de usuarios encontrada."
+          description: "OK - List of users found."
           content:
             application/json:
               schema:
@@ -40,12 +40,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 
     post:
-      summary: "Insertar un nuevo usuario"
-      tags: ["Usuarios"]
+      summary: "Insert a new user"
+      tags: ["Users"]
       security:
         - BearerAuth: []
       requestBody:
-        description: "Datos del nuevo usuario"
+        description: "New user data"
         required: true
         content:
           application/json:
@@ -53,7 +53,7 @@ paths:
               $ref: '#/components/schemas/UsuarioDTO'
       responses:
         '201':
-          description: "Created - Usuario registrado con éxito."
+          description: "Created - User registered successfully."
           content:
             application/json:
               schema:
@@ -64,20 +64,20 @@ paths:
   /usuarios/{id}:
     parameters:
       - name: "id"
-        description: "ID único del usuario"
+        description: "Unique user ID"
         in: path
         required: true
         schema:
           type: integer
           format: int64
     get:
-      summary: "Obtener usuario por ID"
-      tags: ["Usuarios"]
+      summary: "Get user by ID"
+      tags: ["Users"]
       security:
         - BearerAuth: []
       responses:
         '200':
-          description: "OK - Usuario encontrado."
+          description: "OK - User found."
           content:
             application/json:
               schema:
@@ -88,12 +88,12 @@ paths:
           $ref: '#/components/responses/NotFound'
 
     put:
-      summary: "Actualizar usuario"
-      tags: ["Usuarios"]
+      summary: "Update user"
+      tags: ["Users"]
       security:
         - BearerAuth: []
       requestBody:
-        description: "Nuevos datos del usuario"
+        description: "Updated user data"
         required: true
         content:
           application/json:
@@ -101,7 +101,7 @@ paths:
               $ref: '#/components/schemas/UsuarioDTO'
       responses:
         '200':
-          description: "OK - Usuario actualizado."
+          description: "OK - User updated."
           content:
             application/json:
               schema:
@@ -115,45 +115,45 @@ paths:
 
   /usuarios/{userId}/movies:
     get:
-      summary: "Obtener películas del usuario (Paginado)"
-      tags: ["Películas"]
+      summary: "Get user movies (Paginated)"
+      tags: ["User Movies"]
       security:
         - BearerAuth: []
       parameters:
         - name: "userId"
-          description: "ID del usuario"
+          description: "User ID"
           in: path
           required: true
           schema:
             type: integer
             format: int64
         - name: "vista"
-          description: "Filtrar por películas vistas (true/false)"
+          description: "Filter by watched movies (true/false)"
           in: query
           required: true
           schema:
             type: string
         - name: "votada"
-          description: "Filtrar por películas votadas"
+          description: "Filter by voted movies"
           in: query
           required: true
           schema:
             type: string
         - name: "orderBy"
-          description: "Campo de ordenación (ej. popularity)"
+          description: "Sorting field (e.g., popularity)"
           in: query
           required: true
           schema:
             type: string
         - name: "page"
-          description: "Número de página solicitado"
+          description: "Requested page number"
           in: query
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: "OK - Listado paginado obtenido."
+          description: "OK - Paginated list retrieved."
           content:
             application/json:
               schema:
@@ -164,26 +164,26 @@ paths:
   /usuarios/{userId}/movies/{movieId}:
     parameters:
       - name: "userId"
-        description: "ID del usuario"
+        description: "User ID"
         in: path
         required: true
         schema:
           type: integer
           format: int64
       - name: "movieId"
-        description: "ID de la película"
+        description: "Movie ID"
         in: path
         required: true
         schema:
           type: integer
           format: int64
     put:
-      summary: "Actualizar estado de una película para un usuario"
-      tags: ["Películas del Usuario"]
+      summary: "Update movie status for a user"
+      tags: ["User Movies"]
       security:
         - BearerAuth: []
       requestBody:
-        description: "Datos de la relación usuario-película"
+        description: "User-Movie relationship data"
         required: true
         content:
           application/json:
@@ -191,7 +191,7 @@ paths:
               $ref: '#/components/schemas/UsuarioMovieDTO'
       responses:
         '200':
-          description: "OK - Estado de la película actualizado."
+          description: "OK - Movie status updated."
           content:
             application/json:
               schema:
@@ -203,38 +203,38 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
         '502':
-          description: "Error en el servicio externo."
+          description: "Error in external service."
 
   /movies:
     get:
-      summary: "Listado de películas con filtros (Paginado)"
-      tags: ["Películas (General)"]
+      summary: "List movies with filters (Paginated)"
+      tags: ["General Movies"]
       security:
         - BearerAuth: []
       parameters:
         - name: "name"
-          description: "Nombre de la película"
+          description: "Movie title"
           in: query
           required: true
           schema: { type: string }
         - name: "status"
-          description: "Estado (Released, Post-Production...)"
+          description: "Status (Released, Post-Production...)"
           in: query
           required: true
           schema: { type: string }
         - name: "region"
-          description: "Región (ES, US...)"
+          description: "Region code (ES, US...)"
           in: query
           required: true
           schema: { type: string }
         - name: "page"
-          description: "Número de página"
+          description: "Page number"
           in: query
           required: true
           schema: { type: integer }
       responses:
         '200':
-          description: "Lista de películas filtrada."
+          description: "Filtered movie list."
           content:
             application/json:
               schema:
@@ -244,23 +244,23 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
         '502':
-          description: "Error en el servicio externo."
+          description: "Error in external service."
 
   /movies/{id}:
     get:
-      summary: "Obtener detalle completo de una película por ID"
-      tags: ["Películas (General)"]
+      summary: "Get full movie detail by ID"
+      tags: ["General Movies"]
       security:
         - BearerAuth: []
       parameters:
         - name: "id"
-          description: "ID de la película"
+          description: "Movie ID"
           in: path
           required: true
           schema: { type: integer, format: int64 }
       responses:
         '200':
-          description: "Detalle de la película."
+          description: "Movie detail."
           content:
             application/json:
               schema:
@@ -268,45 +268,45 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
         '502':
-          description: "Error en servidor externo."
+          description: "External server error."
 
   /ganadores:
     get:
-      summary: "Obtener ganadores por premio y año"
-      tags: ["Ganadores"]
+      summary: "Get winners by award and year"
+      tags: ["Winners"]
       security:
         - BearerAuth: []
       parameters:
         - name: "premioId"
-          description: "ID del premio"
+          description: "Award ID"
           in: query
           required: true
           schema: { type: integer, format: int64 }
         - name: "anyo"
-          description: "Año del premio"
+          description: "Award year"
           in: query
           required: true
           schema: { type: integer }
         - name: "pagina"
-          description: "Página de resultados"
+          description: "Results page"
           in: query
           required: true
           schema: { type: integer }
       responses:
         '200':
-          description: "Listado de ganadores obtenido."
+          description: "List of winners retrieved."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatorGanadorDTO'
     post:
-      summary: "Insertar un nuevo ganador"
-      description: "Requiere rol de ADMIN."
-      tags: ["Ganadores"]
+      summary: "Insert a new winner"
+      description: "Requires ADMIN role."
+      tags: ["Winners"]
       security:
         - BearerAuth: []
       requestBody:
-        description: "Datos del ganador"
+        description: "Winner data"
         required: true
         content:
           application/json:
@@ -314,7 +314,7 @@ paths:
               $ref: '#/components/schemas/GanadorDTO'
       responses:
         '201':
-          description: "Ganador registrado."
+          description: "Winner registered."
           content:
             application/json:
               schema:
@@ -322,20 +322,20 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
-          description: "Permisos insuficientes."
+          description: "Insufficient permissions."
         '502':
-          description: "Error en servidor externo."
+          description: "External server error."
 
   /premios/{id}/categorias:
     get:
-      summary: "Obtener categorías de un premio"
-      description: "Requiere rol de ADMIN."
-      tags: ["Premios y Categorías"]
+      summary: "Get categories for a specific award"
+      description: "Requires ADMIN role."
+      tags: ["Awards & Categories"]
       security:
         - BearerAuth: []
       parameters:
         - name: "id"
-          description: "ID del premio (ej. Oscars)"
+          description: "Award ID (e.g., Oscars)"
           in: path
           required: true
           schema:
@@ -343,7 +343,7 @@ paths:
             format: int64
       responses:
         '200':
-          description: "Lista de categorías."
+          description: "List of categories."
           content:
             application/json:
               schema:
@@ -360,168 +360,168 @@ components:
 
   responses:
     BadRequest:
-      description: "Datos inválidos."
+      description: "Invalid data."
     Unauthorized:
-      description: "Token no válido."
+      description: "Invalid token."
     Forbidden:
-      description: "Acceso denegado."
+      description: "Access denied."
     NotFound:
-      description: "No encontrado."
+      description: "Not found."
 
   schemas:
     UsuarioDTO:
       type: object
       required: [username, password]
       properties:
-        id: { type: integer, format: int64, description: "Identificador único" }
-        username: { type: string, description: "Nombre de acceso" }
-        password: { type: string, format: password, description: "Clave de acceso" }
-        rol: { type: string, description: "Rol asignado (USER/ADMIN)" }
+        id: { type: integer, format: int64, description: "Unique identifier" }
+        username: { type: string, description: "Access username" }
+        password: { type: string, format: password, description: "Access password" }
+        rol: { type: string, description: "Assigned role (USER/ADMIN)" }
 
     PaginatorMovieDetailDTO:
       type: object
       properties:
-        page: { type: integer, description: "Página actual" }
+        page: { type: integer, description: "Current page" }
         results:
           type: array
           items: { $ref: '#/components/schemas/MovieDetailDTO' }
-          description: "Lista de resultados detallados"
-        total_pages: { type: integer, description: "Total de páginas" }
-        total_results: { type: integer, description: "Total de registros" }
+          description: "List of detailed results"
+        total_pages: { type: integer, description: "Total pages" }
+        total_results: { type: integer, description: "Total records" }
 
     MovieDetailDTO:
       type: object
       properties:
-        id: { type: integer, format: int64, description: "ID de la película" }
-        original_title: { type: string, description: "Título original" }
-        title: { type: string, description: "Título traducido" }
-        poster_path: { type: string, description: "Ruta de la imagen del póster" }
-        overview: { type: string, description: "Resumen o sinopsis" }
-        release_date: { type: string, description: "Fecha de estreno" }
-        popularity: { type: number, format: double, description: "Índice de popularidad" }
-        vote_count: { type: integer, description: "Número total de votos externos" }
-        vote_average: { type: number, format: double, description: "Puntuación media externa" }
-        original_language: { type: string, description: "Idioma original" }
-        favoritos: { type: boolean, description: "Es favorita para el usuario" }
-        voto: { type: number, format: double, description: "Voto del usuario" }
-        vista: { type: boolean, description: "Película ya vista por el usuario" }
-        total_votos_TC: { type: integer, description: "Votos totales en Todo Cine" }
-        votos_media_TC: { type: number, format: double, description: "Media en Todo Cine" }
+        id: { type: integer, format: int64, description: "Movie ID" }
+        original_title: { type: string, description: "Original title" }
+        title: { type: string, description: "Translated title" }
+        poster_path: { type: string, description: "Poster image path" }
+        overview: { type: string, description: "Summary or synopsis" }
+        release_date: { type: string, description: "Release date" }
+        popularity: { type: number, format: double, description: "Popularity index" }
+        vote_count: { type: integer, description: "Total external votes" }
+        vote_average: { type: number, format: double, description: "Average external score" }
+        original_language: { type: string, description: "Original language" }
+        favoritos: { type: boolean, description: "Is marked as favorite by user" }
+        voto: { type: number, format: double, description: "User's personal vote" }
+        vista: { type: boolean, description: "Already watched by user" }
+        total_votos_TC: { type: integer, description: "Total votes in Todo Cine" }
+        votos_media_TC: { type: number, format: double, description: "Average score in Todo Cine" }
         genres:
           type: array
           items: { $ref: '#/components/schemas/GenreDTO' }
-          description: "Lista de géneros"
+          description: "Genre list"
         videos:
           type: array
           items: { $ref: '#/components/schemas/VideoDTO' }
-          description: "Lista de trailers o videos"
+          description: "Trailers or video list"
 
     GenreDTO:
       type: object
       required: [id]
       properties:
-        id: { type: string, description: "ID del género" }
-        name: { type: string, description: "Nombre del género" }
+        id: { type: string, description: "Genre ID" }
+        name: { type: string, description: "Genre name" }
 
     VideoDTO:
       type: object
       required: [id]
       properties:
-        id: { type: string, description: "Identificador del video" }
-        name: { type: string, description: "Nombre del video" }
-        key: { type: string, description: "Clave de plataforma (ej. YouTube ID)" }
-        site: { type: string, description: "Sitio de alojamiento" }
-        type: { type: string, description: "Tipo de video (Trailer, Teaser)" }
+        id: { type: string, description: "Video identifier" }
+        name: { type: string, description: "Video name" }
+        key: { type: string, description: "Platform key (e.g., YouTube ID)" }
+        site: { type: string, description: "Hosting site" }
+        type: { type: string, description: "Video type (Trailer, Teaser)" }
 
     UsuarioMovieDTO:
       type: object
       required: [usuarioId, movieId, favoritos, vista]
       properties:
-        usuarioId: { type: integer, format: int64, description: "ID del usuario" }
-        movieId: { type: integer, format: int64, description: "ID de la película" }
-        favoritos: { type: boolean, description: "Estado de favorito" }
-        vista: { type: boolean, description: "Estado de vista" }
-        voto: { type: number, format: double, nullable: true, description: "Puntuación personal" }
+        usuarioId: { type: integer, format: int64, description: "User ID" }
+        movieId: { type: integer, format: int64, description: "Movie ID" }
+        favoritos: { type: boolean, description: "Favorite status" }
+        vista: { type: boolean, description: "Watch status" }
+        voto: { type: number, format: double, nullable: true, description: "Personal score" }
 
     PaginatorMovieDTO:
       type: object
       properties:
-        page: { type: integer, description: "Página actual" }
+        page: { type: integer, description: "Current page" }
         results:
           type: array
           items: { $ref: '#/components/schemas/MovieDTO' }
-          description: "Lista de películas"
-        total_pages: { type: integer, description: "Páginas totales" }
-        total_results: { type: integer, description: "Registros totales" }
+          description: "Movie list"
+        total_pages: { type: integer, description: "Total pages" }
+        total_results: { type: integer, description: "Total records" }
 
     MovieDTO:
       type: object
       required: [id, title]
       properties:
-        id: { type: integer, format: int64, description: "ID único" }
-        original_title: { type: string, description: "Título original" }
-        title: { type: string, description: "Título" }
-        poster_path: { type: string, description: "Imagen" }
-        overview: { type: string, description: "Sinopsis" }
-        release_date: { type: string, description: "Fecha estreno" }
-        popularity: { type: number, format: double, description: "Popularidad" }
-        vote_count: { type: integer, description: "Votos totales" }
-        vote_average: { type: number, format: double, description: "Media votos" }
-        original_language: { type: string, description: "Idioma" }
+        id: { type: integer, format: int64, description: "Unique ID" }
+        original_title: { type: string, description: "Original title" }
+        title: { type: string, description: "Title" }
+        poster_path: { type: string, description: "Image path" }
+        overview: { type: string, description: "Synopsis" }
+        release_date: { type: string, description: "Release date" }
+        popularity: { type: number, format: double, description: "Popularity" }
+        vote_count: { type: integer, description: "Total votes" }
+        vote_average: { type: number, format: double, description: "Average score" }
+        original_language: { type: string, description: "Language" }
         genres:
           type: array
           items: { $ref: '#/components/schemas/GenreDTO' }
-          description: "Géneros asociados"
+          description: "Associated genres"
         videos:
           type: array
           items: { $ref: '#/components/schemas/VideoDTO' }
-          description: "Videos asociados"
-        total_votos_TC: { type: integer, description: "Votos locales" }
-        votos_media_TC: { type: number, format: double, description: "Media local" }
+          description: "Associated videos"
+        total_votos_TC: { type: integer, description: "Local votes" }
+        votos_media_TC: { type: number, format: double, description: "Local average" }
 
     PaginatorGanadorDTO:
       type: object
       properties:
-        page: { type: integer, description: "Página actual" }
+        page: { type: integer, description: "Current page" }
         results:
           type: array
           items: { $ref: '#/components/schemas/GanadorDTO' }
-          description: "Lista de ganadores"
-        total_pages: { type: integer, description: "Páginas totales" }
-        total_results: { type: integer, description: "Registros totales" }
+          description: "Winner list"
+        total_pages: { type: integer, description: "Total pages" }
+        total_results: { type: integer, description: "Total records" }
 
     GanadorDTO:
       type: object
       required: [premioId, categoriaId, anyo, movieId]
       properties:
-        premioId: { type: integer, format: int64, description: "ID del premio" }
-        premio: { type: string, description: "Nombre del premio" }
-        categoriaId: { type: integer, format: int64, description: "ID de la categoría" }
-        categoria: { type: string, description: "Nombre de la categoría" }
-        anyo: { type: integer, description: "Año de la gala" }
-        movieId: { type: integer, format: int64, description: "ID de la película" }
-        original_title: { type: string, description: "Título original" }
-        title: { type: string, description: "Título" }
-        poster_path: { type: string, description: "Imagen póster" }
-        overview: { type: string, description: "Sinopsis" }
-        release_date: { type: string, description: "Fecha de lanzamiento" }
-        popularity: { type: number, format: double, description: "Popularidad" }
-        vote_count: { type: integer, description: "Votos" }
-        vote_average: { type: number, format: double, description: "Nota media" }
-        original_language: { type: string, description: "Idioma" }
-        total_votos_TC: { type: integer, description: "Votos locales" }
-        votos_media_TC: { type: number, format: double, description: "Media local" }
+        premioId: { type: integer, format: int64, description: "Award ID" }
+        premio: { type: string, description: "Award name" }
+        categoriaId: { type: integer, format: int64, description: "Category ID" }
+        categoria: { type: string, description: "Category name" }
+        anyo: { type: integer, description: "Gala year" }
+        movieId: { type: integer, format: int64, description: "Movie ID" }
+        original_title: { type: string, description: "Original title" }
+        title: { type: string, description: "Title" }
+        poster_path: { type: string, description: "Poster image" }
+        overview: { type: string, description: "Synopsis" }
+        release_date: { type: string, description: "Release date" }
+        popularity: { type: number, format: double, description: "Popularity" }
+        vote_count: { type: integer, description: "Votes" }
+        vote_average: { type: number, format: double, description: "Average score" }
+        original_language: { type: string, description: "Language" }
+        total_votos_TC: { type: integer, description: "Local votes" }
+        votos_media_TC: { type: number, format: double, description: "Local average" }
         genres:
           type: array
           items: { $ref: '#/components/schemas/GenreDTO' }
-          description: "Lista de géneros"
+          description: "Genre list"
         videos:
           type: array
           items: { $ref: '#/components/schemas/VideoDTO' }
-          description: "Lista de videos"
+          description: "Video list"
 
     CategoriaDTO:
       type: object
       properties:
-        id: { type: integer, format: int64, description: "ID único de la categoría" }
-        nombre: { type: string, description: "Descripción de la categoría" }
+        id: { type: integer, format: int64, description: "Unique category ID" }
+        nombre: { type: string, description: "Category description" }

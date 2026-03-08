@@ -20,8 +20,8 @@ application.properties loads properties from three files, one per environment (p
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## API de Todo Cine
-API gestionada con Spring Boot, seguridad JWT y catálogo de películas con manejo de excepciones.
+## Todo Cine API
+API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -30,21 +30,21 @@ Bearer format: JWT
 ---
 
 ### [GET] /usuarios
-**Buscar usuarios por nombre**
+**Search users by name**
 
 #### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
-| username | query | Nombre de usuario para la búsqueda | Yes | string |
+| username | query | Username for the search query | Yes | string |
 
 #### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | OK - Lista de usuarios encontrada. | **application/json**: [ [UsuarioDTO](#usuariodto) ]<br> |
-| 400 | Datos inválidos. |  |
-| 401 | Token no válido. |  |
+| 200 | OK - List of users found. | **application/json**: [ [UsuarioDTO](#usuariodto) ]<br> |
+| 400 | Invalid data. |  |
+| 401 | Invalid token. |  |
 
 ##### Security
 
@@ -53,7 +53,7 @@ Bearer format: JWT
 | BearerAuth |  |
 
 ### [POST] /usuarios
-**Insertar un nuevo usuario**
+**Insert a new user**
 
 #### Request Body
 
@@ -65,8 +65,8 @@ Bearer format: JWT
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 201 | Created - Usuario registrado con éxito. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
-| 400 | Datos inválidos. |  |
+| 201 | Created - User registered successfully. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
+| 400 | Invalid data. |  |
 
 ##### Security
 
@@ -75,21 +75,21 @@ Bearer format: JWT
 | BearerAuth |  |
 
 ### [GET] /usuarios/{id}
-**Obtener usuario por ID**
+**Get user by ID**
 
 #### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
-| id | path | ID único del usuario | Yes | long |
+| id | path | Unique user ID | Yes | long |
 
 #### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | OK - Usuario encontrado. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
-| 403 | Acceso denegado. |  |
-| 404 | No encontrado. |  |
+| 200 | OK - User found. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
 
 ##### Security
 
@@ -98,13 +98,13 @@ Bearer format: JWT
 | BearerAuth |  |
 
 ### [PUT] /usuarios/{id}
-**Actualizar usuario**
+**Update user**
 
 #### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
-| id | path | ID único del usuario | Yes | long |
+| id | path | Unique user ID | Yes | long |
 
 #### Request Body
 
@@ -116,10 +116,10 @@ Bearer format: JWT
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | OK - Usuario actualizado. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
-| 400 | Datos inválidos. |  |
-| 403 | Acceso denegado. |  |
-| 404 | No encontrado. |  |
+| 200 | OK - User updated. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
 
 ##### Security
 
@@ -130,24 +130,24 @@ Bearer format: JWT
 ---
 
 ### [GET] /usuarios/{userId}/movies
-**Obtener películas del usuario (Paginado)**
+**Get user movies (Paginated)**
 
 #### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
-| userId | path | ID del usuario | Yes | long |
-| vista | query | Filtrar por películas vistas (true/false) | Yes | string |
-| votada | query | Filtrar por películas votadas | Yes | string |
-| orderBy | query | Campo de ordenación (ej. popularity) | Yes | string |
-| page | query | Número de página solicitado | Yes | integer |
+| userId | path | User ID | Yes | long |
+| vista | query | Filter by watched movies (true/false) | Yes | string |
+| votada | query | Filter by voted movies | Yes | string |
+| orderBy | query | Sorting field (e.g., popularity) | Yes | string |
+| page | query | Requested page number | Yes | integer |
 
 #### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | OK - Listado paginado obtenido. | **application/json**: [PaginatorMovieDetailDTO](#paginatormoviedetaildto)<br> |
-| 403 | Acceso denegado. |  |
+| 200 | OK - Paginated list retrieved. | **application/json**: [PaginatorMovieDetailDTO](#paginatormoviedetaildto)<br> |
+| 403 | Access denied. |  |
 
 ##### Security
 
@@ -155,17 +155,15 @@ Bearer format: JWT
 | --------------- | ------ |
 | BearerAuth |  |
 
----
-
 ### [PUT] /usuarios/{userId}/movies/{movieId}
-**Actualizar estado de una película para un usuario**
+**Update movie status for a user**
 
 #### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
-| userId | path | ID del usuario | Yes | long |
-| movieId | path | ID de la película | Yes | long |
+| userId | path | User ID | Yes | long |
+| movieId | path | Movie ID | Yes | long |
 
 #### Request Body
 
@@ -177,11 +175,11 @@ Bearer format: JWT
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | OK - Estado de la película actualizado. | **application/json**: [MovieDetailDTO](#moviedetaildto)<br> |
-| 400 | Datos inválidos. |  |
-| 403 | Acceso denegado. |  |
-| 404 | No encontrado. |  |
-| 502 | Error en el servicio externo. |  |
+| 200 | OK - Movie status updated. | **application/json**: [MovieDetailDTO](#moviedetaildto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+| 502 | Error in external service. |  |
 
 ##### Security
 
@@ -192,25 +190,25 @@ Bearer format: JWT
 ---
 
 ### [GET] /movies
-**Listado de películas con filtros (Paginado)**
+**List movies with filters (Paginated)**
 
 #### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
-| name | query | Nombre de la película | Yes | string |
-| status | query | Estado (Released, Post-Production...) | Yes | string |
-| region | query | Región (ES, US...) | Yes | string |
-| page | query | Número de página | Yes | integer |
+| name | query | Movie title | Yes | string |
+| status | query | Status (Released, Post-Production...) | Yes | string |
+| region | query | Region code (ES, US...) | Yes | string |
+| page | query | Page number | Yes | integer |
 
 #### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | Lista de películas filtrada. | **application/json**: [PaginatorMovieDTO](#paginatormoviedto)<br> |
-| 400 | Datos inválidos. |  |
-| 404 | No encontrado. |  |
-| 502 | Error en el servicio externo. |  |
+| 200 | Filtered movie list. | **application/json**: [PaginatorMovieDTO](#paginatormoviedto)<br> |
+| 400 | Invalid data. |  |
+| 404 | Not found. |  |
+| 502 | Error in external service. |  |
 
 ##### Security
 
@@ -219,21 +217,21 @@ Bearer format: JWT
 | BearerAuth |  |
 
 ### [GET] /movies/{id}
-**Obtener detalle completo de una película por ID**
+**Get full movie detail by ID**
 
 #### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
-| id | path | ID de la película | Yes | long |
+| id | path | Movie ID | Yes | long |
 
 #### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | Detalle de la película. | **application/json**: [MovieDetailDTO](#moviedetaildto)<br> |
-| 404 | No encontrado. |  |
-| 502 | Error en servidor externo. |  |
+| 200 | Movie detail. | **application/json**: [MovieDetailDTO](#moviedetaildto)<br> |
+| 404 | Not found. |  |
+| 502 | External server error. |  |
 
 ##### Security
 
@@ -244,21 +242,21 @@ Bearer format: JWT
 ---
 
 ### [GET] /ganadores
-**Obtener ganadores por premio y año**
+**Get winners by award and year**
 
 #### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
-| premioId | query | ID del premio | Yes | long |
-| anyo | query | Año del premio | Yes | integer |
-| pagina | query | Página de resultados | Yes | integer |
+| premioId | query | Award ID | Yes | long |
+| anyo | query | Award year | Yes | integer |
+| pagina | query | Results page | Yes | integer |
 
 #### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | Listado de ganadores obtenido. | **application/json**: [PaginatorGanadorDTO](#paginatorganadordto)<br> |
+| 200 | List of winners retrieved. | **application/json**: [PaginatorGanadorDTO](#paginatorganadordto)<br> |
 
 ##### Security
 
@@ -267,9 +265,9 @@ Bearer format: JWT
 | BearerAuth |  |
 
 ### [POST] /ganadores
-**Insertar un nuevo ganador**
+**Insert a new winner**
 
-Requiere rol de ADMIN.
+Requires ADMIN role.
 
 #### Request Body
 
@@ -281,10 +279,10 @@ Requiere rol de ADMIN.
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 201 | Ganador registrado. | **application/json**: [GanadorDTO](#ganadordto)<br> |
-| 400 | Datos inválidos. |  |
-| 403 | Permisos insuficientes. |  |
-| 502 | Error en servidor externo. |  |
+| 201 | Winner registered. | **application/json**: [GanadorDTO](#ganadordto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Insufficient permissions. |  |
+| 502 | External server error. |  |
 
 ##### Security
 
@@ -295,21 +293,21 @@ Requiere rol de ADMIN.
 ---
 
 ### [GET] /premios/{id}/categorias
-**Obtener categorías de un premio**
+**Get categories for a specific award**
 
-Requiere rol de ADMIN.
+Requires ADMIN role.
 
 #### Parameters
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
-| id | path | ID del premio (ej. Oscars) | Yes | long |
+| id | path | Award ID (e.g., Oscars) | Yes | long |
 
 #### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | Lista de categorías. | **application/json**: [ [CategoriaDTO](#categoriadto) ]<br> |
+| 200 | List of categories. | **application/json**: [ [CategoriaDTO](#categoriadto) ]<br> |
 
 ##### Security
 
@@ -324,136 +322,137 @@ Requiere rol de ADMIN.
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long | Identificador único | No |
-| username | string | Nombre de acceso | Yes |
-| password | password | Clave de acceso | Yes |
-| rol | string | Rol asignado (USER/ADMIN) | No |
+| id | long | Unique identifier | No |
+| username | string | Access username | Yes |
+| password | password | Access password | Yes |
+| rol | string | Assigned role (USER/ADMIN) | No |
 
 #### PaginatorMovieDetailDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| page | integer | Página actual | No |
-| results | [ [MovieDetailDTO](#moviedetaildto) ] | Lista de resultados detallados | No |
-| total_pages | integer | Total de páginas | No |
-| total_results | integer | Total de registros | No |
+| page | integer | Current page | No |
+| results | [ [MovieDetailDTO](#moviedetaildto) ] | List of detailed results | No |
+| total_pages | integer | Total pages | No |
+| total_results | integer | Total records | No |
 
 #### MovieDetailDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long | ID de la película | No |
-| original_title | string | Título original | No |
-| title | string | Título traducido | No |
-| poster_path | string | Ruta de la imagen del póster | No |
-| overview | string | Resumen o sinopsis | No |
-| release_date | string | Fecha de estreno | No |
-| popularity | double | Índice de popularidad | No |
-| vote_count | integer | Número total de votos externos | No |
-| vote_average | double | Puntuación media externa | No |
-| original_language | string | Idioma original | No |
-| favoritos | boolean | Es favorita para el usuario | No |
-| voto | double | Voto del usuario | No |
-| vista | boolean | Película ya vista por el usuario | No |
-| total_votos_TC | integer | Votos totales en Todo Cine | No |
-| votos_media_TC | double | Media en Todo Cine | No |
-| genres | [ [GenreDTO](#genredto) ] | Lista de géneros | No |
-| videos | [ [VideoDTO](#videodto) ] | Lista de trailers o videos | No |
+| id | long | Movie ID | No |
+| original_title | string | Original title | No |
+| title | string | Translated title | No |
+| poster_path | string | Poster image path | No |
+| overview | string | Summary or synopsis | No |
+| release_date | string | Release date | No |
+| popularity | double | Popularity index | No |
+| vote_count | integer | Total external votes | No |
+| vote_average | double | Average external score | No |
+| original_language | string | Original language | No |
+| favoritos | boolean | Is marked as favorite by user | No |
+| voto | double | User's personal vote | No |
+| vista | boolean | Already watched by user | No |
+| total_votos_TC | integer | Total votes in Todo Cine | No |
+| votos_media_TC | double | Average score in Todo Cine | No |
+| genres | [ [GenreDTO](#genredto) ] | Genre list | No |
+| videos | [ [VideoDTO](#videodto) ] | Trailers or video list | No |
 
 #### GenreDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | string | ID del género | Yes |
-| name | string | Nombre del género | No |
+| id | string | Genre ID | Yes |
+| name | string | Genre name | No |
 
 #### VideoDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | string | Identificador del video | Yes |
-| name | string | Nombre del video | No |
-| key | string | Clave de plataforma (ej. YouTube ID) | No |
-| site | string | Sitio de alojamiento | No |
-| type | string | Tipo de video (Trailer, Teaser) | No |
+| id | string | Video identifier | Yes |
+| name | string | Video name | No |
+| key | string | Platform key (e.g., YouTube ID) | No |
+| site | string | Hosting site | No |
+| type | string | Video type (Trailer, Teaser) | No |
 
 #### UsuarioMovieDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| usuarioId | long | ID del usuario | Yes |
-| movieId | long | ID de la película | Yes |
-| favoritos | boolean | Estado de favorito | Yes |
-| vista | boolean | Estado de vista | Yes |
-| voto | double | Puntuación personal | No |
+| usuarioId | long | User ID | Yes |
+| movieId | long | Movie ID | Yes |
+| favoritos | boolean | Favorite status | Yes |
+| vista | boolean | Watch status | Yes |
+| voto | double | Personal score | No |
 
 #### PaginatorMovieDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| page | integer | Página actual | No |
-| results | [ [MovieDTO](#moviedto) ] | Lista de películas | No |
-| total_pages | integer | Páginas totales | No |
-| total_results | integer | Registros totales | No |
+| page | integer | Current page | No |
+| results | [ [MovieDTO](#moviedto) ] | Movie list | No |
+| total_pages | integer | Total pages | No |
+| total_results | integer | Total records | No |
 
 #### MovieDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long | ID único | Yes |
-| original_title | string | Título original | No |
-| title | string | Título | Yes |
-| poster_path | string | Imagen | No |
-| overview | string | Sinopsis | No |
-| release_date | string | Fecha estreno | No |
-| popularity | double | Popularidad | No |
-| vote_count | integer | Votos totales | No |
-| vote_average | double | Media votos | No |
-| original_language | string | Idioma | No |
-| genres | [ [GenreDTO](#genredto) ] | Géneros asociados | No |
-| videos | [ [VideoDTO](#videodto) ] | Videos asociados | No |
-| total_votos_TC | integer | Votos locales | No |
-| votos_media_TC | double | Media local | No |
+| id | long | Unique ID | Yes |
+| original_title | string | Original title | No |
+| title | string | Title | Yes |
+| poster_path | string | Image path | No |
+| overview | string | Synopsis | No |
+| release_date | string | Release date | No |
+| popularity | double | Popularity | No |
+| vote_count | integer | Total votes | No |
+| vote_average | double | Average score | No |
+| original_language | string | Language | No |
+| genres | [ [GenreDTO](#genredto) ] | Associated genres | No |
+| videos | [ [VideoDTO](#videodto) ] | Associated videos | No |
+| total_votos_TC | integer | Local votes | No |
+| votos_media_TC | double | Local average | No |
 
 #### PaginatorGanadorDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| page | integer | Página actual | No |
-| results | [ [GanadorDTO](#ganadordto) ] | Lista de ganadores | No |
-| total_pages | integer | Páginas totales | No |
-| total_results | integer | Registros totales | No |
+| page | integer | Current page | No |
+| results | [ [GanadorDTO](#ganadordto) ] | Winner list | No |
+| total_pages | integer | Total pages | No |
+| total_results | integer | Total records | No |
 
 #### GanadorDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| premioId | long | ID del premio | Yes |
-| premio | string | Nombre del premio | No |
-| categoriaId | long | ID de la categoría | Yes |
-| categoria | string | Nombre de la categoría | No |
-| anyo | integer | Año de la gala | Yes |
-| movieId | long | ID de la película | Yes |
-| original_title | string | Título original | No |
-| title | string | Título | No |
-| poster_path | string | Imagen póster | No |
-| overview | string | Sinopsis | No |
-| release_date | string | Fecha de lanzamiento | No |
-| popularity | double | Popularidad | No |
-| vote_count | integer | Votos | No |
-| vote_average | double | Nota media | No |
-| original_language | string | Idioma | No |
-| total_votos_TC | integer | Votos locales | No |
-| votos_media_TC | double | Media local | No |
-| genres | [ [GenreDTO](#genredto) ] | Lista de géneros | No |
-| videos | [ [VideoDTO](#videodto) ] | Lista de videos | No |
+| premioId | long | Award ID | Yes |
+| premio | string | Award name | No |
+| categoriaId | long | Category ID | Yes |
+| categoria | string | Category name | No |
+| anyo | integer | Gala year | Yes |
+| movieId | long | Movie ID | Yes |
+| original_title | string | Original title | No |
+| title | string | Title | No |
+| poster_path | string | Poster image | No |
+| overview | string | Synopsis | No |
+| release_date | string | Release date | No |
+| popularity | double | Popularity | No |
+| vote_count | integer | Votes | No |
+| vote_average | double | Average score | No |
+| original_language | string | Language | No |
+| total_votos_TC | integer | Local votes | No |
+| votos_media_TC | double | Local average | No |
+| genres | [ [GenreDTO](#genredto) ] | Genre list | No |
+| videos | [ [VideoDTO](#videodto) ] | Video list | No |
 
 #### CategoriaDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long | ID único de la categoría | No |
-| nombre | string | Descripción de la categoría | No |
+| id | long | Unique category ID | No |
+| nombre | string | Category description | No |
+
 
 
 ## Entity-Relation Diagram
