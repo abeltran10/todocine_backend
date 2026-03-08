@@ -54,6 +54,10 @@ paths:
       responses:
         '201':
           description: "Created - Usuario registrado con éxito."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
 
@@ -98,6 +102,10 @@ paths:
       responses:
         '200':
           description: "OK - Usuario actualizado."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -132,13 +140,13 @@ paths:
           schema:
             type: string
         - name: "orderBy"
-          description: "Campo de ordenación"
+          description: "Campo de ordenación (ej. popularity)"
           in: query
           required: true
           schema:
             type: string
         - name: "page"
-          description: "Número de página"
+          description: "Número de página solicitado"
           in: query
           required: true
           schema:
@@ -307,8 +315,16 @@ paths:
       responses:
         '201':
           description: "Ganador registrado."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GanadorDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '403':
           description: "Permisos insuficientes."
+        '502':
+          description: "Error en servidor externo."
 
   /premios/{id}/categorias:
     get:
@@ -319,7 +335,7 @@ paths:
         - BearerAuth: []
       parameters:
         - name: "id"
-          description: "ID del premio"
+          description: "ID del premio (ej. Oscars)"
           in: path
           required: true
           schema:
@@ -357,45 +373,48 @@ components:
       type: object
       required: [username, password]
       properties:
-        id: { type: integer, format: int64 }
-        username: { type: string }
-        password: { type: string, format: password }
-        rol: { type: string }
+        id: { type: integer, format: int64, description: "Identificador único" }
+        username: { type: string, description: "Nombre de acceso" }
+        password: { type: string, format: password, description: "Clave de acceso" }
+        rol: { type: string, description: "Rol asignado (USER/ADMIN)" }
 
     PaginatorMovieDetailDTO:
       type: object
       properties:
-        page: { type: integer }
+        page: { type: integer, description: "Página actual" }
         results:
           type: array
           items: { $ref: '#/components/schemas/MovieDetailDTO' }
-        total_pages: { type: integer }
-        total_results: { type: integer }
+          description: "Lista de resultados detallados"
+        total_pages: { type: integer, description: "Total de páginas" }
+        total_results: { type: integer, description: "Total de registros" }
 
     MovieDetailDTO:
       type: object
       properties:
-        id: { type: integer, format: int64 }
-        original_title: { type: string }
-        title: { type: string }
-        poster_path: { type: string }
-        overview: { type: string }
-        release_date: { type: string }
-        popularity: { type: number, format: double }
-        vote_count: { type: integer }
-        vote_average: { type: number, format: double }
-        original_language: { type: string }
-        favoritos: { type: boolean }
-        voto: { type: number, format: double }
-        vista: { type: boolean }
-        total_votos_TC: { type: integer }
-        votos_media_TC: { type: number, format: double }
+        id: { type: integer, format: int64, description: "ID de la película" }
+        original_title: { type: string, description: "Título original" }
+        title: { type: string, description: "Título traducido" }
+        poster_path: { type: string, description: "Ruta de la imagen del póster" }
+        overview: { type: string, description: "Resumen o sinopsis" }
+        release_date: { type: string, description: "Fecha de estreno" }
+        popularity: { type: number, format: double, description: "Índice de popularidad" }
+        vote_count: { type: integer, description: "Número total de votos externos" }
+        vote_average: { type: number, format: double, description: "Puntuación media externa" }
+        original_language: { type: string, description: "Idioma original" }
+        favoritos: { type: boolean, description: "Es favorita para el usuario" }
+        voto: { type: number, format: double, description: "Voto del usuario" }
+        vista: { type: boolean, description: "Película ya vista por el usuario" }
+        total_votos_TC: { type: integer, description: "Votos totales en Todo Cine" }
+        votos_media_TC: { type: number, format: double, description: "Media en Todo Cine" }
         genres:
           type: array
           items: { $ref: '#/components/schemas/GenreDTO' }
+          description: "Lista de géneros"
         videos:
           type: array
           items: { $ref: '#/components/schemas/VideoDTO' }
+          description: "Lista de trailers o videos"
 
     GenreDTO:
       type: object
@@ -408,95 +427,101 @@ components:
       type: object
       required: [id]
       properties:
-        id: { type: string }
-        name: { type: string }
-        key: { type: string }
-        site: { type: string }
-        type: { type: string }
+        id: { type: string, description: "Identificador del video" }
+        name: { type: string, description: "Nombre del video" }
+        key: { type: string, description: "Clave de plataforma (ej. YouTube ID)" }
+        site: { type: string, description: "Sitio de alojamiento" }
+        type: { type: string, description: "Tipo de video (Trailer, Teaser)" }
 
     UsuarioMovieDTO:
       type: object
       required: [usuarioId, movieId, favoritos, vista]
       properties:
-        usuarioId: { type: integer, format: int64, description: "ID usuario" }
-        movieId: { type: integer, format: int64, description: "ID película" }
-        favoritos: { type: boolean }
-        vista: { type: boolean }
-        voto: { type: number, format: double, nullable: true }
+        usuarioId: { type: integer, format: int64, description: "ID del usuario" }
+        movieId: { type: integer, format: int64, description: "ID de la película" }
+        favoritos: { type: boolean, description: "Estado de favorito" }
+        vista: { type: boolean, description: "Estado de vista" }
+        voto: { type: number, format: double, nullable: true, description: "Puntuación personal" }
 
     PaginatorMovieDTO:
       type: object
       properties:
-        page: { type: integer }
+        page: { type: integer, description: "Página actual" }
         results:
           type: array
           items: { $ref: '#/components/schemas/MovieDTO' }
-        total_pages: { type: integer }
-        total_results: { type: integer }
+          description: "Lista de películas"
+        total_pages: { type: integer, description: "Páginas totales" }
+        total_results: { type: integer, description: "Registros totales" }
 
     MovieDTO:
       type: object
       required: [id, title]
       properties:
-        id: { type: integer, format: int64 }
-        original_title: { type: string }
-        title: { type: string }
-        poster_path: { type: string }
-        overview: { type: string }
-        release_date: { type: string }
-        popularity: { type: number, format: double }
-        vote_count: { type: integer }
-        vote_average: { type: number, format: double }
-        original_language: { type: string }
+        id: { type: integer, format: int64, description: "ID único" }
+        original_title: { type: string, description: "Título original" }
+        title: { type: string, description: "Título" }
+        poster_path: { type: string, description: "Imagen" }
+        overview: { type: string, description: "Sinopsis" }
+        release_date: { type: string, description: "Fecha estreno" }
+        popularity: { type: number, format: double, description: "Popularidad" }
+        vote_count: { type: integer, description: "Votos totales" }
+        vote_average: { type: number, format: double, description: "Media votos" }
+        original_language: { type: string, description: "Idioma" }
         genres:
           type: array
           items: { $ref: '#/components/schemas/GenreDTO' }
+          description: "Géneros asociados"
         videos:
           type: array
           items: { $ref: '#/components/schemas/VideoDTO' }
-        total_votos_TC: { type: integer }
-        votos_media_TC: { type: number, format: double }
+          description: "Videos asociados"
+        total_votos_TC: { type: integer, description: "Votos locales" }
+        votos_media_TC: { type: number, format: double, description: "Media local" }
 
     PaginatorGanadorDTO:
       type: object
       properties:
-        page: { type: integer }
+        page: { type: integer, description: "Página actual" }
         results:
           type: array
           items: { $ref: '#/components/schemas/GanadorDTO' }
-        total_pages: { type: integer }
-        total_results: { type: integer }
+          description: "Lista de ganadores"
+        total_pages: { type: integer, description: "Páginas totales" }
+        total_results: { type: integer, description: "Registros totales" }
 
     GanadorDTO:
       type: object
       required: [premioId, categoriaId, anyo, movieId]
       properties:
-        premioId: { type: integer, format: int64 }
-        premio: { type: string }
-        categoriaId: { type: integer, format: int64 }
-        categoria: { type: string }
-        anyo: { type: integer }
-        movieId: { type: integer, format: int64 }
-        original_title: { type: string }
-        title: { type: string }
-        poster_path: { type: string }
-        overview: { type: string }
-        release_date: { type: string }
-        popularity: { type: number, format: double }
-        vote_count: { type: integer }
-        vote_average: { type: number, format: double }
-        original_language: { type: string }
-        total_votos_TC: { type: integer }
-        votos_media_TC: { type: number, format: double }
+        premioId: { type: integer, format: int64, description: "ID del premio" }
+        premio: { type: string, description: "Nombre del premio" }
+        categoriaId: { type: integer, format: int64, description: "ID de la categoría" }
+        categoria: { type: string, description: "Nombre de la categoría" }
+        anyo: { type: integer, description: "Año de la gala" }
+        movieId: { type: integer, format: int64, description: "ID de la película" }
+        original_title: { type: string, description: "Título original" }
+        title: { type: string, description: "Título" }
+        poster_path: { type: string, description: "Imagen póster" }
+        overview: { type: string, description: "Sinopsis" }
+        release_date: { type: string, description: "Fecha de lanzamiento" }
+        popularity: { type: number, format: double, description: "Popularidad" }
+        vote_count: { type: integer, description: "Votos" }
+        vote_average: { type: number, format: double, description: "Nota media" }
+        original_language: { type: string, description: "Idioma" }
+        total_votos_TC: { type: integer, description: "Votos locales" }
+        votos_media_TC: { type: number, format: double, description: "Media local" }
         genres:
           type: array
           items: { $ref: '#/components/schemas/GenreDTO' }
+          description: "Lista de géneros"
         videos:
           type: array
           items: { $ref: '#/components/schemas/VideoDTO' }
+          description: "Lista de videos"
 
     CategoriaDTO:
       type: object
       properties:
-        id: { type: integer, format: int64, description: "ID categoría" }
-        nombre: { type: string, description: "Nombre categoría" }
+        id: { type: integer, format: int64, description: "ID único de la categoría" }
+        nombre: { type: string, description: "Descripción de la categoría" }

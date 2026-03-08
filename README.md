@@ -63,10 +63,10 @@ Bearer format: JWT
 
 #### Responses
 
-| Code | Description |
-| ---- | ----------- |
-| 201 | Created - Usuario registrado con éxito. |
-| 400 | Datos inválidos. |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 201 | Created - Usuario registrado con éxito. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
+| 400 | Datos inválidos. |  |
 
 ##### Security
 
@@ -114,12 +114,12 @@ Bearer format: JWT
 
 #### Responses
 
-| Code | Description |
-| ---- | ----------- |
-| 200 | OK - Usuario actualizado. |
-| 400 | Datos inválidos. |
-| 403 | Acceso denegado. |
-| 404 | No encontrado. |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | OK - Usuario actualizado. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
+| 400 | Datos inválidos. |  |
+| 403 | Acceso denegado. |  |
+| 404 | No encontrado. |  |
 
 ##### Security
 
@@ -139,8 +139,8 @@ Bearer format: JWT
 | userId | path | ID del usuario | Yes | long |
 | vista | query | Filtrar por películas vistas (true/false) | Yes | string |
 | votada | query | Filtrar por películas votadas | Yes | string |
-| orderBy | query | Campo de ordenación | Yes | string |
-| page | query | Número de página | Yes | integer |
+| orderBy | query | Campo de ordenación (ej. popularity) | Yes | string |
+| page | query | Número de página solicitado | Yes | integer |
 
 #### Responses
 
@@ -279,10 +279,12 @@ Requiere rol de ADMIN.
 
 #### Responses
 
-| Code | Description |
-| ---- | ----------- |
-| 201 | Ganador registrado. |
-| 403 | Permisos insuficientes. |
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 201 | Ganador registrado. | **application/json**: [GanadorDTO](#ganadordto)<br> |
+| 400 | Datos inválidos. |  |
+| 403 | Permisos insuficientes. |  |
+| 502 | Error en servidor externo. |  |
 
 ##### Security
 
@@ -301,7 +303,7 @@ Requiere rol de ADMIN.
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
-| id | path | ID del premio | Yes | long |
+| id | path | ID del premio (ej. Oscars) | Yes | long |
 
 #### Responses
 
@@ -322,41 +324,41 @@ Requiere rol de ADMIN.
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long |  | No |
-| username | string |  | Yes |
-| password | password |  | Yes |
-| rol | string |  | No |
+| id | long | Identificador único | No |
+| username | string | Nombre de acceso | Yes |
+| password | password | Clave de acceso | Yes |
+| rol | string | Rol asignado (USER/ADMIN) | No |
 
 #### PaginatorMovieDetailDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| page | integer |  | No |
-| results | [ [MovieDetailDTO](#moviedetaildto) ] |  | No |
-| total_pages | integer |  | No |
-| total_results | integer |  | No |
+| page | integer | Página actual | No |
+| results | [ [MovieDetailDTO](#moviedetaildto) ] | Lista de resultados detallados | No |
+| total_pages | integer | Total de páginas | No |
+| total_results | integer | Total de registros | No |
 
 #### MovieDetailDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long |  | No |
-| original_title | string |  | No |
-| title | string |  | No |
-| poster_path | string |  | No |
-| overview | string |  | No |
-| release_date | string |  | No |
-| popularity | double |  | No |
-| vote_count | integer |  | No |
-| vote_average | double |  | No |
-| original_language | string |  | No |
-| favoritos | boolean |  | No |
-| voto | double |  | No |
-| vista | boolean |  | No |
-| total_votos_TC | integer |  | No |
-| votos_media_TC | double |  | No |
-| genres | [ [GenreDTO](#genredto) ] |  | No |
-| videos | [ [VideoDTO](#videodto) ] |  | No |
+| id | long | ID de la película | No |
+| original_title | string | Título original | No |
+| title | string | Título traducido | No |
+| poster_path | string | Ruta de la imagen del póster | No |
+| overview | string | Resumen o sinopsis | No |
+| release_date | string | Fecha de estreno | No |
+| popularity | double | Índice de popularidad | No |
+| vote_count | integer | Número total de votos externos | No |
+| vote_average | double | Puntuación media externa | No |
+| original_language | string | Idioma original | No |
+| favoritos | boolean | Es favorita para el usuario | No |
+| voto | double | Voto del usuario | No |
+| vista | boolean | Película ya vista por el usuario | No |
+| total_votos_TC | integer | Votos totales en Todo Cine | No |
+| votos_media_TC | double | Media en Todo Cine | No |
+| genres | [ [GenreDTO](#genredto) ] | Lista de géneros | No |
+| videos | [ [VideoDTO](#videodto) ] | Lista de trailers o videos | No |
 
 #### GenreDTO
 
@@ -369,90 +371,92 @@ Requiere rol de ADMIN.
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | string |  | Yes |
-| name | string |  | No |
-| key | string |  | No |
-| site | string |  | No |
-| type | string |  | No |
+| id | string | Identificador del video | Yes |
+| name | string | Nombre del video | No |
+| key | string | Clave de plataforma (ej. YouTube ID) | No |
+| site | string | Sitio de alojamiento | No |
+| type | string | Tipo de video (Trailer, Teaser) | No |
 
 #### UsuarioMovieDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| usuarioId | long | ID usuario | Yes |
-| movieId | long | ID película | Yes |
-| favoritos | boolean |  | Yes |
-| vista | boolean |  | Yes |
-| voto | double |  | No |
+| usuarioId | long | ID del usuario | Yes |
+| movieId | long | ID de la película | Yes |
+| favoritos | boolean | Estado de favorito | Yes |
+| vista | boolean | Estado de vista | Yes |
+| voto | double | Puntuación personal | No |
 
 #### PaginatorMovieDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| page | integer |  | No |
-| results | [ [MovieDTO](#moviedto) ] |  | No |
-| total_pages | integer |  | No |
-| total_results | integer |  | No |
+| page | integer | Página actual | No |
+| results | [ [MovieDTO](#moviedto) ] | Lista de películas | No |
+| total_pages | integer | Páginas totales | No |
+| total_results | integer | Registros totales | No |
 
 #### MovieDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long |  | Yes |
-| original_title | string |  | No |
-| title | string |  | Yes |
-| poster_path | string |  | No |
-| overview | string |  | No |
-| release_date | string |  | No |
-| popularity | double |  | No |
-| vote_count | integer |  | No |
-| vote_average | double |  | No |
-| original_language | string |  | No |
-| genres | [ [GenreDTO](#genredto) ] |  | No |
-| videos | [ [VideoDTO](#videodto) ] |  | No |
-| total_votos_TC | integer |  | No |
-| votos_media_TC | double |  | No |
+| id | long | ID único | Yes |
+| original_title | string | Título original | No |
+| title | string | Título | Yes |
+| poster_path | string | Imagen | No |
+| overview | string | Sinopsis | No |
+| release_date | string | Fecha estreno | No |
+| popularity | double | Popularidad | No |
+| vote_count | integer | Votos totales | No |
+| vote_average | double | Media votos | No |
+| original_language | string | Idioma | No |
+| genres | [ [GenreDTO](#genredto) ] | Géneros asociados | No |
+| videos | [ [VideoDTO](#videodto) ] | Videos asociados | No |
+| total_votos_TC | integer | Votos locales | No |
+| votos_media_TC | double | Media local | No |
 
 #### PaginatorGanadorDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| page | integer |  | No |
-| results | [ [GanadorDTO](#ganadordto) ] |  | No |
-| total_pages | integer |  | No |
-| total_results | integer |  | No |
+| page | integer | Página actual | No |
+| results | [ [GanadorDTO](#ganadordto) ] | Lista de ganadores | No |
+| total_pages | integer | Páginas totales | No |
+| total_results | integer | Registros totales | No |
 
 #### GanadorDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| premioId | long |  | Yes |
-| premio | string |  | No |
-| categoriaId | long |  | Yes |
-| categoria | string |  | No |
-| anyo | integer |  | Yes |
-| movieId | long |  | Yes |
-| original_title | string |  | No |
-| title | string |  | No |
-| poster_path | string |  | No |
-| overview | string |  | No |
-| release_date | string |  | No |
-| popularity | double |  | No |
-| vote_count | integer |  | No |
-| vote_average | double |  | No |
-| original_language | string |  | No |
-| total_votos_TC | integer |  | No |
-| votos_media_TC | double |  | No |
-| genres | [ [GenreDTO](#genredto) ] |  | No |
-| videos | [ [VideoDTO](#videodto) ] |  | No |
+| premioId | long | ID del premio | Yes |
+| premio | string | Nombre del premio | No |
+| categoriaId | long | ID de la categoría | Yes |
+| categoria | string | Nombre de la categoría | No |
+| anyo | integer | Año de la gala | Yes |
+| movieId | long | ID de la película | Yes |
+| original_title | string | Título original | No |
+| title | string | Título | No |
+| poster_path | string | Imagen póster | No |
+| overview | string | Sinopsis | No |
+| release_date | string | Fecha de lanzamiento | No |
+| popularity | double | Popularidad | No |
+| vote_count | integer | Votos | No |
+| vote_average | double | Nota media | No |
+| original_language | string | Idioma | No |
+| total_votos_TC | integer | Votos locales | No |
+| votos_media_TC | double | Media local | No |
+| genres | [ [GenreDTO](#genredto) ] | Lista de géneros | No |
+| videos | [ [VideoDTO](#videodto) ] | Lista de videos | No |
 
 #### CategoriaDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long | ID categoría | No |
-| nombre | string | Nombre categoría | No |
+| id | long | ID único de la categoría | No |
+| nombre | string | Descripción de la categoría | No |
 
+
+## Entity-Relation Diagram
 
 ## Demo
 
