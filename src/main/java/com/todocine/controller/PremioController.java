@@ -20,22 +20,7 @@ import java.util.List;
 public class PremioController {
 
     @Autowired
-    private GanadorService ganadorService;
-
-    @Autowired
     private CategoriaPremioService categoriaPremioService;
-
-
-    @GetMapping("/{id}/anyos/{anyo}")
-    public ResponseEntity<Paginator<GanadorDTO>> getGanadoresByPremioIdAnyo(@NotNull @PathVariable("id") Long id,
-                                                                            @NotNull @PathVariable("anyo") Integer anyo,
-                                                                            @NotNull @RequestParam("pagina") Integer page) throws NotFoudException {
-        ResponseEntity<Paginator<GanadorDTO>> responseEntity = new ResponseEntity<>(ganadorService.getGanadoresByPremioIdAnyo(id, anyo, page), HttpStatus.OK);
-
-        return responseEntity;
-    }
-
-
 
     @GetMapping("/{id}/categorias")
     @PreAuthorize("ADMIN")

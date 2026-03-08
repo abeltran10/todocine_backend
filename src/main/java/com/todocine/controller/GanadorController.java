@@ -22,6 +22,15 @@ public class GanadorController {
     private GanadorService ganadorService;
 
 
+    @GetMapping
+    public ResponseEntity<Paginator<GanadorDTO>> getGanadoresByPremioIdAnyo(@NotNull @RequestParam("premioId") Long id,
+                                                                            @NotNull @RequestParam("anyo") Integer anyo,
+                                                                            @NotNull @RequestParam("pagina") Integer page) throws NotFoudException {
+        ResponseEntity<Paginator<GanadorDTO>> responseEntity = new ResponseEntity<>(ganadorService.getGanadoresByPremioIdAnyo(id, anyo, page), HttpStatus.OK);
+
+        return responseEntity;
+    }
+
     @PostMapping
     @PreAuthorize("ADMIN")
     public ResponseEntity<GanadorDTO> insertGanador(@Valid @RequestBody GanadorDTO ganadorDTO) throws BadRequestException,
