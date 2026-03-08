@@ -4,16 +4,16 @@ import com.todocine.dto.GanadorDTO;
 import com.todocine.entities.Ganador;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GanadorMapper {
 
     public static GanadorDTO toDTO(Ganador ganador) {
         GanadorDTO ganadorDTO = new GanadorDTO();
 
-        ganadorDTO.setPremioId(ganador.getId().getPremio().getId());
-        ganadorDTO.setPremio(ganador.getId().getPremio().getTitulo());
-        ganadorDTO.setCategoria(ganador.getId().getCategoria().getNombre());
+        ganadorDTO.setPremioId(ganador.getId().getCategoriaPremio().getId().getPremio().getId());
+        ganadorDTO.setPremio(ganador.getId().getCategoriaPremio().getId().getPremio().getTitulo());
+        ganadorDTO.setCategoriaId(ganador.getId().getCategoriaPremio().getId().getCategoria().getId());
+        ganadorDTO.setCategoria(ganador.getId().getCategoriaPremio().getId().getCategoria().getNombre());
         ganadorDTO.setAnyo(ganador.getId().getAnyo());
         ganadorDTO.setMovieId(ganador.getId().getMovie().getId());
         ganadorDTO.setOriginalLanguage(ganador.getId().getMovie().getOriginalLanguage());
@@ -30,15 +30,5 @@ public class GanadorMapper {
         ganadorDTO.setVoteCount(ganador.getId().getMovie().getVoteCount());
 
         return ganadorDTO;
-    }
-
-    public static List<GanadorDTO> toDTOList(List<Ganador> ganadorList) {
-        List<GanadorDTO> ganadorDTOList = new ArrayList<>();
-
-        ganadorDTOList.addAll(ganadorList.stream()
-                .map(GanadorMapper::toDTO)
-                .toList());
-
-        return ganadorDTOList;
     }
 }

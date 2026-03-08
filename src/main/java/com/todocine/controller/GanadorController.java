@@ -1,7 +1,7 @@
 package com.todocine.controller;
 
 import com.todocine.dto.GanadorDTO;
-import com.todocine.dto.GanadorPKDTO;
+import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.GanadorService;
@@ -22,10 +22,10 @@ public class GanadorController {
     private GanadorService ganadorService;
 
 
-    @GetMapping("/{id}/anyos/{anyo}")
-    public ResponseEntity<Paginator<GanadorDTO>> getGanadoresByPremioIdAnyo(@NotNull @PathVariable("id") Long id,
-                                                                       @NotNull @PathVariable("anyo") Integer anyo,
-                                                                       @NotNull @RequestParam("pagina") Integer page) throws NotFoudException {
+    @GetMapping
+    public ResponseEntity<Paginator<GanadorDTO>> getGanadoresByPremioIdAnyo(@NotNull @RequestParam("premioId") Long id,
+                                                                            @NotNull @RequestParam("anyo") Integer anyo,
+                                                                            @NotNull @RequestParam("pagina") Integer page) {
         ResponseEntity<Paginator<GanadorDTO>> responseEntity = new ResponseEntity<>(ganadorService.getGanadoresByPremioIdAnyo(id, anyo, page), HttpStatus.OK);
 
         return responseEntity;
@@ -33,8 +33,9 @@ public class GanadorController {
 
     @PostMapping
     @PreAuthorize("ADMIN")
-    public ResponseEntity<GanadorDTO> insertGanador(@Valid @RequestBody GanadorPKDTO ganadorPKDTO) throws BadRequestException {
-        ResponseEntity<GanadorDTO> responseEntity = new ResponseEntity<>(ganadorService.insertGanador(ganadorPKDTO), HttpStatus.CREATED);
+    public ResponseEntity<GanadorDTO> insertGanador(@Valid @RequestBody GanadorDTO ganadorDTO) throws BadRequestException,
+            NotFoudException, BadGatewayException {
+        ResponseEntity<GanadorDTO> responseEntity = new ResponseEntity<>(ganadorService.insertGanador(ganadorDTO), HttpStatus.CREATED);
 
         return responseEntity;
     }

@@ -1,9 +1,7 @@
 package com.todocine.service.impl;
 
-import com.todocine.dao.GanadorDAO;
-import com.todocine.dao.MovieDAO;
+import com.todocine.dao.*;
 import com.todocine.dto.GanadorDTO;
-import com.todocine.dto.GanadorPKDTO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.entities.*;
 import com.todocine.exceptions.BadGatewayException;
@@ -38,13 +36,22 @@ public class GanadorServiceImpl implements GanadorService {
     @Autowired
     private MovieDAO movieDAO;
 
+    @Autowired
+    private CategoriaPremioDAO categoriaPremioDAO;
+
+    @Autowired
+    private PremioDAO premioDAO;
+
+    @Autowired
+    private CategoriaDAO categoriaDAO;
+
     @Override
     @Transactional(readOnly = true)
-    public Paginator<GanadorDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page) throws NotFoudException {
+    public Paginator<GanadorDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page) {
         Paginator<GanadorDTO> paginator = new Paginator<>();
         Pageable pageable = PageRequest.of(page - 1, 21);
 
-        Page<Ganador> ganadores = ganadorDAO.findByIdPremioIdAndIdAnyo(id, anyo, pageable);
+        Page<Ganador> ganadores = ganadorDAO.findById_CategoriaPremio_Id_Premio_IdAndId_Anyo(id, anyo, pageable);
 
         if (ganadores.hasContent()) {
                 List<GanadorDTO> ganadoresDTOs = ganadores.getContent().stream()
@@ -56,34 +63,48 @@ public class GanadorServiceImpl implements GanadorService {
                 paginator.setTotalPages(ganadores.getTotalPages());
                 paginator.setTotalResults((int)ganadores.getTotalElements());
 
-                return paginator;
+
         }
 
-        throw new NotFoudException(GANADORES_NOTFOUND);
-
+        return paginator;
     }
 
     @Override
     @Transactional
-    public GanadorDTO insertGanador(GanadorPKDTO ganadorPKDTO) throws BadRequestException, BadGatewayException {
+    public GanadorDTO insertGanador(GanadorDTO ganadorDTO) throws BadRequestException, NotFoudException, BadGatewayException {
         Ganador ganador = null;
         MovieDTO movieDTO = null;
         Movie movie = null;
-
         GanadorId ganadorId = new GanadorId();
-        ganadorId.setPremio(new Premio(ganadorPKDTO.getPremioId()));
-        ganadorId.setCategoria(new Categoria(ganadorPKDTO.getCategoriaId()));
-        ganadorId.setAnyo(ganadorPKDTO.getAnyo());
-        ganadorId.setMovie(new Movie(ganadorPKDTO.getMovieId()));
+
+        CategoriaPremio categoriaPremio = new CategoriaPremio();
+        CategoriaPremioId categoriaPremioId = new CategoriaPremioId(new Categoria(ganadorDTO.getCategoriaId()),
+                new Premio(ganadorDTO.getPremioId()));
+        categoriaPremio.setId(categoriaPremioId);
+
+        ganadorId.setCategoriaPremio(categoriaPremio);
+        ganadorId.setAnyo(ganadorDTO.getAnyo());
+        ganadorId.setMovie(new Movie(ganadorDTO.getMovieId()));
 
         ganador = ganadorDAO.findById(ganadorId).orElse(null);
 
         if (ganador == null) {
-            movie = movieDAO.findById(ganadorPKDTO.getMovieId()).orElse(null);
+
+            categoriaPremio = categoriaPremioDAO.findById(categoriaPremioId).orElse(null);
+
+            if (categoriaPremio == null) {
+                throw new NotFoudException(PREMIO_NOTFOUND);
+            }
+
+            movie = movieDAO.findById(ganadorDTO.getMovieId()).orElse(null);
 
             if (movie == null) {
                 try {
-                    Map<String, Object> map = tmdbService.getMovieById(ganadorPKDTO.getMovieId());
+                    Map<String, Object> map = tmdbService.getMovieById(ganadorDTO.getMovieId());
+
+                    if (map.get("id") == null)
+                        throw new NotFoudException(MOVIE_NOTFOUND);
+
                     movieDTO = MovieMapper.toDTO(map);
                     movie = MovieMapper.toEntity(movieDTO);
 
@@ -92,6 +113,13 @@ public class GanadorServiceImpl implements GanadorService {
                     throw new BadGatewayException(TMDB_ERROR);
                 }
             }
+
+            Premio premio = premioDAO.findById(ganadorDTO.getPremioId()).orElse(null);
+            Categoria categoria = categoriaDAO.findById(ganadorDTO.getCategoriaId()).orElse(null);
+            categoriaPremioId.setPremio(premio);
+            categoriaPremioId.setCategoria(categoria);
+
+            ganadorId.setMovie(movie);
 
             ganador = new Ganador();
             ganador.setId(ganadorId);

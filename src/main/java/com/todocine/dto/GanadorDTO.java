@@ -3,9 +3,10 @@ package com.todocine.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
+import com.todocine.entities.Ganador;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -13,15 +14,21 @@ import java.util.List;
 public class GanadorDTO {
 
     @JsonProperty("premioId")
+    @NotNull
     private Long premioId;
 
     @JsonProperty("premio")
     private String premio;
 
+    @JsonProperty("categoriaId")
+    @NotNull
+    private Long categoriaId;
+
     @JsonProperty("categoria")
     private String categoria;
 
     @JsonProperty("anyo")
+    @NotNull
     private Integer anyo;
 
     @JsonProperty("movieId")
@@ -29,53 +36,42 @@ public class GanadorDTO {
     private Long movieId;
 
     @JsonProperty("original_title")
-    @NotBlank
     private String originalTitle;
 
     @JsonProperty("title")
-    @NotBlank
     private String title;
 
     @JsonProperty("poster_path")
-    @NotBlank
     private String posterPath;
 
     @JsonProperty("overview")
     private String overview;
 
     @JsonProperty("release_date")
-    @NotBlank
     private String releaseDate;
 
     @JsonProperty("popularity")
-    @NotNull
     private Double popularity;
 
     @JsonProperty("vote_count")
-    @NotNull
     private Integer voteCount;
 
     @JsonProperty("vote_average")
-    @NotNull
     private Double voteAverage;
 
     @JsonProperty("genres")
-    @NotNull
     private List<GenreDTO> genreDTOS;
 
     @JsonProperty("original_language")
-    @NotBlank
     private String originalLanguage;
 
     @JsonProperty("videos")
     private List<VideoDTO> videoDTOS;
 
     @JsonProperty("total_votos_TC")
-    @NotNull
     private Integer totalVotosTC;
 
     @JsonProperty("votos_media_TC")
-    @NotNull
     private Double votosMediaTC;
 
 
@@ -96,6 +92,14 @@ public class GanadorDTO {
 
     public void setPremio(String premio) {
         this.premio = premio;
+    }
+
+    public Long getCategoriaId() {
+        return categoriaId;
+    }
+
+    public void setCategoriaId(Long categoriaId) {
+        this.categoriaId = categoriaId;
     }
 
     public String getCategoria() {

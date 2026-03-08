@@ -1,0 +1,527 @@
+openapi: 3.0.3
+info:
+  title: "API de Todo Cine"
+  description: "API gestionada con Spring Boot, seguridad JWT y catálogo de películas con manejo de excepciones."
+  version: "1.0.0"
+
+servers:
+  - url: "http://localhost:8080/api"
+    description: "Servidor Local"
+
+security:
+  - BearerAuth: []
+
+paths:
+  /usuarios:
+    get:
+      summary: "Buscar usuarios por nombre"
+      tags: ["Usuarios"]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: "username"
+          description: "Nombre de usuario para la búsqueda"
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "OK - Lista de usuarios encontrada."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsuarioDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      summary: "Insertar un nuevo usuario"
+      tags: ["Usuarios"]
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: "Datos del nuevo usuario"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioDTO'
+      responses:
+        '201':
+          description: "Created - Usuario registrado con éxito."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /usuarios/{id}:
+    parameters:
+      - name: "id"
+        description: "ID único del usuario"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: "Obtener usuario por ID"
+      tags: ["Usuarios"]
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: "OK - Usuario encontrado."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioDTO'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      summary: "Actualizar usuario"
+      tags: ["Usuarios"]
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: "Nuevos datos del usuario"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioDTO'
+      responses:
+        '200':
+          description: "OK - Usuario actualizado."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /usuarios/{userId}/movies:
+    get:
+      summary: "Obtener películas del usuario (Paginado)"
+      tags: ["Películas"]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: "userId"
+          description: "ID del usuario"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: "vista"
+          description: "Filtrar por películas vistas (true/false)"
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: "votada"
+          description: "Filtrar por películas votadas"
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: "orderBy"
+          description: "Campo de ordenación (ej. popularity)"
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: "page"
+          description: "Número de página solicitado"
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "OK - Listado paginado obtenido."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatorMovieDetailDTO'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /usuarios/{userId}/movies/{movieId}:
+    parameters:
+      - name: "userId"
+        description: "ID del usuario"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: "movieId"
+        description: "ID de la película"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    put:
+      summary: "Actualizar estado de una película para un usuario"
+      tags: ["Películas del Usuario"]
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: "Datos de la relación usuario-película"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioMovieDTO'
+      responses:
+        '200':
+          description: "OK - Estado de la película actualizado."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieDetailDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '502':
+          description: "Error en el servicio externo."
+
+  /movies:
+    get:
+      summary: "Listado de películas con filtros (Paginado)"
+      tags: ["Películas (General)"]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: "name"
+          description: "Nombre de la película"
+          in: query
+          required: true
+          schema: { type: string }
+        - name: "status"
+          description: "Estado (Released, Post-Production...)"
+          in: query
+          required: true
+          schema: { type: string }
+        - name: "region"
+          description: "Región (ES, US...)"
+          in: query
+          required: true
+          schema: { type: string }
+        - name: "page"
+          description: "Número de página"
+          in: query
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: "Lista de películas filtrada."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatorMovieDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '502':
+          description: "Error en el servicio externo."
+
+  /movies/{id}:
+    get:
+      summary: "Obtener detalle completo de una película por ID"
+      tags: ["Películas (General)"]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: "id"
+          description: "ID de la película"
+          in: path
+          required: true
+          schema: { type: integer, format: int64 }
+      responses:
+        '200':
+          description: "Detalle de la película."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieDetailDTO'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '502':
+          description: "Error en servidor externo."
+
+  /ganadores:
+    get:
+      summary: "Obtener ganadores por premio y año"
+      tags: ["Ganadores"]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: "premioId"
+          description: "ID del premio"
+          in: query
+          required: true
+          schema: { type: integer, format: int64 }
+        - name: "anyo"
+          description: "Año del premio"
+          in: query
+          required: true
+          schema: { type: integer }
+        - name: "pagina"
+          description: "Página de resultados"
+          in: query
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: "Listado de ganadores obtenido."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatorGanadorDTO'
+    post:
+      summary: "Insertar un nuevo ganador"
+      description: "Requiere rol de ADMIN."
+      tags: ["Ganadores"]
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: "Datos del ganador"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GanadorDTO'
+      responses:
+        '201':
+          description: "Ganador registrado."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GanadorDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          description: "Permisos insuficientes."
+        '502':
+          description: "Error en servidor externo."
+
+  /premios/{id}/categorias:
+    get:
+      summary: "Obtener categorías de un premio"
+      description: "Requiere rol de ADMIN."
+      tags: ["Premios y Categorías"]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: "id"
+          description: "ID del premio (ej. Oscars)"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: "Lista de categorías."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoriaDTO'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    BadRequest:
+      description: "Datos inválidos."
+    Unauthorized:
+      description: "Token no válido."
+    Forbidden:
+      description: "Acceso denegado."
+    NotFound:
+      description: "No encontrado."
+
+  schemas:
+    UsuarioDTO:
+      type: object
+      required: [username, password]
+      properties:
+        id: { type: integer, format: int64, description: "Identificador único" }
+        username: { type: string, description: "Nombre de acceso" }
+        password: { type: string, format: password, description: "Clave de acceso" }
+        rol: { type: string, description: "Rol asignado (USER/ADMIN)" }
+
+    PaginatorMovieDetailDTO:
+      type: object
+      properties:
+        page: { type: integer, description: "Página actual" }
+        results:
+          type: array
+          items: { $ref: '#/components/schemas/MovieDetailDTO' }
+          description: "Lista de resultados detallados"
+        total_pages: { type: integer, description: "Total de páginas" }
+        total_results: { type: integer, description: "Total de registros" }
+
+    MovieDetailDTO:
+      type: object
+      properties:
+        id: { type: integer, format: int64, description: "ID de la película" }
+        original_title: { type: string, description: "Título original" }
+        title: { type: string, description: "Título traducido" }
+        poster_path: { type: string, description: "Ruta de la imagen del póster" }
+        overview: { type: string, description: "Resumen o sinopsis" }
+        release_date: { type: string, description: "Fecha de estreno" }
+        popularity: { type: number, format: double, description: "Índice de popularidad" }
+        vote_count: { type: integer, description: "Número total de votos externos" }
+        vote_average: { type: number, format: double, description: "Puntuación media externa" }
+        original_language: { type: string, description: "Idioma original" }
+        favoritos: { type: boolean, description: "Es favorita para el usuario" }
+        voto: { type: number, format: double, description: "Voto del usuario" }
+        vista: { type: boolean, description: "Película ya vista por el usuario" }
+        total_votos_TC: { type: integer, description: "Votos totales en Todo Cine" }
+        votos_media_TC: { type: number, format: double, description: "Media en Todo Cine" }
+        genres:
+          type: array
+          items: { $ref: '#/components/schemas/GenreDTO' }
+          description: "Lista de géneros"
+        videos:
+          type: array
+          items: { $ref: '#/components/schemas/VideoDTO' }
+          description: "Lista de trailers o videos"
+
+    GenreDTO:
+      type: object
+      required: [id]
+      properties:
+        id: { type: string, description: "ID del género" }
+        name: { type: string, description: "Nombre del género" }
+
+    VideoDTO:
+      type: object
+      required: [id]
+      properties:
+        id: { type: string, description: "Identificador del video" }
+        name: { type: string, description: "Nombre del video" }
+        key: { type: string, description: "Clave de plataforma (ej. YouTube ID)" }
+        site: { type: string, description: "Sitio de alojamiento" }
+        type: { type: string, description: "Tipo de video (Trailer, Teaser)" }
+
+    UsuarioMovieDTO:
+      type: object
+      required: [usuarioId, movieId, favoritos, vista]
+      properties:
+        usuarioId: { type: integer, format: int64, description: "ID del usuario" }
+        movieId: { type: integer, format: int64, description: "ID de la película" }
+        favoritos: { type: boolean, description: "Estado de favorito" }
+        vista: { type: boolean, description: "Estado de vista" }
+        voto: { type: number, format: double, nullable: true, description: "Puntuación personal" }
+
+    PaginatorMovieDTO:
+      type: object
+      properties:
+        page: { type: integer, description: "Página actual" }
+        results:
+          type: array
+          items: { $ref: '#/components/schemas/MovieDTO' }
+          description: "Lista de películas"
+        total_pages: { type: integer, description: "Páginas totales" }
+        total_results: { type: integer, description: "Registros totales" }
+
+    MovieDTO:
+      type: object
+      required: [id, title]
+      properties:
+        id: { type: integer, format: int64, description: "ID único" }
+        original_title: { type: string, description: "Título original" }
+        title: { type: string, description: "Título" }
+        poster_path: { type: string, description: "Imagen" }
+        overview: { type: string, description: "Sinopsis" }
+        release_date: { type: string, description: "Fecha estreno" }
+        popularity: { type: number, format: double, description: "Popularidad" }
+        vote_count: { type: integer, description: "Votos totales" }
+        vote_average: { type: number, format: double, description: "Media votos" }
+        original_language: { type: string, description: "Idioma" }
+        genres:
+          type: array
+          items: { $ref: '#/components/schemas/GenreDTO' }
+          description: "Géneros asociados"
+        videos:
+          type: array
+          items: { $ref: '#/components/schemas/VideoDTO' }
+          description: "Videos asociados"
+        total_votos_TC: { type: integer, description: "Votos locales" }
+        votos_media_TC: { type: number, format: double, description: "Media local" }
+
+    PaginatorGanadorDTO:
+      type: object
+      properties:
+        page: { type: integer, description: "Página actual" }
+        results:
+          type: array
+          items: { $ref: '#/components/schemas/GanadorDTO' }
+          description: "Lista de ganadores"
+        total_pages: { type: integer, description: "Páginas totales" }
+        total_results: { type: integer, description: "Registros totales" }
+
+    GanadorDTO:
+      type: object
+      required: [premioId, categoriaId, anyo, movieId]
+      properties:
+        premioId: { type: integer, format: int64, description: "ID del premio" }
+        premio: { type: string, description: "Nombre del premio" }
+        categoriaId: { type: integer, format: int64, description: "ID de la categoría" }
+        categoria: { type: string, description: "Nombre de la categoría" }
+        anyo: { type: integer, description: "Año de la gala" }
+        movieId: { type: integer, format: int64, description: "ID de la película" }
+        original_title: { type: string, description: "Título original" }
+        title: { type: string, description: "Título" }
+        poster_path: { type: string, description: "Imagen póster" }
+        overview: { type: string, description: "Sinopsis" }
+        release_date: { type: string, description: "Fecha de lanzamiento" }
+        popularity: { type: number, format: double, description: "Popularidad" }
+        vote_count: { type: integer, description: "Votos" }
+        vote_average: { type: number, format: double, description: "Nota media" }
+        original_language: { type: string, description: "Idioma" }
+        total_votos_TC: { type: integer, description: "Votos locales" }
+        votos_media_TC: { type: number, format: double, description: "Media local" }
+        genres:
+          type: array
+          items: { $ref: '#/components/schemas/GenreDTO' }
+          description: "Lista de géneros"
+        videos:
+          type: array
+          items: { $ref: '#/components/schemas/VideoDTO' }
+          description: "Lista de videos"
+
+    CategoriaDTO:
+      type: object
+      properties:
+        id: { type: integer, format: int64, description: "ID único de la categoría" }
+        nombre: { type: string, description: "Descripción de la categoría" }
