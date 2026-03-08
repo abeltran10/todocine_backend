@@ -9,7 +9,7 @@ import com.todocine.utils.Paginator;
 
 public interface GanadorService {
 
-    Paginator<GanadorDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page) throws NotFoudException;
+    Paginator<GanadorDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page);
 
     GanadorDTO insertGanador(GanadorDTO ganadorDTO) throws BadRequestException, NotFoudException, BadGatewayException;
 }

@@ -47,7 +47,7 @@ public class GanadorServiceImpl implements GanadorService {
 
     @Override
     @Transactional(readOnly = true)
-    public Paginator<GanadorDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page) throws NotFoudException {
+    public Paginator<GanadorDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page) {
         Paginator<GanadorDTO> paginator = new Paginator<>();
         Pageable pageable = PageRequest.of(page - 1, 21);
 
@@ -63,11 +63,10 @@ public class GanadorServiceImpl implements GanadorService {
                 paginator.setTotalPages(ganadores.getTotalPages());
                 paginator.setTotalResults((int)ganadores.getTotalElements());
 
-                return paginator;
+
         }
 
-        throw new NotFoudException(GANADORES_NOTFOUND);
-
+        return paginator;
     }
 
     @Override

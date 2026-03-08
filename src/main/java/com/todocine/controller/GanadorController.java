@@ -25,7 +25,7 @@ public class GanadorController {
     @GetMapping
     public ResponseEntity<Paginator<GanadorDTO>> getGanadoresByPremioIdAnyo(@NotNull @RequestParam("premioId") Long id,
                                                                             @NotNull @RequestParam("anyo") Integer anyo,
-                                                                            @NotNull @RequestParam("pagina") Integer page) throws NotFoudException {
+                                                                            @NotNull @RequestParam("pagina") Integer page) {
         ResponseEntity<Paginator<GanadorDTO>> responseEntity = new ResponseEntity<>(ganadorService.getGanadoresByPremioIdAnyo(id, anyo, page), HttpStatus.OK);
 
         return responseEntity;
