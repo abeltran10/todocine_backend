@@ -39,23 +39,18 @@ public class MovieDTO {
     private String releaseDate;
 
     @JsonProperty("popularity")
-    @NotNull
     private Double popularity;
 
     @JsonProperty("vote_count")
-    @NotNull
     private Integer voteCount;
 
     @JsonProperty("vote_average")
-    @NotNull
     private Double voteAverage;
 
     @JsonProperty("genres")
-    @NotNull
     private List<GenreDTO> genreDTOS;
 
     @JsonProperty("original_language")
-    @NotBlank
     private String originalLanguage;
 
     @JsonProperty("videos")

@@ -418,7 +418,7 @@ components:
 
     GenreDTO:
       type: object
-      required: [id, name]
+      required: [id]
       properties:
         id: { type: string, description: "Genre ID" }
         name: { type: string, description: "Genre name" }
@@ -445,7 +445,7 @@ components:
 
     MovieDTO:
       type: object
-      required: [id, title, original_title, poster_path, release_date, popularity, vote_count, vote_average, genres, original_language]
+      required: [id, title, original_title, poster_path, release_date]
       properties:
         id: { type: integer, format: int64, description: "Unique ID" }
         original_title: { type: string, description: "Original title" }
@@ -483,20 +483,6 @@ components:
         poster_path: { type: string, description: "Poster image" }
         overview: { type: string, description: "Synopsis" }
         release_date: { type: string, description: "Release date" }
-        popularity: { type: number, format: double, description: "Popularity" }
-        vote_count: { type: integer, description: "Votes" }
-        vote_average: { type: number, format: double, description: "Average score" }
-        original_language: { type: string, description: "Language" }
-        total_votos_TC: { type: integer, description: "Local votes" }
-        votos_media_TC: { type: number, format: double, description: "Local average" }
-        genres:
-          type: array
-          items: { $ref: '#/components/schemas/GenreDTO' }
-          description: "Genre list"
-        videos:
-          type: array
-          items: { $ref: '#/components/schemas/VideoDTO' }
-          description: "Video list"
 
     CategoriaDTO:
       type: object

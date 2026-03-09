@@ -50,30 +50,6 @@ public class GanadorDTO {
     @JsonProperty("release_date")
     private String releaseDate;
 
-    @JsonProperty("popularity")
-    private Double popularity;
-
-    @JsonProperty("vote_count")
-    private Integer voteCount;
-
-    @JsonProperty("vote_average")
-    private Double voteAverage;
-
-    @JsonProperty("genres")
-    private List<GenreDTO> genreDTOS;
-
-    @JsonProperty("original_language")
-    private String originalLanguage;
-
-    @JsonProperty("videos")
-    private List<VideoDTO> videoDTOS;
-
-    @JsonProperty("total_votos_TC")
-    private Integer totalVotosTC;
-
-    @JsonProperty("votos_media_TC")
-    private Double votosMediaTC;
-
 
     public GanadorDTO() {
     }
@@ -166,67 +142,4 @@ public class GanadorDTO {
         this.releaseDate = releaseDate;
     }
 
-    public Double getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(Double popularity) {
-        this.popularity = popularity;
-    }
-
-    public Integer getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(Integer voteCount) {
-        this.voteCount = voteCount;
-    }
-
-    public Double getVoteAverage() {
-        return voteAverage;
-    }
-
-    public void setVoteAverage(Double voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public List<GenreDTO> getGenreDTOS() {
-        return genreDTOS;
-    }
-
-    public void setGenreDTOS(List<GenreDTO> genreDTOS) {
-        this.genreDTOS = genreDTOS;
-    }
-
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public void setOriginalLanguage(String originalLanguage) {
-        this.originalLanguage = originalLanguage;
-    }
-
-    public List<VideoDTO> getVideoDTOS() {
-        return videoDTOS;
-    }
-
-    public void setVideoDTOS(List<VideoDTO> videoDTOS) {
-        this.videoDTOS = videoDTOS;
-    }
-
-    public Integer getTotalVotosTC() {
-        return totalVotosTC;
-    }
-
-    public void setTotalVotosTC(Integer totalVotosTC) {
-        this.totalVotosTC = totalVotosTC;
-    }
-
-    public Double getVotosMediaTC() {
-        return votosMediaTC;
-    }
-
-    public void setVotosMediaTC(Double votosMediaTC) {
-        this.votosMediaTC = votosMediaTC;
-    }
 }

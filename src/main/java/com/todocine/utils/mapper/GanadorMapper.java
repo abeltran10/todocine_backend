@@ -16,18 +16,11 @@ public class GanadorMapper {
         ganadorDTO.setCategoria(ganador.getId().getCategoriaPremio().getId().getCategoria().getNombre());
         ganadorDTO.setAnyo(ganador.getId().getAnyo());
         ganadorDTO.setMovieId(ganador.getId().getMovie().getId());
-        ganadorDTO.setOriginalLanguage(ganador.getId().getMovie().getOriginalLanguage());
         ganadorDTO.setOriginalTitle(ganador.getId().getMovie().getOriginalTitle());
         ganadorDTO.setTitle(ganador.getId().getMovie().getTitle());
-        ganadorDTO.setGenreDTOS(new ArrayList<>());
-        ganadorDTO.setVideoDTOS(new ArrayList<>());
         ganadorDTO.setOverview(ganador.getId().getMovie().getOverview());
-        ganadorDTO.setPopularity(ganador.getId().getMovie().getPopularity());
         ganadorDTO.setPosterPath(ganador.getId().getMovie().getPosterPath());
         ganadorDTO.setReleaseDate(ganador.getId().getMovie().getReleaseDate());
-        ganadorDTO.setTotalVotosTC(ganador.getId().getMovie().getTotalVotosTC());
-        ganadorDTO.setVoteAverage(ganador.getId().getMovie().getVoteAverage());
-        ganadorDTO.setVoteCount(ganador.getId().getMovie().getVoteCount());
 
         return ganadorDTO;
     }

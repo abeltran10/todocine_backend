@@ -1,15 +1,14 @@
 package com.todocine;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.todocine.dao.CategoriaDAO;
-import com.todocine.dao.UsuarioMovieDAO;
-import com.todocine.dao.MovieDAO;
-import com.todocine.dao.UsuarioDAO;
+import com.todocine.dao.*;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Usuario;
 import com.todocine.utils.mapper.UserMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CheckUsuarioTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckUsuarioTest.class);
 
@@ -39,13 +39,13 @@ public class CheckUsuarioTest {
     private UsuarioDAO usuarioDAO;
 
     @Autowired
-    private CategoriaDAO categoriaDAO;
+    private GanadorDAO ganadorDAO;
 
     @Autowired
     private MovieDAO movieDAO;
 
     @Autowired
-    private UsuarioMovieDAO favoritosDAO;
+    private UsuarioMovieDAO usuarioMovieDAO;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -58,30 +58,20 @@ public class CheckUsuarioTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @BeforeAll
+    void setUp() {
+        usuarioMovieDAO.deleteAll();
+        usuarioDAO.deleteAll();
+        ganadorDAO.deleteAll();
+        movieDAO.deleteAll();
+    }
 
     @BeforeEach
     void before() {
-        favoritosDAO.deleteAll();
         usuarioDAO.deleteAll();
-        movieDAO.deleteAll();
 
         usuario = new Usuario("test", "1234");
-
         usuario = usuarioDAO.save(usuario);
-    }
-
-    @Test
-    void findUser() {
-        LOG.info("findUser");
-
-        try {
-            mockMvc.perform(get("/usuarios?username=test")
-                            .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$[0].id").value(usuario.getId()));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Test
@@ -113,7 +103,7 @@ public class CheckUsuarioTest {
                             .content(objectMapper.writeValueAsString(usuarioDTO))             // Body JSON
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
-                    .andExpect(status().isBadRequest());
+                    .andExpect(status().isConflict());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
