@@ -8,6 +8,4 @@ import java.util.List;
 
 public interface UsuarioDAO extends JpaRepository<Usuario, Long> {
 
-    List<Usuario> findByUsername(String username);
-
 }

@@ -1,7 +1,6 @@
 package com.todocine.service.impl;
 
 
-import com.todocine.configuration.Constants;
 import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dto.MovieDTO;
@@ -9,12 +8,12 @@ import com.todocine.dto.MovieDetailDTO;
 import com.todocine.entities.*;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.MovieMapper;
-import com.todocine.utils.mapper.UsuarioMovieMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

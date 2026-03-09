@@ -13,31 +13,6 @@ security:
 
 paths:
   /usuarios:
-    get:
-      summary: "Search users by name"
-      tags: ["Users"]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: "username"
-          description: "Username for the search query"
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: "OK - List of users found."
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UsuarioDTO'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
 
     post:
       summary: "Insert a new user"
@@ -60,6 +35,8 @@ paths:
                 $ref: '#/components/schemas/UsuarioDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
 
   /usuarios/{id}:
     parameters:
@@ -86,6 +63,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
 
     put:
       summary: "Update user"
@@ -160,6 +139,8 @@ paths:
                 $ref: '#/components/schemas/PaginatorMovieDetailDTO'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '400':
+          $ref: '#/components/responses/BadRequest'
 
   /usuarios/{userId}/movies/{movieId}:
     parameters:
@@ -203,7 +184,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
         '502':
-          description: "Error in external service."
+          $ref: '#/components/responses/BadGateway'
 
   /movies:
     get:
@@ -244,7 +225,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
         '502':
-          description: "Error in external service."
+          $ref: '#/components/responses/BadGateway'
 
   /movies/{id}:
     get:
@@ -265,10 +246,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MovieDetailDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '502':
-          description: "External server error."
+          $ref: '#/components/responses/BadGateway'
 
   /ganadores:
     get:
@@ -299,6 +282,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatorGanadorDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
     post:
       summary: "Insert a new winner"
       description: "Requires ADMIN role."
@@ -322,9 +308,11 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
-          description: "Insufficient permissions."
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '502':
-          description: "External server error."
+          $ref: '#/components/responses/BadGateway'
 
   /premios/{id}/categorias:
     get:
@@ -350,6 +338,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CategoriaDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
 
 components:
   securitySchemes:
@@ -361,12 +353,14 @@ components:
   responses:
     BadRequest:
       description: "Invalid data."
-    Unauthorized:
-      description: "Invalid token."
+    Conflict:
+      description: "Resource already exists."
     Forbidden:
       description: "Access denied."
     NotFound:
       description: "Not found."
+    BadGateway:
+      description: "External server error."
 
   schemas:
     UsuarioDTO:
@@ -391,6 +385,7 @@ components:
 
     MovieDetailDTO:
       type: object
+      required: [id, title, original_title, poster_path, release_date, popularity, vote_count, vote_average, genres, original_language, total_votos_TC, votos_media_TC]
       properties:
         id: { type: integer, format: int64, description: "Movie ID" }
         original_title: { type: string, description: "Original title" }
@@ -418,14 +413,14 @@ components:
 
     GenreDTO:
       type: object
-      required: [id]
+      required: [id, name]
       properties:
         id: { type: string, description: "Genre ID" }
         name: { type: string, description: "Genre name" }
 
     VideoDTO:
       type: object
-      required: [id]
+      required: [id, name, key, site, type]
       properties:
         id: { type: string, description: "Video identifier" }
         name: { type: string, description: "Video name" }
@@ -456,7 +451,7 @@ components:
 
     MovieDTO:
       type: object
-      required: [id, title]
+      required: [id, title, original_title, poster_path, release_date, popularity, vote_count, vote_average, genres, original_language]
       properties:
         id: { type: integer, format: int64, description: "Unique ID" }
         original_title: { type: string, description: "Original title" }
@@ -522,6 +517,7 @@ components:
 
     CategoriaDTO:
       type: object
+      required: [id, nombre]
       properties:
         id: { type: integer, format: int64, description: "Unique category ID" }
         nombre: { type: string, description: "Category description" }

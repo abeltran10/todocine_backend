@@ -3,7 +3,7 @@ package com.todocine;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Usuario;
-import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ConflictException;
 import com.todocine.service.impl.UserServiceImpl;
 import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -90,7 +90,7 @@ public class CheckUsuarioUnitTest {
 
         try {
             usuarioService.insertUsuario(usuarioDTO);
-        } catch (BadRequestException ex) {
+        } catch (ConflictException ex) {
             LOG.info(ex.getMessage());
             assertTrue(ex.getMessage().contains("Un usuario con ese nombre ya existe"));
         }

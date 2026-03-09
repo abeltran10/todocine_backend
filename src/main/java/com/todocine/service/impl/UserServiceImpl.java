@@ -3,7 +3,7 @@ package com.todocine.service.impl;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Usuario;
-import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.UsuarioService;
@@ -51,28 +51,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
     }
 
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<UsuarioDTO> getUsuarioByName(String username) throws BadRequestException {
-        log.info("getUsuarioByName");
-
-        List<UsuarioDTO> usuarioDTOS = new ArrayList<>();
-
-        List<Usuario> usuarios = usuarioDAO.findByUsername(username);
-
-        if (usuarios.isEmpty())
-            return usuarioDTOS;
-        else if (getCurrentUserId() == null)
-            throw new BadRequestException(USER_FORBIDDEN);
-        else {
-            return usuarios.stream().map(UserMapper::toDTO).toList();
-        }
-    }
-
     @Override
     @Transactional
-    public UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws BadRequestException {
+    public UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws ConflictException {
         Usuario usuario = null;
         List<Usuario> usuarios = usuarioDAO.findByUsername(usuarioDTO.getUsername());
 
@@ -90,7 +71,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
             return UserMapper.toDTO(usuario);
         } else {
-            throw new BadRequestException(USER_EXISTS);
+            throw new ConflictException(USER_EXISTS);
         }
     }
 

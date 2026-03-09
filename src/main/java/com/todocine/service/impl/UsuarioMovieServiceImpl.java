@@ -9,7 +9,6 @@ import com.todocine.dto.MovieDTO;
 import com.todocine.dto.MovieDetailDTO;
 import com.todocine.entities.*;
 import com.todocine.exceptions.BadGatewayException;
-import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.UsuarioMovieService;
@@ -20,9 +19,6 @@ import com.todocine.utils.mapper.UsuarioMovieMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +26,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.todocine.configuration.Constants.*;
 
