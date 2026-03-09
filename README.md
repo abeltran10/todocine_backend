@@ -23,6 +23,7 @@ application.properties loads properties from three files, one per environment (p
 ## API
 API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
+
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
 Bearer format: JWT
@@ -380,11 +381,11 @@ Requires ADMIN role.
 | poster_path | string | Image path | Yes |
 | overview | string | Synopsis | No |
 | release_date | string | Release date | Yes |
-| popularity | double | Popularity | Yes |
-| vote_count | integer | Total votes | Yes |
-| vote_average | double | Average score | Yes |
-| original_language | string | Language | Yes |
-| genres | [ [GenreDTO](#genredto) ] | Associated genres | Yes |
+| popularity | double | Popularity | No |
+| vote_count | integer | Total votes | No |
+| vote_average | double | Average score | No |
+| original_language | string | Language | No |
+| genres | [ [GenreDTO](#genredto) ] | Associated genres | No |
 | videos | [ [VideoDTO](#videodto) ] | Associated videos | No |
 | total_votos_TC | integer | Local votes | No |
 | votos_media_TC | double | Local average | No |
@@ -404,14 +405,6 @@ Requires ADMIN role.
 | poster_path | string | Poster image | No |
 | overview | string | Synopsis | No |
 | release_date | string | Release date | No |
-| popularity | double | Popularity | No |
-| vote_count | integer | Votes | No |
-| vote_average | double | Average score | No |
-| original_language | string | Language | No |
-| total_votos_TC | integer | Local votes | No |
-| votos_media_TC | double | Local average | No |
-| genres | [ [GenreDTO](#genredto) ] | Genre list | No |
-| videos | [ [VideoDTO](#videodto) ] | Video list | No |
 
 #### CategoriaDTO
 
