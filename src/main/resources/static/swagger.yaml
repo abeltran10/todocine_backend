@@ -136,7 +136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatorMovieDetailDTO'
+                $ref: '#/components/schemas/Paginator'
         '403':
           $ref: '#/components/responses/Forbidden'
         '400':
@@ -219,7 +219,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatorMovieDTO'
+                $ref: '#/components/schemas/Paginator'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -281,7 +281,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatorGanadorDTO'
+                $ref: '#/components/schemas/Paginator'
         '400':
           $ref: '#/components/responses/BadRequest'
 
@@ -372,14 +372,19 @@ components:
         password: { type: string, format: password, description: "Access password" }
         rol: { type: string, description: "Assigned role (USER/ADMIN)" }
 
-    PaginatorMovieDetailDTO:
+    Paginator:
       type: object
+      required: [page, total_pages, total_results]
       properties:
         page: { type: integer, description: "Current page" }
         results:
           type: array
-          items: { $ref: '#/components/schemas/MovieDetailDTO' }
-          description: "List of detailed results"
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/MovieDTO'
+              - $ref: '#/components/schemas/MovieDetailDTO'
+              - $ref: '#/components/schemas/GanadorDTO'
+          description: "List of results"
         total_pages: { type: integer, description: "Total pages" }
         total_results: { type: integer, description: "Total records" }
 
@@ -438,17 +443,6 @@ components:
         vista: { type: boolean, description: "Watch status" }
         voto: { type: number, format: double, nullable: true, description: "Personal score" }
 
-    PaginatorMovieDTO:
-      type: object
-      properties:
-        page: { type: integer, description: "Current page" }
-        results:
-          type: array
-          items: { $ref: '#/components/schemas/MovieDTO' }
-          description: "Movie list"
-        total_pages: { type: integer, description: "Total pages" }
-        total_results: { type: integer, description: "Total records" }
-
     MovieDTO:
       type: object
       required: [id, title, original_title, poster_path, release_date, popularity, vote_count, vote_average, genres, original_language]
@@ -473,17 +467,6 @@ components:
           description: "Associated videos"
         total_votos_TC: { type: integer, description: "Local votes" }
         votos_media_TC: { type: number, format: double, description: "Local average" }
-
-    PaginatorGanadorDTO:
-      type: object
-      properties:
-        page: { type: integer, description: "Current page" }
-        results:
-          type: array
-          items: { $ref: '#/components/schemas/GanadorDTO' }
-          description: "Winner list"
-        total_pages: { type: integer, description: "Total pages" }
-        total_results: { type: integer, description: "Total records" }
 
     GanadorDTO:
       type: object
