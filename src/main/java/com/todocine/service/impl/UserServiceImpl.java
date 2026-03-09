@@ -42,22 +42,21 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username);
 
-        List<Usuario> usuario = usuarioDAO.findByUsername(username);
+        Usuario usuario = usuarioDAO.findByUsername(username);
 
         if (usuario == null)
             throw new UsernameNotFoundException(USER_PASSWORD_ERROR);
         else
-            return usuario.get(0);
+            return usuario;
 
     }
 
     @Override
     @Transactional
     public UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws ConflictException {
-        Usuario usuario = null;
-        List<Usuario> usuarios = usuarioDAO.findByUsername(usuarioDTO.getUsername());
+        Usuario usuario = usuarioDAO.findByUsername(usuarioDTO.getUsername());
 
-        if (usuarios.isEmpty()) {
+        if (usuario == null) {
             usuario = new Usuario();
             usuario.setUsername(usuarioDTO.getUsername());
             usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
