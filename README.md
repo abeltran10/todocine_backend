@@ -125,7 +125,7 @@ Bearer format: JWT
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | OK - Paginated list retrieved. | **application/json**: [PaginatorMovieDetailDTO](#paginatormoviedetaildto)<br> |
+| 200 | OK - Paginated list retrieved. | **application/json**: [Paginator](#paginator)<br> |
 | 400 | Invalid data. |  |
 | 403 | Access denied. |  |
 
@@ -185,7 +185,7 @@ Bearer format: JWT
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | Filtered movie list. | **application/json**: [PaginatorMovieDTO](#paginatormoviedto)<br> |
+| 200 | Filtered movie list. | **application/json**: [Paginator](#paginator)<br> |
 | 400 | Invalid data. |  |
 | 404 | Not found. |  |
 | 502 | External server error. |  |
@@ -237,7 +237,7 @@ Bearer format: JWT
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | List of winners retrieved. | **application/json**: [PaginatorGanadorDTO](#paginatorganadordto)<br> |
+| 200 | List of winners retrieved. | **application/json**: [Paginator](#paginator)<br> |
 | 400 | Invalid data. |  |
 
 ##### Security
@@ -312,14 +312,14 @@ Requires ADMIN role.
 | password | password | Access password | Yes |
 | rol | string | Assigned role (USER/ADMIN) | No |
 
-#### PaginatorMovieDetailDTO
+#### Paginator
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| page | integer | Current page | No |
-| results | [ [MovieDetailDTO](#moviedetaildto) ] | List of detailed results | No |
-| total_pages | integer | Total pages | No |
-| total_results | integer | Total records | No |
+| page | integer | Current page | Yes |
+| results | [  ] | List of results | No |
+| total_pages | integer | Total pages | Yes |
+| total_results | integer | Total records | Yes |
 
 #### MovieDetailDTO
 
@@ -370,15 +370,6 @@ Requires ADMIN role.
 | vista | boolean | Watch status | Yes |
 | voto | double | Personal score | No |
 
-#### PaginatorMovieDTO
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| page | integer | Current page | No |
-| results | [ [MovieDTO](#moviedto) ] | Movie list | No |
-| total_pages | integer | Total pages | No |
-| total_results | integer | Total records | No |
-
 #### MovieDTO
 
 | Name | Type | Description | Required |
@@ -397,15 +388,6 @@ Requires ADMIN role.
 | videos | [ [VideoDTO](#videodto) ] | Associated videos | No |
 | total_votos_TC | integer | Local votes | No |
 | votos_media_TC | double | Local average | No |
-
-#### PaginatorGanadorDTO
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| page | integer | Current page | No |
-| results | [ [GanadorDTO](#ganadordto) ] | Winner list | No |
-| total_pages | integer | Total pages | No |
-| total_results | integer | Total records | No |
 
 #### GanadorDTO
 
@@ -437,7 +419,6 @@ Requires ADMIN role.
 | ---- | ---- | ----------- | -------- |
 | id | long | Unique category ID | Yes |
 | nombre | string | Category description | Yes |
-
 
 ## Entity-Relation Diagram
 
