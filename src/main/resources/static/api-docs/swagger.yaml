@@ -418,7 +418,7 @@ components:
 
     GenreDTO:
       type: object
-      required: [id, name]
+      required: [id]
       properties:
         id: { type: string, description: "Genre ID" }
         name: { type: string, description: "Genre name" }

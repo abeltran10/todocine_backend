@@ -23,6 +23,7 @@ application.properties loads properties from three files, one per environment (p
 ## API
 API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
+## Version: 1.0.0
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -349,7 +350,7 @@ Requires ADMIN role.
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | id | string | Genre ID | Yes |
-| name | string | Genre name | Yes |
+| name | string | Genre name | No |
 
 #### VideoDTO
 
@@ -412,6 +413,7 @@ Requires ADMIN role.
 | ---- | ---- | ----------- | -------- |
 | id | long | Unique category ID | Yes |
 | nombre | string | Category description | Yes |
+
 
 ## Entity-Relation Diagram
 
