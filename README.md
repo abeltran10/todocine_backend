@@ -20,7 +20,7 @@ application.properties loads properties from three files, one per environment (p
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## Todo Cine API
+## API
 API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
 ### Available authorizations
@@ -28,29 +28,6 @@ API managed with Spring Boot, JWT security, and movie catalog with custom except
 Bearer format: JWT
 
 ---
-
-### [GET] /usuarios
-**Search users by name**
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| username | query | Username for the search query | Yes | string |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | OK - List of users found. | **application/json**: [ [UsuarioDTO](#usuariodto) ]<br> |
-| 400 | Invalid data. |  |
-| 401 | Invalid token. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
 
 ### [POST] /usuarios
 **Insert a new user**
@@ -67,6 +44,7 @@ Bearer format: JWT
 | ---- | ----------- | ------ |
 | 201 | Created - User registered successfully. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
 | 400 | Invalid data. |  |
+| 409 | Resource already exists. |  |
 
 ##### Security
 
@@ -88,6 +66,7 @@ Bearer format: JWT
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | OK - User found. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
+| 400 | Invalid data. |  |
 | 403 | Access denied. |  |
 | 404 | Not found. |  |
 
@@ -147,6 +126,7 @@ Bearer format: JWT
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | OK - Paginated list retrieved. | **application/json**: [PaginatorMovieDetailDTO](#paginatormoviedetaildto)<br> |
+| 400 | Invalid data. |  |
 | 403 | Access denied. |  |
 
 ##### Security
@@ -179,7 +159,7 @@ Bearer format: JWT
 | 400 | Invalid data. |  |
 | 403 | Access denied. |  |
 | 404 | Not found. |  |
-| 502 | Error in external service. |  |
+| 502 | External server error. |  |
 
 ##### Security
 
@@ -208,7 +188,7 @@ Bearer format: JWT
 | 200 | Filtered movie list. | **application/json**: [PaginatorMovieDTO](#paginatormoviedto)<br> |
 | 400 | Invalid data. |  |
 | 404 | Not found. |  |
-| 502 | Error in external service. |  |
+| 502 | External server error. |  |
 
 ##### Security
 
@@ -230,6 +210,7 @@ Bearer format: JWT
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | Movie detail. | **application/json**: [MovieDetailDTO](#moviedetaildto)<br> |
+| 400 | Invalid data. |  |
 | 404 | Not found. |  |
 | 502 | External server error. |  |
 
@@ -257,6 +238,7 @@ Bearer format: JWT
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | List of winners retrieved. | **application/json**: [PaginatorGanadorDTO](#paginatorganadordto)<br> |
+| 400 | Invalid data. |  |
 
 ##### Security
 
@@ -281,7 +263,8 @@ Requires ADMIN role.
 | ---- | ----------- | ------ |
 | 201 | Winner registered. | **application/json**: [GanadorDTO](#ganadordto)<br> |
 | 400 | Invalid data. |  |
-| 403 | Insufficient permissions. |  |
+| 403 | Access denied. |  |
+| 409 | Resource already exists. |  |
 | 502 | External server error. |  |
 
 ##### Security
@@ -308,6 +291,8 @@ Requires ADMIN role.
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | List of categories. | **application/json**: [ [CategoriaDTO](#categoriadto) ]<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
 
 ##### Security
 
@@ -340,22 +325,22 @@ Requires ADMIN role.
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long | Movie ID | No |
-| original_title | string | Original title | No |
-| title | string | Translated title | No |
-| poster_path | string | Poster image path | No |
+| id | long | Movie ID | Yes |
+| original_title | string | Original title | Yes |
+| title | string | Translated title | Yes |
+| poster_path | string | Poster image path | Yes |
 | overview | string | Summary or synopsis | No |
-| release_date | string | Release date | No |
-| popularity | double | Popularity index | No |
-| vote_count | integer | Total external votes | No |
-| vote_average | double | Average external score | No |
-| original_language | string | Original language | No |
+| release_date | string | Release date | Yes |
+| popularity | double | Popularity index | Yes |
+| vote_count | integer | Total external votes | Yes |
+| vote_average | double | Average external score | Yes |
+| original_language | string | Original language | Yes |
 | favoritos | boolean | Is marked as favorite by user | No |
 | voto | double | User's personal vote | No |
 | vista | boolean | Already watched by user | No |
-| total_votos_TC | integer | Total votes in Todo Cine | No |
-| votos_media_TC | double | Average score in Todo Cine | No |
-| genres | [ [GenreDTO](#genredto) ] | Genre list | No |
+| total_votos_TC | integer | Total votes in Todo Cine | Yes |
+| votos_media_TC | double | Average score in Todo Cine | Yes |
+| genres | [ [GenreDTO](#genredto) ] | Genre list | Yes |
 | videos | [ [VideoDTO](#videodto) ] | Trailers or video list | No |
 
 #### GenreDTO
@@ -363,17 +348,17 @@ Requires ADMIN role.
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | id | string | Genre ID | Yes |
-| name | string | Genre name | No |
+| name | string | Genre name | Yes |
 
 #### VideoDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | id | string | Video identifier | Yes |
-| name | string | Video name | No |
-| key | string | Platform key (e.g., YouTube ID) | No |
-| site | string | Hosting site | No |
-| type | string | Video type (Trailer, Teaser) | No |
+| name | string | Video name | Yes |
+| key | string | Platform key (e.g., YouTube ID) | Yes |
+| site | string | Hosting site | Yes |
+| type | string | Video type (Trailer, Teaser) | Yes |
 
 #### UsuarioMovieDTO
 
@@ -399,16 +384,16 @@ Requires ADMIN role.
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | id | long | Unique ID | Yes |
-| original_title | string | Original title | No |
+| original_title | string | Original title | Yes |
 | title | string | Title | Yes |
-| poster_path | string | Image path | No |
+| poster_path | string | Image path | Yes |
 | overview | string | Synopsis | No |
-| release_date | string | Release date | No |
-| popularity | double | Popularity | No |
-| vote_count | integer | Total votes | No |
-| vote_average | double | Average score | No |
-| original_language | string | Language | No |
-| genres | [ [GenreDTO](#genredto) ] | Associated genres | No |
+| release_date | string | Release date | Yes |
+| popularity | double | Popularity | Yes |
+| vote_count | integer | Total votes | Yes |
+| vote_average | double | Average score | Yes |
+| original_language | string | Language | Yes |
+| genres | [ [GenreDTO](#genredto) ] | Associated genres | Yes |
 | videos | [ [VideoDTO](#videodto) ] | Associated videos | No |
 | total_votos_TC | integer | Local votes | No |
 | votos_media_TC | double | Local average | No |
@@ -450,9 +435,8 @@ Requires ADMIN role.
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| id | long | Unique category ID | No |
-| nombre | string | Category description | No |
-
+| id | long | Unique category ID | Yes |
+| nombre | string | Category description | Yes |
 
 
 ## Entity-Relation Diagram

@@ -5,7 +5,7 @@ import com.todocine.dto.GanadorDTO;
 import com.todocine.dto.MovieDTO;
 import com.todocine.entities.*;
 import com.todocine.exceptions.BadGatewayException;
-import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.GanadorService;
 import com.todocine.service.TMDBService;
@@ -71,7 +71,7 @@ public class GanadorServiceImpl implements GanadorService {
 
     @Override
     @Transactional
-    public GanadorDTO insertGanador(GanadorDTO ganadorDTO) throws BadRequestException, NotFoudException, BadGatewayException {
+    public GanadorDTO insertGanador(GanadorDTO ganadorDTO) throws ConflictException, NotFoudException, BadGatewayException {
         Ganador ganador = null;
         MovieDTO movieDTO = null;
         Movie movie = null;
@@ -129,7 +129,7 @@ public class GanadorServiceImpl implements GanadorService {
             return GanadorMapper.toDTO(ganador);
 
         } else {
-            throw new BadRequestException(GANADOR_EXISTS);
+            throw new ConflictException(GANADOR_EXISTS);
         }
     }
 

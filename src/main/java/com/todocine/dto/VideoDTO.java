@@ -3,6 +3,7 @@ package com.todocine.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Map;
 
@@ -14,15 +15,19 @@ public class VideoDTO {
     private String id;
 
     @JsonProperty("name")
+    @NotBlank
     private String name;
 
     @JsonProperty("key")
+    @NotBlank
     private String key;
 
     @JsonProperty("site")
+    @NotBlank
     private String site;
 
     @JsonProperty("type")
+    @NotBlank
     private String type;
 
     public VideoDTO() {

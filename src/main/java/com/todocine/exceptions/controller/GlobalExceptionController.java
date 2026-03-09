@@ -1,15 +1,16 @@
 package com.todocine.exceptions.controller;
 
 import com.todocine.exceptions.BadGatewayException;
-import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
+import jakarta.validation.ConstraintViolationException;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,13 +36,13 @@ public class GlobalExceptionController {
         return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
     }
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<Map<String, Object>> handleBadRequestException(BadRequestException ex) {
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<Map<String, Object>> handleConflictException(ConflictException ex) {
         Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
+        response.put("status", HttpStatus.CONFLICT.value());
+        response.put("error", HttpStatus.CONFLICT.getReasonPhrase());
         response.put("message", ex.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(NotFoudException.class)
@@ -60,5 +61,32 @@ public class GlobalExceptionController {
         response.put("error", HttpStatus.FORBIDDEN.getReasonPhrase());
         response.put("message", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Map<String, Object>> handleBadRequestException(BadGatewayException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
+        response.put("message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleNotValidException(BadGatewayException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
+        response.put("message", "El cuerpo de la petición no es valido");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleNotValidParamsException(BadGatewayException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
+        response.put("message", "Los parámetros del path no son validos");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

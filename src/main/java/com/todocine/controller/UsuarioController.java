@@ -3,7 +3,7 @@ package com.todocine.controller;
 import com.todocine.configuration.Constants;
 import com.todocine.dto.MovieDetailDTO;
 import com.todocine.dto.UsuarioDTO;
-import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.UsuarioMovieService;
@@ -41,15 +41,8 @@ public class UsuarioController {
         return responseEntity;
     }
 
-    @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> getUsuarios(@NotBlank @RequestParam("username") String username) throws BadRequestException {
-        logger.info("getUsuarioByName controller");
-        ResponseEntity<List<UsuarioDTO>> responseEntity = new ResponseEntity<>(usuarioService.getUsuarioByName(username), HttpStatus.OK);
-        return responseEntity;
-    }
-
     @PostMapping
-    public ResponseEntity<UsuarioDTO> insertUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) throws BadRequestException {
+    public ResponseEntity<UsuarioDTO> insertUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) throws ConflictException {
         ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.insertUsuario(usuarioDTO), HttpStatus.CREATED);
         return responseEntity;
     }

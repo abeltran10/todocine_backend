@@ -13,10 +13,11 @@ import java.util.stream.Collectors;
 public class PremioDTO {
 
     @JsonProperty("id")
-    @NotBlank
+    @NotNull
     private Long id;
 
     @JsonProperty("titulo")
+    @NotBlank
     private String titulo;
 
     public PremioDTO(Long id) {
