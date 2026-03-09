@@ -7,5 +7,5 @@ import java.util.List;
 
 
 public interface UsuarioDAO extends JpaRepository<Usuario, Long> {
-
+    Usuario findByUsername(String username);
 }

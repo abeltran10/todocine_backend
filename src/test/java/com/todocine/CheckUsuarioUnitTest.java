@@ -58,35 +58,12 @@ public class CheckUsuarioUnitTest {
     }
 
     @Test
-    void findUser() {
-        LOG.info("findUser");
-
-        Usuario usuario = UserMapper.toEntity(usuarioDTO);
-        usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
-
-        Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(usuario);
-
-        // Mock del SecurityContext
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-
-        // Setear el contexto de seguridad
-        SecurityContextHolder.setContext(securityContext);
-
-        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(List.of(usuario));
-
-        List<UsuarioDTO> test = usuarioService.getUsuarioByName("test");
-        assertEquals(9876L, test.get(0).getId());
-    }
-
-    @Test
     void createSameUser() {
         LOG.info("createSameUser");
 
         Usuario usuario = UserMapper.toEntity(usuarioDTO);
         usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
-        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(List.of(usuario));
+        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuario);
 
         try {
             usuarioService.insertUsuario(usuarioDTO);
