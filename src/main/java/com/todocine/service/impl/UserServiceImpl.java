@@ -3,6 +3,7 @@ package com.todocine.service.impl;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Usuario;
+import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
@@ -53,22 +54,27 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws ConflictException {
+    public UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws ConflictException, BadRequestException {
         Usuario usuario = usuarioDAO.findByUsername(usuarioDTO.getUsername());
 
         if (usuario == null) {
-            usuario = new Usuario();
-            usuario.setUsername(usuarioDTO.getUsername());
-            usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
-            usuario.setEnabled(true);
-            usuario.setCredentialsNonExpired(true);
-            usuario.setAccountNonLocked(true);
-            usuario.setAccountNonExpired(true);
-            usuario.setRol("USUARIO");
+            if (!usuarioDTO.getPassword().isBlank()) {
+                usuario = new Usuario();
+                usuario.setUsername(usuarioDTO.getUsername());
+                usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
+                usuario.setEnabled(true);
+                usuario.setCredentialsNonExpired(true);
+                usuario.setAccountNonLocked(true);
+                usuario.setAccountNonExpired(true);
+                usuario.setRol("USUARIO");
 
-            usuarioDAO.save(usuario);
+                usuarioDAO.save(usuario);
 
-            return UserMapper.toDTO(usuario);
+                return UserMapper.toDTO(usuario);
+            } else {
+                throw new BadRequestException(PASSWORD_MISSING);
+            }
+
         } else {
             throw new ConflictException(USER_EXISTS);
         }
@@ -76,22 +82,27 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException, ForbiddenException {
+    public UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException, ForbiddenException, BadRequestException {
        log.info("updateUsuario");
         Usuario usuario = null;
 
         if (getCurrentUserId().equals(id)) {
+            if (!usuarioDTO.getPassword().isBlank()) {
+                try {
+                    usuario = usuarioDAO.findById(id).get();
 
-            try {
-                usuario = usuarioDAO.findById(id).get();
-                usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
+                    usuario.setPassword(passwordEncoder().encode(usuarioDTO.getPassword()));
 
-                usuarioDAO.save(usuario);
+                    usuarioDAO.save(usuario);
 
-                return UserMapper.toDTO(usuario);
-            } catch (NoSuchElementException ex) {
-                throw new NotFoudException(USER_NOTFOUND);
+                    return UserMapper.toDTO(usuario);
+                } catch (NoSuchElementException ex) {
+                    throw new NotFoudException(USER_NOTFOUND);
+                }
+            } else {
+                throw new BadRequestException(PASSWORD_MISSING);
             }
+
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
