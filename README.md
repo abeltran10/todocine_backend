@@ -188,7 +188,6 @@ Bearer format: JWT
 | ---- | ----------- | ------ |
 | 200 | Filtered movie list. | **application/json**: [Paginator](#paginator)<br> |
 | 400 | Invalid data. |  |
-| 404 | Not found. |  |
 | 502 | External server error. |  |
 
 ##### Security

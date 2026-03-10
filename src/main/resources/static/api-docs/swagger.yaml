@@ -222,8 +222,6 @@ paths:
                 $ref: '#/components/schemas/Paginator'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '502':
           $ref: '#/components/responses/BadGateway'
 
