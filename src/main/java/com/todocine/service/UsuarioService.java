@@ -1,6 +1,7 @@
 package com.todocine.service;
 
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
@@ -10,9 +11,9 @@ import java.util.List;
 
 public interface UsuarioService extends UserDetailsService {
 
-    UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws ConflictException;
+    UsuarioDTO insertUsuario(UsuarioDTO usuarioDTO) throws ConflictException, BadRequestException;
 
-    UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException, ForbiddenException;
+    UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) throws NotFoudException, ForbiddenException, BadRequestException;
 
     UsuarioDTO getUsuarioById(Long id) throws ForbiddenException, NotFoudException;
 }
