@@ -23,7 +23,6 @@ application.properties loads properties from three files, one per environment (p
 ## API
 API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
-## Version: 1.0.0
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
