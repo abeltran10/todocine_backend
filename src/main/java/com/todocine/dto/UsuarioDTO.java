@@ -18,7 +18,6 @@ public class UsuarioDTO {
     @NotBlank
     private String username;
 
-    @NotBlank
     private String password;
 
     @JsonIgnore

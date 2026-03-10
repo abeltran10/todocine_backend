@@ -363,7 +363,7 @@ components:
   schemas:
     UsuarioDTO:
       type: object
-      required: [username, password]
+      required: [username]
       properties:
         id: { type: integer, format: int64, description: "Unique identifier" }
         username: { type: string, description: "Access username" }
