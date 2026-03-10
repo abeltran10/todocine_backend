@@ -23,7 +23,6 @@ application.properties loads properties from three files, one per environment (p
 ## API
 API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
-
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
 Bearer format: JWT
@@ -309,7 +308,7 @@ Requires ADMIN role.
 | ---- | ---- | ----------- | -------- |
 | id | long | Unique identifier | No |
 | username | string | Access username | Yes |
-| password | password | Access password | Yes |
+| password | password | Access password | No |
 | rol | string | Assigned role (USER/ADMIN) | No |
 
 #### Paginator
