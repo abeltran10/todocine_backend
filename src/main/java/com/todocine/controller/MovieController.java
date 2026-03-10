@@ -32,7 +32,7 @@ public class MovieController {
     @GetMapping
     public ResponseEntity<Paginator<MovieDTO>> getMovies(@RequestParam("name") String name, @RequestParam("status") String status,
                                                          @RequestParam("region") String region, @RequestParam("page") Integer pagina)
-            throws NotFoudException, BadRequestException, BadGatewayException {
+            throws BadRequestException, BadGatewayException {
 
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.MOVIE_NAME, name);
