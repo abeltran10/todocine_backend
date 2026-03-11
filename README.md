@@ -36,7 +36,7 @@ Bearer format: JWT
 
 | Required | Schema |
 | -------- | ------ |
-|  Yes | **application/json**: [UsuarioDTO](#usuariodto)<br> |
+|  Yes | **application/json**: [UsuarioReqDTO](#usuarioreqdto)<br> |
 
 #### Responses
 
@@ -65,7 +65,7 @@ Bearer format: JWT
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | OK - User found. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
+| 200 | OK - User found. | **application/json**: [UsuarioReqDTO](#usuarioreqdto)<br> |
 | 400 | Invalid data. |  |
 | 403 | Access denied. |  |
 | 404 | Not found. |  |
@@ -302,14 +302,22 @@ Requires ADMIN role.
 ---
 ### Schemas
 
+#### UsuarioReqDTO
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | long | Unique identifier | No |
+| username | string | Access username | Yes |
+| password | string (string) | Access password | Yes |
+| rol | string | Assigned role (USER/ADMIN) | No |
+
 #### UsuarioDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | id | long | Unique identifier | No |
 | username | string | Access username | Yes |
-| password | password | Access password | No |
-| rol | string | Assigned role (USER/ADMIN) | No |
+| rol | string | Assigned role (USER/ADMIN) | Yes |
 
 #### Paginator
 
