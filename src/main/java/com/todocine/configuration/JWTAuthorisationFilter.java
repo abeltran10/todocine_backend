@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.dto.UsuarioReqDTO;
 import com.todocine.entities.Usuario;
 import com.todocine.utils.mapper.UserMapper;
 import jakarta.servlet.FilterChain;

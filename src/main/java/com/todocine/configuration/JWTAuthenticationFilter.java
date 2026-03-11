@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.dto.UsuarioReqDTO;
 import com.todocine.entities.Usuario;
 import com.todocine.utils.mapper.UserMapper;
 import jakarta.servlet.FilterChain;
@@ -43,7 +44,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
-            UsuarioDTO credenciales = new ObjectMapper().readValue(request.getInputStream(), UsuarioDTO.class);
+            UsuarioReqDTO credenciales = new ObjectMapper().readValue(request.getInputStream(), UsuarioReqDTO.class);
 
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
