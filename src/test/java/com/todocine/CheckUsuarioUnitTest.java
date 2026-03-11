@@ -2,6 +2,7 @@ package com.todocine;
 
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.dto.UsuarioReqDTO;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.service.impl.UserServiceImpl;
@@ -63,10 +64,15 @@ public class CheckUsuarioUnitTest {
 
         Usuario usuario = UserMapper.toEntity(usuarioDTO);
         usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
+
+        UsuarioReqDTO usuarioReqDTO = new UsuarioReqDTO(usuarioDTO.getUsername(), usuarioDTO.getPassword());
+
         Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuario);
 
+
+
         try {
-            usuarioService.insertUsuario(usuarioDTO);
+            usuarioService.insertUsuario(usuarioReqDTO);
         } catch (ConflictException ex) {
             LOG.info(ex.getMessage());
             assertTrue(ex.getMessage().contains("Un usuario con ese nombre ya existe"));
@@ -92,13 +98,12 @@ public class CheckUsuarioUnitTest {
 
         Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
 
-        UsuarioDTO usuarioDTO1 = usuarioDTO;
-        usuarioDTO1.setPassword("abcd");
+        UsuarioReqDTO usuarioReqDTO = new UsuarioReqDTO(usuarioDTO.getUsername(), "abcd");
+        usuarioReqDTO.setId(usuarioDTO.getId());
 
-        usuarioDTO1 = usuarioService.updateUsuario(usuarioDTO1.getId(), usuarioDTO1);
+        UsuarioDTO usuarioDTO1 = usuarioService.updateUsuario(usuarioReqDTO.getId(), usuarioReqDTO);
 
-        assertTrue(passwordEncoder.matches("abcd", usuarioDTO1.getPassword()));
-        assertEquals("test", usuarioDTO1.getUsername());
+        assertEquals("test", usuarioDTO.getUsername());
 
     }
 

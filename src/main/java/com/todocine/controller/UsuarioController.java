@@ -3,6 +3,7 @@ package com.todocine.controller;
 import com.todocine.configuration.Constants;
 import com.todocine.dto.MovieDetailDTO;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.dto.UsuarioReqDTO;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
@@ -43,16 +44,16 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> insertUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) throws ConflictException, BadRequestException {
-        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.insertUsuario(usuarioDTO), HttpStatus.CREATED);
+    public ResponseEntity<UsuarioDTO> insertUsuario(@Valid @RequestBody UsuarioReqDTO usuarioReqDTO) throws ConflictException, BadRequestException {
+        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.insertUsuario(usuarioReqDTO), HttpStatus.CREATED);
         return responseEntity;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> updateUsuario(@NotNull @PathVariable("id") Long id, @Valid @RequestBody UsuarioDTO usuarioDTO) throws NotFoudException,
+    public ResponseEntity<UsuarioDTO> updateUsuario(@NotNull @PathVariable("id") Long id, @Valid @RequestBody UsuarioReqDTO usuarioReqDTO) throws NotFoudException,
             ForbiddenException, BadRequestException {
         logger.info("updateUsuario");
-        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.updateUsuario(id, usuarioDTO), HttpStatus.OK);
+        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.updateUsuario(id, usuarioReqDTO), HttpStatus.OK);
         return responseEntity;
     }
 
