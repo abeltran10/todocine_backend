@@ -18,6 +18,7 @@ public class UsuarioDTO {
     @NotBlank
     private String username;
 
+    @JsonIgnore
     private String password;
 
     @JsonIgnore
@@ -32,6 +33,7 @@ public class UsuarioDTO {
     @JsonIgnore
     private Boolean enabled;
 
+    @NotBlank
     private String rol;
 
     public UsuarioDTO() {

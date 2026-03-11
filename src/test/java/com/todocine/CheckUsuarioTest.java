@@ -3,6 +3,7 @@ package com.todocine;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.dao.*;
 import com.todocine.dto.UsuarioDTO;
+import com.todocine.dto.UsuarioReqDTO;
 import com.todocine.entities.Usuario;
 import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -71,6 +72,7 @@ public class CheckUsuarioTest {
         usuarioDAO.deleteAll();
 
         usuario = new Usuario("test", "1234");
+        usuario.setRol("USUARIO");
         usuario = usuarioDAO.save(usuario);
     }
 
@@ -78,15 +80,15 @@ public class CheckUsuarioTest {
     void addUsuario() {
         LOG.info("addUsuario");
 
-        UsuarioDTO usuarioDTO = new UsuarioDTO("test2", "1234");
+        UsuarioReqDTO usuarioReqDTO = new UsuarioReqDTO("test2", "1234");
 
         try {
             mockMvc.perform(post("/usuarios")
-                            .content(objectMapper.writeValueAsString(usuarioDTO))             // Body JSON
+                            .content(objectMapper.writeValueAsString(usuarioReqDTO))             // Body JSON
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.username").value(usuarioDTO.getUsername()));
+                    .andExpect(jsonPath("$.username").value(usuarioReqDTO.getUsername()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -96,11 +98,11 @@ public class CheckUsuarioTest {
     void createSameUser() {
         LOG.info("createSameUser");
 
-        UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
+        UsuarioReqDTO usuarioReqDTO = new UsuarioReqDTO(usuario.getUsername(), usuario.getPassword());
 
         try {
             mockMvc.perform(post("/usuarios")
-                            .content(objectMapper.writeValueAsString(usuarioDTO))             // Body JSON
+                            .content(objectMapper.writeValueAsString(usuarioReqDTO))             // Body JSON
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isConflict());
@@ -113,12 +115,12 @@ public class CheckUsuarioTest {
     void updateUser() {
         LOG.info("updateUser");
 
-        UsuarioDTO usuarioDTO = UserMapper.toDTO(usuario);
-        usuarioDTO.setPassword("abcd");
+        UsuarioReqDTO usuarioReqDTO = new UsuarioReqDTO(usuario.getUsername(), "abcd");
+        usuarioReqDTO.setId(usuario.getId());
 
         try {
-            MvcResult result = mockMvc.perform(put("/usuarios/" + usuarioDTO.getId())
-                            .content(objectMapper.writeValueAsString(usuarioDTO))
+            MvcResult result = mockMvc.perform(put("/usuarios/" + usuarioReqDTO.getId())
+                            .content(objectMapper.writeValueAsString(usuarioReqDTO))
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
@@ -127,7 +129,8 @@ public class CheckUsuarioTest {
             String json = result.getResponse().getContentAsString();
             UsuarioDTO usuarioDTO1 = objectMapper.readValue(json, UsuarioDTO.class);
 
-            assertTrue(passwordEncoder.matches("abcd", usuarioDTO1.getPassword()));
+            assertEquals("test", usuarioDTO1.getUsername());
+            assertEquals("USUARIO", usuarioDTO1.getRol());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
