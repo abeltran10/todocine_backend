@@ -43,12 +43,6 @@ public class UsuarioDTO {
         this.id = id;
     }
 
-    public UsuarioDTO(Long id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
-
     public UsuarioDTO(String username, String password) {
         this.username = username;
         this.password = password;
@@ -58,15 +52,9 @@ public class UsuarioDTO {
         this.enabled = true;
     }
 
-    public UsuarioDTO(Long id, String username, String password, Boolean accountNonExpired,
-                      Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, String rol) {
+    public UsuarioDTO(Long id, String username, String rol) {
         this.id = id;
         this.username = username;
-        this.password = password;
-        this.accountNonExpired = accountNonExpired;
-        this.accountNonLocked = accountNonLocked;
-        this.credentialsNonExpired = credentialsNonExpired;
-        this.enabled = enabled;
         this.rol = rol;
 
     }
