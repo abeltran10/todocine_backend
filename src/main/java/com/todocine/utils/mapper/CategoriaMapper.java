@@ -1,6 +1,6 @@
 package com.todocine.utils.mapper;
 
-import com.todocine.dto.CategoriaDTO;
+import com.todocine.dto.response.CategoriaDTO;
 import com.todocine.entities.Categoria;
 
 public class CategoriaMapper {

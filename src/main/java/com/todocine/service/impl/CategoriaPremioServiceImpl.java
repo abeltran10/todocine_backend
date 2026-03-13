@@ -1,7 +1,7 @@
 package com.todocine.service.impl;
 
 import com.todocine.dao.CategoriaPremioDAO;
-import com.todocine.dto.CategoriaDTO;
+import com.todocine.dto.response.CategoriaDTO;
 import com.todocine.entities.CategoriaPremio;
 import com.todocine.service.CategoriaPremioService;
 import com.todocine.utils.mapper.CategoriaMapper;

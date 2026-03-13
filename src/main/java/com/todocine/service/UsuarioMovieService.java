@@ -1,7 +1,7 @@
 package com.todocine.service;
 
-import com.todocine.dto.UsuarioMovieDTO;
-import com.todocine.dto.MovieDetailDTO;
+import com.todocine.dto.request.UsuarioMovieDTO;
+import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;

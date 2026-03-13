@@ -1,6 +1,5 @@
 package com.todocine.service.impl;
 
-import com.todocine.dto.UsuarioDTO;
 import com.todocine.entities.Usuario;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

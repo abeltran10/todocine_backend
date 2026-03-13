@@ -1,11 +1,10 @@
 package com.todocine.controller;
 
-import com.todocine.dto.CategoriaDTO;
-import com.todocine.dto.GanadorDTO;
+import com.todocine.dto.response.CategoriaDTO;
+import com.todocine.dto.response.PremioDTO;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.CategoriaPremioService;
-import com.todocine.service.GanadorService;
-import com.todocine.utils.Paginator;
+import com.todocine.service.PremioService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,20 @@ import java.util.List;
 public class PremioController {
 
     @Autowired
+    private PremioService premioService;
+
+    @Autowired
     private CategoriaPremioService categoriaPremioService;
+
+    @GetMapping
+    public ResponseEntity<List<PremioDTO>> getPremios() {
+        return new ResponseEntity<>(premioService.getPremios(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PremioDTO> getPremioById(@NotNull @PathVariable("id") Long id) throws NotFoudException {
+        return new ResponseEntity<>(premioService.getPremioById(id), HttpStatus.OK);
+    }
 
     @GetMapping("/{id}/categorias")
     @PreAuthorize("ADMIN")

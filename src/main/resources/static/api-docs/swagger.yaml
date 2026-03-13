@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: "Todo Cine API"
   description: "API managed with Spring Boot, JWT security, and movie catalog with custom exception handling."
-  version: "1.0.0"
+  version: "v6.2.0"
 
 servers:
   - url: "http://localhost:8080/api"
@@ -58,7 +58,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UsuarioReqDTO'
+                $ref: '#/components/schemas/UsuarioDTO'
         '403':
           $ref: '#/components/responses/Forbidden'
         '404':
@@ -77,7 +77,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UsuarioDTO'
+              $ref: '#/components/schemas/UsuarioReqDTO'
       responses:
         '200':
           description: "OK - User updated."
@@ -295,7 +295,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GanadorDTO'
+              $ref: '#/components/schemas/GanadorReqDTO'
       responses:
         '201':
           description: "Winner registered."
@@ -311,6 +311,47 @@ paths:
           $ref: '#/components/responses/Conflict'
         '502':
           $ref: '#/components/responses/BadGateway'
+  /premios:
+    get:
+      summary: "Get awards"
+      description: "Get awards"
+      tags: [ "Awards" ]
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '200':
+          description: "List of awards."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PremioDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /premios/{id}:
+    get:
+      summary: "Get specific award"
+      description: "Get award by unique identifier"
+      tags: [ "Award" ]
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '200':
+          description: "OK-Award."
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/PremioDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /premios/{id}/categorias:
     get:
@@ -474,6 +515,15 @@ components:
         total_votos_TC: { type: integer, description: "Local votes" }
         votos_media_TC: { type: number, format: double, description: "Local average" }
 
+    GanadorReqDTO:
+      type: object
+      required: [premioId, categoriaId, anyo, movieId]
+      properties:
+        premioId: { type: integer, format: int64, description: "Award ID" }
+        categoriaId: { type: integer, format: int64, description: "Category ID" }
+        anyo: { type: integer, description: "Gala year" }
+        movieId: { type: integer, format: int64, description: "Movie ID" }
+
     GanadorDTO:
       type: object
       required: [premioId, categoriaId, anyo, movieId]
@@ -496,3 +546,14 @@ components:
       properties:
         id: { type: integer, format: int64, description: "Unique category ID" }
         nombre: { type: string, description: "Category description" }
+
+    PremioDTO:
+      type: object
+      required: [ id, titulo ]
+      properties:
+        id: { type: integer, format: int64, description: "Unique award ID" }
+        titulo: { type: string, description: "Award name" }
+        anyos:
+          type: array
+          items: { type: integer}
+          description: "Award years"

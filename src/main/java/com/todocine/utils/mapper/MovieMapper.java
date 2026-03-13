@@ -1,8 +1,8 @@
 package com.todocine.utils.mapper;
 
-import com.todocine.dto.GenreDTO;
-import com.todocine.dto.MovieDTO;
-import com.todocine.dto.VideoDTO;
+import com.todocine.dto.response.GenreDTO;
+import com.todocine.dto.response.MovieDTO;
+import com.todocine.dto.response.VideoDTO;
 import com.todocine.entities.Movie;
 
 import java.util.ArrayList;

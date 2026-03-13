@@ -1,6 +1,6 @@
 package com.todocine.utils.mapper;
 
-import com.todocine.dto.UsuarioDTO;
+import com.todocine.dto.response.UsuarioDTO;
 import com.todocine.entities.Usuario;
 
 public class UserMapper {
