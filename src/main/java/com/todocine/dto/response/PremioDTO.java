@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PremioDTO {
 
@@ -15,6 +17,9 @@ public class PremioDTO {
     @JsonProperty("titulo")
     @NotBlank
     private String titulo;
+
+    @JsonProperty("anyos")
+    private List<Integer> anyos;
 
     public PremioDTO(Long id) {
         this.id = id;
@@ -39,5 +44,13 @@ public class PremioDTO {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public List<Integer> getAnyos() {
+        return anyos;
+    }
+
+    public void setAnyos(List<Integer> anyos) {
+        this.anyos = anyos;
     }
 }
