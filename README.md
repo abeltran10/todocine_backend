@@ -20,7 +20,7 @@ application.properties loads properties from three files, one per environment (p
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## API v6.2.0
+## API Version: v6.2.0
 API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
 ### Available authorizations
@@ -274,6 +274,47 @@ Requires ADMIN role.
 
 ---
 
+### [GET] /premios
+**Get awards**
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List of awards. | **application/json**: [ [PremioDTO](#premiodto) ]<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
+### [GET] /premios/{id}
+**Get specific award**
+
+Get award by unique identifier
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | OK-Award. | **application/json**: [PremioDTO](#premiodto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
 ### [GET] /premios/{id}/categorias
 **Get categories for a specific award**
 
@@ -427,6 +468,14 @@ Requires ADMIN role.
 | ---- | ---- | ----------- | -------- |
 | id | long | Unique category ID | Yes |
 | nombre | string | Category description | Yes |
+
+#### PremioDTO
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | long | Unique award ID | Yes |
+| titulo | string | Award name | Yes |
+| anyos | [ integer ] | Award years | No |
 
 
 ## Entity-Relation Diagram

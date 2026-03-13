@@ -311,6 +311,47 @@ paths:
           $ref: '#/components/responses/Conflict'
         '502':
           $ref: '#/components/responses/BadGateway'
+  /premios:
+    get:
+      summary: "Get awards"
+      description: "Get awards"
+      tags: [ "Awards" ]
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '200':
+          description: "List of awards."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PremioDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /premios/{id}:
+    get:
+      summary: "Get specific award"
+      description: "Get award by unique identifier"
+      tags: [ "Award" ]
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '200':
+          description: "OK-Award."
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/PremioDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /premios/{id}/categorias:
     get:
@@ -505,3 +546,14 @@ components:
       properties:
         id: { type: integer, format: int64, description: "Unique category ID" }
         nombre: { type: string, description: "Category description" }
+
+    PremioDTO:
+      type: object
+      required: [ id, titulo ]
+      properties:
+        id: { type: integer, format: int64, description: "Unique award ID" }
+        titulo: { type: string, description: "Award name" }
+        anyos:
+          type: array
+          items: { type: integer}
+          description: "Award years"
