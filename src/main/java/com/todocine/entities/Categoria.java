@@ -1,6 +1,5 @@
 package com.todocine.entities;
 
-import com.todocine.dto.CategoriaDTO;
 import jakarta.persistence.*;
 
 @Entity

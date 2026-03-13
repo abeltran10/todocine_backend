@@ -1,6 +1,7 @@
 package com.todocine.controller;
 
-import com.todocine.dto.GanadorDTO;
+import com.todocine.dto.response.GanadorDTO;
+import com.todocine.dto.request.GanadorReqDTO;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.NotFoudException;
@@ -33,9 +34,9 @@ public class GanadorController {
 
     @PostMapping
     @PreAuthorize("ADMIN")
-    public ResponseEntity<GanadorDTO> insertGanador(@Valid @RequestBody GanadorDTO ganadorDTO) throws ConflictException,
+    public ResponseEntity<GanadorDTO> insertGanador(@Valid @RequestBody GanadorReqDTO ganadorReqDTO) throws ConflictException,
             NotFoudException, BadGatewayException {
-        ResponseEntity<GanadorDTO> responseEntity = new ResponseEntity<>(ganadorService.insertGanador(ganadorDTO), HttpStatus.CREATED);
+        ResponseEntity<GanadorDTO> responseEntity = new ResponseEntity<>(ganadorService.insertGanador(ganadorReqDTO), HttpStatus.CREATED);
 
         return responseEntity;
     }

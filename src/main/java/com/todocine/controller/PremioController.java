@@ -1,11 +1,7 @@
 package com.todocine.controller;
 
-import com.todocine.dto.CategoriaDTO;
-import com.todocine.dto.GanadorDTO;
-import com.todocine.exceptions.NotFoudException;
+import com.todocine.dto.response.CategoriaDTO;
 import com.todocine.service.CategoriaPremioService;
-import com.todocine.service.GanadorService;
-import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

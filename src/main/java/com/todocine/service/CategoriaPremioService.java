@@ -1,6 +1,6 @@
 package com.todocine.service;
 
-import com.todocine.dto.CategoriaDTO;
+import com.todocine.dto.response.CategoriaDTO;
 
 import java.util.List;
 

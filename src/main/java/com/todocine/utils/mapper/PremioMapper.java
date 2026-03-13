@@ -1,6 +1,6 @@
 package com.todocine.utils.mapper;
 
-import com.todocine.dto.PremioDTO;
+import com.todocine.dto.response.PremioDTO;
 import com.todocine.entities.Premio;
 
 public class PremioMapper {

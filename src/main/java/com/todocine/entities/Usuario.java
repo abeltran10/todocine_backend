@@ -1,12 +1,10 @@
 package com.todocine.entities;
 
-import com.todocine.dto.UsuarioDTO;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "USUARIO")

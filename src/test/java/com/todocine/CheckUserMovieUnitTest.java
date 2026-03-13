@@ -1,13 +1,10 @@
 package com.todocine;
 
-import com.todocine.configuration.Constants;
-import com.todocine.dao.UsuarioMovieDAO;
-import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dao.UsuarioMovieRepo;
-import com.todocine.dto.MovieDTO;
-import com.todocine.dto.MovieDetailDTO;
-import com.todocine.dto.UsuarioDTO;
+import com.todocine.dto.response.MovieDTO;
+import com.todocine.dto.response.MovieDetailDTO;
+import com.todocine.dto.response.UsuarioDTO;
 import com.todocine.entities.*;
 import com.todocine.service.impl.UsuarioMovieServiceImpl;
 import com.todocine.utils.Paginator;
@@ -24,10 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,7 +28,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.*;
 
-import static com.todocine.configuration.Constants.MOVIE_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)

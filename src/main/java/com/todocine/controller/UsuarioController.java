@@ -1,9 +1,9 @@
 package com.todocine.controller;
 
 import com.todocine.configuration.Constants;
-import com.todocine.dto.MovieDetailDTO;
-import com.todocine.dto.UsuarioDTO;
-import com.todocine.dto.UsuarioReqDTO;
+import com.todocine.dto.response.MovieDetailDTO;
+import com.todocine.dto.response.UsuarioDTO;
+import com.todocine.dto.request.UsuarioReqDTO;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
@@ -12,7 +12,6 @@ import com.todocine.service.UsuarioMovieService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController

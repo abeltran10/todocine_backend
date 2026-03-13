@@ -3,10 +3,9 @@ package com.todocine.configuration;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.todocine.dto.UsuarioDTO;
-import com.todocine.dto.UsuarioReqDTO;
+import com.todocine.dto.response.UsuarioDTO;
+import com.todocine.dto.request.UsuarioReqDTO;
 import com.todocine.entities.Usuario;
 import com.todocine.utils.mapper.UserMapper;
 import jakarta.servlet.FilterChain;
@@ -17,13 +16,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 
 import static com.todocine.configuration.Constants.*;
 

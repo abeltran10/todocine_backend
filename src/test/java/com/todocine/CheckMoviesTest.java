@@ -8,13 +8,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dto.MovieDTO;
-import com.todocine.dto.MovieDetailDTO;
+import com.todocine.dto.response.MovieDTO;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
-import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
-import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.MovieMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,13 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.io.IOException;
 

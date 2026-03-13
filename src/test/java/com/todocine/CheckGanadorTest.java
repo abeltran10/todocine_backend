@@ -1,7 +1,7 @@
 package com.todocine;
 
 import com.todocine.dao.*;
-import com.todocine.dto.MovieDTO;
+import com.todocine.dto.response.MovieDTO;
 import com.todocine.entities.*;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.mapper.MovieMapper;
@@ -111,10 +111,10 @@ public class CheckGanadorTest {
     }
 
     @Test
-    void getPremioById() {
+    void getGanador() {
 
         try {
-            mockMvc.perform(get("/premios/" + premioId +"/anyos/2024?pagina=1")
+            mockMvc.perform(get("/ganadores?premioId=" + premioId +"&anyo=2024&pagina=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.results[0].title").value("La sociedad de la nieve"));
@@ -126,9 +126,10 @@ public class CheckGanadorTest {
     @Test
     void getPremioByCodigoException() {
         try {
-            mockMvc.perform(get("/premios/0/anyos/2023?pagina=1")
+            mockMvc.perform(get("/ganadores?premioId=0&anyo=2023&pagina=1")
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))
-                    .andExpect(status().isNotFound());
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.total_results").value("0"));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

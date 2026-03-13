@@ -20,7 +20,7 @@ application.properties loads properties from three files, one per environment (p
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## API
+## API v6.2.0
 API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
 ### Available authorizations
@@ -65,7 +65,7 @@ Bearer format: JWT
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | OK - User found. | **application/json**: [UsuarioReqDTO](#usuarioreqdto)<br> |
+| 200 | OK - User found. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
 | 400 | Invalid data. |  |
 | 403 | Access denied. |  |
 | 404 | Not found. |  |
@@ -89,7 +89,7 @@ Bearer format: JWT
 
 | Required | Schema |
 | -------- | ------ |
-|  Yes | **application/json**: [UsuarioDTO](#usuariodto)<br> |
+|  Yes | **application/json**: [UsuarioReqDTO](#usuarioreqdto)<br> |
 
 #### Responses
 
@@ -254,7 +254,7 @@ Requires ADMIN role.
 
 | Required | Schema |
 | -------- | ------ |
-|  Yes | **application/json**: [GanadorDTO](#ganadordto)<br> |
+|  Yes | **application/json**: [GanadorReqDTO](#ganadorreqdto)<br> |
 
 #### Responses
 
@@ -395,6 +395,15 @@ Requires ADMIN role.
 | videos | [ [VideoDTO](#videodto) ] | Associated videos | No |
 | total_votos_TC | integer | Local votes | No |
 | votos_media_TC | double | Local average | No |
+
+#### GanadorReqDTO
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| premioId | long | Award ID | Yes |
+| categoriaId | long | Category ID | Yes |
+| anyo | integer | Gala year | Yes |
+| movieId | long | Movie ID | Yes |
 
 #### GanadorDTO
 

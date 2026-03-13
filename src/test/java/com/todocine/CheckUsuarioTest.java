@@ -2,10 +2,9 @@ package com.todocine;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todocine.dao.*;
-import com.todocine.dto.UsuarioDTO;
-import com.todocine.dto.UsuarioReqDTO;
+import com.todocine.dto.response.UsuarioDTO;
+import com.todocine.dto.request.UsuarioReqDTO;
 import com.todocine.entities.Usuario;
-import com.todocine.utils.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

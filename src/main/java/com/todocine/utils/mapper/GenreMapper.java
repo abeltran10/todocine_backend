@@ -1,6 +1,6 @@
 package com.todocine.utils.mapper;
 
-import com.todocine.dto.GenreDTO;
+import com.todocine.dto.response.GenreDTO;
 
 import java.util.Map;
 

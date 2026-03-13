@@ -3,12 +3,10 @@ package com.todocine;
 
 import com.todocine.dao.GanadorDAO;
 import com.todocine.dao.PremioDAO;
-import com.todocine.dto.GanadorDTO;
-import com.todocine.dto.PremioDTO;
+import com.todocine.dto.response.GanadorDTO;
 import com.todocine.entities.*;
 import com.todocine.service.impl.GanadorServiceImpl;
 import com.todocine.utils.Paginator;
-import com.todocine.utils.mapper.PremioMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

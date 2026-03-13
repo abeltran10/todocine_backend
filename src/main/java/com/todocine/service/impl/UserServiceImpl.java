@@ -1,10 +1,9 @@
 package com.todocine.service.impl;
 
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dto.UsuarioDTO;
-import com.todocine.dto.UsuarioReqDTO;
+import com.todocine.dto.response.UsuarioDTO;
+import com.todocine.dto.request.UsuarioReqDTO;
 import com.todocine.entities.Usuario;
-import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
@@ -20,8 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.todocine.configuration.Constants.*;

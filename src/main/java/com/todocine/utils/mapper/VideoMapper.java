@@ -1,6 +1,6 @@
 package com.todocine.utils.mapper;
 
-import com.todocine.dto.VideoDTO;
+import com.todocine.dto.response.VideoDTO;
 
 import java.util.Map;
 

@@ -1,9 +1,7 @@
 package com.todocine.utils.mapper;
 
-import com.todocine.dto.GanadorDTO;
+import com.todocine.dto.response.GanadorDTO;
 import com.todocine.entities.Ganador;
-
-import java.util.ArrayList;
 
 public class GanadorMapper {
 

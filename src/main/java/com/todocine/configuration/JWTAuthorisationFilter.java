@@ -6,8 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.todocine.dto.UsuarioDTO;
-import com.todocine.dto.UsuarioReqDTO;
+import com.todocine.dto.response.UsuarioDTO;
 import com.todocine.entities.Usuario;
 import com.todocine.utils.mapper.UserMapper;
 import jakarta.servlet.FilterChain;
@@ -20,8 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static com.todocine.configuration.Constants.*;
 

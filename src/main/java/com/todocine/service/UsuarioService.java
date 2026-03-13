@@ -1,14 +1,12 @@
 package com.todocine.service;
 
-import com.todocine.dto.UsuarioDTO;
-import com.todocine.dto.UsuarioReqDTO;
+import com.todocine.dto.response.UsuarioDTO;
+import com.todocine.dto.request.UsuarioReqDTO;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
-import java.util.List;
 
 public interface UsuarioService extends UserDetailsService {
 
