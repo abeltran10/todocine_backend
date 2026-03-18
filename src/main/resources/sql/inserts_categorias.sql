@@ -28,3 +28,9 @@ INSERT INTO CATEGORIA (ID, NOMBRE) VALUES (27, 'Película documental');
 INSERT INTO CATEGORIA (ID, NOMBRE) VALUES (28, 'Película de habla no inglesa');
 INSERT INTO CATEGORIA (ID, NOMBRE) VALUES (29, 'Banda sonora');
 INSERT INTO CATEGORIA (ID,NOMBRE) values (30,  'Canción original');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (31,  'Mejor documental');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (32,  'Mejor cortometraje');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (33,  'Mejor fotografía');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (34,  'Mejor diseño de producción');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (35,  'Mejor casting');
+
