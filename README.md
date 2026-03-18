@@ -482,6 +482,17 @@ Requires ADMIN role.
 
 <img width="1566" height="698" alt="Captura desde 2026-03-07 18-02-40" src="https://github.com/user-attachments/assets/0d89ccbc-b00f-4bf1-8e80-e2aa9193af08" />
 
+## UML
+
+### Use case diagram
+
+<img width="871" height="1075" alt="case_use_diagram" src="https://github.com/user-attachments/assets/3705a7a6-3c0f-4bb4-9caa-196cfd5f7801" />
+
+### Classes diagram
+
+<img width="4096" height="466" alt="diagrama_clases" src="https://github.com/user-attachments/assets/d0437c18-c362-4f7c-a148-75dbb8ec4b41" />
+
+
 
 ## Demo
 
