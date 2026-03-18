@@ -40,9 +40,6 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
     private UsuarioMovieDAO usuarioMovieDAO;
 
     @Autowired
-    private UsuarioDAO usuarioDAO;
-
-    @Autowired
     private MovieDAO movieDAO;
 
     @Autowired
