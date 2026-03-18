@@ -12,15 +12,15 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v6.2.0](https://github.com/abeltran10/todocine_backend/releases/tag/v6.2.0)
+- [v6.2.1](https://github.com/abeltran10/todocine_backend/releases/tag/v6.2.1)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.2.0) compressed file. 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.2.1) compressed file. 
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## API Version: v6.2.0
+## API Version: v6.2.1
 API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
 ### Available authorizations
