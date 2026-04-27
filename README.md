@@ -490,7 +490,8 @@ Requires ADMIN role.
 
 ### Classes diagram
 
-<img width="4096" height="466" alt="diagrama_clases" src="https://github.com/user-attachments/assets/d0437c18-c362-4f7c-a148-75dbb8ec4b41" />
+<img width="4000" height="360" alt="diagrama_clases" src="https://github.com/user-attachments/assets/9ccfdd44-afce-4e89-9b3c-70ade5bd80ff" />
+
 
 
 
