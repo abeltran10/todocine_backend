@@ -1,7 +1,0 @@
-CREATE TABLE LISTAMOVIES (
-     lista NUMBER(19,0) NOT NULL,
-     movie NUMBER(19,0) NOT NULL,
-     PRIMARY KEY (lista, movie),
-     FOREIGN KEY (lista) REFERENCES LISTA(ID),
-     FOREIGN KEY (movie) REFERENCES MOVIE(ID)
-);
