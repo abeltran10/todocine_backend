@@ -31,7 +31,7 @@ public class PremioServiceImpl implements PremioService {
     }
 
     @Override
-    public PremioDTO getPremioById(Long id) throws NotFoudException {
+    public PremioDTO getPremioById(Long id) {
         Premio premio = premioDAO.findById(id).orElse(null);
 
         if (premio != null) {

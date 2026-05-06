@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UsuarioService extends UserDetailsService {
 
-    UsuarioDTO insertUsuario(UsuarioReqDTO usuarioReqDTO) throws ConflictException, BadRequestException;
+    UsuarioDTO insertUsuario(UsuarioReqDTO usuarioReqDTO);
 
-    UsuarioDTO updateUsuario(Long id, UsuarioReqDTO usuarioReqDTO) throws NotFoudException, ForbiddenException;
+    UsuarioDTO updateUsuario(Long id, UsuarioReqDTO usuarioReqDTO);
 
-    UsuarioDTO getUsuarioById(Long id) throws ForbiddenException, NotFoudException;
+    UsuarioDTO getUsuarioById(Long id);
 }

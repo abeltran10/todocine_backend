@@ -72,7 +72,7 @@ public class GanadorServiceImpl implements GanadorService {
 
     @Override
     @Transactional
-    public GanadorDTO insertGanador(GanadorReqDTO ganadorReqDTO) throws ConflictException, NotFoudException, BadGatewayException {
+    public GanadorDTO insertGanador(GanadorReqDTO ganadorReqDTO) {
         Ganador ganador = null;
         MovieDTO movieDTO = null;
         Movie movie = null;

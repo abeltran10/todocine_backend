@@ -42,7 +42,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
 
     @Override
     @Transactional(readOnly = true)
-    public MovieDetailDTO getMovieDetailById(Long id) throws NotFoudException, BadGatewayException {
+    public MovieDetailDTO getMovieDetailById(Long id) {
         Boolean favorito = false;
         Boolean vista = false;
         Double voto = null;
@@ -80,7 +80,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
     }
 
     @Override
-    public Paginator getMovies(Map<String, String> filters, Integer pagina) throws BadRequestException, BadGatewayException {
+    public Paginator getMovies(Map<String, String> filters, Integer pagina) {
         Map<String, Object> map = new HashMap<>();
         Paginator<MovieDTO> moviePage = new Paginator<>();
         try {

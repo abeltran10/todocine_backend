@@ -36,20 +36,19 @@ public class UsuarioController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> getUsuario(@NotNull @PathVariable("id") Long id) throws ForbiddenException, NotFoudException {
+    public ResponseEntity<UsuarioDTO> getUsuario(@NotNull @PathVariable("id") Long id) {
         ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.getUsuarioById(id), HttpStatus.OK);
         return responseEntity;
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> insertUsuario(@Valid @RequestBody UsuarioReqDTO usuarioReqDTO) throws ConflictException, BadRequestException {
+    public ResponseEntity<UsuarioDTO> insertUsuario(@Valid @RequestBody UsuarioReqDTO usuarioReqDTO) {
         ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.insertUsuario(usuarioReqDTO), HttpStatus.CREATED);
         return responseEntity;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> updateUsuario(@NotNull @PathVariable("id") Long id, @Valid @RequestBody UsuarioReqDTO usuarioReqDTO) throws NotFoudException,
-            ForbiddenException, BadRequestException {
+    public ResponseEntity<UsuarioDTO> updateUsuario(@NotNull @PathVariable("id") Long id, @Valid @RequestBody UsuarioReqDTO usuarioReqDTO) {
         logger.info("updateUsuario");
         ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.updateUsuario(id, usuarioReqDTO), HttpStatus.OK);
         return responseEntity;
@@ -60,8 +59,7 @@ public class UsuarioController {
                                                                       @RequestParam("vista") String vista,
                                                                       @RequestParam("votada") String votada,
                                                                       @RequestParam("orderBy") String orderBy,
-                                                                      @RequestParam("page") Integer pagina)
-            throws ForbiddenException {
+                                                                      @RequestParam("page") Integer pagina) {
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.VISTA_FILTER, vista);
         filters.put(Constants.VOTADA_FILTER, votada);

@@ -52,7 +52,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioDTO insertUsuario(UsuarioReqDTO usuarioReqDTO) throws ConflictException {
+    public UsuarioDTO insertUsuario(UsuarioReqDTO usuarioReqDTO) {
         Usuario usuario = usuarioDAO.findByUsername(usuarioReqDTO.getUsername());
 
         if (usuario == null) {
@@ -76,7 +76,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioDTO updateUsuario(Long id, UsuarioReqDTO usuarioReqDTO) throws NotFoudException, ForbiddenException {
+    public UsuarioDTO updateUsuario(Long id, UsuarioReqDTO usuarioReqDTO) {
        log.info("updateUsuario");
         Usuario usuario = null;
 
@@ -101,7 +101,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
 
     @Override
-    public UsuarioDTO getUsuarioById(Long id) throws ForbiddenException, NotFoudException {
+    public UsuarioDTO getUsuarioById(Long id) {
         if (getCurrentUserId().equals(id)) {
 
             try {
