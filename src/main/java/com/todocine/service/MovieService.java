@@ -10,8 +10,8 @@ import java.util.Map;
 
 public interface MovieService {
 
-    MovieDetailDTO getMovieDetailById(Long id) throws NotFoudException, BadGatewayException;
+    MovieDetailDTO getMovieDetailById(Long id);
 
-    Paginator getMovies(Map<String, String> filters, Integer pagina) throws BadRequestException, BadGatewayException;
+    Paginator getMovies(Map<String, String> filters, Integer pagina);
 
 }

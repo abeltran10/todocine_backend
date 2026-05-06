@@ -47,7 +47,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional(readOnly = true)
-    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, String orderBy, Integer page) throws ForbiddenException {
+    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, String orderBy, Integer page) {
         int pagina = page - 1;
         Paginator<MovieDetailDTO> paginator = new Paginator<>();
         Paginator<UsuarioMovie> usuarioMoviePaginator = new Paginator<>();
@@ -85,7 +85,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional
-    public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO) throws ForbiddenException, NotFoudException, BadGatewayException {
+    public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO) {
         if (getCurrentUserId().equals(userId)) {
             Movie movie = null;
             MovieDTO movieDTO = null;

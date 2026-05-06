@@ -11,11 +11,9 @@ import java.util.Map;
 
 public interface UsuarioMovieService {
 
-    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String, String> filters, String orderBy, Integer page)
-            throws ForbiddenException;
+    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String, String> filters, String orderBy, Integer page);
 
-    public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO)
-            throws ForbiddenException, NotFoudException, BadGatewayException;
+    public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO);
 
-    //public void deleteUsuarioMovie(Long userId, Long movieId) throws ForbiddenException, NotFoudException;
+    //public void deleteUsuarioMovie(Long userId, Long movieId);
 }

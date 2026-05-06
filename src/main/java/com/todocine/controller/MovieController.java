@@ -30,8 +30,7 @@ public class MovieController {
 
     @GetMapping
     public ResponseEntity<Paginator<MovieDTO>> getMovies(@RequestParam("name") String name, @RequestParam("status") String status,
-                                                         @RequestParam("region") String region, @RequestParam("page") Integer pagina)
-            throws BadRequestException, BadGatewayException {
+                                                         @RequestParam("region") String region, @RequestParam("page") Integer pagina) {
 
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.MOVIE_NAME, name);
@@ -44,7 +43,7 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieDetailDTO> getMovieDetailById(@NotNull @PathVariable("id") Long id) throws NotFoudException, BadGatewayException {
+    public ResponseEntity<MovieDetailDTO> getMovieDetailById(@NotNull @PathVariable("id") Long id) {
         ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(movieService.getMovieDetailById(id), HttpStatus.OK);
         return responseEntity;
 

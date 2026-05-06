@@ -1,0 +1,2 @@
+ALTER TABLE LISTAMOVIES
+    ADD PRIMARY KEY (lista, movie);

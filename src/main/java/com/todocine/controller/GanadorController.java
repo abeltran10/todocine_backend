@@ -34,8 +34,7 @@ public class GanadorController {
 
     @PostMapping
     @PreAuthorize("ADMIN")
-    public ResponseEntity<GanadorDTO> insertGanador(@Valid @RequestBody GanadorReqDTO ganadorReqDTO) throws ConflictException,
-            NotFoudException, BadGatewayException {
+    public ResponseEntity<GanadorDTO> insertGanador(@Valid @RequestBody GanadorReqDTO ganadorReqDTO) {
         ResponseEntity<GanadorDTO> responseEntity = new ResponseEntity<>(ganadorService.insertGanador(ganadorReqDTO), HttpStatus.CREATED);
 
         return responseEntity;

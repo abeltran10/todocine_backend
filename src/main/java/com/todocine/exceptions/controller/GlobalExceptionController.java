@@ -64,7 +64,7 @@ public class GlobalExceptionController {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<Map<String, Object>> handleBadRequestException(BadGatewayException ex) {
+    public ResponseEntity<Map<String, Object>> handleBadRequestException(BadRequestException ex) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.BAD_REQUEST.value());
         response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
@@ -73,7 +73,7 @@ public class GlobalExceptionController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleNotValidException(BadGatewayException ex) {
+    public ResponseEntity<Map<String, Object>> handleNotValidException(MethodArgumentNotValidException ex) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.BAD_REQUEST.value());
         response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
@@ -82,7 +82,7 @@ public class GlobalExceptionController {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, Object>> handleNotValidParamsException(BadGatewayException ex) {
+    public ResponseEntity<Map<String, Object>> handleNotValidParamsException(ConstraintViolationException ex) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.BAD_REQUEST.value());
         response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());

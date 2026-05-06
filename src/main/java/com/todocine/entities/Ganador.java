@@ -2,6 +2,8 @@ package com.todocine.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "GANADOR")
 public class Ganador {
@@ -20,4 +22,14 @@ public class Ganador {
         this.id = id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Ganador ganador)) return false;
+        return Objects.equals(id, ganador.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

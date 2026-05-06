@@ -30,7 +30,7 @@ public class PremioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PremioDTO> getPremioById(@NotNull @PathVariable("id") Long id) throws NotFoudException {
+    public ResponseEntity<PremioDTO> getPremioById(@NotNull @PathVariable("id") Long id) {
         return new ResponseEntity<>(premioService.getPremioById(id), HttpStatus.OK);
     }
 

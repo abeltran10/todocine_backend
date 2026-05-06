@@ -6,21 +6,21 @@ Todo Cine is a web app to manage movies from [TMDB](https://www.themoviedb.org/)
 
 ## Code
 
-Todo Cine is an API REST developed with [Java and Springboot in backend](https://github.com/abeltran10/todocine_backend) and there are two frontends one with [Javascript's react framework](https://github.com/abeltran10/todo_cine_frontend) and another with [Angular](https://github.com/abeltran10/todocine_front_angular). It's SQL database. I had to add hibernate-community-dialects in pom because my SQL server is no longer supported.
+Todo Cine is an API REST developed with [Java and Springboot in backend](https://github.com/abeltran10/todocine_backend) and there are two frontends one with [Javascript's react framework](https://github.com/abeltran10/todo_cine_frontend) and another with [Angular](https://github.com/abeltran10/todocine_front_angular). It's SQL database. I had to add hibernate-community-dialects in pom because my Oracle SQL server is no longer supported.
 
 application.properties loads properties from three files, one per environment (prod, dev, test) and Constants file is missing in order you can create it for your need.
 
 
 ## Last release
-- [v6.2.1](https://github.com/abeltran10/todocine_backend/releases/tag/v6.2.1)
+- [v6.3.0](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.0)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.2.1) compressed file. 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.0) compressed file. 
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## API Version: v6.2.1
+## Version: v6.3.0
 API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
 ### Available authorizations
@@ -341,6 +341,209 @@ Requires ADMIN role.
 | BearerAuth |  |
 
 ---
+
+### [GET] /usuarios/{userId}/listas
+**Get user's movie lists**
+
+Returns a paginated list of all movie lists created by a specific user.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| page | query | Page index (1..N) | Yes | integer |
+| userId | path | Unique identifier of the user who owns the lists | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [POST] /usuarios/{userId}/listas
+**Create a new movie list**
+
+Registers a new movie list associated with the specified user.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| userId | path | Unique identifier of the user who owns the lists | Yes | long |
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ListaDTO](#listadto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 201 | List created successfully | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [GET] /usuarios/{userId}/listas/{id}
+**Get movie list details**
+
+Returns the full details of a specific list, including its metadata and movie collection.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| userId | path |  | Yes | long |
+| id | path | Unique identifier of the specific movie list | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List details retrieved successfully | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [PUT] /usuarios/{userId}/listas/{id}
+**Update an existing list**
+
+Updates the name, description, or the entire movie collection of a specific list.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| userId | path |  | Yes | long |
+| id | path | Unique identifier of the specific movie list | Yes | long |
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ListaDTO](#listadto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List updated successfully | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [DELETE] /usuarios/{userId}/listas/{id}
+**Delete a movie list**
+
+Permanently removes the list from the user's profile.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| userId | path |  | Yes | long |
+| id | path | Unique identifier of the specific movie list | Yes | long |
+
+#### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 204 | List deleted successfully (No Content) |
+| 400 | Invalid data. |
+| 403 | Access denied. |
+| 404 | Not found. |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [POST] /usuarios/{userId}/listas/{listaId}/movies/{movieId}
+**Add movie to list**
+
+Adds a specific movie to the list. If the movie does not exist in the local database, it will be persisted.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| userId | path |  | Yes | long |
+| listaId | path |  | Yes | long |
+| movieId | path |  | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Movie added successfully. Returns the updated list. | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+| 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [DELETE] /usuarios/{userId}/listas/{listaId}/movies/{movieId}
+**Remove movie from list**
+
+Removes the relationship between the movie and the list without deleting the movie from the global catalog.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| userId | path |  | Yes | long |
+| listaId | path |  | Yes | long |
+| movieId | path |  | Yes | long |
+
+#### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 204 | Movie removed from list successfully |
+| 400 | Invalid data. |
+| 403 | Access denied. |
+| 404 | Not found. |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
 ### Schemas
 
 #### UsuarioReqDTO
@@ -477,20 +680,34 @@ Requires ADMIN role.
 | titulo | string | Award name | Yes |
 | anyos | [ integer ] | Award years | No |
 
+#### ListaDTO
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | long | Unique list ID | No |
+| nombre | string | List name | Yes |
+| descripcion | string | List description | Yes |
+| username | string | List owner | Yes |
+| movies | [ [MovieDTO](#moviedto) ] | Movies in the list | No |
+
+
 
 ## Entity-Relation Diagram
 
-<img width="1566" height="698" alt="Captura desde 2026-03-07 18-02-40" src="https://github.com/user-attachments/assets/0d89ccbc-b00f-4bf1-8e80-e2aa9193af08" />
+<img width="1377" height="713" alt="entity_relation_diagram" src="https://github.com/user-attachments/assets/c9b20795-041d-4d38-8ffc-d56cc1a54cff" />
+
 
 ## UML
 
 ### Use case diagram
 
-<img width="871" height="1075" alt="case_use_diagram" src="https://github.com/user-attachments/assets/3705a7a6-3c0f-4bb4-9caa-196cfd5f7801" />
+<img width="871" height="1519" alt="case_use_diagram" src="https://github.com/user-attachments/assets/b43e9e3c-6178-414d-826f-2dab7063ae79" />
+
 
 ### Classes diagram
 
-<img width="4000" height="360" alt="diagrama_clases" src="https://github.com/user-attachments/assets/9ccfdd44-afce-4e89-9b3c-70ade5bd80ff" />
+<img width="4096" height="466" alt="diagrama_clases" src="https://github.com/user-attachments/assets/5607f1d2-7b15-4075-911c-0cfd71d209aa" />
+
 
 
 

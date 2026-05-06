@@ -8,5 +8,5 @@ import java.util.List;
 public interface PremioService {
 
     List<PremioDTO> getPremios();
-    PremioDTO getPremioById(Long id) throws NotFoudException;
+    PremioDTO getPremioById(Long id);
 }
