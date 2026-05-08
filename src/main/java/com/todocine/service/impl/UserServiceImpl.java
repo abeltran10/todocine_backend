@@ -1,8 +1,8 @@
 package com.todocine.service.impl;
 
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dto.response.UsuarioDTO;
 import com.todocine.dto.request.UsuarioReqDTO;
+import com.todocine.dto.response.UsuarioDTO;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;

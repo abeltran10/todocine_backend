@@ -1,8 +1,8 @@
 package com.todocine;
 
 import com.todocine.configuration.Constants;
-import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
+import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.entities.Usuario;

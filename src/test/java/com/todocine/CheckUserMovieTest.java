@@ -1,14 +1,14 @@
 package com.todocine;
 
 import com.todocine.dao.GanadorDAO;
-import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
+import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dto.response.MovieDTO;
-import com.todocine.entities.UsuarioMovie;
-import com.todocine.entities.UserMovieId;
 import com.todocine.entities.Movie;
+import com.todocine.entities.UserMovieId;
 import com.todocine.entities.Usuario;
+import com.todocine.entities.UsuarioMovie;
 import com.todocine.utils.mapper.MovieMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

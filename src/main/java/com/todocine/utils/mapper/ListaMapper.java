@@ -3,7 +3,6 @@ package com.todocine.utils.mapper;
 import com.todocine.dto.ListaDTO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.entities.Lista;
-import com.todocine.entities.Movie;
 
 import java.util.List;
 

@@ -1,8 +1,7 @@
 package com.todocine.controller;
 
 import com.todocine.dto.ListaDTO;
-import com.todocine.dto.response.MovieDTO;
-import com.todocine.exceptions.*;
+import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.service.ListaService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;
@@ -30,12 +29,12 @@ public class ListaController {
     }
 
     @PostMapping
-    public ResponseEntity<ListaDTO> createLista(@Valid @RequestBody ListaDTO listaDTO) {
+    public ResponseEntity<ListaDTO> createLista(@Valid @RequestBody ListaReqDTO listaDTO) {
         return new ResponseEntity<>(listaService.createLista(listaDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ListaDTO> updateLista(@NotNull @PathVariable("id") Long id, @Valid @RequestBody ListaDTO listaDTO) {
+    public ResponseEntity<ListaDTO> updateLista(@NotNull @PathVariable("id") Long id, @Valid @RequestBody ListaReqDTO listaDTO) {
         return new ResponseEntity<>(listaService.updateLista(id, listaDTO), HttpStatus.OK);
     }
 

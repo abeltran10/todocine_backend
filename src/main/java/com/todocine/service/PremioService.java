@@ -1,7 +1,6 @@
 package com.todocine.service;
 
 import com.todocine.dto.response.PremioDTO;
-import com.todocine.exceptions.NotFoudException;
 
 import java.util.List;
 

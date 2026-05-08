@@ -1,13 +1,9 @@
 package com.todocine.controller;
 
 import com.todocine.configuration.Constants;
+import com.todocine.dto.request.UsuarioReqDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.UsuarioDTO;
-import com.todocine.dto.request.UsuarioReqDTO;
-import com.todocine.exceptions.BadRequestException;
-import com.todocine.exceptions.ConflictException;
-import com.todocine.exceptions.ForbiddenException;
-import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.UsuarioMovieService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;

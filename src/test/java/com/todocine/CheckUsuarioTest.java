@@ -1,9 +1,12 @@
 package com.todocine;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.todocine.dao.*;
-import com.todocine.dto.response.UsuarioDTO;
+import com.todocine.dao.GanadorDAO;
+import com.todocine.dao.MovieDAO;
+import com.todocine.dao.UsuarioDAO;
+import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dto.request.UsuarioReqDTO;
+import com.todocine.dto.response.UsuarioDTO;
 import com.todocine.entities.Usuario;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,9 +25,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

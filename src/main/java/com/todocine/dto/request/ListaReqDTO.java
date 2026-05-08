@@ -1,4 +1,4 @@
-package com.todocine.dto;
+package com.todocine.dto.request;
 
 import com.todocine.dto.response.MovieDTO;
 import jakarta.validation.constraints.NotBlank;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaDTO {
+public class ListaReqDTO {
 
     private Long id;
 
@@ -21,10 +21,10 @@ public class ListaDTO {
     @NotBlank
     private String username;
 
-    public ListaDTO() {
+    public ListaReqDTO() {
     }
 
-    public ListaDTO(Long id) {
+    public ListaReqDTO(Long id) {
         this.id = id;
     }
 

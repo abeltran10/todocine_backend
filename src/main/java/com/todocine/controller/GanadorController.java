@@ -1,10 +1,7 @@
 package com.todocine.controller;
 
-import com.todocine.dto.response.GanadorDTO;
 import com.todocine.dto.request.GanadorReqDTO;
-import com.todocine.exceptions.BadGatewayException;
-import com.todocine.exceptions.ConflictException;
-import com.todocine.exceptions.NotFoudException;
+import com.todocine.dto.response.GanadorDTO;
 import com.todocine.service.GanadorService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;

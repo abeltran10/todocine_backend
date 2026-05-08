@@ -1,18 +1,20 @@
 package com.todocine.service.impl;
 
-import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
-import com.todocine.dao.UsuarioDAO;
+import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.UsuarioMovieRepo;
 import com.todocine.dto.request.UsuarioMovieDTO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
-import com.todocine.entities.*;
+import com.todocine.entities.Movie;
+import com.todocine.entities.UserMovieId;
+import com.todocine.entities.Usuario;
+import com.todocine.entities.UsuarioMovie;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
-import com.todocine.service.UsuarioMovieService;
 import com.todocine.service.TMDBService;
+import com.todocine.service.UsuarioMovieService;
 import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.MovieMapper;
 import com.todocine.utils.mapper.UsuarioMovieMapper;

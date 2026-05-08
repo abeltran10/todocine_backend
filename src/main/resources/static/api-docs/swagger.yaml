@@ -393,9 +393,9 @@ paths:
           description: "Unique identifier of the user who owns the lists"
 
       get:
-        summary: "Get user's movie lists"
+        summary: "Get user's lists of movies"
         description: "Returns a paginated list of all movie lists created by a specific user."
-        tags: ["User lists"]
+        tags: ["User's Lists"]
         security:
           - BearerAuth: [ ]
         parameters:
@@ -418,9 +418,9 @@ paths:
             $ref: '#/components/responses/Forbidden'
 
       post:
-        summary: "Create a new movie list"
-        description: "Registers a new movie list associated with the specified user."
-        tags: ["User lists"]
+        summary: "Create a new list of movies"
+        description: "Registers a new list of movies associated with the specified user."
+        tags: ["User's Lists"]
         security:
           - BearerAuth: [ ]
         requestBody:
@@ -428,7 +428,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListaDTO'
+                $ref: '#/components/schemas/ListaReqDTO'
         responses:
           '201':
             description: "List created successfully"
@@ -455,12 +455,12 @@ paths:
           schema:
             type: integer
             format: int64
-          description: "Unique identifier of the specific movie list"
+          description: "Unique identifier of the specific list of movies"
 
       get:
-        summary: "Get movie list details"
+        summary: "Get details of the movie list"
         description: "Returns the full details of a specific list, including its metadata and movie collection."
-        tags: ["User lists"]
+        tags: ["User's Lists"]
         security:
           - BearerAuth: [ ]
         responses:
@@ -480,7 +480,7 @@ paths:
       put:
         summary: "Update an existing list"
         description: "Updates the name, description, or the entire movie collection of a specific list."
-        tags: ["User lists"]
+        tags: ["User's Lists"]
         security:
           - BearerAuth: [ ]
         requestBody:
@@ -488,10 +488,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListaDTO'
+                $ref: '#/components/schemas/ListaReqDTO'
         responses:
           '200':
-            description: List updated successfully
+            description: "List updated successfully"
             content:
               application/json:
                 schema:
@@ -504,9 +504,9 @@ paths:
             $ref: '#/components/responses/NotFound'
 
       delete:
-        summary: "Delete a movie list"
+        summary: "Delete a list of movies"
         description: "Permanently removes the list from the user's profile."
-        tags: ["User lists"]
+        tags: ["User's Lists"]
         security:
           - BearerAuth: [ ]
         responses:
@@ -565,7 +565,7 @@ paths:
       delete:
         summary: "Remove movie from list"
         description: "Removes the relationship between the movie and the list without deleting the movie from the global catalog."
-        tags: ["User lists"]
+        tags: ["User's Lists"]
         security:
           - BearerAuth: [ ]
         responses:
@@ -755,6 +755,19 @@ components:
           description: "Award years"
 
     ListaDTO:
+      type: object
+      required: [ id, nombre, descripcion, username ]
+      properties:
+        id: { type: integer, format: int64, description: "Unique list ID" }
+        nombre: { type: string, description: "List name" }
+        descripcion: { type: string, description: "List description" }
+        username: { type: string, description: "List owner" }
+        movies:
+          type: array
+          items: { $ref: '#/components/schemas/MovieDTO' }
+          description: "Movies in the list"
+
+    ListaReqDTO:
       type: object
       required: [ nombre, descripcion, username ]
       properties:

@@ -1,11 +1,14 @@
 package com.todocine.service.impl;
 
 
-import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dao.MovieDAO;
+import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
-import com.todocine.entities.*;
+import com.todocine.entities.Movie;
+import com.todocine.entities.UserMovieId;
+import com.todocine.entities.Usuario;
+import com.todocine.entities.UsuarioMovie;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
