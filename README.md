@@ -6,17 +6,17 @@ Todo Cine is a web app to manage movies from [TMDB](https://www.themoviedb.org/)
 
 ## Code
 
-Todo Cine is an API REST developed with [Java and Springboot in backend](https://github.com/abeltran10/todocine_backend) and there are two frontends one with [Javascript's react framework](https://github.com/abeltran10/todo_cine_frontend) and another with [Angular](https://github.com/abeltran10/todocine_front_angular). It's SQL database. I had to add hibernate-community-dialects in pom because my SQL server is no longer supported.
+Todo Cine is an API REST developed with [Java and Springboot in backend](https://github.com/abeltran10/todocine_backend) and there are two frontends one with [Javascript's react framework](https://github.com/abeltran10/todo_cine_frontend) and another with [Angular](https://github.com/abeltran10/todocine_front_angular). It's SQL database. I had to add hibernate-community-dialects in pom because my Oracle SQL server is no longer supported.
 
 application.properties loads properties from three files, one per environment (prod, dev, test) and Constants file is missing in order you can create it for your need.
 
 
 ## Last release
-- [v6.2.1](https://github.com/abeltran10/todocine_backend/releases/tag/v6.2.1)
+- [v6.3.0](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.0)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.2.1) compressed file. 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.0) compressed file. 
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
@@ -694,17 +694,20 @@ Removes the relationship between the movie and the list without deleting the mov
 
 ## Entity-Relation Diagram
 
-<img width="1566" height="698" alt="Captura desde 2026-03-07 18-02-40" src="https://github.com/user-attachments/assets/0d89ccbc-b00f-4bf1-8e80-e2aa9193af08" />
+<img width="1377" height="713" alt="entity_relation_diagram" src="https://github.com/user-attachments/assets/c9b20795-041d-4d38-8ffc-d56cc1a54cff" />
+
 
 ## UML
 
 ### Use case diagram
 
-<img width="871" height="1075" alt="case_use_diagram" src="https://github.com/user-attachments/assets/3705a7a6-3c0f-4bb4-9caa-196cfd5f7801" />
+<img width="871" height="1519" alt="case_use_diagram" src="https://github.com/user-attachments/assets/b43e9e3c-6178-414d-826f-2dab7063ae79" />
+
 
 ### Classes diagram
 
-<img width="4000" height="360" alt="diagrama_clases" src="https://github.com/user-attachments/assets/9ccfdd44-afce-4e89-9b3c-70ade5bd80ff" />
+<img width="4096" height="466" alt="diagrama_clases" src="https://github.com/user-attachments/assets/5607f1d2-7b15-4075-911c-0cfd71d209aa" />
+
 
 
 
