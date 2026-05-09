@@ -543,7 +543,7 @@ paths:
       post:
         summary: "Add movie to list"
         description: "Adds a specific movie to the list. If the movie does not exist in the local database, it will be persisted."
-        tags: ["User lists"]
+        tags: ["User's Lists"]
         security:
           - BearerAuth: [ ]
         responses:
