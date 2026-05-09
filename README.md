@@ -21,7 +21,6 @@ application.properties loads properties from three files, one per environment (p
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
 ## Version: v6.3.0
-API managed with Spring Boot, JWT security, and movie catalog with custom exception handling.
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -343,7 +342,7 @@ Requires ADMIN role.
 ---
 
 ### [GET] /usuarios/{userId}/listas
-**Get user's movie lists**
+**Get user's lists of movies**
 
 Returns a paginated list of all movie lists created by a specific user.
 
@@ -369,9 +368,9 @@ Returns a paginated list of all movie lists created by a specific user.
 | BearerAuth |  |
 
 ### [POST] /usuarios/{userId}/listas
-**Create a new movie list**
+**Create a new list of movies**
 
-Registers a new movie list associated with the specified user.
+Registers a new list of movies associated with the specified user.
 
 #### Parameters
 
@@ -383,7 +382,7 @@ Registers a new movie list associated with the specified user.
 
 | Required | Schema |
 | -------- | ------ |
-|  Yes | **application/json**: [ListaDTO](#listadto)<br> |
+|  Yes | **application/json**: [ListaReqDTO](#listareqdto)<br> |
 
 #### Responses
 
@@ -400,7 +399,7 @@ Registers a new movie list associated with the specified user.
 | BearerAuth |  |
 
 ### [GET] /usuarios/{userId}/listas/{id}
-**Get movie list details**
+**Get details of the movie list**
 
 Returns the full details of a specific list, including its metadata and movie collection.
 
@@ -409,7 +408,7 @@ Returns the full details of a specific list, including its metadata and movie co
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
 | userId | path |  | Yes | long |
-| id | path | Unique identifier of the specific movie list | Yes | long |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
 
 #### Responses
 
@@ -436,13 +435,13 @@ Updates the name, description, or the entire movie collection of a specific list
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
 | userId | path |  | Yes | long |
-| id | path | Unique identifier of the specific movie list | Yes | long |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
 
 #### Request Body
 
 | Required | Schema |
 | -------- | ------ |
-|  Yes | **application/json**: [ListaDTO](#listadto)<br> |
+|  Yes | **application/json**: [ListaReqDTO](#listareqdto)<br> |
 
 #### Responses
 
@@ -460,7 +459,7 @@ Updates the name, description, or the entire movie collection of a specific list
 | BearerAuth |  |
 
 ### [DELETE] /usuarios/{userId}/listas/{id}
-**Delete a movie list**
+**Delete a list of movies**
 
 Permanently removes the list from the user's profile.
 
@@ -469,7 +468,7 @@ Permanently removes the list from the user's profile.
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
 | userId | path |  | Yes | long |
-| id | path | Unique identifier of the specific movie list | Yes | long |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
 
 #### Responses
 
@@ -485,6 +484,65 @@ Permanently removes the list from the user's profile.
 | Security Schema | Scopes |
 | --------------- | ------ |
 | BearerAuth |  |
+
+### [POST] /usuarios/{userId}/listas/{listaId}/movies/{movieId}
+**Add movie to list**
+
+Adds a specific movie to the list. If the movie does not exist in the local database, it will be persisted.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| userId | path |  | Yes | long |
+| listaId | path |  | Yes | long |
+| movieId | path |  | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Movie added successfully. Returns the updated list. | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+| 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [DELETE] /usuarios/{userId}/listas/{listaId}/movies/{movieId}
+**Remove movie from list**
+
+Removes the relationship between the movie and the list without deleting the movie from the global catalog.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| userId | path |  | Yes | long |
+| listaId | path |  | Yes | long |
+| movieId | path |  | Yes | long |
+
+#### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 204 | Movie removed from list successfully |
+| 400 | Invalid data. |
+| 403 | Access denied. |
+| 404 | Not found. |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
 
 ### [POST] /usuarios/{userId}/listas/{listaId}/movies/{movieId}
 **Add movie to list**
@@ -681,6 +739,16 @@ Removes the relationship between the movie and the list without deleting the mov
 | anyos | [ integer ] | Award years | No |
 
 #### ListaDTO
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | long | Unique list ID | Yes |
+| nombre | string | List name | Yes |
+| descripcion | string | List description | Yes |
+| username | string | List owner | Yes |
+| movies | [ [MovieDTO](#moviedto) ] | Movies in the list | No |
+
+#### ListaReqDTO
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
