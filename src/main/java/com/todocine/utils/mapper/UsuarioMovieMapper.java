@@ -1,10 +1,10 @@
 package com.todocine.utils.mapper;
 
 import com.todocine.dto.request.UsuarioMovieDTO;
-import com.todocine.entities.UsuarioMovie;
-import com.todocine.entities.UserMovieId;
 import com.todocine.entities.Movie;
+import com.todocine.entities.UserMovieId;
 import com.todocine.entities.Usuario;
+import com.todocine.entities.UsuarioMovie;
 
 public class UsuarioMovieMapper {
 

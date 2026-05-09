@@ -5,7 +5,10 @@ import com.todocine.dao.UsuarioMovieRepo;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.UsuarioDTO;
-import com.todocine.entities.*;
+import com.todocine.entities.Movie;
+import com.todocine.entities.UserMovieId;
+import com.todocine.entities.Usuario;
+import com.todocine.entities.UsuarioMovie;
 import com.todocine.service.impl.UsuarioMovieServiceImpl;
 import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.MovieMapper;
@@ -26,9 +29,11 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest

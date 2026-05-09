@@ -1,13 +1,14 @@
-package com.todocine.dto;
+package com.todocine.dto.response;
 
-import com.todocine.dto.response.MovieDTO;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListaDTO {
 
+    @NotNull
     private Long id;
 
     @NotBlank

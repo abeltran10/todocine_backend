@@ -1,9 +1,9 @@
 package com.todocine.service.impl;
 
 import com.todocine.dao.*;
+import com.todocine.dto.request.GanadorReqDTO;
 import com.todocine.dto.response.GanadorDTO;
 import com.todocine.dto.response.MovieDTO;
-import com.todocine.dto.request.GanadorReqDTO;
 import com.todocine.entities.*;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.ConflictException;
@@ -21,7 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 import static com.todocine.configuration.Constants.*;
 

@@ -4,6 +4,7 @@ import com.todocine.dao.ListaDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.ListaDTO;
+import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.entities.Lista;
 import com.todocine.entities.Movie;
@@ -93,7 +94,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
     @Override
     @Transactional
-    public ListaDTO createLista(ListaDTO listaDTO) {
+    public ListaDTO createLista(ListaReqDTO listaDTO) {
         Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
 
         if (usuario == null || !usuario.getId().equals(getCurrentUserId())) {
@@ -110,7 +111,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
     @Override
     @Transactional
-    public ListaDTO updateLista(Long id, ListaDTO listaDTO) {
+    public ListaDTO updateLista(Long id, ListaReqDTO listaDTO) {
 
         Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
 
