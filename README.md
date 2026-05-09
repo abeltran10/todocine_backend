@@ -774,7 +774,8 @@ Removes the relationship between the movie and the list without deleting the mov
 
 ### Classes diagram
 
-<img width="4096" height="466" alt="diagrama_clases" src="https://github.com/user-attachments/assets/5607f1d2-7b15-4075-911c-0cfd71d209aa" />
+<img width="4566" height="360" alt="classes_diagram" src="https://github.com/user-attachments/assets/39f0facd-a528-4015-aaef-7a2728b50b5c" />
+
 
 
 
