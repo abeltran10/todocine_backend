@@ -457,26 +457,6 @@ paths:
             format: int64
           description: "Unique identifier of the specific list of movies"
 
-      get:
-        summary: "Get details of the movie list"
-        description: "Returns the full details of a specific list, including its metadata and movie collection."
-        tags: ["User's Lists"]
-        security:
-          - BearerAuth: [ ]
-        responses:
-          '200':
-            description: "List details retrieved successfully"
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ListaDTO'
-          '400':
-            $ref: '#/components/responses/BadRequest'
-          '403':
-            $ref: '#/components/responses/Forbidden'
-          '404':
-            $ref: '#/components/responses/NotFound'
-
       put:
         summary: "Update an existing list"
         description: "Updates the name, description, or the entire movie collection of a specific list."
@@ -520,6 +500,7 @@ paths:
             $ref: '#/components/responses/NotFound'
 
   /usuarios/{userId}/listas/{listaId}/movies/{movieId}:
+
       parameters:
         - name: "userId"
           in: path
@@ -577,6 +558,65 @@ paths:
             $ref: '#/components/responses/Forbidden'
           '404':
             $ref: '#/components/responses/NotFound'
+
+
+  /listas:
+
+    get:
+      summary: "Get public lists of movies"
+      description: "Returns a paginated list of all public movie lists."
+      tags: [ "Public Lists" ]
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: "page"
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: "Page index (1..N)"
+      responses:
+        '200':
+          description: "Paginated lists retrieved successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginator'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /listas/{id}:
+
+    parameters:
+      - name: "id"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: "Unique identifier of the specific list of movies"
+
+    get:
+      summary: "Get details of the movie list"
+      description: "Returns the full details of a specific list, including its metadata and movie collection."
+      tags: [ "Lists" ]
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '200':
+          description: "List details retrieved successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
 components:
   securitySchemes:
