@@ -1,6 +1,6 @@
 package com.todocine.utils.mapper;
 
-import com.todocine.dto.ListaDTO;
+import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.entities.Lista;
 
@@ -18,6 +18,7 @@ public class ListaMapper {
         listaDTO.setMovies(movieDTOList);
 
         listaDTO.setUsername(lista.getUsuario().getUsername());
+        listaDTO.setPublica("S".equals(lista.getPublica()));
 
         return listaDTO;
     }

@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ListaDAO extends JpaRepository<Lista, Long> {
 
     Page<Lista> findByUsuarioId(Long userId, Pageable pageable);
+
+    Page<Lista> findByPublica(String publica, Pageable pageable);
 }

@@ -756,12 +756,13 @@ components:
 
     ListaDTO:
       type: object
-      required: [ id, nombre, descripcion, username ]
+      required: [ id, nombre, descripcion, username, publica ]
       properties:
         id: { type: integer, format: int64, description: "Unique list ID" }
         nombre: { type: string, description: "List name" }
         descripcion: { type: string, description: "List description" }
         username: { type: string, description: "List owner" }
+        publica: { type: boolean, description: "List visibility" }
         movies:
           type: array
           items: { $ref: '#/components/schemas/MovieDTO' }
@@ -769,12 +770,13 @@ components:
 
     ListaReqDTO:
       type: object
-      required: [ nombre, descripcion, username ]
+      required: [ nombre, descripcion, username, publica ]
       properties:
         id: { type: integer, format: int64, description: "Unique list ID" }
         nombre: { type: string, description: "List name" }
         descripcion: { type: string, description: "List description" }
         username: { type: string, description: "List owner" }
+        publica: { type: boolean, description: "List visibility" }
         movies:
           type: array
           items: { $ref: '#/components/schemas/MovieDTO' }

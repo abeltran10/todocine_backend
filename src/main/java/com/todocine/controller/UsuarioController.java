@@ -50,18 +50,6 @@ public class UsuarioController {
         return responseEntity;
     }
 
-    @GetMapping("/{userId}/movies")
-    public ResponseEntity<Paginator<MovieDetailDTO>> getUsuarioMovies(@NotNull @PathVariable("userId") Long userId,
-                                                                      @RequestParam("vista") String vista,
-                                                                      @RequestParam("votada") String votada,
-                                                                      @RequestParam("orderBy") String orderBy,
-                                                                      @RequestParam("page") Integer pagina) {
-        Map<String, String> filters = new HashMap<>();
-        filters.put(Constants.VISTA_FILTER, vista);
-        filters.put(Constants.VOTADA_FILTER, votada);
 
-        ResponseEntity<Paginator<MovieDetailDTO>> responseEntity = new ResponseEntity<>(usuarioMovieService.getUsuarioMovies(userId, filters, orderBy, pagina), HttpStatus.OK);
-        return responseEntity;
-    }
 
 }

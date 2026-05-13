@@ -22,6 +22,9 @@ public class ListaDTO {
     @NotBlank
     private String username;
 
+    @NotNull
+    private Boolean publica;
+
     public ListaDTO() {
     }
 
@@ -67,5 +70,13 @@ public class ListaDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Boolean getPublica() {
+        return publica;
+    }
+
+    public void setPublica(Boolean publica) {
+        this.publica = publica;
     }
 }

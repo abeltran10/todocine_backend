@@ -3,8 +3,8 @@ package com.todocine.service.impl;
 import com.todocine.dao.ListaDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dto.ListaDTO;
 import com.todocine.dto.request.ListaReqDTO;
+import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.entities.Lista;
 import com.todocine.entities.Movie;
@@ -60,6 +60,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
                             listaDTO.setNombre(lista.getNombre());
                             listaDTO.setDescripcion(lista.getDescripcion());
                             listaDTO.setUsername(lista.getUsuario().getUsername());
+                            listaDTO.setPublica("S".equals(lista.getPublica()));
 
                             return listaDTO;
                         })
@@ -83,12 +84,6 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         Lista lista = listaDAO.findById(id)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
-        Usuario usuario = usuarioDAO.findByUsername(lista.getUsuario().getUsername());
-
-        if (usuario == null || !usuario.getId().equals(getCurrentUserId())) {
-            throw new ForbiddenException(USER_FORBIDDEN);
-        }
-
         return ListaMapper.toDTO(lista);
     }
 
@@ -105,6 +100,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         lista.setNombre(listaDTO.getNombre());
         lista.setDescripcion(listaDTO.getDescripcion());
         lista.setUsuario(usuario);
+        lista.setPublica("N");
 
         return ListaMapper.toDTO(listaDAO.save(lista));
     }
@@ -127,6 +123,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         listaExistente.setNombre(listaDTO.getNombre());
         listaExistente.setDescripcion(listaDTO.getDescripcion());
+        listaExistente.setPublica(listaDTO.getPublica() ? "S" : "N");
 
         return ListaMapper.toDTO(listaDAO.save(listaExistente));
     }
@@ -196,5 +193,34 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
+    }
+
+    @Override
+    public Paginator<ListaDTO> getListasPublicas(Integer page) {
+        Paginator<ListaDTO> paginator = new Paginator<>();
+
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        Page<Lista> listasPage = listaDAO.findByPublica("S", pageable);
+
+        if (listasPage.hasContent()) {
+            List<ListaDTO> results = listasPage.getContent().stream()
+                    .map(lista -> {
+                        ListaDTO listaDTO = new ListaDTO(lista.getId());
+                        listaDTO.setNombre(lista.getNombre());
+                        listaDTO.setDescripcion(lista.getDescripcion());
+                        listaDTO.setUsername(lista.getUsuario().getUsername());
+                        listaDTO.setPublica("S".equals(lista.getPublica()));
+
+                        return listaDTO;
+                    })
+                    .toList();
+
+            paginator.setResults(results);
+            paginator.setPage(page);
+            paginator.setTotalPages(listasPage.getTotalPages());
+            paginator.setTotalResults(Integer.parseInt(String.valueOf(listasPage.getTotalElements())));
+        }
+
+       return paginator;
     }
 }

@@ -31,6 +31,8 @@ public class Lista {
     @JoinColumn(name = "usuario", referencedColumnName = "ID")
     private Usuario usuario;
 
+    private String publica;
+
     public Lista() {
     }
 
@@ -76,6 +78,14 @@ public class Lista {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public String getPublica() {
+        return publica;
+    }
+
+    public void setPublica(String publica) {
+        this.publica = publica;
     }
 
     @Override
