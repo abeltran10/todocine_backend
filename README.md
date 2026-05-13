@@ -12,11 +12,11 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v6.3.0](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.0)
+- [v6.3.5](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.5)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.0) compressed file. 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.5) compressed file. 
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
@@ -731,19 +731,22 @@ Returns the full details of a specific list, including its metadata and movie co
 
 ## Entity-Relation Diagram
 
-<img width="1377" height="713" alt="entity_relation_diagram" src="https://github.com/user-attachments/assets/c9b20795-041d-4d38-8ffc-d56cc1a54cff" />
+<img width="1556" height="725" alt="entity-relation_diagram" src="https://github.com/user-attachments/assets/81b213af-11ec-4ed3-9759-c64c15d4883b" />
+
 
 
 ## UML
 
 ### Use case diagram
 
-<img width="871" height="1519" alt="case_use_diagram" src="https://github.com/user-attachments/assets/b43e9e3c-6178-414d-826f-2dab7063ae79" />
+<img width="871" height="1655" alt="case_use_diagram" src="https://github.com/user-attachments/assets/e1c63124-c5e3-446e-9291-30189e606e60" />
+
 
 
 ### Classes diagram
 
-<img width="4566" height="360" alt="classes_diagram" src="https://github.com/user-attachments/assets/39f0facd-a528-4015-aaef-7a2728b50b5c" />
+<img width="5148" height="466" alt="classes_diagram" src="https://github.com/user-attachments/assets/ef24adf0-7b4a-4f4c-8f98-36ecbe5da905" />
+
 
 
 
