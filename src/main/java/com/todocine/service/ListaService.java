@@ -1,7 +1,7 @@
 package com.todocine.service;
 
-import com.todocine.dto.ListaDTO;
 import com.todocine.dto.request.ListaReqDTO;
+import com.todocine.dto.response.ListaDTO;
 import com.todocine.utils.Paginator;
 
 public interface ListaService {
@@ -13,4 +13,5 @@ public interface ListaService {
     Paginator<ListaDTO> getListas(Long userId, Integer page);
     ListaDTO addMovieToList(Long listaId, Long movieId);
     void deleteMovieFromList(Long listaId, Long movieId);
+    Paginator<ListaDTO> getListasPublicas(Integer page);
 }
