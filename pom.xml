@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.todocine</groupId>
 	<artifactId>todocine</artifactId>
-	<version>v6.3.0</version>
+	<version>v6.3.5</version>
 	<name>todocine</name>
 	<description>Todo cine backend</description>
 	<properties>

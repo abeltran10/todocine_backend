@@ -20,7 +20,7 @@ application.properties loads properties from three files, one per environment (p
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## Version: v6.3.0
+## Version: v6.3.5
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -398,33 +398,6 @@ Registers a new list of movies associated with the specified user.
 | --------------- | ------ |
 | BearerAuth |  |
 
-### [GET] /usuarios/{userId}/listas/{id}
-**Get details of the movie list**
-
-Returns the full details of a specific list, including its metadata and movie collection.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| userId | path |  | Yes | long |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | List details retrieved successfully | **application/json**: [ListaDTO](#listadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
 ### [PUT] /usuarios/{userId}/listas/{id}
 **Update an existing list**
 
@@ -535,6 +508,59 @@ Removes the relationship between the movie and the list without deleting the mov
 | 400 | Invalid data. |
 | 403 | Access denied. |
 | 404 | Not found. |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
+### [GET] /listas
+**Get public lists of movies**
+
+Returns a paginated list of all public movie lists.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| page | query | Page index (1..N) | Yes | integer |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
+### [GET] /listas/{id}
+**Get details of the movie list**
+
+Returns the full details of a specific list, including its metadata and movie collection.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List details retrieved successfully | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 404 | Not found. |  |
 
 ##### Security
 
@@ -687,6 +713,7 @@ Removes the relationship between the movie and the list without deleting the mov
 | nombre | string | List name | Yes |
 | descripcion | string | List description | Yes |
 | username | string | List owner | Yes |
+| publica | boolean | List visibility | Yes |
 | movies | [ [MovieDTO](#moviedto) ] | Movies in the list | No |
 
 #### ListaReqDTO
@@ -697,6 +724,7 @@ Removes the relationship between the movie and the list without deleting the mov
 | nombre | string | List name | Yes |
 | descripcion | string | List description | Yes |
 | username | string | List owner | Yes |
+| publica | boolean | List visibility | Yes |
 | movies | [ [MovieDTO](#moviedto) ] | Movies in the list | No |
 
 
