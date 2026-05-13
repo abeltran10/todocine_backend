@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: "Todo Cine API"
   description: "API managed with Spring Boot, JWT security, and movie catalog with custom exception handling."
-  version: "v6.3.0"
+  version: "v6.3.5"
 
 servers:
   - url: "http://localhost:8080/api"
