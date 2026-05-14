@@ -20,7 +20,7 @@ application.properties loads properties from three files, one per environment (p
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## Version: v6.3.5
+## Version: v6.3.6
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -560,6 +560,7 @@ Returns the full details of a specific list, including its metadata and movie co
 | ---- | ----------- | ------ |
 | 200 | List details retrieved successfully | **application/json**: [ListaDTO](#listadto)<br> |
 | 400 | Invalid data. |  |
+| 403 | Access denied. |  |
 | 404 | Not found. |  |
 
 ##### Security
@@ -726,6 +727,7 @@ Returns the full details of a specific list, including its metadata and movie co
 | username | string | List owner | Yes |
 | publica | boolean | List visibility | Yes |
 | movies | [ [MovieDTO](#moviedto) ] | Movies in the list | No |
+
 
 
 
