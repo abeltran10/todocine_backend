@@ -84,7 +84,15 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         Lista lista = listaDAO.findById(id)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
-        return ListaMapper.toDTO(lista);
+        Usuario usuario = usuarioDAO.findByUsername(lista.getUsuario().getUsername());
+
+        if ((usuario != null && getCurrentUserId().equals(usuario.getId())) || "S".equals(lista.getPublica())) {
+            return ListaMapper.toDTO(lista);
+        } else {
+            throw new ForbiddenException(USER_FORBIDDEN);
+        }
+
+
     }
 
     @Override
