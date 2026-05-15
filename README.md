@@ -20,7 +20,7 @@ application.properties loads properties from three files, one per environment (p
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## Version: v6.3.6
+## Version: v6.3.7-RC
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
