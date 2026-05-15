@@ -720,13 +720,13 @@ Returns the full details of a specific list, including its metadata and movie co
 #### ListaReqDTO
 
 | Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long | Unique list ID | No |
-| nombre | string | List name | Yes |
-| descripcion | string | List description | Yes |
-| username | string | List owner | Yes |
-| publica | boolean | List visibility | Yes |
-| movies | [ [MovieDTO](#moviedto) ] | Movies in the list | No |
+| ---- | ---- | ----------- |----------|
+| id | long | Unique list ID | No       |
+| nombre | string | List name | Yes      |
+| descripcion | string | List description | Yes      |
+| username | string | List owner | Yes      |
+| publica | boolean | List visibility | No       |
+| movies | [ [MovieDTO](#moviedto) ] | Movies in the list | No       |
 
 
 
