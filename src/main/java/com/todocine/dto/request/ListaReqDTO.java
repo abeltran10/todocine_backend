@@ -22,7 +22,6 @@ public class ListaReqDTO {
     @NotBlank
     private String username;
 
-    @NotNull
     private Boolean publica;
 
     public ListaReqDTO() {
