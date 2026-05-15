@@ -808,7 +808,7 @@ components:
 
     ListaReqDTO:
       type: object
-      required: [ nombre, descripcion, username, publica ]
+      required: [ nombre, descripcion, username ]
       properties:
         id: { type: integer, format: int64, description: "Unique list ID" }
         nombre: { type: string, description: "List name" }
