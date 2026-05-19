@@ -131,7 +131,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         listaExistente.setNombre(listaDTO.getNombre());
         listaExistente.setDescripcion(listaDTO.getDescripcion());
-        listaExistente.setPublica(listaDTO.getPublica() ? "S" : "N");
+        listaExistente.setPublica(listaDTO.getPublica() != null && listaDTO.getPublica() ? "S" : "N");
 
         return ListaMapper.toDTO(listaDAO.save(listaExistente));
     }
