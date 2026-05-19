@@ -2,6 +2,7 @@ package com.todocine.utils.mapper;
 
 import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieDTO;
+import com.todocine.dto.response.MovieListaDTO;
 import com.todocine.entities.Lista;
 
 import java.util.List;
@@ -13,8 +14,15 @@ public class ListaMapper {
         listaDTO.setNombre(lista.getNombre());
         listaDTO.setDescripcion(lista.getDescripcion());
 
-        List<MovieDTO> movieDTOList = lista.getMovies().stream()
-                        .map(MovieMapper::toDTO).toList();
+        List<MovieListaDTO> movieDTOList = lista.getMovies().stream()
+                        .map(movie -> {
+                            MovieListaDTO movieListaDTO = new MovieListaDTO(movie.getId());
+                            movieListaDTO.setTitle(movie.getTitle());
+                            movieListaDTO.setPosterPath(movie.getPosterPath());
+                            movieListaDTO.setReleaseDate(movie.getReleaseDate());
+
+                            return movieListaDTO;
+                        }).toList();
         listaDTO.setMovies(movieDTOList);
 
         listaDTO.setUsername(lista.getUsuario().getUsername());

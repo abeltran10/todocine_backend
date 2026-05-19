@@ -20,7 +20,7 @@ application.properties loads properties from three files, one per environment (p
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## Version: v6.3.7-RC
+## Version: v6.3.7
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -715,18 +715,26 @@ Returns the full details of a specific list, including its metadata and movie co
 | descripcion | string | List description | Yes |
 | username | string | List owner | Yes |
 | publica | boolean | List visibility | Yes |
-| movies | [ [MovieDTO](#moviedto) ] | Movies in the list | No |
+| movies | [ [MovieListaDTO](#movielistadto) ] | Movies in the list | No |
 
 #### ListaReqDTO
 
 | Name | Type | Description | Required |
-| ---- | ---- | ----------- |----------|
-| id | long | Unique list ID | No       |
-| nombre | string | List name | Yes      |
-| descripcion | string | List description | Yes      |
-| username | string | List owner | Yes      |
-| publica | boolean | List visibility | No       |
-| movies | [ [MovieDTO](#moviedto) ] | Movies in the list | No       |
+| ---- | ---- | ----------- | -------- |
+| id | long | Unique list ID | No |
+| nombre | string | List name | Yes |
+| descripcion | string | List description | Yes |
+| username | string | List owner | Yes |
+| publica | boolean | List visibility | No |
+
+#### MovieListaDTO
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | long | Unique ID | Yes |
+| title | string | Title | Yes |
+| poster_path | string | Image path | Yes |
+| release_date | string | Release date | Yes |
 
 
 
