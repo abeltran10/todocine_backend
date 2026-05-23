@@ -17,7 +17,9 @@ public class ListaMapper {
         List<MovieListaDTO> movieDTOList = lista.getMovies().stream()
                         .map(movie -> {
                             MovieListaDTO movieListaDTO = new MovieListaDTO(movie.getId());
+                            movieListaDTO.setOriginalTitle(movie.getOriginalTitle());
                             movieListaDTO.setTitle(movie.getTitle());
+                            movieListaDTO.setOverview(movie.getOverview());
                             movieListaDTO.setPosterPath(movie.getPosterPath());
                             movieListaDTO.setReleaseDate(movie.getReleaseDate());
 

@@ -9,9 +9,15 @@ public class MovieListaDTO {
     @NotNull
     private Long id;
 
+    @JsonProperty("original_title")
+    private String originalTitle;
+
     @JsonProperty("title")
     @NotBlank
     private String title;
+
+    @JsonProperty("overview")
+    private String overview;
 
     @JsonProperty("poster_path")
     @NotBlank
@@ -36,12 +42,28 @@ public class MovieListaDTO {
         this.id = id;
     }
 
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
     public String getPosterPath() {

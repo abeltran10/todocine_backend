@@ -297,6 +297,12 @@ Requires ADMIN role.
 
 Get award by unique identifier
 
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | query | Award ID | Yes | long |
+
 #### Responses
 
 | Code | Description | Schema |
@@ -367,156 +373,6 @@ Returns a paginated list of all movie lists created by a specific user.
 | --------------- | ------ |
 | BearerAuth |  |
 
-### [POST] /usuarios/{userId}/listas
-**Create a new list of movies**
-
-Registers a new list of movies associated with the specified user.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| userId | path | Unique identifier of the user who owns the lists | Yes | long |
-
-#### Request Body
-
-| Required | Schema |
-| -------- | ------ |
-|  Yes | **application/json**: [ListaReqDTO](#listareqdto)<br> |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 201 | List created successfully | **application/json**: [ListaDTO](#listadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [PUT] /usuarios/{userId}/listas/{id}
-**Update an existing list**
-
-Updates the name, description, or the entire movie collection of a specific list.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| userId | path |  | Yes | long |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Request Body
-
-| Required | Schema |
-| -------- | ------ |
-|  Yes | **application/json**: [ListaReqDTO](#listareqdto)<br> |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | List updated successfully | **application/json**: [ListaDTO](#listadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [DELETE] /usuarios/{userId}/listas/{id}
-**Delete a list of movies**
-
-Permanently removes the list from the user's profile.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| userId | path |  | Yes | long |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 204 | List deleted successfully (No Content) |
-| 400 | Invalid data. |
-| 403 | Access denied. |
-| 404 | Not found. |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [POST] /usuarios/{userId}/listas/{listaId}/movies/{movieId}
-**Add movie to list**
-
-Adds a specific movie to the list. If the movie does not exist in the local database, it will be persisted.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| userId | path |  | Yes | long |
-| listaId | path |  | Yes | long |
-| movieId | path |  | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Movie added successfully. Returns the updated list. | **application/json**: [ListaDTO](#listadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-| 502 | External server error. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [DELETE] /usuarios/{userId}/listas/{listaId}/movies/{movieId}
-**Remove movie from list**
-
-Removes the relationship between the movie and the list without deleting the movie from the global catalog.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| userId | path |  | Yes | long |
-| listaId | path |  | Yes | long |
-| movieId | path |  | Yes | long |
-
-#### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 204 | Movie removed from list successfully |
-| 400 | Invalid data. |
-| 403 | Access denied. |
-| 404 | Not found. |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
-
 ### [GET] /listas
 **Get public lists of movies**
 
@@ -541,7 +397,30 @@ Returns a paginated list of all public movie lists.
 | --------------- | ------ |
 | BearerAuth |  |
 
----
+### [POST] /listas
+**Create a new list of movies**
+
+Registers a new list of movies associated with the specified user.
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ListaReqDTO](#listareqdto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 201 | List created successfully | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
 
 ### [GET] /listas/{id}
 **Get details of the movie list**
@@ -562,6 +441,119 @@ Returns the full details of a specific list, including its metadata and movie co
 | 400 | Invalid data. |  |
 | 403 | Access denied. |  |
 | 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [PUT] /listas/{id}
+**Update an existing list**
+
+Updates the name, description, or the entire movie collection of a specific list.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ListaReqDTO](#listareqdto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List updated successfully | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [DELETE] /listas/{id}
+**Delete a list of movies**
+
+Permanently removes the list from the user's profile.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 204 | List deleted successfully (No Content) |
+| 400 | Invalid data. |
+| 403 | Access denied. |
+| 404 | Not found. |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [POST] /listas/{listaId}/movies/{movieId}
+**Add movie to list**
+
+Adds a specific movie to the list. If the movie does not exist in the local database, it will be persisted.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| listaId | path |  | Yes | long |
+| movieId | path |  | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Movie added successfully. Returns the updated list. | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+| 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [DELETE] /listas/{listaId}/movies/{movieId}
+**Remove movie from list**
+
+Removes the relationship between the movie and the list without deleting the movie from the global catalog.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| listaId | path |  | Yes | long |
+| movieId | path |  | Yes | long |
+
+#### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 204 | Movie removed from list successfully |
+| 400 | Invalid data. |
+| 403 | Access denied. |
+| 404 | Not found. |
 
 ##### Security
 
@@ -732,7 +724,9 @@ Returns the full details of a specific list, including its metadata and movie co
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | id | long | Unique ID | Yes |
+| original_title | string | Original title | No |
 | title | string | Title | Yes |
+| overview | string | Synopsis | No |
 | poster_path | string | Image path | Yes |
 | release_date | string | Release date | Yes |
 

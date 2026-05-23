@@ -98,6 +98,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional
     public ListaDTO createLista(ListaReqDTO listaDTO) {
+
         Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
 
         if (usuario == null || !usuario.getId().equals(getCurrentUserId())) {
