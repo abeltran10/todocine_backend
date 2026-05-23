@@ -347,7 +347,7 @@ Requires ADMIN role.
 
 ---
 
-### [GET] /usuarios/{userId}/listas
+### [GET] /listas
 **Get user's lists of movies**
 
 Returns a paginated list of all movie lists created by a specific user.
@@ -357,7 +357,6 @@ Returns a paginated list of all movie lists created by a specific user.
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
 | page | query | Page index (1..N) | Yes | integer |
-| userId | path | Unique identifier of the user who owns the lists | Yes | long |
 
 #### Responses
 
@@ -366,30 +365,6 @@ Returns a paginated list of all movie lists created by a specific user.
 | 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
 | 400 | Invalid data. |  |
 | 403 | Access denied. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [GET] /listas
-**Get public lists of movies**
-
-Returns a paginated list of all public movie lists.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| page | query | Page index (1..N) | Yes | integer |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
 
 ##### Security
 
@@ -554,6 +529,32 @@ Removes the relationship between the movie and the list without deleting the mov
 | 400 | Invalid data. |
 | 403 | Access denied. |
 | 404 | Not found. |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
+### [GET] /listas/publicas
+**Get public lists of movies**
+
+Returns a paginated list of all public movie lists.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| page | query | Page index (1..N) | Yes | integer |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
 
 ##### Security
 
@@ -729,7 +730,6 @@ Removes the relationship between the movie and the list without deleting the mov
 | overview | string | Synopsis | No |
 | poster_path | string | Image path | Yes |
 | release_date | string | Release date | Yes |
-
 
 
 

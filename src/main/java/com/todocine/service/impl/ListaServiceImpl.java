@@ -47,7 +47,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     private TMDBService tmdbService;
 
     @Override
-    public Paginator<ListaDTO> getListas(Long userId, Integer page) {
+    public Paginator<ListaDTO> getListasUser(Long userId, Integer page) {
         Paginator<ListaDTO> paginator = new Paginator<>();
         if (getCurrentUserId().equals(userId)) {
             Pageable pageable = PageRequest.of(page - 1, 10);
