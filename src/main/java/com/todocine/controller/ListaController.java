@@ -24,8 +24,8 @@ public class ListaController {
     }
 
     @GetMapping
-    public ResponseEntity<Paginator<ListaDTO>> getListasUser(@NotNull @PathVariable("userId") Long userId, @NotNull @RequestParam("page") Integer page) {
-        return new ResponseEntity<>(listaService.getListasUser(userId, page), HttpStatus.OK);
+    public ResponseEntity<Paginator<ListaDTO>> getListasUser(@NotNull @RequestParam("page") Integer page) {
+        return new ResponseEntity<>(listaService.getListasUser(page), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
