@@ -347,10 +347,36 @@ Requires ADMIN role.
 
 ---
 
-### [GET] /listas
+### [GET] /usuarios/{userId}/listas
 **Get user's lists of movies**
 
 Returns a paginated list of all movie lists created by a specific user.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| page | query | Page index (1..N) | Yes | integer |
+| userId | path | Unique identifier of the specific user | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [GET] /listas
+**Get public lists of movies**
+
+Returns a paginated list of all public movie lists.
 
 #### Parameters
 
@@ -364,7 +390,6 @@ Returns a paginated list of all movie lists created by a specific user.
 | ---- | ----------- | ------ |
 | 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
 | 400 | Invalid data. |  |
-| 403 | Access denied. |  |
 
 ##### Security
 
@@ -538,31 +563,6 @@ Removes the relationship between the movie and the list without deleting the mov
 
 ---
 
-### [GET] /listas/publicas
-**Get public lists of movies**
-
-Returns a paginated list of all public movie lists.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| page | query | Page index (1..N) | Yes | integer |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
 ### Schemas
 
 #### UsuarioReqDTO

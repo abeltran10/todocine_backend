@@ -388,7 +388,16 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
 
-  /listas:
+  /usuarios/{userId}/listas:
+    parameters:
+      - name: "userId"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: "Unique identifier of the specific user"
+
     get:
       summary: "Get user's lists of movies"
       description: "Returns a paginated list of all movie lists created by a specific user."
@@ -414,6 +423,30 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
 
+  /listas:
+    get:
+      summary: "Get public lists of movies"
+      description: "Returns a paginated list of all public movie lists."
+      tags: [ "Public Lists" ]
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: "page"
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: "Page index (1..N)"
+      responses:
+        '200':
+          description: "Paginated lists retrieved successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginator'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
     post:
       summary: "Create a new list of movies"
       description: "Registers a new list of movies associated with the specified user."
@@ -437,30 +470,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '403':
           $ref: '#/components/responses/Forbidden'
-
-  /listas/publicas:
-    get:
-      summary: "Get public lists of movies"
-      description: "Returns a paginated list of all public movie lists."
-      tags: [ "Public Lists" ]
-      security:
-        - BearerAuth: [ ]
-      parameters:
-        - name: "page"
-          in: query
-          required: true
-          schema:
-            type: integer
-          description: "Page index (1..N)"
-      responses:
-        '200':
-          description: "Paginated lists retrieved successfully"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Paginator'
-        '400':
-          $ref: '#/components/responses/BadRequest'
 
   /listas/{id}:
     parameters:

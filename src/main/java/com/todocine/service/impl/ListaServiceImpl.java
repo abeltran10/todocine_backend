@@ -47,31 +47,36 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     private TMDBService tmdbService;
 
     @Override
-    public Paginator<ListaDTO> getListasUser(Integer page) {
+    public Paginator<ListaDTO> getListasUser(Long usuarioId, Integer page) {
         Paginator<ListaDTO> paginator = new Paginator<>();
         Pageable pageable = PageRequest.of(page - 1, 10);
-        Page<Lista> listasPage = listaDAO.findByUsuarioId(getCurrentUserId(), pageable);
 
-        if (listasPage.hasContent()) {
-            List<ListaDTO> results = listasPage.getContent().stream()
-                    .map(lista -> {
-                        ListaDTO listaDTO = new ListaDTO(lista.getId());
-                        listaDTO.setNombre(lista.getNombre());
-                        listaDTO.setDescripcion(lista.getDescripcion());
-                        listaDTO.setUsername(lista.getUsuario().getUsername());
-                        listaDTO.setPublica("S".equals(lista.getPublica()));
+        if (getCurrentUserId().equals(usuarioId)) {
+            Page<Lista> listasPage = listaDAO.findByUsuarioId(usuarioId, pageable);
 
-                        return listaDTO;
-                    })
-                    .toList();
+            if (listasPage.hasContent()) {
+                List<ListaDTO> results = listasPage.getContent().stream()
+                        .map(lista -> {
+                            ListaDTO listaDTO = new ListaDTO(lista.getId());
+                            listaDTO.setNombre(lista.getNombre());
+                            listaDTO.setDescripcion(lista.getDescripcion());
+                            listaDTO.setUsername(lista.getUsuario().getUsername());
+                            listaDTO.setPublica("S".equals(lista.getPublica()));
 
-            paginator.setResults(results);
-            paginator.setPage(page);
-            paginator.setTotalPages(listasPage.getTotalPages());
-            paginator.setTotalResults(Integer.parseInt(String.valueOf(listasPage.getTotalElements())));
+                            return listaDTO;
+                        })
+                        .toList();
+
+                paginator.setResults(results);
+                paginator.setPage(page);
+                paginator.setTotalPages(listasPage.getTotalPages());
+                paginator.setTotalResults(Integer.parseInt(String.valueOf(listasPage.getTotalElements())));
+            }
+
+            return paginator;
+        } else {
+            throw new ForbiddenException(USER_FORBIDDEN);
         }
-
-        return paginator;
     }
 
     @Override

@@ -18,18 +18,13 @@ public class ListaController {
     @Autowired
     private ListaService listaService;
 
-    @GetMapping("/publicas")
+    @GetMapping
     public ResponseEntity<Paginator<ListaDTO>> getListasPublicas(@NotNull @RequestParam("page") Integer page) {
         return new ResponseEntity<>(listaService.getListasPublicas(page), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<Paginator<ListaDTO>> getListasUser(@NotNull @RequestParam("page") Integer page) {
-        return new ResponseEntity<>(listaService.getListasUser(page), HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
-    public ResponseEntity<ListaDTO> getLista(@NotNull @PathVariable("id") Long id) {
+    public ResponseEntity<ListaDTO> getListaById(@NotNull @PathVariable("id") Long id) {
         return new ResponseEntity<>(listaService.getListaById(id), HttpStatus.OK);
     }
 
