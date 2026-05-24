@@ -12,11 +12,11 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v6.3.6](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.6)
+- [v6.3.7](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.7)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.6) compressed file. 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v6.3.7) compressed file. 
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
@@ -749,7 +749,8 @@ Removes the relationship between the movie and the list without deleting the mov
 
 ### Classes diagram
 
-<img width="5148" height="466" alt="classes_diagram" src="https://github.com/user-attachments/assets/ef24adf0-7b4a-4f4c-8f98-36ecbe5da905" />
+<img width="4818" height="360" alt="classes_diagram" src="https://github.com/user-attachments/assets/1155fcf0-0ca0-4172-9c6f-dfd544548934" />
+
 
 
 
