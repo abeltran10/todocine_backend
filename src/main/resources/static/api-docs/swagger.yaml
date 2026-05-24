@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: "Todo Cine API"
   description: "API managed with Spring Boot, JWT security, and movie catalog with custom exception handling."
-  version: "v6.3.5"
+  version: "v6.3.7"
 
 servers:
   - url: "http://localhost:8080/api"
@@ -339,6 +339,12 @@ paths:
       tags: [ "Award" ]
       security:
         - BearerAuth: [ ]
+      parameters:
+        - name: "id"
+          description: "Award ID"
+          in: query
+          required: true
+          schema: { type: integer, format: int64 }
       responses:
         '200':
           description: "OK-Award."
@@ -383,185 +389,41 @@ paths:
           $ref: '#/components/responses/Forbidden'
 
   /usuarios/{userId}/listas:
+    parameters:
+      - name: "userId"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: "Unique identifier of the specific user"
+
+    get:
+      summary: "Get user's lists of movies"
+      description: "Returns a paginated list of all movie lists created by a specific user."
+      tags: [ "User's Lists" ]
+      security:
+        - BearerAuth: [ ]
       parameters:
-        - name: "userId"
-          in: path
+        - name: "page"
+          in: query
           required: true
           schema:
             type: integer
-            format: int64
-          description: "Unique identifier of the user who owns the lists"
-
-      get:
-        summary: "Get user's lists of movies"
-        description: "Returns a paginated list of all movie lists created by a specific user."
-        tags: ["User's Lists"]
-        security:
-          - BearerAuth: [ ]
-        parameters:
-          - name: "page"
-            in: query
-            required: true
-            schema:
-              type: integer
-            description: "Page index (1..N)"
-        responses:
-          '200':
-            description: "Paginated lists retrieved successfully"
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Paginator'
-          '400':
-            $ref: '#/components/responses/BadRequest'
-          '403':
-            $ref: '#/components/responses/Forbidden'
-
-      post:
-        summary: "Create a new list of movies"
-        description: "Registers a new list of movies associated with the specified user."
-        tags: ["User's Lists"]
-        security:
-          - BearerAuth: [ ]
-        requestBody:
-          required: true
+          description: "Page index (1..N)"
+      responses:
+        '200':
+          description: "Paginated lists retrieved successfully"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListaReqDTO'
-        responses:
-          '201':
-            description: "List created successfully"
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ListaDTO'
-          '400':
-            $ref: '#/components/responses/BadRequest'
-          '403':
-            $ref: '#/components/responses/Forbidden'
-
-  /usuarios/{userId}/listas/{id}:
-      parameters:
-        - name: "userId"
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - name: "id"
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-          description: "Unique identifier of the specific list of movies"
-
-      put:
-        summary: "Update an existing list"
-        description: "Updates the name, description, or the entire movie collection of a specific list."
-        tags: ["User's Lists"]
-        security:
-          - BearerAuth: [ ]
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListaReqDTO'
-        responses:
-          '200':
-            description: "List updated successfully"
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ListaDTO'
-          '400':
-            $ref: '#/components/responses/BadRequest'
-          '403':
-            $ref: '#/components/responses/Forbidden'
-          '404':
-            $ref: '#/components/responses/NotFound'
-
-      delete:
-        summary: "Delete a list of movies"
-        description: "Permanently removes the list from the user's profile."
-        tags: ["User's Lists"]
-        security:
-          - BearerAuth: [ ]
-        responses:
-          '204':
-            description: "List deleted successfully (No Content)"
-          '400':
-            $ref: '#/components/responses/BadRequest'
-          '403':
-            $ref: '#/components/responses/Forbidden'
-          '404':
-            $ref: '#/components/responses/NotFound'
-
-  /usuarios/{userId}/listas/{listaId}/movies/{movieId}:
-
-      parameters:
-        - name: "userId"
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - name: "listaId"
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - name: "movieId"
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-
-      post:
-        summary: "Add movie to list"
-        description: "Adds a specific movie to the list. If the movie does not exist in the local database, it will be persisted."
-        tags: ["User's Lists"]
-        security:
-          - BearerAuth: [ ]
-        responses:
-          '200':
-            description: "Movie added successfully. Returns the updated list."
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ListaDTO'
-          '400':
-            $ref: '#/components/responses/BadRequest'
-          '403':
-            $ref: '#/components/responses/Forbidden'
-          '404':
-            $ref: '#/components/responses/NotFound'
-          '502':
-            $ref: '#/components/responses/BadGateway'
-
-      delete:
-        summary: "Remove movie from list"
-        description: "Removes the relationship between the movie and the list without deleting the movie from the global catalog."
-        tags: ["User's Lists"]
-        security:
-          - BearerAuth: [ ]
-        responses:
-          '204':
-            description: "Movie removed from list successfully"
-          '400':
-            $ref: '#/components/responses/BadRequest'
-          '403':
-            $ref: '#/components/responses/Forbidden'
-          '404':
-            $ref: '#/components/responses/NotFound'
-
+                $ref: '#/components/schemas/Paginator'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
 
   /listas:
-
     get:
       summary: "Get public lists of movies"
       description: "Returns a paginated list of all public movie lists."
@@ -585,8 +447,31 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequest'
 
-  /listas/{id}:
+    post:
+      summary: "Create a new list of movies"
+      description: "Registers a new list of movies associated with the specified user."
+      tags: [ "User's Lists" ]
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListaReqDTO'
+      responses:
+        '201':
+          description: "List created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
 
+  /listas/{id}:
     parameters:
       - name: "id"
         in: path
@@ -615,6 +500,102 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+
+    put:
+      summary: "Update an existing list"
+      description: "Updates the name, description, or the entire movie collection of a specific list."
+      tags: [ "User's Lists" ]
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListaReqDTO'
+      responses:
+        '200':
+          description: "List updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      summary: "Delete a list of movies"
+      description: "Permanently removes the list from the user's profile."
+      tags: [ "User's Lists" ]
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '204':
+          description: "List deleted successfully (No Content)"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /listas/{listaId}/movies/{movieId}:
+    parameters:
+      - name: "listaId"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: "movieId"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+
+    post:
+      summary: "Add movie to list"
+      description: "Adds a specific movie to the list. If the movie does not exist in the local database, it will be persisted."
+      tags: [ "User's Lists" ]
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '200':
+          description: "Movie added successfully. Returns the updated list."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+
+    delete:
+      summary: "Remove movie from list"
+      description: "Removes the relationship between the movie and the list without deleting the movie from the global catalog."
+      tags: [ "User's Lists" ]
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '204':
+          description: "Movie removed from list successfully"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
 
 components:
   securitySchemes:
@@ -803,7 +784,7 @@ components:
         publica: { type: boolean, description: "List visibility" }
         movies:
           type: array
-          items: { $ref: '#/components/schemas/MovieDTO' }
+          items: { $ref: '#/components/schemas/MovieListaDTO' }
           description: "Movies in the list"
 
     ListaReqDTO:
@@ -815,7 +796,14 @@ components:
         descripcion: { type: string, description: "List description" }
         username: { type: string, description: "List owner" }
         publica: { type: boolean, description: "List visibility" }
-        movies:
-          type: array
-          items: { $ref: '#/components/schemas/MovieDTO' }
-          description: "Movies in the list"
+
+    MovieListaDTO:
+      type: object
+      required: [ id, title, poster_path, release_date ]
+      properties:
+        id: { type: integer, format: int64, description: "Unique ID" }
+        original_title: { type: string, description: "Original title" }
+        title: { type: string, description: "Title" }
+        overview: { type: string, description: "Synopsis" }
+        poster_path: { type: string, description: "Image path" }
+        release_date: { type: string, description: "Release date" }

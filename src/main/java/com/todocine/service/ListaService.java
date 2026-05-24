@@ -10,7 +10,7 @@ public interface ListaService {
     ListaDTO createLista(ListaReqDTO listaDTO);
     ListaDTO updateLista(Long id, ListaReqDTO listaDTO);
     void deleteLista(Long id);
-    Paginator<ListaDTO> getListas(Long userId, Integer page);
+    Paginator<ListaDTO> getListasUser(Long usuarioId, Integer page);
     ListaDTO addMovieToList(Long listaId, Long movieId);
     void deleteMovieFromList(Long listaId, Long movieId);
     Paginator<ListaDTO> getListasPublicas(Integer page);

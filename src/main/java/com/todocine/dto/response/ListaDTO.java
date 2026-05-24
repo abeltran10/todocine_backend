@@ -17,7 +17,7 @@ public class ListaDTO {
     @NotBlank
     private String descripcion;
 
-    private List<MovieDTO> movies = new ArrayList<>();
+    private List<MovieListaDTO> movies = new ArrayList<>();
 
     @NotBlank
     private String username;
@@ -56,11 +56,11 @@ public class ListaDTO {
         this.descripcion = descripcion;
     }
 
-    public List<MovieDTO> getMovies() {
+    public List<MovieListaDTO> getMovies() {
         return movies;
     }
 
-    public void setMovies(List<MovieDTO> movies) {
+    public void setMovies(List<MovieListaDTO> movies) {
         this.movies = movies;
     }
 

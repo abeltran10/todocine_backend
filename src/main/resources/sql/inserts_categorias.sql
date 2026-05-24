@@ -33,4 +33,21 @@ INSERT INTO CATEGORIA (ID,NOMBRE) values (32,  'Mejor cortometraje');
 INSERT INTO CATEGORIA (ID,NOMBRE) values (33,  'Mejor fotografía');
 INSERT INTO CATEGORIA (ID,NOMBRE) values (34,  'Mejor diseño de producción');
 INSERT INTO CATEGORIA (ID,NOMBRE) values (35,  'Mejor casting');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (36,  'Palma de Oro: Mejor película');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (37,  'Gran Premio del Jurado');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (38,  'Premio Internacional del Jurado');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (39,  'Cámara de Oro: mejor ópera prima');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (40,  'Premio del Jurado Ecuménico');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (41,  'Palma de Oro: Mejor cortometraje');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (42,  'FIPRESCI');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (43,  'Mejor guión');
+
+
+
+
+
+
+
+
+
 

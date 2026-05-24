@@ -47,11 +47,12 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     private TMDBService tmdbService;
 
     @Override
-    public Paginator<ListaDTO> getListas(Long userId, Integer page) {
+    public Paginator<ListaDTO> getListasUser(Long usuarioId, Integer page) {
         Paginator<ListaDTO> paginator = new Paginator<>();
-        if (getCurrentUserId().equals(userId)) {
-            Pageable pageable = PageRequest.of(page - 1, 10);
-            Page<Lista> listasPage = listaDAO.findByUsuarioId(userId, pageable);
+        Pageable pageable = PageRequest.of(page - 1, 10);
+
+        if (getCurrentUserId().equals(usuarioId)) {
+            Page<Lista> listasPage = listaDAO.findByUsuarioId(usuarioId, pageable);
 
             if (listasPage.hasContent()) {
                 List<ListaDTO> results = listasPage.getContent().stream()
@@ -71,11 +72,11 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
                 paginator.setTotalPages(listasPage.getTotalPages());
                 paginator.setTotalResults(Integer.parseInt(String.valueOf(listasPage.getTotalElements())));
             }
+
+            return paginator;
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
-
-        return paginator;
     }
 
     @Override
@@ -98,6 +99,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional
     public ListaDTO createLista(ListaReqDTO listaDTO) {
+
         Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
 
         if (usuario == null || !usuario.getId().equals(getCurrentUserId())) {
@@ -131,7 +133,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         listaExistente.setNombre(listaDTO.getNombre());
         listaExistente.setDescripcion(listaDTO.getDescripcion());
-        listaExistente.setPublica(listaDTO.getPublica() ? "S" : "N");
+        listaExistente.setPublica(listaDTO.getPublica() != null && listaDTO.getPublica() ? "S" : "N");
 
         return ListaMapper.toDTO(listaDAO.save(listaExistente));
     }

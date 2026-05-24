@@ -4,6 +4,7 @@ import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.request.UsuarioReqDTO;
 import com.todocine.dto.response.UsuarioDTO;
 import com.todocine.entities.Usuario;
+import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
@@ -80,7 +81,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
        log.info("updateUsuario");
         Usuario usuario = null;
 
-        if (getCurrentUserId().equals(id)) {
+        if (!id.equals(usuarioReqDTO.getId()))
+            throw new BadRequestException(ID_NOT_MATCH);
+
+        if (getCurrentUserId().equals(usuarioReqDTO.getId())) {
             try {
                 usuario = usuarioDAO.findById(id).get();
 

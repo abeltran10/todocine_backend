@@ -11,6 +11,7 @@ import com.todocine.entities.UserMovieId;
 import com.todocine.entities.Usuario;
 import com.todocine.entities.UsuarioMovie;
 import com.todocine.exceptions.BadGatewayException;
+import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.TMDBService;
@@ -88,6 +89,10 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
     @Override
     @Transactional
     public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO) {
+
+        if (!userId.equals(usuarioMovieDTO.getUsuarioId()) || !movieId.equals(usuarioMovieDTO.getMovieId()))
+            throw new BadRequestException(ID_NOT_MATCH);
+
         if (getCurrentUserId().equals(userId)) {
             Movie movie = null;
             MovieDTO movieDTO = null;
