@@ -3,12 +3,15 @@ package com.todocine.service.impl;
 import com.todocine.dao.ListaDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
+import com.todocine.dao.ValoracionListaDAO;
 import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieDTO;
+import com.todocine.dto.response.ValoracionDTO;
 import com.todocine.entities.Lista;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
+import com.todocine.entities.ValoracionLista;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
@@ -18,6 +21,7 @@ import com.todocine.service.TMDBService;
 import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.ListaMapper;
 import com.todocine.utils.mapper.MovieMapper;
+import com.todocine.utils.mapper.ValoracionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,8 +30,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.todocine.configuration.Constants.*;
 
@@ -42,6 +51,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
     @Autowired
     private MovieDAO movieDAO;
+
+    @Autowired
+    private ValoracionListaDAO valoracionListaDAO;
 
     @Autowired
     private TMDBService tmdbService;
@@ -82,13 +94,33 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional(readOnly = true)
     public ListaDTO getListaById(Long id) {
+
+        List<ValoracionDTO> valoracionDTOList = new ArrayList<>();
+
         Lista lista = listaDAO.findById(id)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
         Usuario usuario = lista.getUsuario();
 
         if ((usuario != null && getCurrentUserId().equals(usuario.getId())) || "S".equals(lista.getPublica())) {
-            return ListaMapper.toDTO(lista);
+
+            List<ValoracionLista> valoracionListaList = valoracionListaDAO.findByIdListaId(lista.getId());
+
+            if (valoracionListaList != null) {
+                valoracionDTOList = valoracionListaList.stream().map(ValoracionMapper::toDTO)
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+                valoracionDTOList.sort(Comparator.comparing((ValoracionDTO dto) ->
+                        LocalDateTime.parse(dto.getFecha(), formatter)
+                ).reversed());
+            }
+
+            ListaDTO listaDTO = ListaMapper.toDTO(lista);
+            listaDTO.setValoracion(valoracionDTOList);
+
+            return listaDTO;
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
@@ -147,12 +179,16 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         if (!lista.getUsuario().getId().equals(getCurrentUserId()))
             throw new ForbiddenException(USER_FORBIDDEN);
 
+        valoracionListaDAO.deleteByIdListaId(lista.getId());
         listaDAO.delete(lista);
     }
 
     @Override
     @Transactional
     public ListaDTO addMovieToList(Long listaId, Long movieId) {
+
+        List<ValoracionDTO> valoracionDTOList = new ArrayList<>();
+
         Lista lista = listaDAO.findById(listaId)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
@@ -180,6 +216,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
             }
 
             return ListaMapper.toDTO(listaDAO.save(lista));
+
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }

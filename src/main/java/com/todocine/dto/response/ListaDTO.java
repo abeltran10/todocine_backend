@@ -25,6 +25,8 @@ public class ListaDTO {
     @NotNull
     private Boolean publica;
 
+    private List<ValoracionDTO> valoracion = new ArrayList<>();
+
     public ListaDTO() {
     }
 
@@ -78,5 +80,13 @@ public class ListaDTO {
 
     public void setPublica(Boolean publica) {
         this.publica = publica;
+    }
+
+    public List<ValoracionDTO> getValoracion() {
+        return valoracion;
+    }
+
+    public void setValoracion(List<ValoracionDTO> valoracion) {
+        this.valoracion = valoracion;
     }
 }
