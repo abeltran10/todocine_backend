@@ -41,6 +41,7 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     @Transactional
     public ValoracionDTO updateValoracionLista(Long listaId, Long usuarioId, ValoracionListaDTO valoracionListaDTO) {
         ValoracionLista valoracionLista = null;
+        ValoracionDTO valoracionDTO = new ValoracionDTO();
 
         if (!listaId.equals(valoracionListaDTO.getListaId()) || !usuarioId.equals(valoracionListaDTO.getUsuarioId())) {
             throw new BadRequestException(ID_NOT_MATCH);
@@ -58,10 +59,13 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
             valoracionLista = valoracionListaDAO.findById(id).orElse(null);
 
             if (valoracionLista == null) {
-                valoracionLista = new ValoracionLista(id);
-                valoracionLista.setComentario(valoracionListaDTO.getComentario());
-                valoracionLista.setPuntuacion(valoracionLista.getPuntuacion());
-                valoracionLista.setFecha(LocalDateTime.now());
+                if ((valoracionListaDTO.getComentario() != null && !valoracionListaDTO.getComentario().isBlank())
+                        || valoracionListaDTO.getPuntuacion() != null) {
+                    valoracionLista = new ValoracionLista(id);
+                    valoracionLista.setComentario(valoracionListaDTO.getComentario());
+                    valoracionLista.setPuntuacion(valoracionLista.getPuntuacion());
+                    valoracionLista.setFecha(LocalDateTime.now());
+                }
             } else {
                 if (valoracionListaDTO.getComentario() != null && !valoracionListaDTO.getComentario().isBlank())
                     valoracionLista.setComentario(valoracionListaDTO.getComentario());
@@ -69,7 +73,10 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
                     valoracionLista.setPuntuacion(valoracionListaDTO.getPuntuacion());
             }
 
-            return ValoracionMapper.toDTO(valoracionListaDAO.save(valoracionLista));
+            if (valoracionLista != null)
+                  valoracionDTO = ValoracionMapper.toDTO(valoracionListaDAO.save(valoracionLista));
+
+            return valoracionDTO;
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
