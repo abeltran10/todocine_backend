@@ -13,5 +13,5 @@ public interface ValoracionListaDAO extends JpaRepository<ValoracionLista, Valor
     @Query(value = "SELECT * FROM VALORACIONLISTA WHERE LISTA = :listaId ORDER BY FECHA DESC", nativeQuery = true)
     List<ValoracionLista> findByIdListaId(@Param("listaId") Long listaId);
 
-
+    void deleteByIdListaId(Long listaId);
 }

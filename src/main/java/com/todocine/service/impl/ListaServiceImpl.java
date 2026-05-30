@@ -156,6 +156,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         if (!lista.getUsuario().getId().equals(getCurrentUserId()))
             throw new ForbiddenException(USER_FORBIDDEN);
 
+        valoracionListaDAO.deleteByIdListaId(lista.getId());
         listaDAO.delete(lista);
     }
 
