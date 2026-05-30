@@ -33,6 +33,9 @@ public class Lista {
 
     private String publica;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE}, mappedBy = "id.lista")
+    private List<ValoracionLista> valoraciones = new ArrayList<>();
+
     public Lista() {
     }
 
@@ -86,6 +89,14 @@ public class Lista {
 
     public void setPublica(String publica) {
         this.publica = publica;
+    }
+
+    public List<ValoracionLista> getValoraciones() {
+        return valoraciones;
+    }
+
+    public void setValoraciones(List<ValoracionLista> valoraciones) {
+        this.valoraciones = valoraciones;
     }
 
     @Override

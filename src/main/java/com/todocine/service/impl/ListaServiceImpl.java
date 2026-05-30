@@ -7,6 +7,7 @@ import com.todocine.dao.ValoracionListaDAO;
 import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieDTO;
+import com.todocine.dto.response.MovieListaDTO;
 import com.todocine.dto.response.ValoracionDTO;
 import com.todocine.entities.Lista;
 import com.todocine.entities.Movie;
@@ -20,6 +21,7 @@ import com.todocine.service.ListaService;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.ListaMapper;
+import com.todocine.utils.mapper.MovieListaMapper;
 import com.todocine.utils.mapper.MovieMapper;
 import com.todocine.utils.mapper.ValoracionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,15 +70,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
             if (listasPage.hasContent()) {
                 List<ListaDTO> results = listasPage.getContent().stream()
-                        .map(lista -> {
-                            ListaDTO listaDTO = new ListaDTO(lista.getId());
-                            listaDTO.setNombre(lista.getNombre());
-                            listaDTO.setDescripcion(lista.getDescripcion());
-                            listaDTO.setUsername(lista.getUsuario().getUsername());
-                            listaDTO.setPublica("S".equals(lista.getPublica()));
-
-                            return listaDTO;
-                        })
+                        .map(ListaMapper::toDTO)
                         .toList();
 
                 paginator.setResults(results);
@@ -162,7 +156,6 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         if (!lista.getUsuario().getId().equals(getCurrentUserId()))
             throw new ForbiddenException(USER_FORBIDDEN);
 
-        valoracionListaDAO.deleteByIdListaId(lista.getId());
         listaDAO.delete(lista);
     }
 
@@ -234,15 +227,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         if (listasPage.hasContent()) {
             List<ListaDTO> results = listasPage.getContent().stream()
-                    .map(lista -> {
-                        ListaDTO listaDTO = new ListaDTO(lista.getId());
-                        listaDTO.setNombre(lista.getNombre());
-                        listaDTO.setDescripcion(lista.getDescripcion());
-                        listaDTO.setUsername(lista.getUsuario().getUsername());
-                        listaDTO.setPublica("S".equals(lista.getPublica()));
-
-                        return listaDTO;
-                    })
+                    .map(ListaMapper::toDTO)
                     .toList();
 
             paginator.setResults(results);
@@ -252,5 +237,37 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         }
 
        return paginator;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Paginator<MovieListaDTO> getMoviesByLista(Long listaId, Integer pagina) {
+        Paginator<MovieListaDTO> paginator = new Paginator<>();
+        int skip = (pagina - 1) * 10;
+
+        Lista lista = listaDAO.findById(listaId).orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
+
+        if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
+            List<MovieListaDTO> movieListaDTOS = lista.getMovies().stream()
+                    .map(MovieListaMapper::toDTO)
+                    .skip(skip)
+                    .limit(10)
+                    .toList();
+
+
+            if (movieListaDTOS.isEmpty())
+                return paginator;
+
+            int total = lista.getMovies().size();
+
+            paginator.setPage(pagina);
+            paginator.setResults(movieListaDTOS);
+            paginator.setTotalResults(total);
+            paginator.setTotalPages((int) Math.ceil(total/10D));
+
+            return paginator;
+        } else {
+            throw new ForbiddenException(USER_FORBIDDEN);
+        }
     }
 }

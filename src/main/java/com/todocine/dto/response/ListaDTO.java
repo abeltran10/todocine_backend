@@ -17,8 +17,6 @@ public class ListaDTO {
     @NotBlank
     private String descripcion;
 
-    private List<MovieListaDTO> movies = new ArrayList<>();
-
     @NotBlank
     private String username;
 
@@ -55,14 +53,6 @@ public class ListaDTO {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public List<MovieListaDTO> getMovies() {
-        return movies;
-    }
-
-    public void setMovies(List<MovieListaDTO> movies) {
-        this.movies = movies;
     }
 
     public String getUsername() {

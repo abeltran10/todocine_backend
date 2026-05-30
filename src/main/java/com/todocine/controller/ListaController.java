@@ -2,6 +2,7 @@ package com.todocine.controller;
 
 import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.dto.response.ListaDTO;
+import com.todocine.dto.response.MovieListaDTO;
 import com.todocine.dto.response.ValoracionDTO;
 import com.todocine.entities.Lista;
 import com.todocine.service.ListaService;
@@ -52,6 +53,12 @@ public class ListaController {
         listaService.deleteLista(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{listaId}/movies")
+    public ResponseEntity<Paginator<MovieListaDTO>> getMoviesByList(@NotNull @PathVariable("listaId") Long listaId,
+                                                                    @NotNull @RequestParam("page") Integer pagina) {
+        return new ResponseEntity<>(listaService.getMoviesByLista(listaId, pagina), HttpStatus.OK);
     }
 
     @PostMapping("/{listaId}/movies/{movieId}")
