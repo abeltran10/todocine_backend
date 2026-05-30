@@ -83,6 +83,8 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
 
     @Override
     public List<ValoracionDTO> getListaValoraciones(Long listaId) {
+        Lista lista = listaDAO.findById(listaId).orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
+
         List<ValoracionLista> valoracionListaList = valoracionListaDAO.findByIdListaId(listaId);
 
         if (valoracionListaList != null)
