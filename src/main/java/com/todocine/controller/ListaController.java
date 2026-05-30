@@ -2,7 +2,10 @@ package com.todocine.controller;
 
 import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.dto.response.ListaDTO;
+import com.todocine.dto.response.ValoracionDTO;
+import com.todocine.entities.Lista;
 import com.todocine.service.ListaService;
+import com.todocine.service.ValoracionListaService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -11,12 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/listas")
 public class ListaController {
 
     @Autowired
     private ListaService listaService;
+
+    @Autowired
+    private ValoracionListaService valoracionListaService;
 
     @GetMapping
     public ResponseEntity<Paginator<ListaDTO>> getListasPublicas(@NotNull @RequestParam("page") Integer page) {
@@ -62,5 +70,10 @@ public class ListaController {
         listaService.deleteMovieFromList(listaId, movieId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{id}/valoraciones")
+    public ResponseEntity<List<ValoracionDTO>> getListaValoraciones(@NotNull @PathVariable("id") Long id) {
+        return new ResponseEntity<>(valoracionListaService.getListaValoraciones(id), HttpStatus.OK);
     }
 }

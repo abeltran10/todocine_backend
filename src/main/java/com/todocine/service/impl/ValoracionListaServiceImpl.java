@@ -41,7 +41,6 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     @Transactional
     public ValoracionDTO updateValoracionLista(Long listaId, Long usuarioId, ValoracionListaDTO valoracionListaDTO) {
         ValoracionLista valoracionLista = null;
-        ValoracionDTO valoracionDTO = new ValoracionDTO();
 
         if (!listaId.equals(valoracionListaDTO.getListaId()) || !usuarioId.equals(valoracionListaDTO.getUsuarioId())) {
             throw new BadRequestException(ID_NOT_MATCH);
@@ -65,6 +64,8 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
                     valoracionLista.setComentario(valoracionListaDTO.getComentario());
                     valoracionLista.setPuntuacion(valoracionLista.getPuntuacion());
                     valoracionLista.setFecha(LocalDateTime.now());
+                } else {
+                    throw new BadRequestException(VALORATION_ERROR);
                 }
             } else {
                 if (valoracionListaDTO.getComentario() != null && !valoracionListaDTO.getComentario().isBlank())
@@ -73,12 +74,20 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
                     valoracionLista.setPuntuacion(valoracionListaDTO.getPuntuacion());
             }
 
-            if (valoracionLista != null)
-                  valoracionDTO = ValoracionMapper.toDTO(valoracionListaDAO.save(valoracionLista));
+            return ValoracionMapper.toDTO(valoracionListaDAO.save(valoracionLista));
 
-            return valoracionDTO;
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
+    }
+
+    @Override
+    public List<ValoracionDTO> getListaValoraciones(Long listaId) {
+        List<ValoracionLista> valoracionListaList = valoracionListaDAO.findByIdListaId(listaId);
+
+        if (valoracionListaList != null)
+            return valoracionListaList.stream().map(ValoracionMapper::toDTO).toList();
+
+        return new ArrayList<>();
     }
 }

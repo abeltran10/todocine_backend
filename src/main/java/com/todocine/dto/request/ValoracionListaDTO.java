@@ -14,8 +14,6 @@ public class ValoracionListaDTO {
 
     private Double puntuacion;
 
-    private String fecha;
-
     public ValoracionListaDTO() {
     }
 
@@ -54,13 +52,5 @@ public class ValoracionListaDTO {
 
     public void setPuntuacion(Double puntuacion) {
         this.puntuacion = puntuacion;
-    }
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
     }
 }

@@ -95,8 +95,6 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Transactional(readOnly = true)
     public ListaDTO getListaById(Long id) {
 
-        List<ValoracionDTO> valoracionDTOList = new ArrayList<>();
-
         Lista lista = listaDAO.findById(id)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
@@ -104,23 +102,8 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         if ((usuario != null && getCurrentUserId().equals(usuario.getId())) || "S".equals(lista.getPublica())) {
 
-            List<ValoracionLista> valoracionListaList = valoracionListaDAO.findByIdListaId(lista.getId());
+            return ListaMapper.toDTO(lista);
 
-            if (valoracionListaList != null) {
-                valoracionDTOList = valoracionListaList.stream().map(ValoracionMapper::toDTO)
-                        .collect(Collectors.toCollection(ArrayList::new));
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-
-                valoracionDTOList.sort(Comparator.comparing((ValoracionDTO dto) ->
-                        LocalDateTime.parse(dto.getFecha(), formatter)
-                ).reversed());
-            }
-
-            ListaDTO listaDTO = ListaMapper.toDTO(lista);
-            listaDTO.setValoracion(valoracionDTOList);
-
-            return listaDTO;
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
