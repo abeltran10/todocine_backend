@@ -94,6 +94,9 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     public List<ValoracionDTO> getListaValoraciones(Long listaId) {
         Lista lista = listaDAO.findById(listaId).orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
+        if (!getCurrentUserId().equals(lista.getUsuario().getId()) || !"S".equals(lista.getPublica()))
+            throw new ForbiddenException(USER_FORBIDDEN);
+
         List<ValoracionLista> valoracionListaList = valoracionListaDAO.findByIdListaId(lista.getId());
 
         if (valoracionListaList != null)
