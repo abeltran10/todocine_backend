@@ -1,5 +1,6 @@
 package com.todocine.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class ValoracionListaDTO {
@@ -7,8 +8,8 @@ public class ValoracionListaDTO {
     @NotNull
     private Long listaId;
 
-    @NotNull
-    private Long usuarioId;
+    @NotBlank
+    private String username;
 
     private String comentario;
 
@@ -17,9 +18,9 @@ public class ValoracionListaDTO {
     public ValoracionListaDTO() {
     }
 
-    public ValoracionListaDTO(Long listaId, Long usuarioId) {
+    public ValoracionListaDTO(Long listaId, String username) {
         this.listaId = listaId;
-        this.usuarioId = usuarioId;
+        this.username = username;
     }
 
     public Long getListaId() {
@@ -30,12 +31,12 @@ public class ValoracionListaDTO {
         this.listaId = listaId;
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getComentario() {

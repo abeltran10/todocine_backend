@@ -1,6 +1,7 @@
 package com.todocine.service.impl;
 
 import com.todocine.dao.ListaDAO;
+import com.todocine.dao.UsuarioDAO;
 import com.todocine.dao.ValoracionListaDAO;
 import com.todocine.dto.request.ValoracionListaDTO;
 import com.todocine.dto.response.ListaDTO;
@@ -37,12 +38,20 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     @Autowired
     private ListaDAO listaDAO;
 
+    @Autowired
+    private UsuarioDAO usuarioDAO;
+
     @Override
     @Transactional
     public ValoracionDTO updateValoracionLista(Long listaId, Long usuarioId, ValoracionListaDTO valoracionListaDTO) {
         ValoracionLista valoracionLista = null;
 
-        if (!listaId.equals(valoracionListaDTO.getListaId()) || !usuarioId.equals(valoracionListaDTO.getUsuarioId())) {
+        Usuario usuario = usuarioDAO.findByUsername(valoracionListaDTO.getUsername());
+
+        if (usuario == null)
+            throw new ForbiddenException(USER_FORBIDDEN);
+
+        if (!listaId.equals(valoracionListaDTO.getListaId()) || !usuarioId.equals(usuario.getId())) {
             throw new BadRequestException(ID_NOT_MATCH);
         }
 
@@ -54,7 +63,7 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
                 throw new NotFoudException(LISTA_NOT_FOUND);
             }
 
-            ValoracionListaId id = new ValoracionListaId(new Usuario(valoracionListaDTO.getUsuarioId()), lista);
+            ValoracionListaId id = new ValoracionListaId(usuario, lista);
             valoracionLista = valoracionListaDAO.findById(id).orElse(null);
 
             if (valoracionLista == null) {
@@ -85,7 +94,7 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     public List<ValoracionDTO> getListaValoraciones(Long listaId) {
         Lista lista = listaDAO.findById(listaId).orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
-        List<ValoracionLista> valoracionListaList = valoracionListaDAO.findByIdListaId(listaId);
+        List<ValoracionLista> valoracionListaList = valoracionListaDAO.findByIdListaId(lista.getId());
 
         if (valoracionListaList != null)
             return valoracionListaList.stream().map(ValoracionMapper::toDTO).toList();
