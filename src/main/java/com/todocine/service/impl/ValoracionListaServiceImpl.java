@@ -3,9 +3,8 @@ package com.todocine.service.impl;
 import com.todocine.dao.ListaDAO;
 import com.todocine.dao.UsuarioDAO;
 import com.todocine.dao.ValoracionListaDAO;
-import com.todocine.dto.request.ValoracionListaDTO;
-import com.todocine.dto.response.ListaDTO;
-import com.todocine.dto.response.ValoracionDTO;
+import com.todocine.dto.request.ValoracionListaReqDTO;
+import com.todocine.dto.response.ValoracionListaDTO;
 import com.todocine.entities.Lista;
 import com.todocine.entities.Usuario;
 import com.todocine.entities.ValoracionLista;
@@ -14,18 +13,14 @@ import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.ValoracionListaService;
-import com.todocine.utils.mapper.ListaMapper;
 import com.todocine.utils.mapper.ValoracionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.todocine.configuration.Constants.*;
 
@@ -43,21 +38,21 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
 
     @Override
     @Transactional
-    public ValoracionDTO updateValoracionLista(Long listaId, Long usuarioId, ValoracionListaDTO valoracionListaDTO) {
+    public ValoracionListaDTO updateValoracionLista(Long listaId, ValoracionListaReqDTO valoracionListaReqDTO) {
         ValoracionLista valoracionLista = null;
 
-        Usuario usuario = usuarioDAO.findByUsername(valoracionListaDTO.getUsername());
+        Usuario usuario = usuarioDAO.findByUsername(valoracionListaReqDTO.getUsername());
 
         if (usuario == null)
             throw new ForbiddenException(USER_FORBIDDEN);
 
-        if (!listaId.equals(valoracionListaDTO.getListaId()) || !usuarioId.equals(usuario.getId())) {
+        if (!listaId.equals(valoracionListaReqDTO.getListaId())) {
             throw new BadRequestException(ID_NOT_MATCH);
         }
 
-        if (getCurrentUserId().equals(usuarioId)) {
+        if (getCurrentUserId().equals(usuario.getId())) {
 
-            Lista lista = listaDAO.findById(valoracionListaDTO.getListaId()).orElse(null);
+            Lista lista = listaDAO.findById(valoracionListaReqDTO.getListaId()).orElse(null);
 
             if (lista == null) {
                 throw new NotFoudException(LISTA_NOT_FOUND);
@@ -67,20 +62,20 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
             valoracionLista = valoracionListaDAO.findById(id).orElse(null);
 
             if (valoracionLista == null) {
-                if ((valoracionListaDTO.getComentario() != null && !valoracionListaDTO.getComentario().isBlank())
-                        || valoracionListaDTO.getPuntuacion() != null) {
+                if ((valoracionListaReqDTO.getComentario() != null && !valoracionListaReqDTO.getComentario().isBlank())
+                        || valoracionListaReqDTO.getPuntuacion() != null) {
                     valoracionLista = new ValoracionLista(id);
-                    valoracionLista.setComentario(valoracionListaDTO.getComentario());
+                    valoracionLista.setComentario(valoracionListaReqDTO.getComentario());
                     valoracionLista.setPuntuacion(valoracionLista.getPuntuacion());
                     valoracionLista.setFecha(LocalDateTime.now());
                 } else {
                     throw new BadRequestException(VALORATION_ERROR);
                 }
             } else {
-                if (valoracionListaDTO.getComentario() != null && !valoracionListaDTO.getComentario().isBlank())
-                    valoracionLista.setComentario(valoracionListaDTO.getComentario());
-                if (valoracionLista.getPuntuacion() == null && valoracionListaDTO.getPuntuacion() != null)
-                    valoracionLista.setPuntuacion(valoracionListaDTO.getPuntuacion());
+                if (valoracionListaReqDTO.getComentario() != null && !valoracionListaReqDTO.getComentario().isBlank())
+                    valoracionLista.setComentario(valoracionListaReqDTO.getComentario());
+                if (valoracionLista.getPuntuacion() == null && valoracionListaReqDTO.getPuntuacion() != null && !valoracionListaReqDTO.getPuntuacion().equals(0.0D))
+                    valoracionLista.setPuntuacion(valoracionListaReqDTO.getPuntuacion());
             }
 
             return ValoracionMapper.toDTO(valoracionListaDAO.save(valoracionLista));
@@ -91,7 +86,7 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     }
 
     @Override
-    public List<ValoracionDTO> getListaValoraciones(Long listaId) {
+    public List<ValoracionListaDTO> getListaValoraciones(Long listaId) {
         Lista lista = listaDAO.findById(listaId).orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
         if (!getCurrentUserId().equals(lista.getUsuario().getId()) || !"S".equals(lista.getPublica()))

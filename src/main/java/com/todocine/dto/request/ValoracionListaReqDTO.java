@@ -3,7 +3,7 @@ package com.todocine.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class ValoracionListaDTO {
+public class ValoracionListaReqDTO {
 
     @NotNull
     private Long listaId;
@@ -15,10 +15,10 @@ public class ValoracionListaDTO {
 
     private Double puntuacion;
 
-    public ValoracionListaDTO() {
+    public ValoracionListaReqDTO() {
     }
 
-    public ValoracionListaDTO(Long listaId, String username) {
+    public ValoracionListaReqDTO(Long listaId, String username) {
         this.listaId = listaId;
         this.username = username;
     }

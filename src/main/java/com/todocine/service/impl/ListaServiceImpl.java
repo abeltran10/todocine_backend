@@ -8,11 +8,10 @@ import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieListaDTO;
-import com.todocine.dto.response.ValoracionDTO;
+import com.todocine.dto.response.ValoracionListaDTO;
 import com.todocine.entities.Lista;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
-import com.todocine.entities.ValoracionLista;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
@@ -23,7 +22,6 @@ import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.ListaMapper;
 import com.todocine.utils.mapper.MovieListaMapper;
 import com.todocine.utils.mapper.MovieMapper;
-import com.todocine.utils.mapper.ValoracionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,13 +30,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.todocine.configuration.Constants.*;
 
@@ -164,7 +158,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Transactional
     public ListaDTO addMovieToList(Long listaId, Long movieId) {
 
-        List<ValoracionDTO> valoracionDTOList = new ArrayList<>();
+        List<ValoracionListaDTO> valoracionListaDTOList = new ArrayList<>();
 
         Lista lista = listaDAO.findById(listaId)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
@@ -244,29 +238,31 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Transactional(readOnly = true)
     public Paginator<MovieListaDTO> getMoviesByLista(Long listaId, Integer pagina) {
         Paginator<MovieListaDTO> paginator = new Paginator<>();
-        int skip = (pagina - 1) * 10;
 
-        Lista lista = listaDAO.findById(listaId).orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
+        Lista lista = listaDAO.findById(listaId)
+                .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
         if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
-            List<MovieListaDTO> movieListaDTOS = lista.getMovies().stream()
-                    .map(MovieListaMapper::toDTO)
-                    .skip(skip)
-                    .limit(10)
-                    .toList();
 
+            Pageable pageable = PageRequest.of(pagina - 1, 10);
 
-            if (movieListaDTOS.isEmpty())
+            Page<Movie> moviePage = listaDAO.findMovieByLista(listaId, pageable);
+
+            if (moviePage.isEmpty()) {
                 return paginator;
+            }
 
-            int total = lista.getMovies().size();
+            List<MovieListaDTO> movieListaDTOS = moviePage.getContent().stream()
+                    .map(MovieListaMapper::toDTO)
+                    .toList();
 
             paginator.setPage(pagina);
             paginator.setResults(movieListaDTOS);
-            paginator.setTotalResults(total);
-            paginator.setTotalPages((int) Math.ceil(total/10D));
+            paginator.setTotalResults((int) moviePage.getTotalElements());
+            paginator.setTotalPages(moviePage.getTotalPages());
 
             return paginator;
+
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }

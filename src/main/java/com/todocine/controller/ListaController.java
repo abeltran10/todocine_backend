@@ -1,10 +1,10 @@
 package com.todocine.controller;
 
 import com.todocine.dto.request.ListaReqDTO;
+import com.todocine.dto.request.ValoracionListaReqDTO;
 import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieListaDTO;
-import com.todocine.dto.response.ValoracionDTO;
-import com.todocine.entities.Lista;
+import com.todocine.dto.response.ValoracionListaDTO;
 import com.todocine.service.ListaService;
 import com.todocine.service.ValoracionListaService;
 import com.todocine.utils.Paginator;
@@ -80,7 +80,14 @@ public class ListaController {
     }
 
     @GetMapping("/{id}/valoraciones")
-    public ResponseEntity<List<ValoracionDTO>> getListaValoraciones(@NotNull @PathVariable("id") Long id) {
+    public ResponseEntity<List<ValoracionListaDTO>> getListaValoraciones(@NotNull @PathVariable("id") Long id) {
         return new ResponseEntity<>(valoracionListaService.getListaValoraciones(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/valoraciones")
+    public ResponseEntity<ValoracionListaDTO> updateValoracionLista(@NotNull @PathVariable("id") Long listaId,
+                                                                    @Valid @RequestBody ValoracionListaReqDTO valoracionListaReqDTO) {
+
+        return new ResponseEntity<>(valoracionListaService.updateValoracionLista(listaId, valoracionListaReqDTO), HttpStatus.OK);
     }
 }
