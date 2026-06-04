@@ -18,7 +18,7 @@ public interface ListaService {
 
     Paginator<ListaDTO> getListasUser(Long usuarioId, Integer page);
 
-    ListaDTO addMovieToList(Long listaId, Long movieId);
+    MovieListaDTO addMovieToList(Long listaId, Long movieId);
 
     void deleteMovieFromList(Long listaId, Long movieId);
 

@@ -62,7 +62,7 @@ public class ListaController {
     }
 
     @PostMapping("/{listaId}/movies/{movieId}")
-    public ResponseEntity<ListaDTO> addMovieToList(
+    public ResponseEntity<MovieListaDTO> addMovieToList(
             @NotNull @PathVariable("listaId") Long listaId,
             @NotNull @PathVariable("movieId") Long movieId) {
 

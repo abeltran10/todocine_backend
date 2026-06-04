@@ -43,9 +43,6 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     private ListaDAO listaDAO;
 
     @Autowired
-    private UsuarioDAO usuarioDAO;
-
-    @Autowired
     private MovieDAO movieDAO;
 
     @Autowired
@@ -102,17 +99,16 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional
     public ListaDTO createLista(ListaReqDTO listaDTO) {
+        Long usuarioId = listaDTO.getUsuarioId();
 
-        Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
-
-        if (usuario == null || !usuario.getId().equals(getCurrentUserId())) {
+        if (!getCurrentUserId().equals(usuarioId)) {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
 
         Lista lista = new Lista();
         lista.setNombre(listaDTO.getNombre());
         lista.setDescripcion(listaDTO.getDescripcion());
-        lista.setUsuario(usuario);
+        lista.setUsuario(new Usuario(usuarioId));
         lista.setPublica("N");
 
         return ListaMapper.toDTO(listaDAO.save(lista));
@@ -121,10 +117,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional
     public ListaDTO updateLista(Long id, ListaReqDTO listaDTO) {
+        Long usuarioId = listaDTO.getUsuarioId();
 
-        Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
-
-        if (usuario == null || !getCurrentUserId().equals(usuario.getId()))
+        if (!getCurrentUserId().equals(usuarioId))
             throw new ForbiddenException(USER_FORBIDDEN);
 
         if (!id.equals(listaDTO.getId())) {
@@ -156,9 +151,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
     @Override
     @Transactional
-    public ListaDTO addMovieToList(Long listaId, Long movieId) {
-
-        List<ValoracionListaDTO> valoracionListaDTOList = new ArrayList<>();
+    public MovieListaDTO addMovieToList(Long listaId, Long movieId) {
 
         Lista lista = listaDAO.findById(listaId)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
@@ -186,7 +179,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
                 lista.getMovies().add(movie);
             }
 
-            return ListaMapper.toDTO(listaDAO.save(lista));
+            listaDAO.save(lista);
+
+            return MovieListaMapper.toDTO(movie);
 
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);

@@ -8,8 +8,8 @@ public class ValoracionListaReqDTO {
     @NotNull
     private Long listaId;
 
-    @NotBlank
-    private String username;
+    @NotNull
+    private Long usuarioId;
 
     private String comentario;
 
@@ -18,9 +18,9 @@ public class ValoracionListaReqDTO {
     public ValoracionListaReqDTO() {
     }
 
-    public ValoracionListaReqDTO(Long listaId, String username) {
+    public ValoracionListaReqDTO(Long listaId, Long usuarioId) {
         this.listaId = listaId;
-        this.username = username;
+        this.usuarioId = usuarioId;
     }
 
     public Long getListaId() {
@@ -31,12 +31,12 @@ public class ValoracionListaReqDTO {
         this.listaId = listaId;
     }
 
-    public String getUsername() {
-        return username;
+    public Long getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public String getComentario() {
