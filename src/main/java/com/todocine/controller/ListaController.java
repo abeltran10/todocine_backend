@@ -78,7 +78,7 @@ public class ListaController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+/*
     @GetMapping("/{id}/valoraciones")
     public ResponseEntity<List<ValoracionListaDTO>> getListaValoraciones(@NotNull @PathVariable("id") Long id) {
         return new ResponseEntity<>(valoracionListaService.getListaValoraciones(id), HttpStatus.OK);
@@ -89,5 +89,5 @@ public class ListaController {
                                                                     @Valid @RequestBody ValoracionListaReqDTO valoracionListaReqDTO) {
 
         return new ResponseEntity<>(valoracionListaService.updateValoracionLista(listaId, valoracionListaReqDTO), HttpStatus.OK);
-    }
+    }*/
 }
