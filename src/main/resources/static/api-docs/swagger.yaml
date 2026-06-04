@@ -602,7 +602,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListaDTO'
+                $ref: '#/components/schemas/MovieListaDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -825,3 +825,15 @@ components:
         descripcion: { type: string, description: "List description" }
         usuarioId: { type: integer, description: "List owner id" }
         publica: { type: boolean, description: "List visibility" }
+
+    MovieListaDTO:
+      type: object
+      required: [ id, title, poster_path, release_date ]
+      properties:
+        id: { type: integer, format: int64, description: "Movie ID" }
+        original_title: { type: string, description: "Original title" }
+        title: { type: string, description: "Translated title" }
+        poster_path: { type: string, description: "Poster image path" }
+        overview: { type: string, description: "Summary or synopsis" }
+        release_date: { type: string, description: "Release date" }
+

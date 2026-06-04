@@ -550,13 +550,13 @@ Adds a specific movie to the list. If the movie does not exist in the local data
 
 #### Responses
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Movie added successfully. Returns the updated list. | **application/json**: [ListaDTO](#listadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-| 502 | External server error. |  |
+| Code | Description | Schema                                                    |
+| ---- | ----------- |-----------------------------------------------------------|
+| 200 | Movie added successfully. Returns the updated list. | **application/json**: [MovieListaDTO](#movielistadto)<br> |
+| 400 | Invalid data. |                                                           |
+| 403 | Access denied. |                                                           |
+| 404 | Not found. |                                                           |
+| 502 | External server error. |                                                           |
 
 ##### Security
 
@@ -747,6 +747,17 @@ Removes the relationship between the movie and the list without deleting the mov
 | descripcion | string | List description | Yes |
 | usuarioId | integer | List owner id | Yes |
 | publica | boolean | List visibility | No |
+
+#### MovieListaDTO
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | long | Movie ID | Yes |
+| original_title | string | Original title | No |
+| title | string | Translated title | Yes |
+| poster_path | string | Poster image path | Yes |
+| overview | string | Summary or synopsis | No |
+| release_date | string | Release date | Yes |
 
 
 
