@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ValoracionListaDAO extends JpaRepository<ValoracionLista, ValoracionListaId> {
 
-    @Query("SELECT v FROM ValoracionLista v WHERE v.id.listaId = :listaId ORDER BY v.fecha DESC")
+    @Query("SELECT v FROM ValoracionLista v WHERE v.id.lista.id = :listaId ORDER BY v.fecha DESC")
     List<ValoracionLista> findByIdListaId(@Param("listaId") Long listaId);
 
     void deleteByIdListaId(Long listaId);

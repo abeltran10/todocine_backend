@@ -33,24 +33,16 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     @Autowired
     private ListaDAO listaDAO;
 
-    @Autowired
-    private UsuarioDAO usuarioDAO;
-
     @Override
     @Transactional
     public ValoracionListaDTO updateValoracionLista(Long listaId, ValoracionListaReqDTO valoracionListaReqDTO) {
         ValoracionLista valoracionLista = null;
 
-        Usuario usuario = usuarioDAO.findByUsername(valoracionListaReqDTO.getUsername());
-
-        if (usuario == null)
-            throw new ForbiddenException(USER_FORBIDDEN);
-
         if (!listaId.equals(valoracionListaReqDTO.getListaId())) {
             throw new BadRequestException(ID_NOT_MATCH);
         }
 
-        if (getCurrentUserId().equals(usuario.getId())) {
+        if (getCurrentUserId().equals(valoracionListaReqDTO.getUsuarioId())) {
 
             Lista lista = listaDAO.findById(valoracionListaReqDTO.getListaId()).orElse(null);
 
@@ -58,7 +50,7 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
                 throw new NotFoudException(LISTA_NOT_FOUND);
             }
 
-            ValoracionListaId id = new ValoracionListaId(usuario, lista);
+            ValoracionListaId id = new ValoracionListaId(new Usuario(getCurrentUserId()), lista);
             valoracionLista = valoracionListaDAO.findById(id).orElse(null);
 
             if (valoracionLista == null) {
