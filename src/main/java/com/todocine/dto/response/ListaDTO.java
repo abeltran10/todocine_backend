@@ -17,13 +17,12 @@ public class ListaDTO {
     @NotBlank
     private String descripcion;
 
-    private List<MovieListaDTO> movies = new ArrayList<>();
-
     @NotBlank
     private String username;
 
     @NotNull
     private Boolean publica;
+
 
     public ListaDTO() {
     }
@@ -56,14 +55,6 @@ public class ListaDTO {
         this.descripcion = descripcion;
     }
 
-    public List<MovieListaDTO> getMovies() {
-        return movies;
-    }
-
-    public void setMovies(List<MovieListaDTO> movies) {
-        this.movies = movies;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -79,4 +70,5 @@ public class ListaDTO {
     public void setPublica(Boolean publica) {
         this.publica = publica;
     }
+
 }

@@ -3,9 +3,12 @@ package com.todocine.service.impl;
 import com.todocine.dao.ListaDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
+import com.todocine.dao.ValoracionListaDAO;
 import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieDTO;
+import com.todocine.dto.response.MovieListaDTO;
+import com.todocine.dto.response.ValoracionListaDTO;
 import com.todocine.entities.Lista;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
@@ -17,6 +20,7 @@ import com.todocine.service.ListaService;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.Paginator;
 import com.todocine.utils.mapper.ListaMapper;
+import com.todocine.utils.mapper.MovieListaMapper;
 import com.todocine.utils.mapper.MovieMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,10 +43,10 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     private ListaDAO listaDAO;
 
     @Autowired
-    private UsuarioDAO usuarioDAO;
+    private MovieDAO movieDAO;
 
     @Autowired
-    private MovieDAO movieDAO;
+    private ValoracionListaDAO valoracionListaDAO;
 
     @Autowired
     private TMDBService tmdbService;
@@ -56,15 +61,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
             if (listasPage.hasContent()) {
                 List<ListaDTO> results = listasPage.getContent().stream()
-                        .map(lista -> {
-                            ListaDTO listaDTO = new ListaDTO(lista.getId());
-                            listaDTO.setNombre(lista.getNombre());
-                            listaDTO.setDescripcion(lista.getDescripcion());
-                            listaDTO.setUsername(lista.getUsuario().getUsername());
-                            listaDTO.setPublica("S".equals(lista.getPublica()));
-
-                            return listaDTO;
-                        })
+                        .map(ListaMapper::toDTO)
                         .toList();
 
                 paginator.setResults(results);
@@ -82,13 +79,16 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional(readOnly = true)
     public ListaDTO getListaById(Long id) {
+
         Lista lista = listaDAO.findById(id)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
         Usuario usuario = lista.getUsuario();
 
         if ((usuario != null && getCurrentUserId().equals(usuario.getId())) || "S".equals(lista.getPublica())) {
+
             return ListaMapper.toDTO(lista);
+
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
@@ -99,17 +99,16 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional
     public ListaDTO createLista(ListaReqDTO listaDTO) {
+        Long usuarioId = listaDTO.getUsuarioId();
 
-        Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
-
-        if (usuario == null || !usuario.getId().equals(getCurrentUserId())) {
+        if (!getCurrentUserId().equals(usuarioId)) {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
 
         Lista lista = new Lista();
         lista.setNombre(listaDTO.getNombre());
         lista.setDescripcion(listaDTO.getDescripcion());
-        lista.setUsuario(usuario);
+        lista.setUsuario(new Usuario(usuarioId));
         lista.setPublica("N");
 
         return ListaMapper.toDTO(listaDAO.save(lista));
@@ -118,10 +117,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional
     public ListaDTO updateLista(Long id, ListaReqDTO listaDTO) {
+        Long usuarioId = listaDTO.getUsuarioId();
 
-        Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
-
-        if (usuario == null || !getCurrentUserId().equals(usuario.getId()))
+        if (!getCurrentUserId().equals(usuarioId))
             throw new ForbiddenException(USER_FORBIDDEN);
 
         if (!id.equals(listaDTO.getId())) {
@@ -147,12 +145,14 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         if (!lista.getUsuario().getId().equals(getCurrentUserId()))
             throw new ForbiddenException(USER_FORBIDDEN);
 
+        valoracionListaDAO.deleteByIdListaId(lista.getId());
         listaDAO.delete(lista);
     }
 
     @Override
     @Transactional
-    public ListaDTO addMovieToList(Long listaId, Long movieId) {
+    public MovieListaDTO addMovieToList(Long listaId, Long movieId) {
+
         Lista lista = listaDAO.findById(listaId)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
@@ -179,7 +179,10 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
                 lista.getMovies().add(movie);
             }
 
-            return ListaMapper.toDTO(listaDAO.save(lista));
+            listaDAO.save(lista);
+
+            return MovieListaMapper.toDTO(movie);
+
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
@@ -214,15 +217,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         if (listasPage.hasContent()) {
             List<ListaDTO> results = listasPage.getContent().stream()
-                    .map(lista -> {
-                        ListaDTO listaDTO = new ListaDTO(lista.getId());
-                        listaDTO.setNombre(lista.getNombre());
-                        listaDTO.setDescripcion(lista.getDescripcion());
-                        listaDTO.setUsername(lista.getUsuario().getUsername());
-                        listaDTO.setPublica("S".equals(lista.getPublica()));
-
-                        return listaDTO;
-                    })
+                    .map(ListaMapper::toDTO)
                     .toList();
 
             paginator.setResults(results);
@@ -232,5 +227,39 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         }
 
        return paginator;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Paginator<MovieListaDTO> getMoviesByLista(Long listaId, Integer pagina) {
+        Paginator<MovieListaDTO> paginator = new Paginator<>();
+
+        Lista lista = listaDAO.findById(listaId)
+                .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
+
+        if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
+
+            Pageable pageable = PageRequest.of(pagina - 1, 10);
+
+            Page<Movie> moviePage = listaDAO.findMovieByLista(listaId, pageable);
+
+            if (moviePage.isEmpty()) {
+                return paginator;
+            }
+
+            List<MovieListaDTO> movieListaDTOS = moviePage.getContent().stream()
+                    .map(MovieListaMapper::toDTO)
+                    .toList();
+
+            paginator.setPage(pagina);
+            paginator.setResults(movieListaDTOS);
+            paginator.setTotalResults((int) moviePage.getTotalElements());
+            paginator.setTotalPages(moviePage.getTotalPages());
+
+            return paginator;
+
+        } else {
+            throw new ForbiddenException(USER_FORBIDDEN);
+        }
     }
 }

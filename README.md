@@ -12,15 +12,15 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v3.6.7](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.7)
+- [v3.6.8](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.8)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.7) compressed file. 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.8) compressed file. 
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## Version: v3.6.7
+## Version: v6.3.8
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -159,6 +159,34 @@ Bearer format: JWT
 | 403 | Access denied. |  |
 | 404 | Not found. |  |
 | 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
+### [GET] /usuarios/{userId}/listas
+**Get user's lists of movies**
+
+Returns a paginated list of all movie lists created by a specific user.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| page | query | Page index (1..N) | Yes | integer |
+| userId | path | Unique identifier of the specific user | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
 
 ##### Security
 
@@ -347,32 +375,6 @@ Requires ADMIN role.
 
 ---
 
-### [GET] /usuarios/{userId}/listas
-**Get user's lists of movies**
-
-Returns a paginated list of all movie lists created by a specific user.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| page | query | Page index (1..N) | Yes | integer |
-| userId | path | Unique identifier of the specific user | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
 ### [GET] /listas
 **Get public lists of movies**
 
@@ -421,6 +423,8 @@ Registers a new list of movies associated with the specified user.
 | Security Schema | Scopes |
 | --------------- | ------ |
 | BearerAuth |  |
+
+---
 
 ### [GET] /listas/{id}
 **Get details of the movie list**
@@ -506,6 +510,32 @@ Permanently removes the list from the user's profile.
 | --------------- | ------ |
 | BearerAuth |  |
 
+### [GET] /listas/{id}/movies
+**Get paginated list of movies from the list**
+
+Returns paginated list movies from the list.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Movies from the list retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
 ### [POST] /listas/{listaId}/movies/{movieId}
 **Add movie to list**
 
@@ -562,7 +592,6 @@ Removes the relationship between the movie and the list without deleting the mov
 | BearerAuth |  |
 
 ---
-
 ### Schemas
 
 #### UsuarioReqDTO
@@ -708,7 +737,6 @@ Removes the relationship between the movie and the list without deleting the mov
 | descripcion | string | List description | Yes |
 | username | string | List owner | Yes |
 | publica | boolean | List visibility | Yes |
-| movies | [ [MovieListaDTO](#movielistadto) ] | Movies in the list | No |
 
 #### ListaReqDTO
 
@@ -717,19 +745,8 @@ Removes the relationship between the movie and the list without deleting the mov
 | id | long | Unique list ID | No |
 | nombre | string | List name | Yes |
 | descripcion | string | List description | Yes |
-| username | string | List owner | Yes |
+| usuarioId | integer | List owner id | Yes |
 | publica | boolean | List visibility | No |
-
-#### MovieListaDTO
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long | Unique ID | Yes |
-| original_title | string | Original title | No |
-| title | string | Title | Yes |
-| overview | string | Synopsis | No |
-| poster_path | string | Image path | Yes |
-| release_date | string | Release date | Yes |
 
 
 
@@ -749,12 +766,7 @@ Removes the relationship between the movie and the list without deleting the mov
 
 ### Classes diagram
 
-<img width="4818" height="360" alt="classes_diagram" src="https://github.com/user-attachments/assets/1155fcf0-0ca0-4172-9c6f-dfd544548934" />
-
-
-
-
-
+<img width="4948" height="360" alt="classes_diagram" src="https://github.com/user-attachments/assets/67d30442-2c52-4fd4-a1e9-3da78562d740" />
 
 
 

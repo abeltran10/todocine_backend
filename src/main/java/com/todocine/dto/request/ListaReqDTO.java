@@ -17,8 +17,8 @@ public class ListaReqDTO {
     @NotBlank
     private String descripcion;
 
-    @NotBlank
-    private String username;
+    @NotNull
+    private Long usuarioId;
 
     private Boolean publica;
 
@@ -53,12 +53,12 @@ public class ListaReqDTO {
         this.descripcion = descripcion;
     }
 
-    public String getUsername() {
-        return username;
+    public Long getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public Boolean getPublica() {
