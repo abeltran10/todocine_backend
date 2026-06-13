@@ -8,19 +8,22 @@ public class ValoracionListaReqDTO {
     @NotNull
     private Long listaId;
 
-    @NotNull
-    private Long usuarioId;
+    @NotBlank
+    private String username;
 
     private String comentario;
 
+    @NotNull
     private Double puntuacion;
+
+    private String fecha;
 
     public ValoracionListaReqDTO() {
     }
 
-    public ValoracionListaReqDTO(Long listaId, Long usuarioId) {
+    public ValoracionListaReqDTO(Long listaId, String username) {
         this.listaId = listaId;
-        this.usuarioId = usuarioId;
+        this.username = username;
     }
 
     public Long getListaId() {
@@ -31,12 +34,12 @@ public class ValoracionListaReqDTO {
         this.listaId = listaId;
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getComentario() {
@@ -53,5 +56,13 @@ public class ValoracionListaReqDTO {
 
     public void setPuntuacion(Double puntuacion) {
         this.puntuacion = puntuacion;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 }

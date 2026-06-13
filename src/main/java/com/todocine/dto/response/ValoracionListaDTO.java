@@ -10,8 +10,10 @@ public class ValoracionListaDTO {
 
     private String comentario;
 
+    @NotNull
     private Double puntuacion;
 
+    @NotBlank
     private String fecha;
 
     @NotBlank
@@ -20,8 +22,9 @@ public class ValoracionListaDTO {
     public ValoracionListaDTO() {
     }
 
-    public ValoracionListaDTO(Long listaId) {
+    public ValoracionListaDTO(Long listaId, String username) {
         this.listaId = listaId;
+        this.username = username;
     }
 
     public Long getListaId() {

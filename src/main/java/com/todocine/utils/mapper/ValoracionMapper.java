@@ -8,7 +8,8 @@ import java.time.format.DateTimeFormatter;
 public class ValoracionMapper {
 
     public static ValoracionListaDTO toDTO(ValoracionLista valoracionLista) {
-        ValoracionListaDTO valoracionListaDTO = new ValoracionListaDTO(valoracionLista.getId().getLista().getId());
+        ValoracionListaDTO valoracionListaDTO = new ValoracionListaDTO();
+        valoracionListaDTO.setListaId(valoracionLista.getId().getLista().getId());
         valoracionListaDTO.setComentario(valoracionLista.getComentario());
         valoracionListaDTO.setPuntuacion(valoracionLista.getPuntuacion());
         valoracionListaDTO.setUsername(valoracionLista.getId().getUsuario().getUsername());

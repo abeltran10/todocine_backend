@@ -78,16 +78,16 @@ public class ListaController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-/*
+
     @GetMapping("/{id}/valoraciones")
     public ResponseEntity<List<ValoracionListaDTO>> getListaValoraciones(@NotNull @PathVariable("id") Long id) {
         return new ResponseEntity<>(valoracionListaService.getListaValoraciones(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/valoraciones")
-    public ResponseEntity<ValoracionListaDTO> updateValoracionLista(@NotNull @PathVariable("id") Long listaId,
+    public ResponseEntity<ValoracionListaDTO> guardarValoracionLista(@NotNull @PathVariable("id") Long listaId,
                                                                     @Valid @RequestBody ValoracionListaReqDTO valoracionListaReqDTO) {
 
-        return new ResponseEntity<>(valoracionListaService.updateValoracionLista(listaId, valoracionListaReqDTO), HttpStatus.OK);
-    }*/
+        return new ResponseEntity<>(valoracionListaService.guardarValoracionLista(listaId, valoracionListaReqDTO), HttpStatus.OK);
+    }
 }
