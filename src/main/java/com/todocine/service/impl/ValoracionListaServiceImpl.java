@@ -10,6 +10,7 @@ import com.todocine.entities.Usuario;
 import com.todocine.entities.ValoracionLista;
 import com.todocine.entities.ValoracionListaId;
 import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.ValoracionListaService;
@@ -33,16 +34,20 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     @Autowired
     private ListaDAO listaDAO;
 
+    @Autowired
+    private UsuarioDAO usuarioDAO;
+
     @Override
     @Transactional
-    public ValoracionListaDTO updateValoracionLista(Long listaId, ValoracionListaReqDTO valoracionListaReqDTO) {
+    public ValoracionListaDTO guardarValoracionLista(Long listaId, ValoracionListaReqDTO valoracionListaReqDTO) {
         ValoracionLista valoracionLista = null;
+        Usuario usuario = usuarioDAO.findByUsername(valoracionListaReqDTO.getUsername());
 
         if (!listaId.equals(valoracionListaReqDTO.getListaId())) {
             throw new BadRequestException(ID_NOT_MATCH);
         }
 
-        if (getCurrentUserId().equals(valoracionListaReqDTO.getUsuarioId())) {
+        if (usuario != null && getCurrentUserId().equals(usuario.getId())) {
 
             Lista lista = listaDAO.findById(valoracionListaReqDTO.getListaId()).orElse(null);
 
@@ -50,25 +55,16 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
                 throw new NotFoudException(LISTA_NOT_FOUND);
             }
 
-            ValoracionListaId id = new ValoracionListaId(new Usuario(getCurrentUserId()), lista);
+            ValoracionListaId id = new ValoracionListaId(usuario, lista);
             valoracionLista = valoracionListaDAO.findById(id).orElse(null);
 
             if (valoracionLista == null) {
-                if ((valoracionListaReqDTO.getComentario() != null && !valoracionListaReqDTO.getComentario().isBlank())
-                        || valoracionListaReqDTO.getPuntuacion() != null) {
-                    valoracionLista = new ValoracionLista(id);
-                    valoracionLista.setComentario(valoracionListaReqDTO.getComentario());
-                    valoracionLista.setPuntuacion(valoracionLista.getPuntuacion());
-                    valoracionLista.setFecha(LocalDateTime.now());
-                } else {
-                    throw new BadRequestException(VALORATION_ERROR);
-                }
-            } else {
-                if (valoracionListaReqDTO.getComentario() != null && !valoracionListaReqDTO.getComentario().isBlank())
-                    valoracionLista.setComentario(valoracionListaReqDTO.getComentario());
-                if (valoracionLista.getPuntuacion() == null && valoracionListaReqDTO.getPuntuacion() != null && !valoracionListaReqDTO.getPuntuacion().equals(0.0D))
-                    valoracionLista.setPuntuacion(valoracionListaReqDTO.getPuntuacion());
+                valoracionLista = new ValoracionLista(id);
+                valoracionLista.setFecha(LocalDateTime.now());
             }
+
+            valoracionLista.setComentario(valoracionListaReqDTO.getComentario());
+            valoracionLista.setPuntuacion(valoracionListaReqDTO.getPuntuacion());
 
             return ValoracionMapper.toDTO(valoracionListaDAO.save(valoracionLista));
 
@@ -81,7 +77,7 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     public List<ValoracionListaDTO> getListaValoraciones(Long listaId) {
         Lista lista = listaDAO.findById(listaId).orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
-        if (!getCurrentUserId().equals(lista.getUsuario().getId()) || !"S".equals(lista.getPublica()))
+        if (!getCurrentUserId().equals(lista.getUsuario().getId()) && !"S".equals(lista.getPublica()))
             throw new ForbiddenException(USER_FORBIDDEN);
 
         List<ValoracionLista> valoracionListaList = valoracionListaDAO.findByIdListaId(lista.getId());

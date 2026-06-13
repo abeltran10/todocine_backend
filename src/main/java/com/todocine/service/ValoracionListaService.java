@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ValoracionListaService {
 
-    ValoracionListaDTO updateValoracionLista(Long listaId, ValoracionListaReqDTO valoracionListaReqDTO);
+    ValoracionListaDTO guardarValoracionLista(Long listaId, ValoracionListaReqDTO valoracionListaReqDTO);
 
     List<ValoracionListaDTO> getListaValoraciones(Long listaId);
 }

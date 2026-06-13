@@ -46,6 +46,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     private MovieDAO movieDAO;
 
     @Autowired
+    private UsuarioDAO usuarioDAO;
+
+    @Autowired
     private ValoracionListaDAO valoracionListaDAO;
 
     @Autowired
@@ -99,16 +102,16 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional
     public ListaDTO createLista(ListaReqDTO listaDTO) {
-        Long usuarioId = listaDTO.getUsuarioId();
+        Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
 
-        if (!getCurrentUserId().equals(usuarioId)) {
+        if (usuario == null || !getCurrentUserId().equals(usuario.getId())) {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
 
         Lista lista = new Lista();
         lista.setNombre(listaDTO.getNombre());
         lista.setDescripcion(listaDTO.getDescripcion());
-        lista.setUsuario(new Usuario(usuarioId));
+        lista.setUsuario(usuario);
         lista.setPublica("N");
 
         return ListaMapper.toDTO(listaDAO.save(lista));
@@ -117,9 +120,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional
     public ListaDTO updateLista(Long id, ListaReqDTO listaDTO) {
-        Long usuarioId = listaDTO.getUsuarioId();
+        Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
 
-        if (!getCurrentUserId().equals(usuarioId))
+        if (usuario == null || !getCurrentUserId().equals(usuario.getId()))
             throw new ForbiddenException(USER_FORBIDDEN);
 
         if (!id.equals(listaDTO.getId())) {

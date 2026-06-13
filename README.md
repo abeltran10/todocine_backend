@@ -12,15 +12,15 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v3.6.8](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.8)
+- [v3.6.9](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.9)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.8) compressed file. 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.9) compressed file. 
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## Version: v6.3.8
+## Version: v3.6.9
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -318,7 +318,6 @@ Requires ADMIN role.
 | --------------- | ------ |
 | BearerAuth |  |
 
----
 
 ### [GET] /premios/{id}
 **Get specific award**
@@ -346,7 +345,6 @@ Get award by unique identifier
 | --------------- | ------ |
 | BearerAuth |  |
 
----
 
 ### [GET] /premios/{id}/categorias
 **Get categories for a specific award**
@@ -424,7 +422,6 @@ Registers a new list of movies associated with the specified user.
 | --------------- | ------ |
 | BearerAuth |  |
 
----
 
 ### [GET] /listas/{id}
 **Get details of the movie list**
@@ -510,6 +507,8 @@ Permanently removes the list from the user's profile.
 | --------------- | ------ |
 | BearerAuth |  |
 
+---
+
 ### [GET] /listas/{id}/movies
 **Get paginated list of movies from the list**
 
@@ -536,6 +535,7 @@ Returns paginated list movies from the list.
 | --------------- | ------ |
 | BearerAuth |  |
 
+
 ### [POST] /listas/{listaId}/movies/{movieId}
 **Add movie to list**
 
@@ -550,13 +550,13 @@ Adds a specific movie to the list. If the movie does not exist in the local data
 
 #### Responses
 
-| Code | Description | Schema                                                    |
-| ---- | ----------- |-----------------------------------------------------------|
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
 | 200 | Movie added successfully. Returns the updated list. | **application/json**: [MovieListaDTO](#movielistadto)<br> |
-| 400 | Invalid data. |                                                           |
-| 403 | Access denied. |                                                           |
-| 404 | Not found. |                                                           |
-| 502 | External server error. |                                                           |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+| 502 | External server error. |  |
 
 ##### Security
 
@@ -584,6 +584,67 @@ Removes the relationship between the movie and the list without deleting the mov
 | 400 | Invalid data. |
 | 403 | Access denied. |
 | 404 | Not found. |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+
+---
+
+### [GET] /listas/{id}/valoraciones
+**Get a list of opinions about one specific list**
+
+Returns a list of opinions about one list.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Responses
+
+| Code | Description                     | Schema |
+| ---- |---------------------------------| ------ |
+| 200 | Opinions retrieved successfully | **application/json**: [ [ValoracionListaDTO](#valoracionlistadto) ]<br> |
+| 400 | Invalid data.                   |  |
+| 403 | Access denied.                  |  |
+| 404 | Not found.                      |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [PUT] /listas/{id}/valoraciones
+**Update or post an opinion**
+
+Updates or posts an opinion about the list
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ValoracionListaReqDTO](#valoracionlistareqdto)<br> |
+
+#### Responses
+
+| Code | Description                             | Schema |
+| ---- |-----------------------------------------| ------ |
+| 200 | Opinion created or updated successfully | **application/json**: [ValoracionListaDTO](#valoracionlistadto)<br> |
+| 400 | Invalid data.                           |  |
+| 403 | Access denied.                          |  |
+| 404 | Not found.                              |  |
 
 ##### Security
 
@@ -745,7 +806,7 @@ Removes the relationship between the movie and the list without deleting the mov
 | id | long | Unique list ID | No |
 | nombre | string | List name | Yes |
 | descripcion | string | List description | Yes |
-| usuarioId | integer | List owner id | Yes |
+| username | string | List owner | Yes |
 | publica | boolean | List visibility | No |
 
 #### MovieListaDTO
@@ -759,25 +820,45 @@ Removes the relationship between the movie and the list without deleting the mov
 | overview | string | Summary or synopsis | No |
 | release_date | string | Release date | Yes |
 
+#### ValoracionListaDTO
+
+| Name | Type | Description              | Required |
+| ---- | ---- |--------------------------| -------- |
+| listaId | long | Unique list ID           | Yes |
+| puntuacion | double | Rating                   | Yes |
+| comentario | string | A comment about the list | No |
+| username | string | Opinion owner            | Yes |
+| fecha | string | Opinion creation date    | Yes |
+
+#### ValoracionListaReqDTO
+
+| Name | Type | Description              | Required |
+| ---- | ---- |--------------------------| -------- |
+| listaId | long | Unique list ID           | Yes |
+| puntuacion | double | Rating                   | Yes |
+| comentario | string | A comment about the list | No |
+| username | string | Opinion owner            | Yes |
+| fecha | string | Opinion creation date    | No |
 
 
 ## Entity-Relation Diagram
 
-<img width="1556" height="725" alt="entity-relation_diagram" src="https://github.com/user-attachments/assets/81b213af-11ec-4ed3-9759-c64c15d4883b" />
-
+<img width="1606" height="738" alt="entity-relation_diagram" src="https://github.com/user-attachments/assets/bed9cb7b-f2fb-4104-8e19-4cd907ca3514" />
 
 
 ## UML
 
 ### Use case diagram
 
-<img width="871" height="1655" alt="case_use_diagram" src="https://github.com/user-attachments/assets/e1c63124-c5e3-446e-9291-30189e606e60" />
+<img width="885" height="1677" alt="case_use_diagram" src="https://github.com/user-attachments/assets/5b85afd1-63a0-4d71-800d-ab95798c26fd" />
+
 
 
 
 ### Classes diagram
 
-<img width="4948" height="360" alt="classes_diagram" src="https://github.com/user-attachments/assets/67d30442-2c52-4fd4-a1e9-3da78562d740" />
+<img width="4096" height="466" alt="classes_diagram" src="https://github.com/user-attachments/assets/d7743c7f-fb78-4772-bbd8-7d7a13151dfd" />
+
 
 
 
