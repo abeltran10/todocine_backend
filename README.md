@@ -595,9 +595,9 @@ Removes the relationship between the movie and the list without deleting the mov
 ---
 
 ### [GET] /listas/{id}/valoraciones
-**Get a list of valorations for the specific list**
+**Get a list of opinions about one specific list**
 
-Returns a list of valorations.
+Returns a list of opinions about one list.
 
 #### Parameters
 
@@ -607,12 +607,12 @@ Returns a list of valorations.
 
 #### Responses
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Valorations retrieved successfully | **application/json**: [ [ValoracionListaDTO](#valoracionlistadto) ]<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
+| Code | Description                     | Schema |
+| ---- |---------------------------------| ------ |
+| 200 | Opinions retrieved successfully | **application/json**: [ [ValoracionListaDTO](#valoracionlistadto) ]<br> |
+| 400 | Invalid data.                   |  |
+| 403 | Access denied.                  |  |
+| 404 | Not found.                      |  |
 
 ##### Security
 
@@ -621,9 +621,9 @@ Returns a list of valorations.
 | BearerAuth |  |
 
 ### [PUT] /listas/{id}/valoraciones
-**Update or post a valoration**
+**Update or post an opinion**
 
-Updates or posts a valoration about the list
+Updates or posts an opinion about the list
 
 #### Parameters
 
@@ -639,12 +639,12 @@ Updates or posts a valoration about the list
 
 #### Responses
 
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Valoration created or updated successfully | **application/json**: [ValoracionListaDTO](#valoracionlistadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
+| Code | Description                             | Schema |
+| ---- |-----------------------------------------| ------ |
+| 200 | Opinion created or updated successfully | **application/json**: [ValoracionListaDTO](#valoracionlistadto)<br> |
+| 400 | Invalid data.                           |  |
+| 403 | Access denied.                          |  |
+| 404 | Not found.                              |  |
 
 ##### Security
 
@@ -822,23 +822,23 @@ Updates or posts a valoration about the list
 
 #### ValoracionListaDTO
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| listaId | long | Unique list ID | Yes |
-| puntuacion | double | Rating | Yes |
+| Name | Type | Description              | Required |
+| ---- | ---- |--------------------------| -------- |
+| listaId | long | Unique list ID           | Yes |
+| puntuacion | double | Rating                   | Yes |
 | comentario | string | A comment about the list | No |
-| username | string | Valoration owner | Yes |
-| fecha | string | Valoration creation date | Yes |
+| username | string | Opinion owner            | Yes |
+| fecha | string | Opinion creation date    | Yes |
 
 #### ValoracionListaReqDTO
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| listaId | long | Unique list ID | Yes |
-| puntuacion | double | Rating | Yes |
+| Name | Type | Description              | Required |
+| ---- | ---- |--------------------------| -------- |
+| listaId | long | Unique list ID           | Yes |
+| puntuacion | double | Rating                   | Yes |
 | comentario | string | A comment about the list | No |
-| username | string | Valoration owner | Yes |
-| fecha | string | Valoration creation date | No |
+| username | string | Opinion owner            | Yes |
+| fecha | string | Opinion creation date    | No |
 
 
 ## Entity-Relation Diagram

@@ -639,14 +639,14 @@ paths:
         description: "Unique identifier of the specific list of movies"
 
     get:
-      summary: "Get a list of valorations for the specific list"
+      summary: "Get a list of users's opinions about one specific list"
       description: "Returns a list of valorations."
-      tags: [ "List's valorations" ]
+      tags: [ "Users's opinions about the list" ]
       security:
         - BearerAuth: [ ]
       responses:
         '200':
-          description: "Valorations retrieved successfully"
+          description: "Opinions retrieved successfully"
           content:
             application/json:
               schema:
@@ -661,9 +661,9 @@ paths:
           $ref: '#/components/responses/NotFound'
 
     put:
-      summary: "Update or post a valoration"
-      description: "Updates or posts a valoration about the list"
-      tags: [ "List's valorations" ]
+      summary: "Update or post an opinion"
+      description: "Updates or posts an opinion about the list"
+      tags: [ "Users's opinions about the list" ]
       security:
         - BearerAuth: [ ]
       requestBody:
@@ -674,7 +674,7 @@ paths:
               $ref: '#/components/schemas/ValoracionListaReqDTO'
       responses:
         '200':
-          description: "Valoration created or updated successfully"
+          description: "Opinion created or updated successfully"
           content:
             application/json:
               schema:
@@ -901,8 +901,8 @@ components:
         listaId: { type: integer, format: int64, description: "Unique list ID" }
         puntuacion: { type: double, description: "Rating" }
         comentario: { type: string, description: "A comment about the list" }
-        username: { type: string, description: "Valoration owner" }
-        fecha: { type: string, description: "Valoration creation date" }
+        username: { type: string, description: "Opinion owner" }
+        fecha: { type: string, description: "Opinion creation date" }
 
 
     ValoracionListaReqDTO:
@@ -912,6 +912,6 @@ components:
         listaId: { type: integer, format: int64, description: "Unique list ID" }
         puntuacion: { type: double, description: "Rating" }
         comentario: { type: string, description: "A comment about the list" }
-        username: { type: string, description: "Valoration owner" }
-        fecha: { type: string, description: "Valoration creation date" }
+        username: { type: string, description: "Opinion owner" }
+        fecha: { type: string, description: "Opinion creation date" }
 
