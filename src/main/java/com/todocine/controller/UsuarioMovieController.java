@@ -48,7 +48,7 @@ public class UsuarioMovieController {
                                                                       @RequestParam("vista") String vista,
                                                                       @RequestParam("votada") String votada,
                                                                       @RequestParam("orderBy") String orderBy,
-                                                                      @RequestParam("page") Integer pagina) {
+                                                                      @NotNull @RequestParam("page") Integer pagina) {
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.VISTA_FILTER, vista);
         filters.put(Constants.VOTADA_FILTER, votada);
