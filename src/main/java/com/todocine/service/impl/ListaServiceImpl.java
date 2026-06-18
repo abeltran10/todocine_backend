@@ -241,8 +241,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
 
-            Pageable pageable = PageRequest.of(pagina - 1, 10);
-
+            Pageable pageable = PageRequest.of(pagina - 1, 5);
             Page<Movie> moviePage = listaDAO.findMovieByLista(listaId, pageable);
 
             if (moviePage.isEmpty()) {
