@@ -14,6 +14,6 @@ public interface ListaDAO extends JpaRepository<Lista, Long> {
 
     Page<Lista> findByPublica(String publica, Pageable pageable);
 
-    @Query("SELECT m FROM Lista l JOIN l.movies m WHERE l.id = :listaId ORDER BY m.title ASC")
+    @Query("SELECT m FROM Lista l JOIN l.movies m WHERE l.id = :listaId")
     Page<Movie> findMovieByLista(@Param("listaId") Long listaId, Pageable pageable);
 }

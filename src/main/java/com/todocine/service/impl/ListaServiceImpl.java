@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -233,7 +234,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
     @Override
     @Transactional(readOnly = true)
-    public Paginator<MovieListaDTO> getMoviesByLista(Long listaId, Integer pagina) {
+    public Paginator<MovieListaDTO> getMoviesByLista(Long listaId, String orderBy, String direction, Integer pagina) {
         Paginator<MovieListaDTO> paginator = new Paginator<>();
 
         Lista lista = listaDAO.findById(listaId)
@@ -241,7 +242,14 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
 
-            Pageable pageable = PageRequest.of(pagina - 1, 5);
+
+            String criterio = "fecha".equalsIgnoreCase(orderBy) ? "m.releaseDate" : "m.title";
+
+            Sort sort = "DESC".equalsIgnoreCase(direction)
+                    ? Sort.by(criterio).descending()
+                    : Sort.by(criterio).ascending();
+
+            Pageable pageable = PageRequest.of(pagina - 1, 5, sort);
             Page<Movie> moviePage = listaDAO.findMovieByLista(listaId, pageable);
 
             if (moviePage.isEmpty()) {

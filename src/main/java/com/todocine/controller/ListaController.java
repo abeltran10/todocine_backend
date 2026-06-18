@@ -9,6 +9,7 @@ import com.todocine.service.ListaService;
 import com.todocine.service.ValoracionListaService;
 import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,8 +58,10 @@ public class ListaController {
 
     @GetMapping("/{listaId}/movies")
     public ResponseEntity<Paginator<MovieListaDTO>> getMoviesByList(@NotNull @PathVariable("listaId") Long listaId,
+                                                                    @RequestParam("orderBy") String orderBy,
+                                                                    @RequestParam("direction") String direction,
                                                                     @NotNull @RequestParam("page") Integer pagina) {
-        return new ResponseEntity<>(listaService.getMoviesByLista(listaId, pagina), HttpStatus.OK);
+        return new ResponseEntity<>(listaService.getMoviesByLista(listaId, orderBy, direction, pagina), HttpStatus.OK);
     }
 
     @PostMapping("/{listaId}/movies/{movieId}")
