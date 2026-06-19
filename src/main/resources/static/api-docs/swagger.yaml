@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: "Todo Cine API"
   description: "API managed with Spring Boot, JWT security, and movie catalog with custom exception handling."
-  version: "v3.6.9"
+  version: "v3.6.10"
 
 servers:
   - url: "http://localhost:8080/api"
@@ -109,19 +109,19 @@ paths:
         - name: "vista"
           description: "Filter by watched movies (true/false)"
           in: query
-          required: true
+          required: false
           schema:
             type: string
         - name: "votada"
           description: "Filter by voted movies"
           in: query
-          required: true
+          required: false
           schema:
             type: string
         - name: "orderBy"
           description: "Sorting field (e.g., popularity)"
           in: query
-          required: true
+          required: false
           schema:
             type: string
         - name: "page"
@@ -485,7 +485,7 @@ paths:
 
     get:
       summary: "Get details of the movie list"
-      description: "Returns the full details of a specific list, including its metadata and movie collection."
+      description: "Returns a specific list."
       tags: [ "Lists" ]
       security:
         - BearerAuth: [ ]
@@ -556,11 +556,30 @@ paths:
         description: "Unique identifier of the specific list of movies"
 
     get:
-      summary: "Get paginated list of movies from the list"
-      description: "Returns paginated list movies from the list."
+      summary: "Get paginated movies from the list"
+      description: "Returns paginated movies from the list."
       tags: [ "Lists" ]
       security:
         - BearerAuth: [ ]
+      parameters:
+        - name: "orderBy"
+          description: "Sorting field (e.g., title)"
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: "direction"
+          description: "Sorting direction (e.g., asc)"
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: "page"
+          description: "Requested page number"
+          in: query
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: "Movies from the list retrieved successfully"

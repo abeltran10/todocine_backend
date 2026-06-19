@@ -20,7 +20,7 @@ application.properties loads properties from three files, one per environment (p
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## Version: v3.6.9
+## Version: v3.6.10
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -115,9 +115,9 @@ Bearer format: JWT
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ------ |
 | userId | path | User ID | Yes | long |
-| vista | query | Filter by watched movies (true/false) | Yes | string |
-| votada | query | Filter by voted movies | Yes | string |
-| orderBy | query | Sorting field (e.g., popularity) | Yes | string |
+| vista | query | Filter by watched movies (true/false) | No | string |
+| votada | query | Filter by voted movies | No | string |
+| orderBy | query | Sorting field (e.g., popularity) | No | string |
 | page | query | Requested page number | Yes | integer |
 
 #### Responses
@@ -193,6 +193,285 @@ Returns a paginated list of all movie lists created by a specific user.
 | Security Schema | Scopes |
 | --------------- | ------ |
 | BearerAuth |  |
+
+
+### [GET] /listas
+**Get public lists of movies**
+
+Returns a paginated list of all public movie lists.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| page | query | Page index (1..N) | Yes | integer |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [POST] /listas
+**Create a new list of movies**
+
+Registers a new list of movies associated with the specified user.
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ListaReqDTO](#listareqdto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 201 | List created successfully | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [GET] /listas/{id}
+**Get details of the movie list**
+
+Returns a specific list.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List details retrieved successfully | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [PUT] /listas/{id}
+**Update an existing list**
+
+Updates the name, description, or the entire movie collection of a specific list.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ListaReqDTO](#listareqdto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List updated successfully | **application/json**: [ListaDTO](#listadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [DELETE] /listas/{id}
+**Delete a list of movies**
+
+Permanently removes the list from the user's profile.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 204 | List deleted successfully (No Content) |
+| 400 | Invalid data. |
+| 403 | Access denied. |
+| 404 | Not found. |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+
+### [GET] /listas/{id}/movies
+**Get paginated movies from the list**
+
+Returns paginated movies from the list.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| orderBy | query | Sorting field (e.g., title) | No | string |
+| direction | query | Sorting direction (e.g., asc) | No | string |
+| page | query | Requested page number | Yes | integer |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Movies from the list retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [POST] /listas/{listaId}/movies/{movieId}
+**Add movie to list**
+
+Adds a specific movie to the list. If the movie does not exist in the local database, it will be persisted.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| listaId | path |  | Yes | long |
+| movieId | path |  | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Movie added successfully. Returns the updated list. | **application/json**: [MovieListaDTO](#movielistadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+| 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [DELETE] /listas/{listaId}/movies/{movieId}
+**Remove movie from list**
+
+Removes the relationship between the movie and the list without deleting the movie from the global catalog.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| listaId | path |  | Yes | long |
+| movieId | path |  | Yes | long |
+
+#### Responses
+
+| Code | Description |
+| ---- | ----------- |
+| 204 | Movie removed from list successfully |
+| 400 | Invalid data. |
+| 403 | Access denied. |
+| 404 | Not found. |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+
+### [GET] /listas/{id}/valoraciones
+**Get a list of users's opinions about one specific list**
+
+Returns a list of valorations.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Opinions retrieved successfully | **application/json**: [ [ValoracionListaDTO](#valoracionlistadto) ]<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [PUT] /listas/{id}/valoraciones
+**Update or post an opinion**
+
+Updates or posts an opinion about the list
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ValoracionListaReqDTO](#valoracionlistareqdto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Opinion created or updated successfully | **application/json**: [ValoracionListaDTO](#valoracionlistadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
 
 ---
 
@@ -318,6 +597,7 @@ Requires ADMIN role.
 | --------------- | ------ |
 | BearerAuth |  |
 
+---
 
 ### [GET] /premios/{id}
 **Get specific award**
@@ -373,286 +653,6 @@ Requires ADMIN role.
 
 ---
 
-### [GET] /listas
-**Get public lists of movies**
-
-Returns a paginated list of all public movie lists.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| page | query | Page index (1..N) | Yes | integer |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Paginated lists retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [POST] /listas
-**Create a new list of movies**
-
-Registers a new list of movies associated with the specified user.
-
-#### Request Body
-
-| Required | Schema |
-| -------- | ------ |
-|  Yes | **application/json**: [ListaReqDTO](#listareqdto)<br> |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 201 | List created successfully | **application/json**: [ListaDTO](#listadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-
-### [GET] /listas/{id}
-**Get details of the movie list**
-
-Returns the full details of a specific list, including its metadata and movie collection.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | List details retrieved successfully | **application/json**: [ListaDTO](#listadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [PUT] /listas/{id}
-**Update an existing list**
-
-Updates the name, description, or the entire movie collection of a specific list.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Request Body
-
-| Required | Schema |
-| -------- | ------ |
-|  Yes | **application/json**: [ListaReqDTO](#listareqdto)<br> |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | List updated successfully | **application/json**: [ListaDTO](#listadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [DELETE] /listas/{id}
-**Delete a list of movies**
-
-Permanently removes the list from the user's profile.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 204 | List deleted successfully (No Content) |
-| 400 | Invalid data. |
-| 403 | Access denied. |
-| 404 | Not found. |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
-
-### [GET] /listas/{id}/movies
-**Get paginated list of movies from the list**
-
-Returns paginated list movies from the list.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Movies from the list retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-
-### [POST] /listas/{listaId}/movies/{movieId}
-**Add movie to list**
-
-Adds a specific movie to the list. If the movie does not exist in the local database, it will be persisted.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| listaId | path |  | Yes | long |
-| movieId | path |  | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Movie added successfully. Returns the updated list. | **application/json**: [MovieListaDTO](#movielistadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-| 502 | External server error. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [DELETE] /listas/{listaId}/movies/{movieId}
-**Remove movie from list**
-
-Removes the relationship between the movie and the list without deleting the movie from the global catalog.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| listaId | path |  | Yes | long |
-| movieId | path |  | Yes | long |
-
-#### Responses
-
-| Code | Description |
-| ---- | ----------- |
-| 204 | Movie removed from list successfully |
-| 400 | Invalid data. |
-| 403 | Access denied. |
-| 404 | Not found. |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-
----
-
-### [GET] /listas/{id}/valoraciones
-**Get a list of opinions about one specific list**
-
-Returns a list of opinions about one list.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Responses
-
-| Code | Description                     | Schema |
-| ---- |---------------------------------| ------ |
-| 200 | Opinions retrieved successfully | **application/json**: [ [ValoracionListaDTO](#valoracionlistadto) ]<br> |
-| 400 | Invalid data.                   |  |
-| 403 | Access denied.                  |  |
-| 404 | Not found.                      |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [PUT] /listas/{id}/valoraciones
-**Update or post an opinion**
-
-Updates or posts an opinion about the list
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Request Body
-
-| Required | Schema |
-| -------- | ------ |
-|  Yes | **application/json**: [ValoracionListaReqDTO](#valoracionlistareqdto)<br> |
-
-#### Responses
-
-| Code | Description                             | Schema |
-| ---- |-----------------------------------------| ------ |
-| 200 | Opinion created or updated successfully | **application/json**: [ValoracionListaDTO](#valoracionlistadto)<br> |
-| 400 | Invalid data.                           |  |
-| 403 | Access denied.                          |  |
-| 404 | Not found.                              |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
 ### Schemas
 
 #### UsuarioReqDTO
@@ -822,23 +822,23 @@ Updates or posts an opinion about the list
 
 #### ValoracionListaDTO
 
-| Name | Type | Description              | Required |
-| ---- | ---- |--------------------------| -------- |
-| listaId | long | Unique list ID           | Yes |
-| puntuacion | double | Rating                   | Yes |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| listaId | long | Unique list ID | Yes |
+| puntuacion | double | Rating | Yes |
 | comentario | string | A comment about the list | No |
-| username | string | Opinion owner            | Yes |
-| fecha | string | Opinion creation date    | Yes |
+| username | string | Opinion owner | Yes |
+| fecha | string | Opinion creation date | Yes |
 
 #### ValoracionListaReqDTO
 
-| Name | Type | Description              | Required |
-| ---- | ---- |--------------------------| -------- |
-| listaId | long | Unique list ID           | Yes |
-| puntuacion | double | Rating                   | Yes |
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| listaId | long | Unique list ID | Yes |
+| puntuacion | double | Rating | Yes |
 | comentario | string | A comment about the list | No |
-| username | string | Opinion owner            | Yes |
-| fecha | string | Opinion creation date    | No |
+| username | string | Opinion owner | Yes |
+| fecha | string | Opinion creation date | No |
 
 
 ## Entity-Relation Diagram
