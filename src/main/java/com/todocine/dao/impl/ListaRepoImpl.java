@@ -6,10 +6,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todocine.dao.ListaRepo;
 import com.todocine.entities.*;
 import com.todocine.utils.Paginator;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ListaRepoImpl extends BaseRepoImpl implements ListaRepo {
     private static final QMovie movie = QMovie.movie;
     private static final QLista lista = QLista.lista;
