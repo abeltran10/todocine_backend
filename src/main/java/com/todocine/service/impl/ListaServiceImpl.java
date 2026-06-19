@@ -236,34 +236,27 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Transactional(readOnly = true)
     public Paginator<MovieListaDTO> getMoviesByLista(Long listaId, String orderBy, String direction, Integer pagina) {
         Paginator<MovieListaDTO> paginator = new Paginator<>();
+        List<MovieListaDTO> movieListaDTOS = new ArrayList<>();
 
         Lista lista = listaDAO.findById(listaId)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
         if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
 
+            Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, 5, (pagina - 1) * 5);
 
-            String criterio = "fecha".equalsIgnoreCase(orderBy) ? "m.releaseDate" : "m.title";
-
-            Sort sort = "DESC".equalsIgnoreCase(direction)
-                    ? Sort.by(criterio).descending()
-                    : Sort.by(criterio).ascending();
-
-            Pageable pageable = PageRequest.of(pagina - 1, 5, sort);
-            Page<Movie> moviePage = listaDAO.findMovieByLista(listaId, pageable);
-
-            if (moviePage.isEmpty()) {
-                return paginator;
+            if (moviePage != null && !moviePage.getResults().isEmpty()) {
+                movieListaDTOS = moviePage.getResults().stream()
+                        .map(MovieListaMapper::toDTO)
+                        .toList();
             }
 
-            List<MovieListaDTO> movieListaDTOS = moviePage.getContent().stream()
-                    .map(MovieListaMapper::toDTO)
-                    .toList();
-
-            paginator.setPage(pagina);
-            paginator.setResults(movieListaDTOS);
-            paginator.setTotalResults((int) moviePage.getTotalElements());
-            paginator.setTotalPages(moviePage.getTotalPages());
+            if (!movieListaDTOS.isEmpty()) {
+                paginator.setPage(pagina);
+                paginator.setResults(movieListaDTOS);
+                paginator.setTotalResults(moviePage.getTotalResults());
+                paginator.setTotalPages(moviePage.getTotalPages());
+            }
 
             return paginator;
 

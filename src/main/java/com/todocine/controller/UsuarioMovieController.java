@@ -32,17 +32,6 @@ public class UsuarioMovieController {
         return responseEntity;
     }
 
-    /*@DeleteMapping("/{movieId}")
-    public ResponseEntity<Void> deleteUsuarioMovie(@NotNull @PathVariable("userId") Long userId,
-                                               @NotNull @PathVariable("movieId") Long movieId) throws NotFoudException,
-            ForbiddenException {
-
-            usuarioMovieService.deleteUsuarioMovie(userId, movieId);
-
-            ResponseEntity<Void> responseEntity = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            return responseEntity;
-    }*/
-
     @GetMapping
     public ResponseEntity<Paginator<MovieDetailDTO>> getUsuarioMovies(@NotNull @PathVariable("userId") Long userId,
                                                                       @RequestParam("vista") String vista,

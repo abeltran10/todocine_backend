@@ -8,12 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ListaDAO extends JpaRepository<Lista, Long> {
+public interface ListaDAO extends JpaRepository<Lista, Long>, ListaRepo {
 
     Page<Lista> findByUsuarioId(Long userId, Pageable pageable);
 
     Page<Lista> findByPublica(String publica, Pageable pageable);
 
-    @Query("SELECT m FROM Lista l JOIN l.movies m WHERE l.id = :listaId")
-    Page<Movie> findMovieByLista(@Param("listaId") Long listaId, Pageable pageable);
 }

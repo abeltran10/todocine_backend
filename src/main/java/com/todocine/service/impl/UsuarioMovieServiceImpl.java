@@ -45,9 +45,6 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
     @Autowired
     private MovieDAO movieDAO;
 
-    @Autowired
-    private UsuarioMovieRepo usuarioMovieRepo;
-
     @Override
     @Transactional(readOnly = true)
     public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, String orderBy, Integer page) {
@@ -58,7 +55,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
         if (getCurrentUserId().equals(userId)) {
 
-            usuarioMoviePaginator = usuarioMovieRepo.getUserMoviesByFilter(userId, filters, orderBy,21, (pagina) * 21);
+            usuarioMoviePaginator = usuarioMovieDAO.getUserMoviesByFilter(userId, filters, orderBy,21, (pagina) * 21);
 
             if (!usuarioMoviePaginator.getResults().isEmpty()) {
                 movieDetailDTOS = usuarioMoviePaginator.getResults().stream()
@@ -163,24 +160,5 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
         Double votosMedia = Math.round(((total + voto) / totalVotosTC) * 10.0) / 10.0;
         movieEntity.setVotosMediaTC(votosMedia);
     }
-
-    /*@Override
-    @Transactional
-    public void deleteUsuarioMovie(Long userId, Long movieId) throws ForbiddenException, NotFoudException {
-        if (getCurrentUserId().equals(userId)) {
-            Usuario u = new Usuario(userId);
-            Movie m = new Movie(movieId);
-
-            UsuarioMovie usuarioMovie = usuarioMovieDAO.findById(new UserMovieId(u, m)).orElse(null);
-
-            if (usuarioMovie != null) {
-                usuarioMovieDAO.delete(usuarioMovie);
-            } else {
-                throw new NotFoudException(FAVORITOS_NOTFOUND);
-            }
-        } else {
-            throw new ForbiddenException(USER_FORBIDDEN);
-        }
-    }*/
 
 }
