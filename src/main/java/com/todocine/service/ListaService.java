@@ -24,5 +24,5 @@ public interface ListaService {
 
     Paginator<ListaDTO> getListasPublicas(Integer page);
 
-    Paginator<MovieListaDTO> getMoviesByLista(Long listaId, Integer pagina);
+    Paginator<MovieListaDTO> getMoviesByLista(Long listaId, String orderBy, String direction, Integer pagina);
 }

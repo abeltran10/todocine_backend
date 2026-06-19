@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -233,30 +234,29 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
     @Override
     @Transactional(readOnly = true)
-    public Paginator<MovieListaDTO> getMoviesByLista(Long listaId, Integer pagina) {
+    public Paginator<MovieListaDTO> getMoviesByLista(Long listaId, String orderBy, String direction, Integer pagina) {
         Paginator<MovieListaDTO> paginator = new Paginator<>();
+        List<MovieListaDTO> movieListaDTOS = new ArrayList<>();
 
         Lista lista = listaDAO.findById(listaId)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
         if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
 
-            Pageable pageable = PageRequest.of(pagina - 1, 10);
+            Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, 5, (pagina - 1) * 5);
 
-            Page<Movie> moviePage = listaDAO.findMovieByLista(listaId, pageable);
-
-            if (moviePage.isEmpty()) {
-                return paginator;
+            if (moviePage != null && !moviePage.getResults().isEmpty()) {
+                movieListaDTOS = moviePage.getResults().stream()
+                        .map(MovieListaMapper::toDTO)
+                        .toList();
             }
 
-            List<MovieListaDTO> movieListaDTOS = moviePage.getContent().stream()
-                    .map(MovieListaMapper::toDTO)
-                    .toList();
-
-            paginator.setPage(pagina);
-            paginator.setResults(movieListaDTOS);
-            paginator.setTotalResults((int) moviePage.getTotalElements());
-            paginator.setTotalPages(moviePage.getTotalPages());
+            if (!movieListaDTOS.isEmpty()) {
+                paginator.setPage(pagina);
+                paginator.setResults(movieListaDTOS);
+                paginator.setTotalResults(moviePage.getTotalResults());
+                paginator.setTotalPages(moviePage.getTotalPages());
+            }
 
             return paginator;
 
