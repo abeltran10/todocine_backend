@@ -857,7 +857,8 @@ Requires ADMIN role.
 
 ### Classes diagram
 
-<img width="4096" height="466" alt="classes_diagram" src="https://github.com/user-attachments/assets/2af5f513-3e87-4071-a3fd-3c68b034c118" />
+<img width="4096" height="466" alt="classes_diagram" src="https://github.com/user-attachments/assets/56ce8513-9ea5-420f-858f-52eaf3a2792f" />
+
 
 
 
