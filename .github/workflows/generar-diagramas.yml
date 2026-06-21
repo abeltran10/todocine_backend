@@ -14,13 +14,11 @@ jobs:
     - name: Descargar repositorio
       uses: actions/checkout@v4
 
-    # 2. Usa una Action prefabricada de la comunidad que transforma .puml en imágenes (.png)
+    # 2. NUEVA ACTION: Corre el motor oficial de PlantUML
     - name: Renderizar archivos PlantUML
-      uses: xcruiser/plantuml-action@v1
+      uses: plantuml/plantuml-github-action@main
       with:
-        # Busca todos los archivos .puml dentro de la carpeta 'diagramas'
-        path: "src/main/resources/uml"
-        output_format: "png"
+        args: -v -tpng src/main/resources/uml/*.puml # Busca todos los .puml de la carpeta diagramas
 
     # 3. El robot guarda las imágenes generadas de vuelta en tu repositorio
     - name: Subir imágenes generadas al repositorio
