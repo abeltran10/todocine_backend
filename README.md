@@ -843,7 +843,7 @@ Requires ADMIN role.
 
 ## Entity-Relation Diagram
 
-<img width="1606" height="738" alt="entity-relation_diagram" src="https://github.com/user-attachments/assets/bed9cb7b-f2fb-4104-8e19-4cd907ca3514" />
+![Entity-Relation diagram](src/main/resources/sql/entity-relation_diagram.png)
 
 
 ## UML
