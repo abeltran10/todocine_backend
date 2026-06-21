@@ -12,7 +12,7 @@ jobs:
     steps:
     # 1. Descarga el código de tu repositorio en la máquina virtual
     - name: Descargar repositorio
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     # 2. Instala Java y Graphviz (Herramientas necesarias para que funcione PlantUML)
     - name: Instalar dependencias del sistema
