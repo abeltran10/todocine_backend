@@ -848,16 +848,16 @@ Requires ADMIN role.
 
 ## UML
 
-### Use case diagram
+### Use cases diagram
 
-<img width="885" height="1677" alt="case_use_diagram" src="https://github.com/user-attachments/assets/5b85afd1-63a0-4d71-800d-ab95798c26fd" />
+![Use cases](src/main/resources/uml/case_use_diagram.png)
 
 
 
 
 ### Classes diagram
 
-<img width="4096" height="466" alt="classes_diagram" src="https://github.com/user-attachments/assets/56ce8513-9ea5-420f-858f-52eaf3a2792f" />
+![Classes diagram](src/main/resources/uml/classes_diagram.png)
 
 
 
