@@ -1,0 +1,184 @@
+@startuml
+skinparam ClassBackgroundColor white
+skinparam ClassBorderColor #005580
+skinparam RelationshipColor #005580
+skinparam ArrowColor #005580
+hide circle
+
+package "Controllers" {
+    class GanadorController
+    class MovieController
+    class PremioController
+    class UsuarioController
+    class UsuarioMovieController
+    class UsuarioListaController
+    class ListaController
+}
+
+package "Services (Interfaces)" {
+    interface CategoriaPremioService
+    interface GanadorService
+    interface MovieService
+    interface PremioService
+    interface TMDBService
+    interface UserService
+    interface UsuarioMovieService
+    interface ListaService
+    interface ValoracionListaService
+}
+
+package "Service Implementations" {
+    class CategoriaPremioServiceImpl
+    class GanadorServiceImpl
+    class MovieServiceImpl
+    class PremioServiceImpl
+    class TMDBServiceImpl
+    class UserServiceImpl
+    class UsuarioMovieServiceImpl
+    class ListaServiceImpl
+    class ValoracionListaServiceImpl
+}
+
+package "DAOs / Repositories" {
+    interface CategoriaDAO
+    interface GanadorDAO
+    interface MovieDAO
+    interface PremioDAO
+    interface UsuarioDAO
+    interface UsuarioMovieDAO
+    interface UsuarioMovieRepo
+    interface CategoriaPremioDAO
+    class UsuarioMovieRepoImpl
+    interface ListaDAO
+    interface ValoracionListaDAO
+    class ListaRepoImpl
+    interface ListaRepo
+}
+
+package "Entities" {
+    class Categoria
+    class CategoriaPremio
+    class Ganador
+    class Movie
+    class Premio
+    class Usuario
+    class UsuarioMovie
+    class Lista
+    class ValoracionLista
+}
+
+package "DTOs" {
+    class GanadorReqDTO
+    class GanadorDTO
+    class UsuarioMovieDTO
+    class UsuarioReqDTO
+    class CategoriaDTO
+    class MovieDetailDTO
+    class MovieDTO
+    class PremioDTO
+    class UsuarioDTO
+    class ListaDTO
+    class ListaReqDTO
+    class MovieListaDTO
+    class ValoracionListaReqDTO
+    class ValoracionListaDTO
+}
+
+' -------------------------
+' IMPLEMENTATIONS
+' -------------------------
+CategoriaPremioServiceImpl ..|> CategoriaPremioService
+GanadorServiceImpl ..|> GanadorService
+MovieServiceImpl ..|> MovieService
+PremioServiceImpl ..|> PremioService
+TMDBServiceImpl ..|> TMDBService
+UserServiceImpl ..|> UserService
+UsuarioMovieServiceImpl ..|> UsuarioMovieService
+ListaServiceImpl ..|> ListaService
+ValoracionListaServiceImpl ..|> ValoracionListaService
+
+UsuarioMovieRepoImpl ..|> UsuarioMovieRepo
+ListaRepoImpl ..|> ListaRepo
+
+UsuarioMovieDAO ..|> UsuarioMovieRepo
+ListaDAO ..|> ListaRepo
+
+' -------------------------
+' CONTROLLER -> SERVICE
+' -------------------------
+GanadorController --> GanadorService
+MovieController --> MovieService
+PremioController --> PremioService
+PremioController --> CategoriaPremioService
+UsuarioController --> UserService
+UsuarioController --> UsuarioMovieService
+UsuarioMovieController --> UsuarioMovieService
+UsuarioListaController --> ListaService
+ListaController --> ListaService
+ListaController --> ValoracionListaService
+
+' -------------------------
+' SERVICE IMPL -> DAO
+' -------------------------
+GanadorServiceImpl --> GanadorDAO
+GanadorServiceImpl --> CategoriaDAO
+MovieServiceImpl --> MovieDAO
+MovieServiceImpl --> UsuarioMovieDAO
+PremioServiceImpl --> PremioDAO
+UserServiceImpl --> UsuarioDAO
+UsuarioMovieServiceImpl --> UsuarioMovieDAO
+UsuarioMovieServiceImpl --> MovieDAO
+CategoriaPremioServiceImpl --> CategoriaPremioDAO
+ListaServiceImpl --> ListaDAO
+ListaServiceImpl --> UsuarioDAO
+ListaServiceImpl --> MovieDAO
+ListaServiceImpl --> ValoracionListaDAO
+ValoracionListaServiceImpl --> ListaDAO
+ValoracionListaServiceImpl --> ValoracionListaDAO
+ValoracionListaServiceImpl --> UsuarioDAO
+
+' -------------------------
+' SERVICE IMPL -> DTO
+' -------------------------
+UserServiceImpl ..> UsuarioReqDTO : handles
+UserServiceImpl ..> UsuarioDTO : returns
+
+MovieServiceImpl ..> MovieDetailDTO : returns
+MovieServiceImpl ..> MovieDTO : returns
+
+GanadorServiceImpl ..> GanadorReqDTO : handles
+GanadorServiceImpl ..> GanadorDTO : returns
+
+UsuarioMovieServiceImpl ..> UsuarioMovieDTO : handles
+PremioServiceImpl ..> PremioDTO : returns
+CategoriaPremioServiceImpl ..> CategoriaDTO : returns
+
+ListaServiceImpl ..> ListaReqDTO: handles
+ListaServiceImpl ..> ListaDTO: returns
+ListaServiceImpl ..> MovieListaDTO: returns
+
+ValoracionListaServiceImpl ..> ValoracionListaReqDTO: handles
+ValoracionListaServiceImpl ..> ValoracionListaDTO: returns
+
+' -------------------------
+' ENTITY RELATIONSHIPS (ORM)
+' -------------------------
+Premio "1" *-- "many" CategoriaPremio
+Categoria "1" *-- "many" CategoriaPremio
+CategoriaPremio "1" *-- "many" Ganador
+Movie "1" *-- "many" Ganador
+Usuario "1" *-- "many" UsuarioMovie
+Movie "1" *-- "many" UsuarioMovie
+Usuario "1" *-- "many" Lista
+Lista "many"  *-- "many" Movie
+Lista "1" *-- "many" ValoracionLista
+Usuario "1" *-- "many" ValoracionLista
+
+' -------------------------
+' SERVICE -> SERVICE
+' -------------------------
+MovieServiceImpl --> TMDBService : uses
+UsuarioMovieServiceImpl --> TMDBService : uses
+ListaServiceImpl --> TMDBService: uses
+
+@enduml
