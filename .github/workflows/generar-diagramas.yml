@@ -14,13 +14,23 @@ jobs:
     - name: Descargar repositorio
       uses: actions/checkout@v4
 
-    # 2. NUEVA ACTION: Corre el motor oficial de PlantUML
-    - name: Renderizar archivos PlantUML
-      uses: plantuml/plantuml-github-action@main
-      with:
-        args: -v -tpng src/main/resources/uml/*.puml # Busca todos los .puml de la carpeta diagramas
+    # 2. Instala Java y Graphviz (Herramientas necesarias para que funcione PlantUML)
+    - name: Instalar dependencias del sistema
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y graphviz default-jre
 
-    # 3. El robot guarda las imágenes generadas de vuelta en tu repositorio
+    # 3. Descarga la herramienta oficial de PlantUML directamente de sus servidores
+    - name: Descargar PlantUML
+      run: |
+        curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2024.7/plantuml-1.2024.7.jar
+
+    # 4. Ejecuta el comando para renderizar todos los archivos .puml de tu carpeta
+    - name: Generar imágenes de los diagramas
+      run: |
+        java -jar plantuml.jar -tpng src/main/resources/uml/*.puml
+
+    # 5. Guarda y sube las imágenes generadas a tu repositorio
     - name: Subir imágenes generadas al repositorio
       run: |
         git config --global user.name "github-actions[bot]"
