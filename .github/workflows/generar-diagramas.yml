@@ -3,7 +3,7 @@ name: Generador de Diagramas UML
 # El robot se activará cada vez que hagas un push a la rama 'main'
 on:
   push:
-    branches: [ "development" ]
+    branches: [ "master" ]
 
 jobs:
   render-uml:
