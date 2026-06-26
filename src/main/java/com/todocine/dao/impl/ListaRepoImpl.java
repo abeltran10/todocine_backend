@@ -17,10 +17,11 @@ public class ListaRepoImpl extends BaseRepoImpl implements ListaRepo {
     private static final QLista lista = QLista.lista;
 
     @Override
-    public Paginator<Movie> getMoviesByListaId(Long listaId, String orderBy, String direction, int limit, int offset, int pagina) {
+    public Paginator<Movie> getMoviesByListaId(Long listaId, String orderBy, String direction, int limit, int pagina) {
         List<Movie> resultList = new ArrayList<>();
         Paginator<Movie> paginator = new Paginator<>();
         long total = 0L;
+        int offset = (pagina - 1) * limit;
 
         JPAQueryFactory queryFactory = new JPAQueryFactory(JPQLTemplates.DEFAULT, entityManager);
 

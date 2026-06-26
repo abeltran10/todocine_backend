@@ -94,7 +94,7 @@ public class CheckUserMovieUnitTest {
         Paginator<UsuarioMovie> usuarioMovies = new Paginator<>();
         usuarioMovies.setResults(Arrays.asList(usuarioMovie));
 
-        Mockito.when(usuarioMovieRepo.getUserMoviesByFilter(usuarioDTO.getId(), null, null,21, 0, 1)).thenReturn(usuarioMovies);
+        Mockito.when(usuarioMovieRepo.getUserMoviesByFilter(usuarioDTO.getId(), null, null,21,  1)).thenReturn(usuarioMovies);
 
         Paginator<MovieDetailDTO> paginator = usuarioMovieService.getUsuarioMovies(usuarioDTO.getId(), null, null, 1);
         assertNotNull(paginator);

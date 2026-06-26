@@ -243,9 +243,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
 
-            Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, 5, (pagina - 1) * 5, pagina);
+            Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, 5, pagina);
 
-            if (moviePage != null && !moviePage.getResults().isEmpty()) {
+            if (!moviePage.getResults().isEmpty()) {
                 movieListaDTOS = moviePage.getResults().stream()
                         .map(MovieListaMapper::toDTO)
                         .toList();
