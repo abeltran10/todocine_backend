@@ -3,6 +3,8 @@ package com.todocine.utils.mapper;
 import com.todocine.dto.response.GanadorDTO;
 import com.todocine.entities.Ganador;
 
+import java.time.format.DateTimeFormatter;
+
 public class GanadorMapper {
 
     public static GanadorDTO toDTO(Ganador ganador) {
@@ -18,7 +20,10 @@ public class GanadorMapper {
         ganadorDTO.setTitle(ganador.getId().getMovie().getTitle());
         ganadorDTO.setOverview(ganador.getId().getMovie().getOverview());
         ganadorDTO.setPosterPath(ganador.getId().getMovie().getPosterPath());
-        ganadorDTO.setReleaseDate(ganador.getId().getMovie().getReleaseDate());
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String fecha = ganador.getId().getMovie().getReleaseDate().format(formato);
+        ganadorDTO.setReleaseDate(fecha);
 
         return ganadorDTO;
     }

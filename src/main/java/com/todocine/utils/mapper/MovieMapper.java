@@ -5,6 +5,8 @@ import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.VideoDTO;
 import com.todocine.entities.Movie;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,11 @@ public class MovieMapper {
         movie.setTitle(movieDTO.getTitle());
         movie.setPosterPath(movieDTO.getPosterPath());
         movie.setOverview(movieDTO.getOverview());
-        movie.setReleaseDate(movieDTO.getReleaseDate());
+
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fecha = LocalDate.parse(movieDTO.getReleaseDate(), formateador);
+        movie.setReleaseDate(fecha);
+
         movie.setPopularity(movieDTO.getPopularity());
         movie.setVoteCount(movieDTO.getVoteCount());
         movie.setVoteAverage(movieDTO.getVoteAverage());
@@ -38,7 +44,11 @@ public class MovieMapper {
         movieDTO.setTitle(movie.getTitle());
         movieDTO.setPosterPath(movie.getPosterPath());
         movieDTO.setOverview(movie.getOverview());
-        movieDTO.setReleaseDate(movie.getReleaseDate());
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String fecha = movie.getReleaseDate().format(formato);
+        movieDTO.setReleaseDate(fecha);
+
         movieDTO.setPopularity(movie.getPopularity());
         movieDTO.setVoteCount(movie.getVoteCount());
         movieDTO.setVoteAverage(movie.getVoteAverage());

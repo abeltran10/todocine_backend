@@ -21,6 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class CheckUserMovieTest {
 
         Movie movie = new Movie(906126L, "La sociedad de la nieve"
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
-                , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", "2023-12-13"
+                , "El 13 de octubre de 1972, el vuelo 571 de la Fuerza Aérea Uruguaya, fl…", LocalDate.of(2023, 12, 13)
                 , 1284.858, 467, 8.158, "es",  0, 0D);
         UsuarioMovie usuarioMovie = new UsuarioMovie(new UserMovieId(usuario, movie));
         usuarioMovie.setVista("N");

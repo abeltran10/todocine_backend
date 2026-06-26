@@ -4,7 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -23,7 +26,7 @@ public class Movie {
     @Column(length = 980)
     private String overview;
 
-    private String releaseDate;
+    private LocalDate releaseDate;
 
     private Double popularity;
 
@@ -44,7 +47,7 @@ public class Movie {
         this.id = id;
     }
 
-    public Movie(Long id, String originalTitle, String title, String posterPath, String overview, String releaseDate,
+    public Movie(Long id, String originalTitle, String title, String posterPath, String overview, LocalDate releaseDate,
                  Double popularity, Integer voteCount, Double voteAverage, String originalLanguage,
                  Integer totalVotosTC, Double votosMediaTC) {
         this.id = id;
@@ -101,11 +104,11 @@ public class Movie {
         this.overview = overview;
     }
 
-    public String getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 
