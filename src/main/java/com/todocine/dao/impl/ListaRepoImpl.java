@@ -3,6 +3,7 @@ package com.todocine.dao.impl;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.todocine.configuration.Constants;
 import com.todocine.dao.ListaRepo;
 import com.todocine.entities.*;
 import com.todocine.utils.Paginator;
@@ -28,7 +29,7 @@ public class ListaRepoImpl extends BaseRepoImpl implements ListaRepo {
         JPAQuery<Movie> q =  queryFactory.select(movie).from(lista).innerJoin(lista.movies, movie).where(lista.id.eq(listaId));
         JPAQuery<Long> count = queryFactory.select(movie.count()).from(lista).innerJoin(lista.movies, movie).where(lista.id.eq(listaId));
 
-        if ("fecha".equalsIgnoreCase(orderBy)) {
+        if (Constants.ORDER_ANYO.equalsIgnoreCase(orderBy)) {
             q = "desc".equalsIgnoreCase(direction) ? q.orderBy(movie.releaseDate.desc()) : q.orderBy(movie.releaseDate.asc());
         } else {
             q = "desc".equalsIgnoreCase(direction) ? q.orderBy(movie.title.desc()) : q.orderBy(movie.title.asc());
