@@ -11,5 +11,4 @@ public interface TMDBService {
 
     Map<String, Object> getMoviesPlayingNow(String country, Integer pagina) throws IOException;
 
-    Map<String, Object> getVideosByMovieId(String movieId) throws IOException;
 }

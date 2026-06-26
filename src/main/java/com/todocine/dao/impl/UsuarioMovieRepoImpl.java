@@ -53,6 +53,8 @@ public class UsuarioMovieRepoImpl extends BaseRepoImpl implements UsuarioMovieRe
             q = q.orderBy(usuarioMovie.id.movie.title.asc());
         else if (Constants.ORDER_ANYO.equalsIgnoreCase(orderBy))
             q = q.orderBy(usuarioMovie.id.movie.releaseDate.asc());
+        else
+            q = q.orderBy(usuarioMovie.id.movie.id.asc());
 
         total = count.fetchOne();
 
