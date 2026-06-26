@@ -19,7 +19,7 @@ public class UsuarioMovieRepoImpl extends BaseRepoImpl implements UsuarioMovieRe
     private static final QUsuarioMovie usuarioMovie = QUsuarioMovie.usuarioMovie;
     @Override
     public Paginator<UsuarioMovie> getUserMoviesByFilter(Long usuarioId, Map<String, String> filters, String orderBy,
-                                                         int limit, int offset) {
+                                                         int limit, int offset, int pagina) {
         List<UsuarioMovie> resultList = new ArrayList<>();
         Paginator<UsuarioMovie> paginator = new Paginator<>();
         JPAQueryFactory queryFactory = new JPAQueryFactory(JPQLTemplates.DEFAULT, entityManager);
@@ -60,6 +60,7 @@ public class UsuarioMovieRepoImpl extends BaseRepoImpl implements UsuarioMovieRe
         paginator.setResults(resultList);
         paginator.setTotalResults((int) total);
         paginator.setTotalPages((int) Math.ceil(total/(double)limit));
+        paginator.setPage(pagina);
 
         return paginator;
     }

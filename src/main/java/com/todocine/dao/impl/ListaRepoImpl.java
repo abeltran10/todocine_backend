@@ -17,7 +17,7 @@ public class ListaRepoImpl extends BaseRepoImpl implements ListaRepo {
     private static final QLista lista = QLista.lista;
 
     @Override
-    public Paginator<Movie> getMoviesByListaId(Long listaId, String orderBy, String direction, int limit, int offset) {
+    public Paginator<Movie> getMoviesByListaId(Long listaId, String orderBy, String direction, int limit, int offset, int pagina) {
         List<Movie> resultList = new ArrayList<>();
         Paginator<Movie> paginator = new Paginator<>();
         long total = 0L;
@@ -40,6 +40,7 @@ public class ListaRepoImpl extends BaseRepoImpl implements ListaRepo {
         paginator.setResults(resultList);
         paginator.setTotalResults((int) total);
         paginator.setTotalPages((int) Math.ceil(total/(double)limit));
+        paginator.setPage(pagina);
 
         return paginator;
     }

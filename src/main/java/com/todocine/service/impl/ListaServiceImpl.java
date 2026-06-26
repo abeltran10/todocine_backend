@@ -243,7 +243,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
 
-            Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, 5, (pagina - 1) * 5);
+            Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, 5, (pagina - 1) * 5, pagina);
 
             if (moviePage != null && !moviePage.getResults().isEmpty()) {
                 movieListaDTOS = moviePage.getResults().stream()
@@ -252,7 +252,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
             }
 
             if (!movieListaDTOS.isEmpty()) {
-                paginator.setPage(pagina);
+                paginator.setPage(moviePage.getPage());
                 paginator.setResults(movieListaDTOS);
                 paginator.setTotalResults(moviePage.getTotalResults());
                 paginator.setTotalPages(moviePage.getTotalPages());
