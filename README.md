@@ -12,11 +12,11 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v3.6.10](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.10)
+- [v3.6.11](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.11)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.10) compressed file. 
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.11) compressed file. 
 - Add application.properties and Constants.java files to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
