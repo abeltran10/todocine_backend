@@ -3,6 +3,8 @@ package com.todocine.utils.mapper;
 import com.todocine.dto.response.MovieListaDTO;
 import com.todocine.entities.Movie;
 
+import java.time.format.DateTimeFormatter;
+
 public class MovieListaMapper {
 
     public static MovieListaDTO toDTO(Movie movie) {
@@ -11,7 +13,10 @@ public class MovieListaMapper {
         movieListaDTO.setTitle(movie.getTitle());
         movieListaDTO.setOverview(movie.getOverview());
         movieListaDTO.setPosterPath(movie.getPosterPath());
-        movieListaDTO.setReleaseDate(movie.getReleaseDate());
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String fecha = movie.getReleaseDate().format(formato);
+        movieListaDTO.setReleaseDate(fecha);
 
         return movieListaDTO;
     }

@@ -48,14 +48,13 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
     @Override
     @Transactional(readOnly = true)
     public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, String orderBy, Integer page) {
-        int pagina = page - 1;
         Paginator<MovieDetailDTO> paginator = new Paginator<>();
         Paginator<UsuarioMovie> usuarioMoviePaginator = new Paginator<>();
         List<MovieDetailDTO> movieDetailDTOS = new ArrayList<>();
 
         if (getCurrentUserId().equals(userId)) {
 
-            usuarioMoviePaginator = usuarioMovieDAO.getUserMoviesByFilter(userId, filters, orderBy,21, (pagina) * 21);
+            usuarioMoviePaginator = usuarioMovieDAO.getUserMoviesByFilter(userId, filters, orderBy,12, page);
 
             if (!usuarioMoviePaginator.getResults().isEmpty()) {
                 movieDetailDTOS = usuarioMoviePaginator.getResults().stream()
@@ -72,7 +71,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
             if (!movieDetailDTOS.isEmpty()) {
                 paginator.setTotalPages(usuarioMoviePaginator.getTotalPages());
                 paginator.setTotalResults(usuarioMoviePaginator.getTotalResults());
-                paginator.setPage(page);
+                paginator.setPage(usuarioMoviePaginator.getPage());
                 paginator.setResults(movieDetailDTOS);
             }
 

@@ -27,9 +27,6 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @Autowired
-    private UsuarioMovieService usuarioMovieService;
-
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> getUsuario(@NotNull @PathVariable("id") Long id) {

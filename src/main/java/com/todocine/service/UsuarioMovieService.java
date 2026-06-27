@@ -12,5 +12,4 @@ public interface UsuarioMovieService {
 
     public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO);
 
-    //public void deleteUsuarioMovie(Long userId, Long movieId);
 }

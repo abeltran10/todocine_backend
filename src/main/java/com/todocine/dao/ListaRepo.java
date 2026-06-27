@@ -5,5 +5,5 @@ import com.todocine.utils.Paginator;
 
 public interface ListaRepo {
 
-    Paginator<Movie> getMoviesByListaId(Long listaId, String orderBy, String direction, int limit, int offset);
+    Paginator<Movie> getMoviesByListaId(Long listaId, String orderBy, String direction, int limit, int pagina);
 }

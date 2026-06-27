@@ -14,7 +14,7 @@ public class ValoracionMapper {
         valoracionListaDTO.setPuntuacion(valoracionLista.getPuntuacion());
         valoracionListaDTO.setUsername(valoracionLista.getId().getUsuario().getUsername());
 
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String fecha = valoracionLista.getFecha().format(formato);
         valoracionListaDTO.setFecha(fecha);
 
