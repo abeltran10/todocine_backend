@@ -37,12 +37,13 @@ rectangle "Todo Cine System" {
     package "Custom lists" {
         U -- (Create list)
         U -- (Edit list)
-        U -- (View list)
+        U -- (View owned lists)
         U -- (View public lists)
         U -- (Delete list)
         U -- (Add movie to list)
         U -- (Remove movie from list)
-        U -- (Share your opinion about the list)
+        U -- (Share your opinion about a list)
+        U -- (View opinions about a list)
     }
 }
 
