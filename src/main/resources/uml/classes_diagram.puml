@@ -100,8 +100,8 @@ ValoracionListaServiceImpl ..|> ValoracionListaService
 UsuarioMovieRepoImpl ..|> UsuarioMovieRepo
 ListaRepoImpl ..|> ListaRepo
 
-UsuarioMovieDAO ..|> UsuarioMovieRepo
-ListaDAO ..|> ListaRepo
+UsuarioMovieDAO --|> UsuarioMovieRepo
+ListaDAO --|> ListaRepo
 
 ' -------------------------
 ' CONTROLLER -> SERVICE
