@@ -866,7 +866,7 @@ Requires ADMIN role.
 
 ## Demo
 
-Demo is allocated in https://render.com/, there is a free service with PostgresSQL database. You can create a user or, in case you don't want:
+Demo is allocated in https://render.com/, there is a free service with PostgresSQL database. You can create an user or, in case you don't want:
 
 - username: test_demo
 - password: 1234
