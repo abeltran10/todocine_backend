@@ -38,8 +38,6 @@ public class WebConfiguration {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.expiration-time}")
-    private long jwtExpirationTime;
 
     @Autowired
     private UsuarioService usuarioService;
@@ -112,7 +110,7 @@ public class WebConfiguration {
                 )
 
                 //JWT filters con orden correcto
-                .addFilter(new JWTAuthenticationFilter(authenticationManager, jwtSecret, jwtExpirationTime))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager, jwtSecret))
                 .addFilterBefore(
                         new JWTAuthorisationFilter(authenticationManager, jwtSecret),
                         UsernamePasswordAuthenticationFilter.class

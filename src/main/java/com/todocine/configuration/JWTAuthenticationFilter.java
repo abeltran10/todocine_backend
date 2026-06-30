@@ -31,12 +31,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private String secretKey;
 
-    private long expirationTime;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, String secretKey, long expirationTime) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, String secretKey) {
         this.authManager = authenticationManager;
         this.secretKey = secretKey;
-        this.expirationTime = expirationTime;
     }
 
     @Override
@@ -72,7 +70,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = JWT.create()
                 .withSubject(mapper.writeValueAsString(usuarioDTO))
-                .withExpiresAt(new Date(System.currentTimeMillis() + this.expirationTime))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 3600000))
                 .sign(Algorithm.HMAC256(this.secretKey));
 
         response.addHeader(HEADER_AUTHORIZACION_KEY, TOKEN_BEARER_PREFIX + " " + token);
