@@ -22,10 +22,14 @@ import java.io.IOException;
 
 import static com.todocine.configuration.Constants.*;
 
+
 public class JWTAuthorisationFilter extends BasicAuthenticationFilter {
 
-    public JWTAuthorisationFilter(AuthenticationManager authenticationManager) {
+    private String secretKey;
+
+    public JWTAuthorisationFilter(AuthenticationManager authenticationManager, String secretKey) {
         super(authenticationManager);
+        this.secretKey = secretKey;
     }
 
     @Override
@@ -58,7 +62,7 @@ public class JWTAuthorisationFilter extends BasicAuthenticationFilter {
 
         if (!token.isEmpty()) {
             // Se procesa el token y se recupera el usuario.
-            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SUPER_SECRET_KEY))
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(this.secretKey))
                     .build(); //Reusable verifier instance
             String usuarioString = verifier.verify(token).getSubject();
 
