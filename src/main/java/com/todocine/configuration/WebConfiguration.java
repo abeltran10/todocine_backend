@@ -35,6 +35,12 @@ public class WebConfiguration {
     @Value("${permit.all.paths}")
     private String[] paths;
 
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${jwt.expiration-time}")
+    private long jwtExpirationTime;
+
     @Autowired
     private UsuarioService usuarioService;
 
@@ -106,9 +112,9 @@ public class WebConfiguration {
                 )
 
                 //JWT filters con orden correcto
-                .addFilter(new JWTAuthenticationFilter(authenticationManager))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager, jwtSecret, jwtExpirationTime))
                 .addFilterBefore(
-                        new JWTAuthorisationFilter(authenticationManager),
+                        new JWTAuthorisationFilter(authenticationManager, jwtSecret),
                         UsernamePasswordAuthenticationFilter.class
                 );
 

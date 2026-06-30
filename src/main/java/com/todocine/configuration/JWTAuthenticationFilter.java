@@ -24,12 +24,19 @@ import java.util.Date;
 
 import static com.todocine.configuration.Constants.*;
 
+
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authManager;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    private String secretKey;
+
+    private long expirationTime;
+
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, String secretKey, long expirationTime) {
         this.authManager = authenticationManager;
+        this.secretKey = secretKey;
+        this.expirationTime = expirationTime;
     }
 
     @Override
@@ -65,8 +72,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = JWT.create()
                 .withSubject(mapper.writeValueAsString(usuarioDTO))
-                .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
-                .sign(Algorithm.HMAC256(SUPER_SECRET_KEY));
+                .withExpiresAt(new Date(System.currentTimeMillis() + this.expirationTime))
+                .sign(Algorithm.HMAC256(this.secretKey));
 
         response.addHeader(HEADER_AUTHORIZACION_KEY, TOKEN_BEARER_PREFIX + " " + token);
 
