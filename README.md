@@ -866,9 +866,8 @@ Requires ADMIN role.
 
 ## Demo
 
-Demo v6.1.0 release
+[Demo v3.6.11 release](https://todocine-backend.onrender.com/api/index.html)
 
-[TodoCine-Angular[v6.1.0].webm](https://github.com/user-attachments/assets/14ba5b37-85af-4e68-a30a-d3b8c93e9754)
 
 
 
