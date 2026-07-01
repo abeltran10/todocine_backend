@@ -12,15 +12,15 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v3.6.11](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.11)
+- [v3.6.12](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.12)
 
 ## Install
 
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.11) compressed file. 
-- Add application.properties and Constants.java files to project.
+- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.12) compressed file. 
+- Add application.properties to project.
 - Execute [mvn clean install] command and deploy .jar file generated in one server.
 
-## Version: v3.6.11
+## Version: v3.6.12
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -45,11 +45,6 @@ Bearer format: JWT
 | 400 | Invalid data. |  |
 | 409 | Resource already exists. |  |
 
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
 
 ### [GET] /usuarios/{id}
 **Get user by ID**
