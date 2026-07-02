@@ -8,6 +8,8 @@ public class Constants {
 
     public static final String TOKEN_BEARER_PREFIX = "Bearer";
 
+    public static long TOKEN_EXPIRATION_TIME= 60 * 60 * 1000;
+
 
     //EXCEPTIONS
 
