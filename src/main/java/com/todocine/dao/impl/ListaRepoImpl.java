@@ -21,7 +21,7 @@ public class ListaRepoImpl extends BaseRepoImpl implements ListaRepo {
     public Paginator<Movie> getMoviesByListaId(Long listaId, String orderBy, String direction, int limit, int pagina) {
         List<Movie> resultList = new ArrayList<>();
         Paginator<Movie> paginator = new Paginator<>();
-        long total = 0L;
+        long total = 0;
         int offset = (pagina - 1) * limit;
 
         JPAQueryFactory queryFactory = new JPAQueryFactory(JPQLTemplates.DEFAULT, entityManager);
