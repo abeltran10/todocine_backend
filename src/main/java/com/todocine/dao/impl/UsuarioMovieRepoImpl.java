@@ -22,7 +22,7 @@ public class UsuarioMovieRepoImpl extends BaseRepoImpl implements UsuarioMovieRe
                                                          int limit, int pagina) {
         List<UsuarioMovie> resultList = new ArrayList<>();
         Paginator<UsuarioMovie> paginator = new Paginator<>();
-        long total = 0L;
+        long total = 0;
         int offset = (pagina - 1) * limit;
 
         JPAQueryFactory queryFactory = new JPAQueryFactory(JPQLTemplates.DEFAULT, entityManager);

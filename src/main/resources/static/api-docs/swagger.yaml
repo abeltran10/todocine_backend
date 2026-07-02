@@ -17,8 +17,6 @@ paths:
     post:
       summary: "Insert a new user"
       tags: ["Users"]
-      security:
-        - BearerAuth: []
       requestBody:
         description: "New user data"
         required: true
