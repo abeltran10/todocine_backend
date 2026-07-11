@@ -546,6 +546,7 @@ Requires ADMIN role.
 | 200 | List of categories. | **application/json**: [ [CategoriaDTO](#categoriadto) ]<br> |
 | 400 | Invalid data. |  |
 | 403 | Access denied. |  |
+| 404 | Not found. |  |
 
 ##### Security
 
