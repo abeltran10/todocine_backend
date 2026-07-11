@@ -613,12 +613,13 @@ Updates or posts an opinion about the list
 
 #### UsuarioReqDTO
 
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| id | long | Unique identifier | No |
-| username | string | Access username | Yes |
-| password | string (string) | Access password | Yes |
-| rol | string | Assigned role (USER/ADMIN) | No |
+| Name     | Type | Description                    | Required |
+|----------| ---- |--------------------------------| -------- |
+| id       | long | Unique identifier              | No |
+| username | string | Access username                | Yes |
+| password | string (string) | Access password                | Yes |
+| rol      | string | Assigned role (USER/ADMIN)     | No |
+| captcha  | string | Token for captcha verification | No |
 
 #### UsuarioDTO
 

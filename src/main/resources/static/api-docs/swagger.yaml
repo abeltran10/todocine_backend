@@ -728,6 +728,7 @@ components:
         username: { type: string, description: "Access username" }
         password: { type: string, format: string, description: "Access password" }
         rol: { type: string, description: "Assigned role (USER/ADMIN)" }
+        captcha: { type: string, description: "Token for captcha varification" }
 
     UsuarioDTO:
       type: object

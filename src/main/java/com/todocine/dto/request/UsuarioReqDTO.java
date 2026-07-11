@@ -16,7 +16,6 @@ public class UsuarioReqDTO {
 
     private String rol;
 
-    @NotBlank
     private String captcha;
 
     public UsuarioReqDTO() {
