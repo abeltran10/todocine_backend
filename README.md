@@ -12,13 +12,7 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v3.6.13](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.13)
-
-## Install
-
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.13) compressed file. 
-- Add application.properties to project.
-- Execute [mvn clean install] command and deploy .jar file generated in one server.
+- [v3.6.13.1](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.13.1)
 
 ## Version: v3.6.13.1
 
@@ -833,7 +827,7 @@ Demo is hosted in https://render.com/, there is a free service with PostgresSQL 
 - username: test_demo
 - password: 1234
 
-[Demo v3.6.13 release](https://todocine-backend.onrender.com/api/index.html)
+[Demo v3.6.13.1 release](https://todocine-backend.onrender.com/api/index.html)
 
 
 
