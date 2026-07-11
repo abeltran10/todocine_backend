@@ -188,6 +188,8 @@ Returns a paginated list of all movie lists created by a specific user.
 | --------------- | ------ |
 | BearerAuth |  |
 
+---
+
 ### [GET] /listas
 **Get public lists of movies**
 
@@ -376,6 +378,65 @@ Removes the relationship between the movie and the list without deleting the mov
 | --------------- | ------ |
 | BearerAuth |  |
 
+
+### [GET] /listas/{id}/valoraciones
+**Get a list of users's opinions about one specific list**
+
+Returns a list of valorations.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Opinions retrieved successfully | **application/json**: [ [ValoracionListaDTO](#valoracionlistadto) ]<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [PUT] /listas/{id}/valoraciones
+**Update or post an opinion**
+
+Updates or posts an opinion about the list
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ValoracionListaReqDTO](#valoracionlistareqdto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Opinion created or updated successfully | **application/json**: [ValoracionListaDTO](#valoracionlistadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
 ---
 
 ### [GET] /movies
@@ -499,7 +560,6 @@ Requires ADMIN role.
 | --------------- | ------ |
 | BearerAuth |  |
 
----
 
 ### [GET] /premios/{id}
 **Get specific award**
@@ -526,7 +586,6 @@ Get award by unique identifier
 | --------------- | ------ |
 | BearerAuth |  |
 
----
 
 ### [GET] /premios/{id}/categorias
 **Get categories for a specific award**
@@ -544,66 +603,6 @@ Requires ADMIN role.
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | List of categories. | **application/json**: [ [CategoriaDTO](#categoriadto) ]<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
-
-### [GET] /listas/{id}/valoraciones
-**Get a list of users's opinions about one specific list**
-
-Returns a list of valorations.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Opinions retrieved successfully | **application/json**: [ [ValoracionListaDTO](#valoracionlistadto) ]<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [PUT] /listas/{id}/valoraciones
-**Update or post an opinion**
-
-Updates or posts an opinion about the list
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Request Body
-
-| Required | Schema |
-| -------- | ------ |
-|  Yes | **application/json**: [ValoracionListaReqDTO](#valoracionlistareqdto)<br> |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Opinion created or updated successfully | **application/json**: [ValoracionListaDTO](#valoracionlistadto)<br> |
 | 400 | Invalid data. |  |
 | 403 | Access denied. |  |
 | 404 | Not found. |  |
