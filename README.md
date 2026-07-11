@@ -45,7 +45,6 @@ Bearer format: JWT
 | 400 | Invalid data. |  |
 | 409 | Resource already exists. |  |
 
-
 ### [GET] /usuarios/{id}
 **Get user by ID**
 
@@ -189,7 +188,6 @@ Returns a paginated list of all movie lists created by a specific user.
 | --------------- | ------ |
 | BearerAuth |  |
 
-
 ### [GET] /listas
 **Get public lists of movies**
 
@@ -323,36 +321,6 @@ Permanently removes the list from the user's profile.
 | --------------- | ------ |
 | BearerAuth |  |
 
-
-### [GET] /listas/{id}/movies
-**Get paginated movies from the list**
-
-Returns paginated movies from the list.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| orderBy | query | Sorting field (e.g., title) | No | string |
-| direction | query | Sorting direction (e.g., asc) | No | string |
-| page | query | Requested page number | Yes | integer |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Movies from the list retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
 ### [POST] /listas/{listaId}/movies/{movieId}
 **Add movie to list**
 
@@ -407,66 +375,6 @@ Removes the relationship between the movie and the list without deleting the mov
 | Security Schema | Scopes |
 | --------------- | ------ |
 | BearerAuth |  |
-
-
-### [GET] /listas/{id}/valoraciones
-**Get a list of users's opinions about one specific list**
-
-Returns a list of valorations.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Opinions retrieved successfully | **application/json**: [ [ValoracionListaDTO](#valoracionlistadto) ]<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [PUT] /listas/{id}/valoraciones
-**Update or post an opinion**
-
-Updates or posts an opinion about the list
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Request Body
-
-| Required | Schema |
-| -------- | ------ |
-|  Yes | **application/json**: [ValoracionListaReqDTO](#valoracionlistareqdto)<br> |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Opinion created or updated successfully | **application/json**: [ValoracionListaDTO](#valoracionlistadto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
 
 ---
 
@@ -584,7 +492,6 @@ Requires ADMIN role.
 | ---- | ----------- | ------ |
 | 200 | List of awards. | **application/json**: [ [PremioDTO](#premiodto) ]<br> |
 | 400 | Invalid data. |  |
-| 403 | Access denied. |  |
 
 ##### Security
 
@@ -611,7 +518,6 @@ Get award by unique identifier
 | ---- | ----------- | ------ |
 | 200 | OK-Award. | **application/json**: [PremioDTO](#premiodto)<br> |
 | 400 | Invalid data. |  |
-| 403 | Access denied. |  |
 | 404 | Not found. |  |
 
 ##### Security
@@ -620,6 +526,7 @@ Get award by unique identifier
 | --------------- | ------ |
 | BearerAuth |  |
 
+---
 
 ### [GET] /premios/{id}/categorias
 **Get categories for a specific award**
@@ -648,6 +555,65 @@ Requires ADMIN role.
 
 ---
 
+### [GET] /listas/{id}/valoraciones
+**Get a list of users's opinions about one specific list**
+
+Returns a list of valorations.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Opinions retrieved successfully | **application/json**: [ [ValoracionListaDTO](#valoracionlistadto) ]<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [PUT] /listas/{id}/valoraciones
+**Update or post an opinion**
+
+Updates or posts an opinion about the list
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Unique identifier of the specific list of movies | Yes | long |
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ValoracionListaReqDTO](#valoracionlistareqdto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Opinion created or updated successfully | **application/json**: [ValoracionListaDTO](#valoracionlistadto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
 ### Schemas
 
 #### UsuarioReqDTO

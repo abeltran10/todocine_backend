@@ -345,6 +345,7 @@ paths:
           $ref: '#/components/responses/Conflict'
         '502':
           $ref: '#/components/responses/BadGateway'
+
   /premios:
     get:
       summary: "Get awards"
@@ -363,8 +364,7 @@ paths:
                   $ref: '#/components/schemas/PremioDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
+
 
   /premios/{id}:
     get:
@@ -388,8 +388,6 @@ paths:
                   $ref: '#/components/schemas/PremioDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
 
