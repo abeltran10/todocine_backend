@@ -190,6 +190,182 @@ Returns a paginated list of all movie lists created by a specific user.
 
 ---
 
+### [GET] /movies
+**List movies with filters (Paginated)**
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| name | query | Movie title | Yes | string |
+| status | query | Status (Released, Post-Production...) | Yes | string |
+| region | query | Region code (ES, US...) | Yes | string |
+| page | query | Page number | Yes | integer |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Filtered movie list. | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+| 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [GET] /movies/{id}
+**Get full movie detail by ID**
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Movie ID | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Movie detail. | **application/json**: [MovieDetailDTO](#moviedetaildto)<br> |
+| 400 | Invalid data. |  |
+| 404 | Not found. |  |
+| 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
+### [GET] /ganadores
+**Get winners by award and year**
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| premioId | query | Award ID | Yes | long |
+| anyo | query | Award year | Yes | integer |
+| pagina | query | Results page | Yes | integer |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List of winners retrieved. | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [POST] /ganadores
+**Insert a new winner**
+
+Requires ADMIN role.
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [GanadorReqDTO](#ganadorreqdto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 201 | Winner registered. | **application/json**: [GanadorDTO](#ganadordto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 409 | Resource already exists. |  |
+| 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
+### [GET] /premios
+**Get awards**
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List of awards. | **application/json**: [ [PremioDTO](#premiodto) ]<br> |
+| 400 | Invalid data. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+
+### [GET] /premios/{id}
+**Get specific award**
+
+Get award by unique identifier
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | query | Award ID | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | OK-Award. | **application/json**: [PremioDTO](#premiodto)<br> |
+| 400 | Invalid data. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+
+### [GET] /premios/{id}/categorias
+**Get categories for a specific award**
+
+Requires ADMIN role.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Award ID (e.g., Oscars) | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List of categories. | **application/json**: [ [CategoriaDTO](#categoriadto) ]<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
 ### [GET] /listas
 **Get public lists of movies**
 
@@ -439,181 +615,7 @@ Updates or posts an opinion about the list
 
 ---
 
-### [GET] /movies
-**List movies with filters (Paginated)**
 
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| name | query | Movie title | Yes | string |
-| status | query | Status (Released, Post-Production...) | Yes | string |
-| region | query | Region code (ES, US...) | Yes | string |
-| page | query | Page number | Yes | integer |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Filtered movie list. | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
-| 502 | External server error. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [GET] /movies/{id}
-**Get full movie detail by ID**
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Movie ID | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Movie detail. | **application/json**: [MovieDetailDTO](#moviedetaildto)<br> |
-| 400 | Invalid data. |  |
-| 404 | Not found. |  |
-| 502 | External server error. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
-
-### [GET] /ganadores
-**Get winners by award and year**
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| premioId | query | Award ID | Yes | long |
-| anyo | query | Award year | Yes | integer |
-| pagina | query | Results page | Yes | integer |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | List of winners retrieved. | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [POST] /ganadores
-**Insert a new winner**
-
-Requires ADMIN role.
-
-#### Request Body
-
-| Required | Schema |
-| -------- | ------ |
-|  Yes | **application/json**: [GanadorReqDTO](#ganadorreqdto)<br> |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 201 | Winner registered. | **application/json**: [GanadorDTO](#ganadordto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 409 | Resource already exists. |  |
-| 502 | External server error. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
-
-### [GET] /premios
-**Get awards**
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | List of awards. | **application/json**: [ [PremioDTO](#premiodto) ]<br> |
-| 400 | Invalid data. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-
-### [GET] /premios/{id}
-**Get specific award**
-
-Get award by unique identifier
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | query | Award ID | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | OK-Award. | **application/json**: [PremioDTO](#premiodto)<br> |
-| 400 | Invalid data. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-
-### [GET] /premios/{id}/categorias
-**Get categories for a specific award**
-
-Requires ADMIN role.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Award ID (e.g., Oscars) | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | List of categories. | **application/json**: [ [CategoriaDTO](#categoriadto) ]<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
 ### Schemas
 
 #### UsuarioReqDTO
