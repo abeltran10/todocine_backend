@@ -32,18 +32,15 @@ public class PremioServiceImpl implements PremioService {
 
     @Override
     public PremioDTO getPremioById(Long id) {
-        Premio premio = premioDAO.findById(id).orElse(null);
+        Premio premio = premioDAO.findById(id).orElseThrow(() -> new NotFoudException(PREMIO_NOTFOUND));
 
-        if (premio != null) {
-            List<Integer> anyos = ganadorDAO.findAnyosByPremioId(id);
+        List<Integer> anyos = ganadorDAO.findAnyosByPremioId(id);
 
-            PremioDTO premioDTO = PremioMapper.toDTO(premio);
-            premioDTO.setAnyos(anyos);
+        PremioDTO premioDTO = PremioMapper.toDTO(premio);
+        premioDTO.setAnyos(anyos);
 
-            return premioDTO;
-        } else {
-            throw new NotFoudException(PREMIO_NOTFOUND);
-        }
+        return premioDTO;
+
     }
 
 

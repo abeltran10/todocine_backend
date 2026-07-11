@@ -24,7 +24,7 @@ public class CategoriaPremioServiceImpl implements CategoriaPremioService {
     public List<CategoriaDTO> getCategorias(Long premioId) {
         List<CategoriaPremio> categoriasPremio = categoriaPremioDAO.findById_Premio_Id(premioId);
 
-        if (categoriasPremio == null || categoriasPremio.isEmpty())
+        if (categoriasPremio.isEmpty())
             throw new NotFoudException(PREMIO_NOTFOUND);
 
         return categoriasPremio.stream().map(cp -> CategoriaMapper.toDTO(cp.getId().getCategoria())).toList();

@@ -107,15 +107,8 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     @Override
     public UsuarioDTO getUsuarioById(Long id) {
         if (getCurrentUserId().equals(id)) {
-
-            try {
-                Usuario usuario = usuarioDAO.findById(id).get();
-
-                return UserMapper.toDTO(usuario);
-            } catch (NoSuchElementException ex) {
-                throw new NotFoudException(USER_NOTFOUND);
-            }
-
+            Usuario usuario = usuarioDAO.findById(id).orElseThrow(() -> new NotFoudException(USER_NOTFOUND));
+            return UserMapper.toDTO(usuario);
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
