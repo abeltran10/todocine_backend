@@ -8,6 +8,7 @@ import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
+import com.todocine.service.CaptchaService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.mapper.UserMapper;
 import org.slf4j.Logger;
@@ -32,6 +33,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioDAO usuarioDAO;
 
+    @Autowired
+    private CaptchaService captchaService;
+
 
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -54,6 +58,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public UsuarioDTO insertUsuario(UsuarioReqDTO usuarioReqDTO) {
+        if (!captchaService.isValidToken(usuarioReqDTO.getCaptcha()))
+            throw new BadRequestException(USER_NOT_CREATED);
+
         Usuario usuario = usuarioDAO.findByUsername(usuarioReqDTO.getUsername());
 
         if (usuario == null) {
