@@ -303,7 +303,6 @@ Requires ADMIN role.
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | List of awards. | **application/json**: [ [PremioDTO](#premiodto) ]<br> |
-| 400 | Invalid data. |  |
 
 ##### Security
 

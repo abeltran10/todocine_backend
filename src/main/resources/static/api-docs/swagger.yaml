@@ -362,9 +362,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PremioDTO'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-
 
   /premios/{id}:
     get:
