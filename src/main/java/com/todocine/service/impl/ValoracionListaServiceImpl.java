@@ -49,11 +49,7 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
 
         if (usuario != null && getCurrentUserId().equals(usuario.getId())) {
 
-            Lista lista = listaDAO.findById(valoracionListaReqDTO.getListaId()).orElse(null);
-
-            if (lista == null) {
-                throw new NotFoudException(LISTA_NOT_FOUND);
-            }
+            Lista lista = listaDAO.findById(valoracionListaReqDTO.getListaId()).orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
             ValoracionListaId id = new ValoracionListaId(usuario, lista);
             valoracionLista = valoracionListaDAO.findById(id).orElse(null);
@@ -82,9 +78,7 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
 
         List<ValoracionLista> valoracionListaList = valoracionListaDAO.findByIdListaId(lista.getId());
 
-        if (valoracionListaList != null)
-            return valoracionListaList.stream().map(ValoracionMapper::toDTO).toList();
+        return valoracionListaList.stream().map(ValoracionMapper::toDTO).toList();
 
-        return new ArrayList<>();
     }
 }

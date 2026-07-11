@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: "Todo Cine API"
   description: "API managed with Spring Boot, JWT security, and movie catalog with custom exception handling."
-  version: "v3.6.13"
+  version: "v3.6.13.1"
 
 servers:
   - url: "http://localhost:8080/api"
@@ -345,6 +345,7 @@ paths:
           $ref: '#/components/responses/Conflict'
         '502':
           $ref: '#/components/responses/BadGateway'
+
   /premios:
     get:
       summary: "Get awards"
@@ -361,10 +362,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PremioDTO'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
 
   /premios/{id}:
     get:
@@ -388,8 +385,6 @@ paths:
                   $ref: '#/components/schemas/PremioDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
 
@@ -421,6 +416,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
 
   /listas:

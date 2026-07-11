@@ -12,15 +12,9 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v3.6.13](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.13)
+- [v3.6.13.1](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.13.1)
 
-## Install
-
-- Download [last release](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.13) compressed file. 
-- Add application.properties to project.
-- Execute [mvn clean install] command and deploy .jar file generated in one server.
-
-## Version: v3.6.13
+## Version: v3.6.13.1
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -44,7 +38,6 @@ Bearer format: JWT
 | 201 | Created - User registered successfully. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
 | 400 | Invalid data. |  |
 | 409 | Resource already exists. |  |
-
 
 ### [GET] /usuarios/{id}
 **Get user by ID**
@@ -189,6 +182,182 @@ Returns a paginated list of all movie lists created by a specific user.
 | --------------- | ------ |
 | BearerAuth |  |
 
+---
+
+### [GET] /movies
+**List movies with filters (Paginated)**
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| name | query | Movie title | Yes | string |
+| status | query | Status (Released, Post-Production...) | Yes | string |
+| region | query | Region code (ES, US...) | Yes | string |
+| page | query | Page number | Yes | integer |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Filtered movie list. | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+| 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [GET] /movies/{id}
+**Get full movie detail by ID**
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Movie ID | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Movie detail. | **application/json**: [MovieDetailDTO](#moviedetaildto)<br> |
+| 400 | Invalid data. |  |
+| 404 | Not found. |  |
+| 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
+### [GET] /ganadores
+**Get winners by award and year**
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| premioId | query | Award ID | Yes | long |
+| anyo | query | Award year | Yes | integer |
+| pagina | query | Results page | Yes | integer |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List of winners retrieved. | **application/json**: [Paginator](#paginator)<br> |
+| 400 | Invalid data. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+### [POST] /ganadores
+**Insert a new winner**
+
+Requires ADMIN role.
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [GanadorReqDTO](#ganadorreqdto)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 201 | Winner registered. | **application/json**: [GanadorDTO](#ganadordto)<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 409 | Resource already exists. |  |
+| 502 | External server error. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
+
+### [GET] /premios
+**Get awards**
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List of awards. | **application/json**: [ [PremioDTO](#premiodto) ]<br> |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+
+### [GET] /premios/{id}
+**Get specific award**
+
+Get award by unique identifier
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | query | Award ID | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | OK-Award. | **application/json**: [PremioDTO](#premiodto)<br> |
+| 400 | Invalid data. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+
+### [GET] /premios/{id}/categorias
+**Get categories for a specific award**
+
+Requires ADMIN role.
+
+#### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Award ID (e.g., Oscars) | Yes | long |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | List of categories. | **application/json**: [ [CategoriaDTO](#categoriadto) ]<br> |
+| 400 | Invalid data. |  |
+| 403 | Access denied. |  |
+| 404 | Not found. |  |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| BearerAuth |  |
+
+---
 
 ### [GET] /listas
 **Get public lists of movies**
@@ -323,36 +492,6 @@ Permanently removes the list from the user's profile.
 | --------------- | ------ |
 | BearerAuth |  |
 
-
-### [GET] /listas/{id}/movies
-**Get paginated movies from the list**
-
-Returns paginated movies from the list.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| orderBy | query | Sorting field (e.g., title) | No | string |
-| direction | query | Sorting direction (e.g., asc) | No | string |
-| page | query | Requested page number | Yes | integer |
-| id | path | Unique identifier of the specific list of movies | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Movies from the list retrieved successfully | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
 ### [POST] /listas/{listaId}/movies/{movieId}
 **Add movie to list**
 
@@ -467,186 +606,8 @@ Updates or posts an opinion about the list
 | --------------- | ------ |
 | BearerAuth |  |
 
-
 ---
 
-### [GET] /movies
-**List movies with filters (Paginated)**
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| name | query | Movie title | Yes | string |
-| status | query | Status (Released, Post-Production...) | Yes | string |
-| region | query | Region code (ES, US...) | Yes | string |
-| page | query | Page number | Yes | integer |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Filtered movie list. | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
-| 502 | External server error. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [GET] /movies/{id}
-**Get full movie detail by ID**
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Movie ID | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Movie detail. | **application/json**: [MovieDetailDTO](#moviedetaildto)<br> |
-| 400 | Invalid data. |  |
-| 404 | Not found. |  |
-| 502 | External server error. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
-
-### [GET] /ganadores
-**Get winners by award and year**
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| premioId | query | Award ID | Yes | long |
-| anyo | query | Award year | Yes | integer |
-| pagina | query | Results page | Yes | integer |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | List of winners retrieved. | **application/json**: [Paginator](#paginator)<br> |
-| 400 | Invalid data. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-### [POST] /ganadores
-**Insert a new winner**
-
-Requires ADMIN role.
-
-#### Request Body
-
-| Required | Schema |
-| -------- | ------ |
-|  Yes | **application/json**: [GanadorReqDTO](#ganadorreqdto)<br> |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 201 | Winner registered. | **application/json**: [GanadorDTO](#ganadordto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 409 | Resource already exists. |  |
-| 502 | External server error. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
-
-### [GET] /premios
-**Get awards**
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | List of awards. | **application/json**: [ [PremioDTO](#premiodto) ]<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
-
-### [GET] /premios/{id}
-**Get specific award**
-
-Get award by unique identifier
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | query | Award ID | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | OK-Award. | **application/json**: [PremioDTO](#premiodto)<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-| 404 | Not found. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
-
-### [GET] /premios/{id}/categorias
-**Get categories for a specific award**
-
-Requires ADMIN role.
-
-#### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| id | path | Award ID (e.g., Oscars) | Yes | long |
-
-#### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | List of categories. | **application/json**: [ [CategoriaDTO](#categoriadto) ]<br> |
-| 400 | Invalid data. |  |
-| 403 | Access denied. |  |
-
-##### Security
-
-| Security Schema | Scopes |
-| --------------- | ------ |
-| BearerAuth |  |
-
----
 
 ### Schemas
 
@@ -866,7 +827,7 @@ Demo is hosted in https://render.com/, there is a free service with PostgresSQL 
 - username: test_demo
 - password: 1234
 
-[Demo v3.6.13 release](https://todocine-backend.onrender.com/api/index.html)
+[Demo v3.6.13.1 release](https://todocine-backend.onrender.com/api/index.html)
 
 
 
