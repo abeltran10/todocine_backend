@@ -35,6 +35,8 @@ public class Constants {
 
     public static final String USER_EXISTS = "Un usuario con ese nombre ya existe";
 
+    public static final String USER_NOT_CREATED = "No se ha creado el usuario";
+
     public static final String FAVORITOS_NOTFOUND = "No se ha encontrado la película en favoritos";
 
     public static final String MOVIE_SEARCH_BADREQUEST = "Hay que indicar los filtros de busqueda";

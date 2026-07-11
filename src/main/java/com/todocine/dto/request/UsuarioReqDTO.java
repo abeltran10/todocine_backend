@@ -16,6 +16,9 @@ public class UsuarioReqDTO {
 
     private String rol;
 
+    @NotBlank
+    private String captcha;
+
     public UsuarioReqDTO() {
     }
 
@@ -54,5 +57,13 @@ public class UsuarioReqDTO {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public String getCaptcha() {
+        return captcha;
+    }
+
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
     }
 }

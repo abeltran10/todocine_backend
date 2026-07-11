@@ -4,6 +4,8 @@ import com.todocine.configuration.Constants;
 import com.todocine.dto.request.UsuarioReqDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.UsuarioDTO;
+import com.todocine.exceptions.BadRequestException;
+import com.todocine.service.CaptchaService;
 import com.todocine.service.UsuarioMovieService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.Paginator;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.todocine.configuration.Constants.USER_NOT_CREATED;
+
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -26,7 +30,6 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> getUsuario(@NotNull @PathVariable("id") Long id) {
