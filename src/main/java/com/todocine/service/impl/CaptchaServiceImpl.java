@@ -2,22 +2,13 @@ package com.todocine.service.impl;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.todocine.exceptions.BadGatewayException;
-import com.todocine.exceptions.BadRequestException;
-import com.todocine.exceptions.ForbiddenException;
 import com.todocine.service.CaptchaService;
 import com.todocine.utils.CaptchaDTO;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-
-import static com.todocine.configuration.Constants.*;
 
 @Service
 public class CaptchaServiceImpl implements CaptchaService {

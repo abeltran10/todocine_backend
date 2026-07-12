@@ -10,7 +10,6 @@ import com.todocine.entities.Usuario;
 import com.todocine.entities.ValoracionLista;
 import com.todocine.entities.ValoracionListaId;
 import com.todocine.exceptions.BadRequestException;
-import com.todocine.exceptions.ConflictException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.ValoracionListaService;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.todocine.configuration.Constants.*;

@@ -1,11 +1,7 @@
 package com.todocine.utils.mapper;
 
 import com.todocine.dto.response.ListaDTO;
-import com.todocine.dto.response.MovieDTO;
-import com.todocine.dto.response.MovieListaDTO;
 import com.todocine.entities.Lista;
-
-import java.util.List;
 
 public class ListaMapper {
 

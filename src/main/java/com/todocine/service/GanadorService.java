@@ -2,7 +2,7 @@ package com.todocine.service;
 
 import com.todocine.dto.request.GanadorReqDTO;
 import com.todocine.dto.response.GanadorDTO;
-import com.todocine.utils.Paginator;
+import com.todocine.dto.response.Paginator;
 
 public interface GanadorService {
 

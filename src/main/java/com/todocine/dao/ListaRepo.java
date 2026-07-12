@@ -1,7 +1,7 @@
 package com.todocine.dao;
 
+import com.todocine.dto.response.Paginator;
 import com.todocine.entities.Movie;
-import com.todocine.utils.Paginator;
 
 public interface ListaRepo {
 

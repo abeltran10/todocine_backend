@@ -2,8 +2,8 @@ package com.todocine.controller;
 
 import com.todocine.dto.request.GanadorReqDTO;
 import com.todocine.dto.response.GanadorDTO;
+import com.todocine.dto.response.Paginator;
 import com.todocine.service.GanadorService;
-import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
