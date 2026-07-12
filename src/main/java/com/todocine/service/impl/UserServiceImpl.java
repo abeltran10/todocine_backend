@@ -4,10 +4,7 @@ import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.request.UsuarioReqDTO;
 import com.todocine.dto.response.UsuarioDTO;
 import com.todocine.entities.Usuario;
-import com.todocine.exceptions.BadRequestException;
-import com.todocine.exceptions.ConflictException;
-import com.todocine.exceptions.ForbiddenException;
-import com.todocine.exceptions.NotFoudException;
+import com.todocine.exceptions.*;
 import com.todocine.service.CaptchaService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.mapper.UserMapper;
@@ -58,27 +55,29 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public UsuarioDTO insertUsuario(UsuarioReqDTO usuarioReqDTO) {
-        if (!captchaService.isValidToken(usuarioReqDTO.getCaptcha()))
-            throw new BadRequestException(USER_NOT_CREATED);
+        if (captchaService.isValidToken(usuarioReqDTO.getCaptcha())) {
+            Usuario usuario = usuarioDAO.findByUsername(usuarioReqDTO.getUsername());
 
-        Usuario usuario = usuarioDAO.findByUsername(usuarioReqDTO.getUsername());
+            if (usuario == null) {
+                usuario = new Usuario();
+                usuario.setUsername(usuarioReqDTO.getUsername());
+                usuario.setPassword(passwordEncoder().encode(usuarioReqDTO.getPassword()));
+                usuario.setEnabled(true);
+                usuario.setCredentialsNonExpired(true);
+                usuario.setAccountNonLocked(true);
+                usuario.setAccountNonExpired(true);
+                usuario.setRol("USUARIO");
 
-        if (usuario == null) {
-            usuario = new Usuario();
-            usuario.setUsername(usuarioReqDTO.getUsername());
-            usuario.setPassword(passwordEncoder().encode(usuarioReqDTO.getPassword()));
-            usuario.setEnabled(true);
-            usuario.setCredentialsNonExpired(true);
-            usuario.setAccountNonLocked(true);
-            usuario.setAccountNonExpired(true);
-            usuario.setRol("USUARIO");
+                usuarioDAO.save(usuario);
 
-            usuarioDAO.save(usuario);
+                return UserMapper.toDTO(usuario);
 
-            return UserMapper.toDTO(usuario);
-
+            } else {
+                throw new ConflictException(USER_EXISTS);
+            }
         } else {
-            throw new ConflictException(USER_EXISTS);
+            throw new ForbiddenException(CAPTCHA_UNAUTHORISED);
+
         }
     }
 

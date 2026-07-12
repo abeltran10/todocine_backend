@@ -2,6 +2,9 @@ package com.todocine.service.impl;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.todocine.exceptions.BadGatewayException;
+import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ForbiddenException;
 import com.todocine.service.CaptchaService;
 import com.todocine.utils.CaptchaDTO;
 import okhttp3.FormBody;
@@ -13,6 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+
+import static com.todocine.configuration.Constants.*;
 
 @Service
 public class CaptchaServiceImpl implements CaptchaService {
@@ -32,7 +37,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         if (token == null || token.isEmpty()) {
-            return false;
+            throw new BadRequestException(CAPTCHA_MISSING);
         }
 
         RequestBody formBody = new FormBody.Builder()
@@ -47,7 +52,7 @@ public class CaptchaServiceImpl implements CaptchaService {
 
         try (Response response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful() || response.body() == null) {
-                return false;
+               return false;
             }
 
             String responseString = response.body().string();

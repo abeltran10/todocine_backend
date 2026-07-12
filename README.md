@@ -12,9 +12,9 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v3.6.14.1](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.14.1)
+- [v3.6.14.2](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.14.2)
 
-## Version: v3.6.14.1
+## Version: v3.6.14.2
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -37,6 +37,7 @@ Bearer format: JWT
 | ---- | ----------- | ------ |
 | 201 | Created - User registered successfully. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
 | 400 | Invalid data. |  |
+| 403 | Access denied. |  |
 | 409 | Resource already exists. |  |
 
 ### [GET] /usuarios/{id}
@@ -828,7 +829,7 @@ Demo is hosted in https://render.com/, there is a free service with PostgresSQL 
 - username: test_demo
 - password: 1234
 
-[Demo v3.6.14.1 release](https://todocine-backend.onrender.com/api/index.html)
+[Demo v3.6.14.2 release](https://todocine-backend.onrender.com/api/index.html)
 
 
 
