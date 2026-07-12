@@ -18,11 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.todocine.configuration.Constants.USER_NOT_CREATED;
-
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
