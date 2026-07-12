@@ -37,6 +37,7 @@ Bearer format: JWT
 | ---- | ----------- | ------ |
 | 201 | Created - User registered successfully. | **application/json**: [UsuarioDTO](#usuariodto)<br> |
 | 400 | Invalid data. |  |
+| 403 | Access denied. |  |
 | 409 | Resource already exists. |  |
 
 ### [GET] /usuarios/{id}
