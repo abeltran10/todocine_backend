@@ -36,10 +36,6 @@ public class CaptchaServiceImpl implements CaptchaService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-        if (token == null || token.isEmpty()) {
-            throw new BadRequestException(CAPTCHA_MISSING);
-        }
-
         RequestBody formBody = new FormBody.Builder()
                 .add("secret", secretKey)
                 .add("response", token)

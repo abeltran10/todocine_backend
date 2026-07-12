@@ -55,6 +55,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public UsuarioDTO insertUsuario(UsuarioReqDTO usuarioReqDTO) {
+        if (usuarioReqDTO.getCaptcha() == null || usuarioReqDTO.getCaptcha().isEmpty())
+            throw new BadRequestException(CAPTCHA_MISSING);
+
         if (captchaService.isValidToken(usuarioReqDTO.getCaptcha())) {
             Usuario usuario = usuarioDAO.findByUsername(usuarioReqDTO.getUsername());
 
