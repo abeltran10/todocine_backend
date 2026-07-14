@@ -4,6 +4,8 @@
 
 Todo Cine is a web app to manage movies from [TMDB](https://www.themoviedb.org/) 
 
+The application allows users to browse a vast catalog of movies, manage their favourites, keep track of award-winning films and share lists of movies.
+
 ## Code
 
 Todo Cine is an API REST developed with [Java and Springboot in backend](https://github.com/abeltran10/todocine_backend) and there is a frontend with [Angular](https://github.com/abeltran10/todocine_front_angular). It's SQL database. I had to add hibernate-community-dialects in pom because my Oracle SQL server is no longer supported.
