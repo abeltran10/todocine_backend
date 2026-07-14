@@ -12,9 +12,9 @@ application.properties loads properties from three files, one per environment (p
 
 
 ## Last release
-- [v3.6.14.2](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.14.2)
+- [v3.6.14.3](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.14.3)
 
-## Version: v3.6.14.2
+## Version: v3.6.14.3
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
