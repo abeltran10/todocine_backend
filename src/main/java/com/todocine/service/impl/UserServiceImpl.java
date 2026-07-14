@@ -4,7 +4,10 @@ import com.todocine.dao.UsuarioDAO;
 import com.todocine.dto.request.UsuarioReqDTO;
 import com.todocine.dto.response.UsuarioDTO;
 import com.todocine.entities.Usuario;
-import com.todocine.exceptions.*;
+import com.todocine.exceptions.BadRequestException;
+import com.todocine.exceptions.ConflictException;
+import com.todocine.exceptions.ForbiddenException;
+import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.CaptchaService;
 import com.todocine.service.UsuarioService;
 import com.todocine.utils.mapper.UserMapper;
@@ -55,6 +58,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public UsuarioDTO insertUsuario(UsuarioReqDTO usuarioReqDTO) {
+        if (usuarioReqDTO.getCaptcha() == null || usuarioReqDTO.getCaptcha().isEmpty())
+            throw new BadRequestException(CAPTCHA_MISSING);
+
         if (captchaService.isValidToken(usuarioReqDTO.getCaptcha())) {
             Usuario usuario = usuarioDAO.findByUsername(usuarioReqDTO.getUsername());
 

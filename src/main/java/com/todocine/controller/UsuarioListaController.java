@@ -1,8 +1,8 @@
 package com.todocine.controller;
 
 import com.todocine.dto.response.ListaDTO;
+import com.todocine.dto.response.Paginator;
 import com.todocine.service.ListaService;
-import com.todocine.utils.Paginator;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

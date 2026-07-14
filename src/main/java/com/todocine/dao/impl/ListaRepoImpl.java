@@ -5,8 +5,10 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todocine.configuration.Constants;
 import com.todocine.dao.ListaRepo;
-import com.todocine.entities.*;
-import com.todocine.utils.Paginator;
+import com.todocine.dto.response.Paginator;
+import com.todocine.entities.Movie;
+import com.todocine.entities.QLista;
+import com.todocine.entities.QMovie;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

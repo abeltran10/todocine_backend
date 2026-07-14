@@ -3,8 +3,7 @@ package com.todocine.service;
 import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieListaDTO;
-import com.todocine.utils.Paginator;
-import jakarta.validation.constraints.NotNull;
+import com.todocine.dto.response.Paginator;
 
 public interface ListaService {
 

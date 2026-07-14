@@ -1,14 +1,8 @@
 package com.todocine.controller;
 
-import com.todocine.configuration.Constants;
 import com.todocine.dto.request.UsuarioReqDTO;
-import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.UsuarioDTO;
-import com.todocine.exceptions.BadRequestException;
-import com.todocine.service.CaptchaService;
-import com.todocine.service.UsuarioMovieService;
 import com.todocine.service.UsuarioService;
-import com.todocine.utils.Paginator;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
