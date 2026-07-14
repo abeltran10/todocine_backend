@@ -25,6 +25,7 @@ package "Services (Interfaces)" {
     interface UsuarioMovieService
     interface ListaService
     interface ValoracionListaService
+    interface CaptchaService
 }
 
 package "Service Implementations" {
@@ -37,6 +38,7 @@ package "Service Implementations" {
     class UsuarioMovieServiceImpl
     class ListaServiceImpl
     class ValoracionListaServiceImpl
+    class CaptchaServiceImpl
 }
 
 package "DAOs / Repositories" {
@@ -102,6 +104,8 @@ ListaRepoImpl ..|> ListaRepo
 
 UsuarioMovieDAO --|> UsuarioMovieRepo
 ListaDAO --|> ListaRepo
+
+CaptchaServiceImpl ..|> CaptchaService
 
 ' -------------------------
 ' CONTROLLER -> SERVICE
@@ -180,5 +184,6 @@ Usuario "1" *-- "many" ValoracionLista
 MovieServiceImpl --> TMDBService : uses
 UsuarioMovieServiceImpl --> TMDBService : uses
 ListaServiceImpl --> TMDBService: uses
+UsuarioServiceImpl --> CaptchaService: uses
 
 @enduml
