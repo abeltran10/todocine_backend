@@ -44,8 +44,6 @@ public class TMDBServiceImpl implements TMDBService {
 
         Map<String,Object> map = objectMapper.readValue(body, HashMap.class);
 
-        logger.info(body);
-
         return map;
 
     }
@@ -68,11 +66,7 @@ public class TMDBServiceImpl implements TMDBService {
 
         String body = response.body().string();
 
-        logger.info(body);
-
         Map<String,Object> map = objectMapper.readValue(body, HashMap.class);
-
-        logger.info(map.toString());
 
         return map;
 
@@ -97,8 +91,6 @@ public class TMDBServiceImpl implements TMDBService {
         String body = response.body().string();
 
         Map<String,Object> map = objectMapper.readValue(body, HashMap.class);
-
-        logger.info(body);
 
         return map;
 
