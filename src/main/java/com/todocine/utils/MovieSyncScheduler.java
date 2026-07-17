@@ -3,7 +3,6 @@ package com.todocine.utils;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.entities.Movie;
-import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.mapper.MovieMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-import static com.todocine.configuration.Constants.MOVIE_NOTFOUND;
 
 @Service
 public class MovieSyncScheduler {
