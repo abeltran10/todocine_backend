@@ -113,7 +113,7 @@ public class MovieSyncScheduler {
                             }
 
                         } else {
-                            throw new NotFoudException(MOVIE_NOTFOUND);
+                            System.err.println("Fallo al recuperar la película " + id + " de TMDB");
                         }
 
                         // Delay de 100ms para respetar el rate limit de la API de TMDB
