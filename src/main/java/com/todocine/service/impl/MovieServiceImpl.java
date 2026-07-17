@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +46,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
     private UsuarioMovieDAO usuarioMovieDAO;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public MovieDetailDTO getMovieDetailById(Long id) {
         Boolean favorito = false;
         Boolean vista = false;
@@ -60,9 +62,33 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                 if (movie != null) {
                     movieDTO.setVotosMediaTC(movie.getVotosMediaTC());
                     movieDTO.setTotalVotosTC(movie.getTotalVotosTC());
+
+                    //Sync with TMDB
+                    movie.setOriginalTitle(movieDTO.getOriginalTitle());
+                    movie.setTitle(movieDTO.getTitle());
+                    movie.setPosterPath(movieDTO.getPosterPath());
+                    movie.setOverview(movieDTO.getOverview());
+
+                    DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate fecha = LocalDate.parse(movieDTO.getReleaseDate(), formateador);
+                    movie.setReleaseDate(fecha);
+
+                    movie.setPopularity(movieDTO.getPopularity());
+                    movie.setVoteCount(movieDTO.getVoteCount());
+                    movie.setVoteAverage(movieDTO.getVoteAverage());
+                    movie.setOriginalLanguage(movieDTO.getOriginalLanguage());
+                    movie.setVotosMediaTC(movieDTO.getVotosMediaTC());
+                    movie.setTotalVotosTC(movieDTO.getTotalVotosTC());
+
+                    movieDAO.save(movie);
+                } else {
+                    movie = MovieMapper.toEntity(movieDTO);
+
+                    movieDTO.setVotosMediaTC(0.0);
+                    movieDTO.setTotalVotosTC(0);
                 }
 
-                UserMovieId userMovieId = new UserMovieId(new Usuario(getCurrentUserId()), MovieMapper.toEntity(movieDTO));
+                UserMovieId userMovieId = new UserMovieId(new Usuario(getCurrentUserId()), movie);
 
                 UsuarioMovie usuarioMovie = usuarioMovieDAO.findById(userMovieId).orElse(null);
 
