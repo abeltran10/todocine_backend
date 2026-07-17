@@ -171,20 +171,4 @@ public class Movie {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "MovieDTO{" +
-                "id='" + id + '\'' +
-                ", originalTitle='" + originalTitle + '\'' +
-                ", title='" + title + '\'' +
-                ", posterPath='" + posterPath + '\'' +
-                ", overview='" + overview + '\'' +
-                ", releaseDate='" + releaseDate + '\'' +
-                ", popularity=" + popularity +
-                ", voteCount=" + voteCount +
-                ", voteAverage=" + voteAverage +
-                 ", originalLanguage='" + originalLanguage + '\'' +
-
-                '}';
-    }
 }
