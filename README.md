@@ -16,9 +16,9 @@ For creating new users it is implemented Google [reCaptchav3](https://docs.cloud
 
 
 ## Last release
-- [v3.6.14.3](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.14.3)
+- [v3.6.15](https://github.com/abeltran10/todocine_backend/releases/tag/v3.6.15)
 
-## Version: v3.6.14.3
+## Version: v3.6.15
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -442,7 +442,7 @@ Returns a specific list.
 ### [PUT] /listas/{id}
 **Update an existing list**
 
-Updates the name, description, or the entire movie collection of a specific list.
+Updates the name or description of a specific list.
 
 #### Parameters
 
@@ -554,9 +554,9 @@ Removes the relationship between the movie and the list without deleting the mov
 
 
 ### [GET] /listas/{id}/valoraciones
-**Get a list of users's opinions about one specific list**
+**Get a list of users' opinions about one specific list**
 
-Returns a list of valorations.
+Returns a list of opinions.
 
 #### Parameters
 
@@ -833,7 +833,7 @@ Demo is hosted in https://render.com/, there is a free service with PostgresSQL 
 - username: test_demo
 - password: 1234
 
-[Demo v3.6.14.3 release](https://todocine-backend.onrender.com/api/index.html)
+[Demo v3.6.15 release](https://todocine-backend.onrender.com/api/index.html)
 
 
 
