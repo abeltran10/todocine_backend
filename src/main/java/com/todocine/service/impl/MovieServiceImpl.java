@@ -63,24 +63,6 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                     movieDTO.setVotosMediaTC(movie.getVotosMediaTC());
                     movieDTO.setTotalVotosTC(movie.getTotalVotosTC());
 
-                    //Sync with TMDB
-                    movie.setOriginalTitle(movieDTO.getOriginalTitle());
-                    movie.setTitle(movieDTO.getTitle());
-                    movie.setPosterPath(movieDTO.getPosterPath());
-                    movie.setOverview(movieDTO.getOverview());
-
-                    DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    LocalDate fecha = LocalDate.parse(movieDTO.getReleaseDate(), formateador);
-                    movie.setReleaseDate(fecha);
-
-                    movie.setPopularity(movieDTO.getPopularity());
-                    movie.setVoteCount(movieDTO.getVoteCount());
-                    movie.setVoteAverage(movieDTO.getVoteAverage());
-                    movie.setOriginalLanguage(movieDTO.getOriginalLanguage());
-                    movie.setVotosMediaTC(movieDTO.getVotosMediaTC());
-                    movie.setTotalVotosTC(movieDTO.getTotalVotosTC());
-
-                    movieDAO.save(movie);
                 } else {
                     movie = MovieMapper.toEntity(movieDTO);
 
