@@ -56,7 +56,7 @@ public class MovieSyncScheduler {
     @Transactional
     private void ejecutarSincronizacionGlobal() {
         int pageNumber = 0;
-        int pageSize = 21; // Tamaño del lote: procesamos de 21 en 21 registros
+        int pageSize = 21; // Batch size
         boolean hasMorePages = true;
         long totalProcesadas = 0;
 
@@ -64,75 +64,64 @@ public class MovieSyncScheduler {
 
         while (hasMorePages) {
             try {
-                // 1. Pedimos la página actual de IDs a la base de datos
                 Pageable pageable = PageRequest.of(pageNumber, pageSize);
-                Page<Long> movieIdsPage = movieDAO.findAllIds(pageable);
+                Page<Movie> moviePage = movieDAO.findAll(pageable);
 
-                // Si la página está vacía, terminamos el bucle
-                if (movieIdsPage.isEmpty()) {
+                // If empty finish loop
+                if (moviePage.isEmpty()) {
                     hasMorePages = false;
                     break;
                 }
 
-                System.out.println("Procesando lote nº " + (pageNumber + 1) + " con " + movieIdsPage.getNumberOfElements() + " películas...");
+                System.out.println("Procesando lote nº " + (pageNumber + 1) + " con " + moviePage.getNumberOfElements() + " películas...");
 
-                // 2. Iteramos sobre los IDs de la página actual
-                for (Long id : movieIdsPage.getContent()) {
+                for (Movie movie : moviePage.getContent()) {
+                    Long id = movie.getId();
+
                     try {
-                        // Invocamos tu servicio que conecta con TMDB y actualiza la BD local
+                        //Get from TMDB
                         Map<String, Object> movieMap = tmdbService.getMovieById(id);
                         if (movieMap.get("id") != null) {
                             MovieDTO movieDTO = MovieMapper.toDTO(movieMap);
-                            Movie movie = movieDAO.findById(id).orElse(null);
 
-                            if (movie == null) {
-                                System.err.println("Fallo al recuperar la película " + id + " de la base de datos");
-                            } else {
-                                movieDTO.setTotalVotosTC(movie.getTotalVotosTC());
-                                movieDTO.setVotosMediaTC(movie.getVotosMediaTC());
+                            movie.setOriginalTitle(movieDTO.getOriginalTitle());
+                            movie.setTitle(movieDTO.getTitle());
+                            movie.setPosterPath(movieDTO.getPosterPath());
+                            movie.setOverview(movieDTO.getOverview());
 
-                                movie.setOriginalTitle(movieDTO.getOriginalTitle());
-                                movie.setTitle(movieDTO.getTitle());
-                                movie.setPosterPath(movieDTO.getPosterPath());
-                                movie.setOverview(movieDTO.getOverview());
+                            DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                            LocalDate fecha = LocalDate.parse(movieDTO.getReleaseDate(), formateador);
+                            movie.setReleaseDate(fecha);
 
-                                DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                                LocalDate fecha = LocalDate.parse(movieDTO.getReleaseDate(), formateador);
-                                movie.setReleaseDate(fecha);
+                            movie.setPopularity(movieDTO.getPopularity());
+                            movie.setVoteCount(movieDTO.getVoteCount());
+                            movie.setVoteAverage(movieDTO.getVoteAverage());
+                            movie.setOriginalLanguage(movieDTO.getOriginalLanguage());
 
-                                movie.setPopularity(movieDTO.getPopularity());
-                                movie.setVoteCount(movieDTO.getVoteCount());
-                                movie.setVoteAverage(movieDTO.getVoteAverage());
-                                movie.setOriginalLanguage(movieDTO.getOriginalLanguage());
-                                movie.setVotosMediaTC(movieDTO.getVotosMediaTC());
-                                movie.setTotalVotosTC(movieDTO.getTotalVotosTC());
+                            movieDAO.save(movie);
 
-                                movieDAO.save(movie);
-
-                                totalProcesadas++;
-                            }
-
+                            totalProcesadas++;
                         } else {
-                            System.err.println("Fallo al recuperar la película " + id + " de TMDB");
+                            System.err.println("Fallo al recuperar la película con ID " + id + " de TMDB");
                         }
 
-                        // Delay de 100ms para respetar el rate limit de la API de TMDB
+                        // Delay de 100ms to respect rate limit of TMDB API
                         Thread.sleep(100);
                     } catch (Exception e) {
                         System.err.println("Error sincronizando la película con ID " + id + ": " + e.getMessage());
                     }
                 }
 
-                // 3. Verificamos si existe una página siguiente
-                if (movieIdsPage.hasNext()) {
-                    pageNumber++; // Avanzamos a la siguiente página
+                //Check if there is a next page
+                if (moviePage.hasNext()) {
+                    pageNumber++;
                 } else {
-                    hasMorePages = false; // Era la última página, salimos
+                    hasMorePages = false; //It was last page, finish loop
                 }
 
             } catch (Exception e) {
                 System.err.println("Error crítico al recuperar el lote " + pageNumber + ": " + e.getMessage());
-                hasMorePages = false; // Interrumpimos para evitar un bucle infinito en caso de error de BD
+                hasMorePages = false; // Interrupt to avoid infinite loop in case DB error
             }
         }
 
