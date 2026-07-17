@@ -105,8 +105,6 @@ public class MovieSyncScheduler {
                             System.err.println("Fallo al recuperar la película con ID " + id + " de TMDB");
                         }
 
-
-
                         // Delay de 100ms to respect rate limit of TMDB API
                         Thread.sleep(100);
                     } catch (Exception e) {
