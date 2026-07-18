@@ -54,7 +54,7 @@ public class MovieSyncScheduler {
     @Transactional
     private void ejecutarSincronizacionGlobal() {
         int pageNumber = 0;
-        int pageSize = 21; // Batch size
+        int pageSize = 50; // Batch size
         boolean hasMorePages = true;
         long totalProcesadas = 0;
 
