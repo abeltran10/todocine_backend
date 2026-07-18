@@ -62,12 +62,8 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                 if (movie != null) {
                     movieDTO.setVotosMediaTC(movie.getVotosMediaTC());
                     movieDTO.setTotalVotosTC(movie.getTotalVotosTC());
-
                 } else {
                     movie = MovieMapper.toEntity(movieDTO);
-
-                    movieDTO.setVotosMediaTC(0.0);
-                    movieDTO.setTotalVotosTC(0);
                 }
 
                 UserMovieId userMovieId = new UserMovieId(new Usuario(getCurrentUserId()), movie);
@@ -111,8 +107,6 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
                         .toList();
 
                 moviePage.setResults(results);
-
-                logger.info(moviePage.toString());
             }
 
             return moviePage;
