@@ -15,7 +15,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("API Todo Cine")
-                        .version("v3.6.15")
+                        .version("v3.7.0")
                         .description("API documentation with JWT"))
                 .addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
                 .components(new Components()

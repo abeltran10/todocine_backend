@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Map;
 
 
@@ -30,15 +32,22 @@ public class MovieSyncScheduler {
     @Autowired
     private TMDBService tmdbService;
 
+    @Autowired
+    private Environment environment;
+
     /**
      * DESENCADENANTE 1: Al desplegar / arrancar la aplicación.
      * Se ejecuta automáticamente cuando la app está lista para recibir peticiones.
      */
     @EventListener(ApplicationReadyEvent.class)
-    @Profile("prod")
     public void syncOnDeploy() {
-        System.out.println("Iniciando sincronización de películas por despliegue de nueva versión...");
-        ejecutarSincronizacionGlobal();
+        // 2. Comprobamos si el perfil "prod" está entre los perfiles activos
+        boolean isProd = Arrays.asList(environment.getActiveProfiles()).contains("prod");
+
+        if (isProd) {
+            System.out.println("Iniciando sincronización de películas por despliegue de nueva versión...");
+            ejecutarSincronizacionGlobal();
+        }
     }
 
     /**

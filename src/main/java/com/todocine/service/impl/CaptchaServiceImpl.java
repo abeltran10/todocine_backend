@@ -16,9 +16,6 @@ public class CaptchaServiceImpl implements CaptchaService {
     @Value("${captcha.secret.key}")
     private String secretKey;
 
-    @Value("${captcha.verify-url}")
-    private String verifyUrl;
-
     private final OkHttpClient httpClient = new OkHttpClient();
 
 
@@ -32,6 +29,7 @@ public class CaptchaServiceImpl implements CaptchaService {
                 .add("response", token)
                 .build();
 
+        String verifyUrl = "https://www.google.com/recaptcha/api/siteverify";
         Request request = new Request.Builder()
                 .url(verifyUrl)
                 .post(formBody)
