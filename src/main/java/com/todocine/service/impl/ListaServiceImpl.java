@@ -48,9 +48,6 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     private UsuarioDAO usuarioDAO;
 
     @Autowired
-    private ValoracionListaDAO valoracionListaDAO;
-
-    @Autowired
     private TMDBService tmdbService;
 
     @Override
