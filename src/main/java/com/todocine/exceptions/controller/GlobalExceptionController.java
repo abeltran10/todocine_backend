@@ -55,7 +55,7 @@ public class GlobalExceptionController {
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<Map<String, Object>> handleNotFoundException(ForbiddenException ex) {
+    public ResponseEntity<Map<String, Object>> handleForbiddenException(ForbiddenException ex) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.FORBIDDEN.value());
         response.put("error", HttpStatus.FORBIDDEN.getReasonPhrase());
