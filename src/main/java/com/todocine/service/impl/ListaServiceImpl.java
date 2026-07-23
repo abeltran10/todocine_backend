@@ -3,7 +3,6 @@ package com.todocine.service.impl;
 import com.todocine.dao.ListaDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dao.ValoracionListaDAO;
 import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieDTO;
@@ -53,7 +52,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     public Paginator<ListaDTO> getListasUser(Long usuarioId, Integer page) {
         Paginator<ListaDTO> paginator = new Paginator<>();
-        Pageable pageable = PageRequest.of(page - 1, 10);
+        Pageable pageable = PageRequest.of(page - 1, LISTAS_PAGE_SIZE);
 
         if (getCurrentUserId().equals(usuarioId)) {
             Page<Lista> listasPage = listaDAO.findByUsuarioId(usuarioId, pageable);
@@ -210,7 +209,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     public Paginator<ListaDTO> getListasPublicas(Integer page) {
         Paginator<ListaDTO> paginator = new Paginator<>();
 
-        Pageable pageable = PageRequest.of(page - 1, 10);
+        Pageable pageable = PageRequest.of(page - 1, LISTAS_PAGE_SIZE);
         Page<Lista> listasPage = listaDAO.findByPublica("S", pageable);
 
         if (listasPage.hasContent()) {
@@ -238,7 +237,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
 
-            Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, 5, pagina);
+            Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, MOVIELIST_PAGE_SIZE, pagina);
 
             if (!moviePage.getResults().isEmpty()) {
                 movieListaDTOS = moviePage.getResults().stream()

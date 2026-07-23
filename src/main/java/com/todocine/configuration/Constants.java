@@ -56,4 +56,11 @@ public class Constants {
 
     public static final String ORDER_TITULO = "TITLE";
     public static final String ORDER_ANYO = "YEAR";
+
+    //PAGINATION
+
+    public static final int PAGE_SIZE = 21;
+    public static final int MOVIELIST_PAGE_SIZE = 5;
+    public static final int LISTAS_PAGE_SIZE = 10;
+    public static final int FAVOURITES_SIZE = 12;
 }

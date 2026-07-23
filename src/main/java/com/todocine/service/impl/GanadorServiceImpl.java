@@ -51,7 +51,7 @@ public class GanadorServiceImpl implements GanadorService {
     @Transactional(readOnly = true)
     public Paginator<GanadorDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page) {
         Paginator<GanadorDTO> paginator = new Paginator<>();
-        Pageable pageable = PageRequest.of(page - 1, 21);
+        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
 
         Page<Ganador> ganadores = ganadorDAO.findById_CategoriaPremio_Id_Premio_IdAndId_Anyo(id, anyo, pageable);
 

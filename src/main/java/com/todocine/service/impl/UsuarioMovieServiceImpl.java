@@ -53,7 +53,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
         if (getCurrentUserId().equals(userId)) {
 
-            usuarioMoviePaginator = usuarioMovieDAO.getUserMoviesByFilter(userId, filters, orderBy,12, page);
+            usuarioMoviePaginator = usuarioMovieDAO.getUserMoviesByFilter(userId, filters, orderBy, FAVOURITES_SIZE, page);
 
             if (!usuarioMoviePaginator.getResults().isEmpty()) {
                 movieDetailDTOS = usuarioMoviePaginator.getResults().stream()
