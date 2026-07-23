@@ -40,14 +40,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CheckMoviesUnitTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckMoviesUnitTest.class);
+
     @Mock
     private MovieDAO movieDAO;
 
     @Mock
     private TMDBService tmdbService;
 
-    @Mock
-    private UsuarioMovieDAO favoritosDAO;
 
     @InjectMocks
     private MovieServiceImpl movieService;

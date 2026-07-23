@@ -37,9 +37,6 @@ public class CheckGanadorUnitarioTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckGanadorUnitarioTest.class);
 
     @Mock
-    PremioDAO premioDAO;
-
-    @Mock
     GanadorDAO ganadorDAO;
 
     @InjectMocks
