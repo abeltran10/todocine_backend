@@ -77,7 +77,7 @@ public class GlobalExceptionController {
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.BAD_REQUEST.value());
         response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
-        response.put("message", "El cuerpo de la petición no es valido");
+        response.put("message", "El cuerpo de la petición no es válido");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -86,7 +86,7 @@ public class GlobalExceptionController {
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.BAD_REQUEST.value());
         response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
-        response.put("message", "Los parámetros del path no son validos");
+        response.put("message", "Los parámetros del path no son válidos");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
