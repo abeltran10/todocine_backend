@@ -10,10 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuarios")
+@Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class UsuarioController {
     private Logger logger = LoggerFactory.getLogger(UsuarioController.class);
 
