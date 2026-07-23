@@ -86,7 +86,7 @@ public class GlobalExceptionController {
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.BAD_REQUEST.value());
         response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
-        response.put("message", "Los parámetros del path no son válidos");
+        response.put("message", "Los parámetros del path y/o url no son válidos");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
