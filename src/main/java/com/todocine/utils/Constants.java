@@ -33,7 +33,7 @@ public class Constants {
 
     public static final String CAPTCHA_UNAUTHORISED = "No autorizado ha registrarse. La validación captcha ha fallado";
 
-    public static final String MOVIE_SEARCH_BADREQUEST = "Hay que indicar los filtros de busqueda";
+    public static final String MOVIE_SEARCH_BADREQUEST = "Hay que indicar los filtros de búsqueda";
 
     public static final String LISTA_NOT_FOUND = "Lista no encontrada";
 
@@ -43,7 +43,6 @@ public class Constants {
     //FILTERS FAVORITOS
 
     public static final String VISTA_FILTER = "VISTA";
-
     public static final String VOTADA_FILTER = "VOTADA";
 
     //MOVIES FILTERS
