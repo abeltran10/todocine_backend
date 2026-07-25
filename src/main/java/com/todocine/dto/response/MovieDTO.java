@@ -76,18 +76,18 @@ public class MovieDTO {
 
     /**
      * TMDB devuelve los vídeos anidados como: {"videos": {"results": [...]}}
-     * Mapeamos la estructura wrapper internamente para aplanar la lista.
+     * Mapeamos la estructura mapper internamente para aplanar la lista.
      */
     @JsonSetter("videos")
-    public void unpackVideos(VideosWrapper wrapper) {
-        if (wrapper != null && wrapper.getResults() != null) {
-            this.videoDTOS = wrapper.getResults();
+    public void mapVideos(VideosMapper mapper) {
+        if (mapper != null && mapper.getResults() != null) {
+            this.videoDTOS = mapper.getResults();
         }
     }
 
     // Clase auxiliar estática para desempaquetar la respuesta de vídeos de TMDB
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class VideosWrapper {
+    private static class VideosMapper {
         @JsonProperty("results")
         private List<VideoDTO> results;
 
