@@ -7,6 +7,7 @@ import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.Paginator;
 import com.todocine.service.UsuarioMovieService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class UsuarioMovieController {
                                                                       @RequestParam("vista") String vista,
                                                                       @RequestParam("votada") String votada,
                                                                       @RequestParam("orderBy") String orderBy,
-                                                                      @NotNull @RequestParam("page") Integer pagina) {
+                                                                      @NotNull @Min(1) @RequestParam("page") Integer pagina) {
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.VISTA_FILTER, vista);
         filters.put(Constants.VOTADA_FILTER, votada);
