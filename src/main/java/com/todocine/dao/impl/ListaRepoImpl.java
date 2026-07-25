@@ -3,7 +3,7 @@ package com.todocine.dao.impl;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.todocine.configuration.Constants;
+import com.todocine.utils.Constants;
 import com.todocine.dao.ListaRepo;
 import com.todocine.dto.response.Paginator;
 import com.todocine.entities.Movie;

@@ -9,16 +9,19 @@ import com.todocine.dto.response.ValoracionListaDTO;
 import com.todocine.service.ListaService;
 import com.todocine.service.ValoracionListaService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/listas")
+@Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class ListaController {
 
     @Autowired
@@ -28,7 +31,7 @@ public class ListaController {
     private ValoracionListaService valoracionListaService;
 
     @GetMapping
-    public ResponseEntity<Paginator<ListaDTO>> getListasPublicas(@NotNull @RequestParam("page") Integer page) {
+    public ResponseEntity<Paginator<ListaDTO>> getListasPublicas(@NotNull @Min(1) @RequestParam("page") Integer page) {
         return new ResponseEntity<>(listaService.getListasPublicas(page), HttpStatus.OK);
     }
 
@@ -59,7 +62,7 @@ public class ListaController {
     public ResponseEntity<Paginator<MovieListaDTO>> getMoviesByList(@NotNull @PathVariable("listaId") Long listaId,
                                                                     @RequestParam("orderBy") String orderBy,
                                                                     @RequestParam("direction") String direction,
-                                                                    @NotNull @RequestParam("page") Integer pagina) {
+                                                                    @NotNull @Min(1) @RequestParam("page") Integer pagina) {
         return new ResponseEntity<>(listaService.getMoviesByLista(listaId, orderBy, direction, pagina), HttpStatus.OK);
     }
 

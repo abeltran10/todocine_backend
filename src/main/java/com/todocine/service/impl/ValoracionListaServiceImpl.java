@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.todocine.configuration.Constants.*;
+import static com.todocine.utils.Constants.*;
 
 @Service
 public class ValoracionListaServiceImpl extends BaseServiceImpl implements ValoracionListaService {

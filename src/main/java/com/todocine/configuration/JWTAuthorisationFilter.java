@@ -20,17 +20,17 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import java.io.IOException;
 
-import static com.todocine.configuration.Constants.HEADER_AUTHORIZACION_KEY;
-import static com.todocine.configuration.Constants.TOKEN_BEARER_PREFIX;
+import static com.todocine.utils.Constants.HEADER_AUTHORIZACION_KEY;
+import static com.todocine.utils.Constants.TOKEN_BEARER_PREFIX;
 
 
 public class JWTAuthorisationFilter extends BasicAuthenticationFilter {
 
-    private String secretKey;
+    private String JWT_SECRET;
 
-    public JWTAuthorisationFilter(AuthenticationManager authenticationManager, String secretKey) {
+    public JWTAuthorisationFilter(AuthenticationManager authenticationManager, String JWT_SECRET) {
         super(authenticationManager);
-        this.secretKey = secretKey;
+        this.JWT_SECRET = JWT_SECRET;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class JWTAuthorisationFilter extends BasicAuthenticationFilter {
 
         if (!token.isEmpty()) {
             // Se procesa el token y se recupera el usuario.
-            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(this.secretKey))
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(this.JWT_SECRET))
                     .build(); //Reusable verifier instance
             String usuarioString = verifier.verify(token).getSubject();
 

@@ -3,7 +3,6 @@ package com.todocine.service.impl;
 import com.todocine.dao.ListaDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioDAO;
-import com.todocine.dao.ValoracionListaDAO;
 import com.todocine.dto.request.ListaReqDTO;
 import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.MovieDTO;
@@ -33,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.todocine.configuration.Constants.*;
+import static com.todocine.utils.Constants.*;
 
 @Service
 public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
@@ -48,15 +47,12 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     private UsuarioDAO usuarioDAO;
 
     @Autowired
-    private ValoracionListaDAO valoracionListaDAO;
-
-    @Autowired
     private TMDBService tmdbService;
 
     @Override
     public Paginator<ListaDTO> getListasUser(Long usuarioId, Integer page) {
         Paginator<ListaDTO> paginator = new Paginator<>();
-        Pageable pageable = PageRequest.of(page - 1, 10);
+        Pageable pageable = PageRequest.of(page - 1, LISTAS_PAGE_SIZE);
 
         if (getCurrentUserId().equals(usuarioId)) {
             Page<Lista> listasPage = listaDAO.findByUsuarioId(usuarioId, pageable);
@@ -162,13 +158,12 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
             if (movie == null) {
                 try {
-                    Map<String, Object> movieMap = tmdbService.getMovieById(movieId);
+                    MovieDTO movieDTO = tmdbService.getMovieById(movieId);
 
-                    if (movieMap.get("id") == null) {
+                    if (movieDTO.getId() == null) {
                         throw new NotFoudException(MOVIE_NOTFOUND);
                     }
 
-                    MovieDTO movieDTO = MovieMapper.toDTO(movieMap);
                     movie = movieDAO.save(MovieMapper.toEntity(movieDTO));
 
                 } catch (IOException e) {
@@ -213,7 +208,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     public Paginator<ListaDTO> getListasPublicas(Integer page) {
         Paginator<ListaDTO> paginator = new Paginator<>();
 
-        Pageable pageable = PageRequest.of(page - 1, 10);
+        Pageable pageable = PageRequest.of(page - 1, LISTAS_PAGE_SIZE);
         Page<Lista> listasPage = listaDAO.findByPublica("S", pageable);
 
         if (listasPage.hasContent()) {
@@ -241,7 +236,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
 
-            Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, 8, pagina);
+            Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, MOVIELIST_PAGE_SIZE, pagina);
 
             if (!moviePage.getResults().isEmpty()) {
                 movieListaDTOS = moviePage.getResults().stream()

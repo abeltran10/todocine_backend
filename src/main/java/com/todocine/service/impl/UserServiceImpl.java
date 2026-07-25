@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
-import static com.todocine.configuration.Constants.*;
+import static com.todocine.utils.Constants.*;
 
 @Service
 public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {

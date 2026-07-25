@@ -1,16 +1,18 @@
 package com.todocine.controller;
 
 
-import com.todocine.configuration.Constants;
+import com.todocine.utils.Constants;
 import com.todocine.dto.request.UsuarioMovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.Paginator;
 import com.todocine.service.UsuarioMovieService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios/{userId}/movies")
+@Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class UsuarioMovieController {
 
     @Autowired
@@ -37,7 +40,7 @@ public class UsuarioMovieController {
                                                                       @RequestParam("vista") String vista,
                                                                       @RequestParam("votada") String votada,
                                                                       @RequestParam("orderBy") String orderBy,
-                                                                      @NotNull @RequestParam("page") Integer pagina) {
+                                                                      @NotNull @Min(1) @RequestParam("page") Integer pagina) {
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.VISTA_FILTER, vista);
         filters.put(Constants.VOTADA_FILTER, votada);

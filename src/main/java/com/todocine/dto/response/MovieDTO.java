@@ -2,6 +2,7 @@ package com.todocine.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -58,10 +59,54 @@ public class MovieDTO {
     @JsonProperty("votos_media_TC")
     private Double votosMediaTC;
 
+    /**
+     * TMDB devuelve "genre_ids": [28, 12] en las listas.
+     * Este setter captura ese campo si "genres" no está presente.
+     */
+    @JsonSetter("genre_ids")
+    public void setGenreIds(List<Long> genreIds) {
+        if (this.genreDTOS == null || this.genreDTOS.isEmpty()) {
+            if (genreIds != null) {
+                this.genreDTOS = genreIds.stream()
+                        .map(GenreDTO::new)
+                        .toList();
+            }
+        }
+    }
+
+    /**
+     * TMDB devuelve los vídeos anidados como: {"videos": {"results": [...]}}
+     * Mapeamos la estructura mapper internamente para aplanar la lista.
+     */
+    @JsonSetter("videos")
+    public void mapVideos(VideosMapper mapper) {
+        if (mapper != null && mapper.getResults() != null) {
+            this.videoDTOS = mapper.getResults();
+        }
+    }
+
+    // Clase auxiliar estática para desempaquetar la respuesta de vídeos de TMDB
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private static class VideosMapper {
+        @JsonProperty("results")
+        private List<VideoDTO> results;
+
+        public List<VideoDTO> getResults() {
+            return results;
+        }
+
+        public void setResults(List<VideoDTO> results) {
+            this.results = results;
+        }
+    }
+
     public MovieDTO() {
+        this.totalVotosTC = 0;
+        this.votosMediaTC = 0.0;
     }
 
     public MovieDTO(Long id) {
+        this();
         this.id = id;
     }
 
@@ -85,13 +130,13 @@ public class MovieDTO {
     }
 
     public MovieDTO(Long id, String originalTitle, String posterPath) {
-        this.id = id;
+        this(id);
         this.originalTitle = originalTitle;
         this.posterPath = posterPath;
     }
 
     public MovieDTO(Long id, String originalTitle) {
-        this.id = id;
+        this(id);
         this.originalTitle = originalTitle;
     }
 

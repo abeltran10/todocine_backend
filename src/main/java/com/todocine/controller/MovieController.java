@@ -1,16 +1,18 @@
 package com.todocine.controller;
 
-import com.todocine.configuration.Constants;
+import com.todocine.utils.Constants;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.Paginator;
 import com.todocine.service.MovieService;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/movies")
+@Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class MovieController {
     Logger LOG = LoggerFactory.getLogger(MovieController.class);
 
@@ -27,7 +30,7 @@ public class MovieController {
 
     @GetMapping
     public ResponseEntity<Paginator<MovieDTO>> getMovies(@RequestParam("name") String name, @RequestParam("status") String status,
-                                                         @RequestParam("region") String region, @RequestParam("page") Integer pagina) {
+                                                         @RequestParam("region") String region, @NotNull @Min(1) @RequestParam("page") Integer pagina) {
 
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.MOVIE_NAME, name);

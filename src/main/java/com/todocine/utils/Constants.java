@@ -1,9 +1,10 @@
-package com.todocine.configuration;
+package com.todocine.utils;
 
 
 public class Constants {
 
     //TOKEN
+
     public static final String HEADER_AUTHORIZACION_KEY = "Authorization";
 
     public static final String TOKEN_BEARER_PREFIX = "Bearer";
@@ -33,7 +34,7 @@ public class Constants {
 
     public static final String CAPTCHA_UNAUTHORISED = "No autorizado ha registrarse. La validación captcha ha fallado";
 
-    public static final String MOVIE_SEARCH_BADREQUEST = "Hay que indicar los filtros de busqueda";
+    public static final String MOVIE_SEARCH_BADREQUEST = "Hay que indicar los filtros de búsqueda";
 
     public static final String LISTA_NOT_FOUND = "Lista no encontrada";
 
@@ -43,7 +44,6 @@ public class Constants {
     //FILTERS FAVORITOS
 
     public static final String VISTA_FILTER = "VISTA";
-
     public static final String VOTADA_FILTER = "VOTADA";
 
     //MOVIES FILTERS
@@ -56,4 +56,11 @@ public class Constants {
 
     public static final String ORDER_TITULO = "TITLE";
     public static final String ORDER_ANYO = "YEAR";
+
+    //PAGINATION
+
+    public static final int PAGE_SIZE = 21;
+    public static final int MOVIELIST_PAGE_SIZE = 5;
+    public static final int LISTAS_PAGE_SIZE = 9;
+    public static final int FAVOURITES_PAGE_SIZE = 12;
 }

@@ -1,8 +1,7 @@
 package com.todocine;
 
-import com.todocine.configuration.Constants;
+import com.todocine.utils.Constants;
 import com.todocine.dao.MovieDAO;
-import com.todocine.dao.UsuarioMovieDAO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.Paginator;
@@ -40,14 +39,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CheckMoviesUnitTest {
     public static Logger LOG = LoggerFactory.getLogger(CheckMoviesUnitTest.class);
+
     @Mock
     private MovieDAO movieDAO;
 
     @Mock
     private TMDBService tmdbService;
 
-    @Mock
-    private UsuarioMovieDAO favoritosDAO;
 
     @InjectMocks
     private MovieServiceImpl movieService;
@@ -76,12 +74,12 @@ public class CheckMoviesUnitTest {
         // Setear el contexto de seguridad
         SecurityContextHolder.setContext(securityContext);
 
-        Map<String, Object> movieMap = new HashMap<>();
-        movieMap.put("id", 13);
-        movieMap.put("original_title", "Fantasía");
+        MovieDTO movieDTO = new MovieDTO();
+        movieDTO.setId(13L);
+        movieDTO.setOriginalTitle("Fantasía");
 
         try {
-            Mockito.when(tmdbService.getMovieById(13L)).thenReturn(movieMap);
+            Mockito.when(tmdbService.getMovieById(13L)).thenReturn(movieDTO);
             Mockito.when(movieDAO.findById(13L)).thenReturn(Optional.empty());
             MovieDetailDTO movieDetailDTO = movieService.getMovieDetailById(13L);
 
@@ -99,13 +97,16 @@ public class CheckMoviesUnitTest {
         Map<String, Object> movieMap = new HashMap<>();
         Map<String, Object> results = new HashMap<>();
 
-        movieMap.put("id", 13);
-        movieMap.put("original_title", "Fantasía");
+        Paginator<MovieDTO> moviePage = new Paginator<>();
 
-        results.put("results", Arrays.asList(movieMap));
-        results.put("page", 1);
-        results.put("total_pages", 1);
-        results.put("total_results", 1);
+        MovieDTO movieDTO1 = new MovieDTO();
+        movieDTO1.setId(13L);
+        movieDTO1.setOriginalTitle("Fantasía");
+
+        moviePage.setResults(Arrays.asList(movieDTO1));
+        moviePage.setPage(1);
+        moviePage.setTotalPages(1);
+        moviePage.setTotalResults(1);
 
         Map<String, String> filters = new HashMap<>();
         filters.put(Constants.MOVIE_NAME, "Fantasía");
@@ -113,7 +114,7 @@ public class CheckMoviesUnitTest {
         filters.put(Constants.MOVIE_REGION, "");
 
         try {
-            Mockito.when(tmdbService.getMoviesByName("Fantasía", 1)).thenReturn(results);
+            Mockito.when(tmdbService.getMoviesByName("Fantasía", 1)).thenReturn(moviePage);
             Paginator<MovieDTO> paginator = movieService.getMovies(filters, 1);
 
             assertTrue(paginator.getResults() != null);

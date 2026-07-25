@@ -9,7 +9,7 @@ public class GenreDTO {
 
     @JsonProperty("id")
     @NotBlank
-    private String id;
+    private Long id;
 
     @JsonProperty("name")
     private String name;
@@ -17,20 +17,20 @@ public class GenreDTO {
     public GenreDTO() {
     }
 
-    public GenreDTO(String id) {
+    public GenreDTO(Long id) {
         this.id = id;
     }
 
-    public GenreDTO(String id, String name) {
+    public GenreDTO(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -42,11 +42,4 @@ public class GenreDTO {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "Genre{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }

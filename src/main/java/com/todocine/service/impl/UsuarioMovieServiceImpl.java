@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.todocine.configuration.Constants.*;
+import static com.todocine.utils.Constants.*;
 
 @Service
 public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioMovieService {
@@ -53,7 +53,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
         if (getCurrentUserId().equals(userId)) {
 
-            usuarioMoviePaginator = usuarioMovieDAO.getUserMoviesByFilter(userId, filters, orderBy,12, page);
+            usuarioMoviePaginator = usuarioMovieDAO.getUserMoviesByFilter(userId, filters, orderBy, FAVOURITES_PAGE_SIZE, page);
 
             if (!usuarioMoviePaginator.getResults().isEmpty()) {
                 movieDetailDTOS = usuarioMoviePaginator.getResults().stream()
@@ -93,12 +93,12 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
             MovieDTO movieDTO = null;
 
              try {
-                 Map<String, Object> movieMap = tmdbService.getMovieById(usuarioMovieDTO.getMovieId());
-                 if (movieMap.get("id") == null)
+                 movieDTO = tmdbService.getMovieById(usuarioMovieDTO.getMovieId());
+
+                 if (movieDTO == null)
                      throw new NotFoudException(MOVIE_NOTFOUND);
                  else {
                      movie = movieDAO.findById(movieId).orElse(null);
-                     movieDTO = MovieMapper.toDTO(movieMap);
 
                      if (movie == null) {
                         movie = MovieMapper.toEntity(movieDTO);

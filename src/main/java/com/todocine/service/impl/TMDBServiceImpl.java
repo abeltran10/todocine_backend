@@ -1,7 +1,10 @@
 package com.todocine.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.todocine.dto.response.MovieDTO;
+import com.todocine.dto.response.Paginator;
 import com.todocine.service.TMDBService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -25,7 +28,7 @@ public class TMDBServiceImpl implements TMDBService {
 
 
     @Override
-    public Map<String, Object> getMovieById(Long id) throws IOException {
+    public MovieDTO getMovieById(Long id) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
@@ -42,14 +45,12 @@ public class TMDBServiceImpl implements TMDBService {
 
         String body = response.body().string();
 
-        Map<String,Object> map = objectMapper.readValue(body, HashMap.class);
-
-        return map;
+        return objectMapper.readValue(body, MovieDTO.class);
 
     }
 
     @Override
-    public Map<String, Object> getMoviesByName(String name, Integer pagina) throws IOException {
+    public Paginator<MovieDTO> getMoviesByName(String name, Integer pagina) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
@@ -66,14 +67,15 @@ public class TMDBServiceImpl implements TMDBService {
 
         String body = response.body().string();
 
-        Map<String,Object> map = objectMapper.readValue(body, HashMap.class);
-
-        return map;
+        return objectMapper.readValue(
+                body,
+                new TypeReference<Paginator<MovieDTO>>() {}
+        );
 
     }
 
     @Override
-    public Map<String, Object> getMoviesPlayingNow(String country, Integer pagina) throws IOException {
+    public Paginator<MovieDTO> getMoviesPlayingNow(String country, Integer pagina) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
@@ -90,9 +92,10 @@ public class TMDBServiceImpl implements TMDBService {
 
         String body = response.body().string();
 
-        Map<String,Object> map = objectMapper.readValue(body, HashMap.class);
-
-        return map;
+        return objectMapper.readValue(
+                body,
+                new TypeReference<Paginator<MovieDTO>>() {}
+        );
 
     }
 

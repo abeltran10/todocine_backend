@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.todocine.configuration.Constants.PREMIO_NOTFOUND;
+import static com.todocine.utils.Constants.PREMIO_NOTFOUND;
 
 
 @Service

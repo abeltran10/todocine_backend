@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static com.todocine.configuration.Constants.*;
+import static com.todocine.utils.Constants.*;
 
 @Service
 public class GanadorServiceImpl implements GanadorService {
@@ -51,7 +51,7 @@ public class GanadorServiceImpl implements GanadorService {
     @Transactional(readOnly = true)
     public Paginator<GanadorDTO> getGanadoresByPremioIdAnyo(Long id, Integer anyo, Integer page) {
         Paginator<GanadorDTO> paginator = new Paginator<>();
-        Pageable pageable = PageRequest.of(page - 1, 21);
+        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
 
         Page<Ganador> ganadores = ganadorDAO.findById_CategoriaPremio_Id_Premio_IdAndId_Anyo(id, anyo, pageable);
 
@@ -102,12 +102,11 @@ public class GanadorServiceImpl implements GanadorService {
 
             if (movie == null) {
                 try {
-                    Map<String, Object> map = tmdbService.getMovieById(ganadorReqDTO.getMovieId());
+                    movieDTO = tmdbService.getMovieById(ganadorReqDTO.getMovieId());
 
-                    if (map.get("id") == null)
+                    if (movieDTO == null)
                         throw new NotFoudException(MOVIE_NOTFOUND);
 
-                    movieDTO = MovieMapper.toDTO(map);
                     movie = MovieMapper.toEntity(movieDTO);
 
                     movieDAO.save(movie);

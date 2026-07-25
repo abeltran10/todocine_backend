@@ -36,7 +36,7 @@ public class WebConfiguration {
     private String[] paths;
 
     @Value("${jwt.secret}")
-    private String jwtSecret;
+    private String JWT_SECRET;
 
 
     @Autowired
@@ -110,9 +110,9 @@ public class WebConfiguration {
                 )
 
                 //JWT filters con orden correcto
-                .addFilter(new JWTAuthenticationFilter(authenticationManager, jwtSecret))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager, JWT_SECRET))
                 .addFilterBefore(
-                        new JWTAuthorisationFilter(authenticationManager, jwtSecret),
+                        new JWTAuthorisationFilter(authenticationManager, JWT_SECRET),
                         UsernamePasswordAuthenticationFilter.class
                 );
 
