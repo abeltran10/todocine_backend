@@ -20,8 +20,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import java.io.IOException;
 
-import static com.todocine.configuration.Constants.HEADER_AUTHORIZACION_KEY;
-import static com.todocine.configuration.Constants.TOKEN_BEARER_PREFIX;
+import static com.todocine.utils.Constants.HEADER_AUTHORIZACION_KEY;
+import static com.todocine.utils.Constants.TOKEN_BEARER_PREFIX;
 
 
 public class JWTAuthorisationFilter extends BasicAuthenticationFilter {

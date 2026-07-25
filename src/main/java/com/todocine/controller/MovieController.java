@@ -1,6 +1,6 @@
 package com.todocine.controller;
 
-import com.todocine.configuration.Constants;
+import com.todocine.utils.Constants;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.Paginator;

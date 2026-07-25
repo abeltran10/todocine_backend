@@ -1,4 +1,4 @@
-package com.todocine.configuration;
+package com.todocine.utils;
 
 
 public class Constants {
