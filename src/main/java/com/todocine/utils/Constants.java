@@ -4,6 +4,7 @@ package com.todocine.utils;
 public class Constants {
 
     //TOKEN
+
     public static final String HEADER_AUTHORIZACION_KEY = "Authorization";
 
     public static final String TOKEN_BEARER_PREFIX = "Bearer";
