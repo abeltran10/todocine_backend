@@ -45,9 +45,7 @@ public class TMDBServiceImpl implements TMDBService {
 
         String body = response.body().string();
 
-       MovieDTO movieDTO = objectMapper.readValue(body, MovieDTO.class);
-
-        return movieDTO;
+        return objectMapper.readValue(body, MovieDTO.class);
 
     }
 
@@ -69,12 +67,10 @@ public class TMDBServiceImpl implements TMDBService {
 
         String body = response.body().string();
 
-        Paginator<MovieDTO> paginator = objectMapper.readValue(
+        return objectMapper.readValue(
                 body,
                 new TypeReference<Paginator<MovieDTO>>() {}
         );
-
-        return paginator;
 
     }
 
@@ -96,12 +92,10 @@ public class TMDBServiceImpl implements TMDBService {
 
         String body = response.body().string();
 
-        Paginator<MovieDTO> paginator = objectMapper.readValue(
+        return objectMapper.readValue(
                 body,
                 new TypeReference<Paginator<MovieDTO>>() {}
         );
-
-        return paginator;
 
     }
 
