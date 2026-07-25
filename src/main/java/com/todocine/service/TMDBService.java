@@ -1,14 +1,17 @@
 package com.todocine.service;
 
+import com.todocine.dto.response.MovieDTO;
+import com.todocine.dto.response.Paginator;
+
 import java.io.IOException;
 import java.util.Map;
 
 public interface TMDBService {
 
-    Map<String, Object> getMovieById(Long id) throws IOException;
+    MovieDTO getMovieById(Long id) throws IOException;
 
-    Map<String, Object> getMoviesByName(String name, Integer pagina) throws IOException;
+    Paginator<MovieDTO> getMoviesByName(String name, Integer pagina) throws IOException;
 
-    Map<String, Object> getMoviesPlayingNow(String country, Integer pagina) throws IOException;
+    Paginator<MovieDTO> getMoviesPlayingNow(String country, Integer pagina) throws IOException;
 
 }

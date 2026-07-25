@@ -51,10 +51,9 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
         Double voto = null;
 
         try {
-            Map<String, Object> movieMap = tmdbService.getMovieById(id);
+            MovieDTO movieDTO = tmdbService.getMovieById(id);
 
-            if (movieMap.get("id") != null) {
-                MovieDTO movieDTO = MovieMapper.toDTO(movieMap);
+            if (movieDTO != null) {
                 Movie movie = movieDAO.findById(id).orElse(null);
 
                 if (movie != null) {
@@ -85,26 +84,16 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
     }
 
     @Override
-    public Paginator getMovies(Map<String, String> filters, Integer pagina) {
-        Map<String, Object> map = new HashMap<>();
+    public Paginator<MovieDTO> getMovies(Map<String, String> filters, Integer pagina) {
         Paginator<MovieDTO> moviePage = new Paginator<>();
         try {
 
             if (!filters.get(MOVIE_NAME).isBlank()) {
-                map = tmdbService.getMoviesByName(filters.get(MOVIE_NAME), pagina);
+                moviePage = tmdbService.getMoviesByName(filters.get(MOVIE_NAME), pagina);
             } else if (!filters.get(MOVIE_STATUS).isBlank() && !filters.get(MOVIE_REGION).isBlank()) {
-                map = tmdbService.getMoviesPlayingNow(filters.get(MOVIE_REGION), pagina);
+                moviePage = tmdbService.getMoviesPlayingNow(filters.get(MOVIE_REGION), pagina);
             } else {
                 throw new BadRequestException(MOVIE_SEARCH_BADREQUEST);
-            }
-
-            if (map.get("results") != null) {
-                moviePage = new Paginator<>(map);
-                List<MovieDTO> results = ((List<Map<String, Object>>) map.get("results")).stream()
-                        .map(MovieMapper::toDTO)
-                        .toList();
-
-                moviePage.setResults(results);
             }
 
             return moviePage;

@@ -158,13 +158,12 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
             if (movie == null) {
                 try {
-                    Map<String, Object> movieMap = tmdbService.getMovieById(movieId);
+                    MovieDTO movieDTO = tmdbService.getMovieById(movieId);
 
-                    if (movieMap.get("id") == null) {
+                    if (movieDTO.getId() == null) {
                         throw new NotFoudException(MOVIE_NOTFOUND);
                     }
 
-                    MovieDTO movieDTO = MovieMapper.toDTO(movieMap);
                     movie = movieDAO.save(MovieMapper.toEntity(movieDTO));
 
                 } catch (IOException e) {

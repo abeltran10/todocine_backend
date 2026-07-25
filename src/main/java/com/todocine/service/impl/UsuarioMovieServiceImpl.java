@@ -93,12 +93,12 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
             MovieDTO movieDTO = null;
 
              try {
-                 Map<String, Object> movieMap = tmdbService.getMovieById(usuarioMovieDTO.getMovieId());
-                 if (movieMap.get("id") == null)
+                 movieDTO = tmdbService.getMovieById(usuarioMovieDTO.getMovieId());
+
+                 if (movieDTO == null)
                      throw new NotFoudException(MOVIE_NOTFOUND);
                  else {
                      movie = movieDAO.findById(movieId).orElse(null);
-                     movieDTO = MovieMapper.toDTO(movieMap);
 
                      if (movie == null) {
                         movie = MovieMapper.toEntity(movieDTO);

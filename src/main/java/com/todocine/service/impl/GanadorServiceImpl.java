@@ -102,12 +102,11 @@ public class GanadorServiceImpl implements GanadorService {
 
             if (movie == null) {
                 try {
-                    Map<String, Object> map = tmdbService.getMovieById(ganadorReqDTO.getMovieId());
+                    movieDTO = tmdbService.getMovieById(ganadorReqDTO.getMovieId());
 
-                    if (map.get("id") == null)
+                    if (movieDTO == null)
                         throw new NotFoudException(MOVIE_NOTFOUND);
 
-                    movieDTO = MovieMapper.toDTO(map);
                     movie = MovieMapper.toEntity(movieDTO);
 
                     movieDAO.save(movie);

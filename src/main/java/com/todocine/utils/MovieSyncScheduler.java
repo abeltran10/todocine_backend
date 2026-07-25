@@ -39,7 +39,7 @@ public class MovieSyncScheduler {
      * DESENCADENANTE 1: Al desplegar / arrancar la aplicación.
      * Se ejecuta automáticamente cuando la app está lista para recibir peticiones.
      */
-    @EventListener(ApplicationReadyEvent.class)
+    /*@EventListener(ApplicationReadyEvent.class)
     public void syncOnDeploy() {
         // 2. Comprobamos si el perfil "prod" está entre los perfiles activos
         boolean isProd = Arrays.asList(environment.getActiveProfiles()).contains("prod");
@@ -48,7 +48,7 @@ public class MovieSyncScheduler {
             System.out.println("Iniciando sincronización de películas por despliegue de nueva versión...");
             ejecutarSincronizacionGlobal();
         }
-    }
+    }*/
 
     /**
      * DESENCADENANTE 2: Todos los lunes a las 03:00 AM.
@@ -87,10 +87,9 @@ public class MovieSyncScheduler {
 
                     try {
                         //Get from TMDB
-                        Map<String, Object> movieMap = tmdbService.getMovieById(id);
-                        if (movieMap.get("id") != null) {
-                            MovieDTO movieDTO = MovieMapper.toDTO(movieMap);
+                        MovieDTO movieDTO = tmdbService.getMovieById(id);
 
+                        if (movieDTO != null) {
                             movie.setOriginalTitle(movieDTO.getOriginalTitle());
                             movie.setTitle(movieDTO.getTitle());
                             movie.setPosterPath(movieDTO.getPosterPath());
