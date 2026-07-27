@@ -12,13 +12,13 @@ Todo Cine is an API REST developed with [Java and Springboot in backend](https:/
 
 application.properties loads properties from three files, one per environment (prod, dev, test).
 
-For creating new users it is implemented Google [reCaptchav3](https://docs.cloud.google.com/recaptcha/docs/overview?hl=en).
+For creating new users it is implemented [Google reCaptchaV3](https://docs.cloud.google.com/recaptcha/docs/overview?hl=en).
 
 
 ## Last release
-- [v6.6.0](https://github.com/abeltran10/todocine_backend/releases/tag/v6.6.0)
+- [v6.6.1](https://github.com/abeltran10/todocine_backend/releases/tag/v6.6.1)
 
-## Version: v6.6.0
+## Version: v6.6.1
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
