@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,11 +23,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.resource.PathResourceResolver;
+
+import java.io.IOException;
 
 
 @Configuration
 @EnableWebSecurity
-public class WebConfiguration {
+public class WebConfiguration implements WebMvcConfigurer {
 
     private Logger logger = LoggerFactory.getLogger(WebConfiguration.class);
 
@@ -37,6 +44,9 @@ public class WebConfiguration {
 
     @Value("${jwt.secret}")
     private String JWT_SECRET;
+
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
 
 
     @Autowired
@@ -117,6 +127,29 @@ public class WebConfiguration {
                 );
 
         return http.build();
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/")
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver() {
+                    @Override
+                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        Resource requestedResource = location.createRelative(resourcePath);
+
+                        // Si el recurso existe (ej. un .js, .css, imagen), lo sirve directamente.
+                        // Si no existe y no es una llamada a la API, devuelve index.html para que Angular maneje la ruta.
+                        if (requestedResource.exists() && requestedResource.isReadable()) {
+                            return requestedResource;
+                        } else if (!resourcePath.startsWith(contextPath)) {
+                            return location.createRelative("index.html");
+                        }
+
+                        return null;
+                    }
+                });
     }
 
 

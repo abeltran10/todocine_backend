@@ -51,10 +51,9 @@ public class MovieSyncScheduler {
     }*/
 
     /**
-     * DESENCADENANTE 2: Todos los lunes a las 03:00 AM.
-     * "0 0 3 ? * MON" -> Segundos, Minutos, Horas, Día del mes, Mes, Día de la semana.
+     * DESENCADENANTE 2: El primer domingo de cada mes a las 00:00:01.
      */
-    @Scheduled(cron = "0 0 3 ? * MON", zone = "Europe/Madrid")
+    @Scheduled(cron = "1 0 0 ? * SUN#1", zone = "Europe/Madrid")
     public void syncEveryMonday() {
         System.out.println("Iniciando sincronización programada de los lunes...");
         ejecutarSincronizacionGlobal();
