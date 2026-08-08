@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,17 +21,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.resource.PathResourceResolver;
-
-import java.io.IOException;
 
 
 @Configuration
 @EnableWebSecurity
-public class WebConfiguration implements WebMvcConfigurer {
+public class WebConfiguration {
 
     private Logger logger = LoggerFactory.getLogger(WebConfiguration.class);
 
@@ -128,44 +120,6 @@ public class WebConfiguration implements WebMvcConfigurer {
                 );
 
         return http.build();
-    }
-
-    // 1. Mapea la raíz exacta "/" para que entregue siempre index.html
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index.html");
-    }
-
-    // 2. Gestiona los archivos estáticos y la navegación SPA de Angular
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/")
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver() {
-                    @Override
-                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-
-                        // SI ES LA RAÍZ (resourcePath está vacío "" o es "/"): sirve index.html directamente
-                        if (resourcePath.isEmpty() || resourcePath.equals("/")) {
-                            return location.createRelative("index.html");
-                        }
-
-                        Resource requestedResource = location.createRelative(resourcePath);
-
-                        // SI ES UN ARCHIVO FÍSICO QUE EXISTE (ej. main.js, styles.css, favicon.ico)
-                        if (requestedResource.exists() && requestedResource.isReadable()) {
-                            return requestedResource;
-                        }
-
-                        // SI ES UNA RUTA DE ANGULAR (no existe como archivo y no empieza por "/api")
-                        if (!resourcePath.startsWith(contextPath)) {
-                            return location.createRelative("index.html");
-                        }
-
-                        return null;
-                    }
-                });
     }
 
 }
