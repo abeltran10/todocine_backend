@@ -133,7 +133,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     // 1. Mapea la raíz exacta "/" para que entregue siempre index.html
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController(contextPath).setViewName("forward:/index.html");
+        registry.addViewController("/").setViewName("forward:/index.html");
     }
 
     // 2. Gestiona los archivos estáticos y la navegación SPA de Angular
@@ -158,7 +158,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                             return requestedResource;
                         }
 
-                        // SI ES UNA RUTA DE ANGULAR (no existe como archivo y no empieza por "/")
+                        // SI ES UNA RUTA DE ANGULAR (no existe como archivo y no empieza por "/api")
                         if (!resourcePath.startsWith(contextPath)) {
                             return location.createRelative("index.html");
                         }
