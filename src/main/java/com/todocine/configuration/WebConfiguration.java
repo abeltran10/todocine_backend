@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
@@ -129,29 +130,10 @@ public class WebConfiguration implements WebMvcConfigurer {
         return http.build();
     }
 
+    // 1. Mapea la raíz exacta "/" para que entregue siempre index.html
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/")
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver() {
-                    @Override
-                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-                        Resource requestedResource = location.createRelative(resourcePath);
-
-                        // Si el recurso existe (ej. un .js, .css, imagen), lo sirve directamente.
-                        // Si no existe y no es una llamada a la API, devuelve index.html para que Angular maneje la ruta.
-                        if (requestedResource.exists() && requestedResource.isReadable()) {
-                            return requestedResource;
-                        } else if (!resourcePath.startsWith(contextPath)) {
-                            return location.createRelative("index.html");
-                        }
-
-                        return null;
-                    }
-                });
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController(contextPath).setViewName("forward:/index.html");
     }
-
-
 
 }
