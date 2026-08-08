@@ -136,4 +136,36 @@ public class WebConfiguration implements WebMvcConfigurer {
         registry.addViewController(contextPath).setViewName("forward:/index.html");
     }
 
+    // 2. Gestiona los archivos estáticos y la navegación SPA de Angular
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/")
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver() {
+                    @Override
+                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+
+                        // SI ES LA RAÍZ (resourcePath está vacío "" o es "/"): sirve index.html directamente
+                        if (resourcePath.isEmpty() || resourcePath.equals("/")) {
+                            return location.createRelative("index.html");
+                        }
+
+                        Resource requestedResource = location.createRelative(resourcePath);
+
+                        // SI ES UN ARCHIVO FÍSICO QUE EXISTE (ej. main.js, styles.css, favicon.ico)
+                        if (requestedResource.exists() && requestedResource.isReadable()) {
+                            return requestedResource;
+                        }
+
+                        // SI ES UNA RUTA DE ANGULAR (no existe como archivo y no empieza por "/")
+                        if (!resourcePath.startsWith(contextPath)) {
+                            return location.createRelative("index.html");
+                        }
+
+                        return null;
+                    }
+                });
+    }
+
 }
