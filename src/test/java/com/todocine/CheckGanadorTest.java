@@ -82,11 +82,11 @@ public class CheckGanadorTest {
         }
 
 
-        Premio premio = new Premio(null, "Goya");
+        Premio premio = new Premio(1L, "Goya");
         premioDAO.save(premio);
         premioId = premio.getId();
 
-        Categoria categoria = new Categoria(null, "Mejor película");
+        Categoria categoria = new Categoria(1L, "Mejor película");
         categoriaDAO.save(categoria);
 
         CategoriaPremio categoriaPremio = new CategoriaPremio();
