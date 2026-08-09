@@ -129,10 +129,4 @@ public class WebConfiguration implements WebMvcConfigurer {
         return http.build();
     }
 
-    // 2. Mapea la raíz "/" a index.html
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index.html");
-    }
-
 }
