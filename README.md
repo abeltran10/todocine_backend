@@ -16,9 +16,9 @@ For creating new users it is implemented [Google reCaptchaV3](https://docs.cloud
 
 
 ## Last release
-- [v6.6.2](https://github.com/abeltran10/todocine_backend/releases/tag/v6.6.2)
+- [v6.6.2.1](https://github.com/abeltran10/todocine_backend/releases/tag/v6.6.2.1)
 
-## Version: v6.6.2
+## Version: v6.6.2.1
 
 ### Available authorizations
 #### BearerAuth (HTTP, bearer)
@@ -833,7 +833,7 @@ Demo is hosted in https://render.com/, there is a free service with PostgresSQL 
 - username: test_demo
 - password: 1234
 
-[Demo v6.6.0 release](https://todocine-backend.onrender.com/api/index.html)
+[Demo v6.6.2.1 release](https://todocine-backend.onrender.com/index.html)
 
 
 
