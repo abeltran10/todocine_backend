@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/movies")
+@RequestMapping("movies")
 @Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class MovieController {
     Logger LOG = LoggerFactory.getLogger(MovieController.class);

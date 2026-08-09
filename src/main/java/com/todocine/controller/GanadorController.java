@@ -15,7 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/ganadores")
+@RequestMapping("ganadores")
 @Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class GanadorController {
 
