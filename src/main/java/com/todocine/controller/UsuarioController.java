@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("usuarios")
 @Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class UsuarioController {
     private Logger logger = LoggerFactory.getLogger(UsuarioController.class);
