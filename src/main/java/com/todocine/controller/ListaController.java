@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("listas")
+@RequestMapping("/listas")
 @Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class ListaController {
 

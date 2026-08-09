@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("premios")
+@RequestMapping("/premios")
 @Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class PremioController {
 
