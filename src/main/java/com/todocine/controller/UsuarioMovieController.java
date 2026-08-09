@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/usuarios/{userId}/movies")
+@RequestMapping("usuarios/{userId}/movies")
 @Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class UsuarioMovieController {
 

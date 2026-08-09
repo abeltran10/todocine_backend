@@ -21,11 +21,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
 @EnableWebSecurity
-public class WebConfiguration {
+public class WebConfiguration implements WebMvcConfigurer {
 
     private Logger logger = LoggerFactory.getLogger(WebConfiguration.class);
 
@@ -120,6 +122,12 @@ public class WebConfiguration {
                 );
 
         return http.build();
+    }
+
+    // 2. Mapea la raíz "/" a index.html
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("forward:/index.html");
     }
 
 }

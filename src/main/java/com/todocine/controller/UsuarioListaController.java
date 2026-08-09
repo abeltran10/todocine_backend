@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/usuarios/{usuarioId}/listas")
+@RequestMapping("usuarios/{usuarioId}/listas")
 @Validated // <-- CRUCIAL para que ConstraintViolationException funcione en parámetros
 public class UsuarioListaController {
 
