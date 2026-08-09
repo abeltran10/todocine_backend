@@ -135,24 +135,4 @@ public class WebConfiguration implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("forward:/index.html");
     }
 
-    // 3. Resuelve rutas estáticas y delega las rutas de Angular (SPA)
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/")
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver() {
-                    @Override
-                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-
-                        // Si es la raíz, devuelve index.html
-                        if (resourcePath.isEmpty() || resourcePath.equals("/")) {
-                            return location.createRelative("index.html");
-                        }
-
-                        return null;
-                    }
-                });
-    }
-
 }
