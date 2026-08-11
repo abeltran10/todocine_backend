@@ -32,7 +32,7 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
-public class WebConfiguration implements WebMvcConfigurer {
+public class WebConfiguration {
 
     private Logger logger = LoggerFactory.getLogger(WebConfiguration.class);
 
