@@ -1,10 +1,10 @@
 package com.todocine.controller;
 
-import com.todocine.utils.Constants;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.Paginator;
 import com.todocine.service.MovieService;
+import com.todocine.utils.Constants;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
