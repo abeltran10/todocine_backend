@@ -45,9 +45,6 @@ public class WebConfiguration {
     @Value("${jwt.secret}")
     private String JWT_SECRET;
 
-    @Value("${server.servlet.context-path}")
-    private String contextPath;
-
 
     @Autowired
     private UsuarioService usuarioService;
