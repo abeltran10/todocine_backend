@@ -1,15 +1,10 @@
 package com.todocine.utils.mapper;
 
-import com.todocine.dto.response.GenreDTO;
 import com.todocine.dto.response.MovieDTO;
-import com.todocine.dto.response.VideoDTO;
 import com.todocine.entities.Movie;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class MovieMapper {
 

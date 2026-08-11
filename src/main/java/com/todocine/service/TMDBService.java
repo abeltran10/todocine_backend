@@ -4,7 +4,6 @@ import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.Paginator;
 
 import java.io.IOException;
-import java.util.Map;
 
 public interface TMDBService {
 

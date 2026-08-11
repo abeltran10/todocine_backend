@@ -2,7 +2,6 @@ package com.todocine;
 
 
 import com.todocine.dao.GanadorDAO;
-import com.todocine.dao.PremioDAO;
 import com.todocine.dto.response.GanadorDTO;
 import com.todocine.dto.response.Paginator;
 import com.todocine.entities.*;

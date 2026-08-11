@@ -1,6 +1,5 @@
 package com.todocine;
 
-import com.todocine.utils.Constants;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
@@ -8,6 +7,7 @@ import com.todocine.dto.response.Paginator;
 import com.todocine.entities.Usuario;
 import com.todocine.service.TMDBService;
 import com.todocine.service.impl.MovieServiceImpl;
+import com.todocine.utils.Constants;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
