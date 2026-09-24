@@ -52,7 +52,6 @@ public class JWTAuthorisationFilter extends BasicAuthenticationFilter {
         } catch (JWTVerificationException ex) {
             SecurityContextHolder.clearContext();
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
         }
     }
 
