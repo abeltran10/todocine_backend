@@ -41,6 +41,9 @@ INSERT INTO CATEGORIA (ID,NOMBRE) values (40,  'Premio del Jurado Ecuménico');
 INSERT INTO CATEGORIA (ID,NOMBRE) values (41,  'Palma de Oro: Mejor cortometraje');
 INSERT INTO CATEGORIA (ID,NOMBRE) values (42,  'FIPRESCI');
 INSERT INTO CATEGORIA (ID,NOMBRE) values (43,  'Mejor guión');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (44,  'Premio Especial del Jurado');
+INSERT INTO CATEGORIA (ID,NOMBRE) values (45,  'Mejor joven actor o actriz emergente');
+
 
 
 
