@@ -833,7 +833,7 @@ Demo is hosted in https://render.com/, there is a free service with PostgresSQL 
 - username: test_demo
 - password: 1234
 
-[Demo v6.6.2.2 release](https://todocine-backend.onrender.com/index.html)
+[Demo](https://todocine-backend.onrender.com/index.html)
 
 
 
