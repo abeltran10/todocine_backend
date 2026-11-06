@@ -39,13 +39,13 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     @Transactional
     public ValoracionListaDTO guardarValoracionLista(Long listaId, ValoracionListaReqDTO valoracionListaReqDTO) {
         ValoracionLista valoracionLista = null;
-        Usuario usuario = usuarioDAO.findByUsername(valoracionListaReqDTO.getUsername());
+        Usuario usuario = usuarioDAO.findById(valoracionListaReqDTO.getUsername()).orElse(null);
 
         if (!listaId.equals(valoracionListaReqDTO.getListaId())) {
             throw new BadRequestException(ID_NOT_MATCH);
         }
 
-        if (usuario != null && getCurrentUserId().equals(usuario.getId())) {
+        if (usuario != null && getCurrentUsername().equals(usuario.getUsername())) {
 
             Lista lista = listaDAO.findById(valoracionListaReqDTO.getListaId()).orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
@@ -71,7 +71,7 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     public List<ValoracionListaDTO> getListaValoraciones(Long listaId) {
         Lista lista = listaDAO.findById(listaId).orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
-        if (!getCurrentUserId().equals(lista.getUsuario().getId()) && !"S".equals(lista.getPublica()))
+        if (!getCurrentUsername().equals(lista.getUsuario().getUsername()) && !"S".equals(lista.getPublica()))
             throw new ForbiddenException(USER_FORBIDDEN);
 
         List<ValoracionLista> valoracionListaList = valoracionListaDAO.findByIdListaId(lista.getId());

@@ -8,7 +8,7 @@ public interface UsuarioService extends UserDetailsService {
 
     UsuarioDTO insertUsuario(UsuarioReqDTO usuarioReqDTO);
 
-    UsuarioDTO updateUsuario(Long id, UsuarioReqDTO usuarioReqDTO);
+    UsuarioDTO updateUsuario(String username, UsuarioReqDTO usuarioReqDTO);
 
-    UsuarioDTO getUsuarioById(Long id);
+    UsuarioDTO getUsuarioById(String username);
 }

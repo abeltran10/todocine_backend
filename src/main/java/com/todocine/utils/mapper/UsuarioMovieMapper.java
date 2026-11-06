@@ -9,7 +9,7 @@ import com.todocine.entities.UsuarioMovie;
 public class UsuarioMovieMapper {
 
     public static UsuarioMovie toEntity(UsuarioMovieDTO usuarioMovieDTO) {
-        Usuario usuario = new Usuario(usuarioMovieDTO.getUsuarioId());
+        Usuario usuario = new Usuario(usuarioMovieDTO.getUsername());
         Movie movie = new Movie(usuarioMovieDTO.getMovieId());
 
         UsuarioMovie usuarioMovie = new UsuarioMovie(new UserMovieId(usuario, movie));
@@ -21,7 +21,7 @@ public class UsuarioMovieMapper {
     }
 
     public static UsuarioMovieDTO toDTO(UsuarioMovie usuarioMovie) {
-        UsuarioMovieDTO usuarioMovieDTO = new UsuarioMovieDTO(usuarioMovie.getId().getUsuario().getId(), usuarioMovie.getId().getMovie().getId());
+        UsuarioMovieDTO usuarioMovieDTO = new UsuarioMovieDTO(usuarioMovie.getId().getUsuario().getUsername(), usuarioMovie.getId().getMovie().getId());
         usuarioMovieDTO.setFavoritos(usuarioMovie.getFavoritos().equals("S"));
         usuarioMovieDTO.setVista(usuarioMovie.getVista().equals("S"));
         usuarioMovieDTO.setVoto(usuarioMovie.getVoto());

@@ -118,10 +118,10 @@ public class CheckUsuarioTest {
         LOG.info("updateUser");
 
         UsuarioReqDTO usuarioReqDTO = new UsuarioReqDTO(usuario.getUsername(), "abcd");
-        usuarioReqDTO.setId(usuario.getId());
+        usuarioReqDTO.setUsername(usuario.getUsername());
 
         try {
-            MvcResult result = mockMvc.perform(put("/usuarios/" + usuarioReqDTO.getId())
+            MvcResult result = mockMvc.perform(put("/usuarios/" + usuarioReqDTO.getUsername())
                             .content(objectMapper.writeValueAsString(usuarioReqDTO))
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(authentication(new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(), usuario.getAuthorities()))))

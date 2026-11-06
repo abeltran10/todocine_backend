@@ -28,7 +28,7 @@ public class Lista {
     private List<Movie> movies = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "usuario", referencedColumnName = "ID")
+    @JoinColumn(name = "usuario", referencedColumnName = "USERNAME")
     private Usuario usuario;
 
     private String publica;

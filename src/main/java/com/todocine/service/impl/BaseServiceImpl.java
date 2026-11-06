@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class BaseServiceImpl {
 
-    public Long getCurrentUserId() {
+    public String getCurrentUsername() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof Usuario) {
-            return ((Usuario) principal).getId();
+            return ((Usuario) principal).getUsername();
         }
 
         return null;  // Si no se encuentra un UsuarioDetails

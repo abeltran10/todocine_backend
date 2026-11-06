@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ListaDAO extends JpaRepository<Lista, Long>, ListaRepo {
 
-    Page<Lista> findByUsuarioId(Long userId, Pageable pageable);
+    Page<Lista> findByUsuarioUsername(String username, Pageable pageable);
 
     Page<Lista> findByPublica(String publica, Pageable pageable);
 

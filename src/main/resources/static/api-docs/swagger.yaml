@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: "Todo Cine API"
   description: "API managed with Spring Boot, JWT security, and movie catalog with custom exception handling."
-  version: "v6.6.2.3"
+  version: "v7.0.0"
 
 servers:
   - url: "http://localhost:8080/api"
@@ -38,15 +38,14 @@ paths:
         '409':
           $ref: '#/components/responses/Conflict'
 
-  /usuarios/{id}:
+  /usuarios/{username}:
     parameters:
-      - name: "id"
-        description: "Unique user ID"
+      - name: "username"
+        description: "Username"
         in: path
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
     get:
       summary: "Get user by ID"
       tags: ["Users"]
@@ -92,20 +91,19 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
-  /usuarios/{userId}/movies:
+  /usuarios/{username}/movies:
     get:
       summary: "Get user movies (Paginated)"
       tags: ["User Movies"]
       security:
         - BearerAuth: []
       parameters:
-        - name: "userId"
-          description: "User ID"
+        - name: "username"
+          description: "Username"
           in: path
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
         - name: "vista"
           description: "Filter by watched movies (true/false)"
           in: query
@@ -142,15 +140,14 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequest'
 
-  /usuarios/{userId}/movies/{movieId}:
+  /usuarios/{username}/movies/{movieId}:
     parameters:
-      - name: "userId"
-        description: "User ID"
+      - name: "username"
+        description: "Username"
         in: path
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
       - name: "movieId"
         description: "Movie ID"
         in: path
@@ -186,14 +183,13 @@ paths:
         '502':
           $ref: '#/components/responses/BadGateway'
 
-  /usuarios/{userId}/listas:
+  /usuarios/{username}/listas:
     parameters:
-      - name: "userId"
+      - name: "username"
         in: path
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
         description: "Unique identifier of the specific user"
 
     get:
@@ -726,7 +722,6 @@ components:
       type: object
       required: [username, password]
       properties:
-        id: { type: integer, format: int64, description: "Unique identifier" }
         username: { type: string, description: "Access username" }
         password: { type: string, format: string, description: "Access password" }
         rol: { type: string, description: "Assigned role (USER/ADMIN)" }
@@ -736,7 +731,6 @@ components:
       type: object
       required: [username, rol]
       properties:
-        id: { type: integer, format: int64, description: "Unique identifier" }
         username: { type: string, description: "Access username" }
         rol: { type: string, description: "Assigned role (USER/ADMIN)" }
 
@@ -803,9 +797,9 @@ components:
 
     UsuarioMovieDTO:
       type: object
-      required: [usuarioId, movieId, favoritos, vista]
+      required: [username, movieId, favoritos, vista]
       properties:
-        usuarioId: { type: integer, format: int64, description: "User ID" }
+        username: { type: string, description: "Username" }
         movieId: { type: integer, format: int64, description: "Movie ID" }
         favoritos: { type: boolean, description: "Favorite status" }
         vista: { type: boolean, description: "Watch status" }

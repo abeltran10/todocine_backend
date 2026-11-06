@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UsuarioReqDTO {
 
-    private Long id;
-
     @NotBlank
     private String username;
 
@@ -24,14 +22,6 @@ public class UsuarioReqDTO {
     public UsuarioReqDTO(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {
