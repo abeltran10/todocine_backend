@@ -13,11 +13,6 @@ import java.util.Objects;
 public class Usuario implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_entity_user_generator")
-    @SequenceGenerator(name = "sequence_entity_user_generator", allocationSize = 1, sequenceName = "sequence_entity_user_generator")
-    private Long id;
-
-    @Column
     private String username;
 
     @Column
@@ -41,9 +36,9 @@ public class Usuario implements UserDetails {
     public Usuario() {
     }
 
-    public Usuario(Long id) {
-        this.id = id;
-    }
+   public Usuario(String username) {
+        this.username = username;
+   }
 
     public Usuario(String username, String password) {
         this.username = username;
@@ -55,9 +50,8 @@ public class Usuario implements UserDetails {
     }
 
 
-    public Usuario(Long id, String username, String password, Boolean accountNonExpired,
+    public Usuario(String username, String password, Boolean accountNonExpired,
                    Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, String rol) {
-        this.id = id;
         this.username = username;
         this.password = password;
         this.accountNonExpired = accountNonExpired;
@@ -65,14 +59,6 @@ public class Usuario implements UserDetails {
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
         this.rol = rol;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -162,19 +148,18 @@ public class Usuario implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario that = (Usuario) o;
-        return id.equals(that.id);
+        return username.equals(that.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(username);
     }
 
     @Override
     public String toString() {
         return "UsuarioDTO{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
+                "  username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", accountNonExpired=" + accountNonExpired +
                 ", accountNonLocked=" + accountNonLocked +

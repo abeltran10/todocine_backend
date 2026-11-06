@@ -60,7 +60,6 @@ public class CheckUserMovieUnitTest {
         LOG.info("setUp");
 
         usuarioDTO = new UsuarioDTO("test", "1234");
-        usuarioDTO.setId(9876L);
 
         movieDTO = new MovieDTO(906126L,"La sociedad de la nieve"
                 , "La sociedad de la nieve", "/9tkJPQb4X4VoU3S5nqLDohZijPj.jpg"
@@ -86,7 +85,7 @@ public class CheckUserMovieUnitTest {
 
         Movie movie = MovieMapper.toEntity(movieDTO);
 
-        UsuarioMovie usuarioMovie = new UsuarioMovie(new UserMovieId(new Usuario(usuarioDTO.getId()), movie));
+        UsuarioMovie usuarioMovie = new UsuarioMovie(new UserMovieId(new Usuario(usuarioDTO.getUsername()), movie));
         usuarioMovie.setVista("N");
         usuarioMovie.setFavoritos("S");
         usuarioMovie.setVoto(null);
@@ -94,9 +93,9 @@ public class CheckUserMovieUnitTest {
         Paginator<UsuarioMovie> usuarioMovies = new Paginator<>();
         usuarioMovies.setResults(Arrays.asList(usuarioMovie));
 
-        Mockito.when(usuarioMovieRepo.getUserMoviesByFilter(usuarioDTO.getId(), null, null,21,  1)).thenReturn(usuarioMovies);
+        Mockito.when(usuarioMovieRepo.getUserMoviesByFilter(usuarioDTO.getUsername(), null, null,21,  1)).thenReturn(usuarioMovies);
 
-        Paginator<MovieDetailDTO> paginator = usuarioMovieService.getUsuarioMovies(usuarioDTO.getId(), null, null, 1);
+        Paginator<MovieDetailDTO> paginator = usuarioMovieService.getUsuarioMovies(usuarioDTO.getUsername(), null, null, 1);
         assertNotNull(paginator);
         assertEquals(1, paginator.getResults().size());
         assertEquals(906126L, paginator.getResults().get(0).getId());

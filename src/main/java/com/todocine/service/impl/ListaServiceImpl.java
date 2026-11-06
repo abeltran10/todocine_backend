@@ -49,12 +49,12 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     private TMDBService tmdbService;
 
     @Override
-    public Paginator<ListaDTO> getListasUser(Long usuarioId, Integer page) {
+    public Paginator<ListaDTO> getListasUser(String username, Integer page) {
         Paginator<ListaDTO> paginator = new Paginator<>();
         Pageable pageable = PageRequest.of(page - 1, LISTAS_PAGE_SIZE);
 
-        if (getCurrentUserId().equals(usuarioId)) {
-            Page<Lista> listasPage = listaDAO.findByUsuarioId(usuarioId, pageable);
+        if (getCurrentUsername().equals(username)) {
+            Page<Lista> listasPage = listaDAO.findByUsuarioUsername(username, pageable);
 
             if (listasPage.hasContent()) {
                 List<ListaDTO> results = listasPage.getContent().stream()
@@ -82,7 +82,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         Usuario usuario = lista.getUsuario();
 
-        if ((usuario != null && getCurrentUserId().equals(usuario.getId())) || "S".equals(lista.getPublica())) {
+        if ((usuario != null && getCurrentUsername().equals(usuario.getUsername())) || "S".equals(lista.getPublica())) {
 
             return ListaMapper.toDTO(lista);
 
@@ -96,9 +96,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional
     public ListaDTO createLista(ListaReqDTO listaDTO) {
-        Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
+        Usuario usuario = usuarioDAO.findById(listaDTO.getUsername()).orElse(null);
 
-        if (usuario == null || !getCurrentUserId().equals(usuario.getId())) {
+        if (usuario == null || !getCurrentUsername().equals(usuario.getUsername())) {
             throw new ForbiddenException(USER_FORBIDDEN);
         }
 
@@ -114,9 +114,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
     @Override
     @Transactional
     public ListaDTO updateLista(Long id, ListaReqDTO listaDTO) {
-        Usuario usuario = usuarioDAO.findByUsername(listaDTO.getUsername());
+        Usuario usuario = usuarioDAO.findById(listaDTO.getUsername()).orElse(null);
 
-        if (usuario == null || !getCurrentUserId().equals(usuario.getId()))
+        if (usuario == null || !getCurrentUsername().equals(usuario.getUsername()))
             throw new ForbiddenException(USER_FORBIDDEN);
 
         if (!id.equals(listaDTO.getId())) {
@@ -139,7 +139,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         Lista lista = listaDAO.findById(id)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
-        if (!lista.getUsuario().getId().equals(getCurrentUserId()))
+        if (!lista.getUsuario().getUsername().equals(getCurrentUsername()))
             throw new ForbiddenException(USER_FORBIDDEN);
 
         listaDAO.delete(lista);
@@ -152,7 +152,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         Lista lista = listaDAO.findById(listaId)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
-        if (getCurrentUserId().equals(lista.getUsuario().getId())) {
+        if (getCurrentUsername().equals(lista.getUsuario().getUsername())) {
             Movie movie = movieDAO.findById(movieId).orElse(null);
 
             if (movie == null) {
@@ -190,7 +190,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         Lista lista = listaDAO.findById(listaId)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
-        if (getCurrentUserId().equals(lista.getUsuario().getId())) {
+        if (getCurrentUsername().equals(lista.getUsuario().getUsername())) {
             boolean removed = lista.getMovies().removeIf(movie -> movie.getId().equals(movieId));
 
             if (!removed) {
@@ -233,7 +233,7 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         Lista lista = listaDAO.findById(listaId)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
-        if (getCurrentUserId().equals(lista.getUsuario().getId()) || "S".equals(lista.getPublica())) {
+        if (getCurrentUsername().equals(lista.getUsuario().getUsername()) || "S".equals(lista.getPublica())) {
 
             Paginator<Movie> moviePage = listaDAO.getMoviesByListaId(listaId, orderBy, direction, MOVIELIST_PAGE_SIZE, pagina);
 

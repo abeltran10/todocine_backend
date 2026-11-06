@@ -54,7 +54,6 @@ public class CheckUsuarioUnitTest {
         LOG.info("setUp");
 
         usuarioDTO = new UsuarioDTO("test", "1234");
-        usuarioDTO.setId(9876L);
     }
 
     @Test
@@ -66,7 +65,7 @@ public class CheckUsuarioUnitTest {
 
         UsuarioReqDTO usuarioReqDTO = new UsuarioReqDTO(usuarioDTO.getUsername(), usuarioDTO.getPassword());
 
-        Mockito.when(usuarioDAO.findByUsername("test")).thenReturn(usuario);
+        Mockito.when(usuarioDAO.findById("test")).thenReturn(Optional.of(usuario));
 
 
 
@@ -95,12 +94,12 @@ public class CheckUsuarioUnitTest {
         // Setear el contexto de seguridad
         SecurityContextHolder.setContext(securityContext);
 
-        Mockito.when(usuarioDAO.findById(9876L)).thenReturn(Optional.of(usuario));
+        Mockito.when(usuarioDAO.findById(usuarioDTO.getUsername())).thenReturn(Optional.of(usuario));
 
         UsuarioReqDTO usuarioReqDTO = new UsuarioReqDTO(usuarioDTO.getUsername(), "abcd");
-        usuarioReqDTO.setId(usuarioDTO.getId());
+        usuarioReqDTO.setUsername(usuarioDTO.getUsername());
 
-        UsuarioDTO usuarioDTO1 = usuarioService.updateUsuario(usuarioReqDTO.getId(), usuarioReqDTO);
+        UsuarioDTO usuarioDTO1 = usuarioService.updateUsuario(usuarioReqDTO.getUsername(), usuarioReqDTO);
 
         assertEquals("test", usuarioDTO.getUsername());
 

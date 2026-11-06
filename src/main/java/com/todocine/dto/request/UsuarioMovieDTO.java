@@ -7,9 +7,9 @@ import jakarta.validation.constraints.NotNull;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UsuarioMovieDTO {
 
-    @JsonProperty("usuarioId")
+    @JsonProperty("username")
     @NotNull
-    private Long usuarioId;
+    private String username;
 
     @JsonProperty("movieId")
     @NotNull
@@ -29,17 +29,17 @@ public class UsuarioMovieDTO {
     public UsuarioMovieDTO() {
     }
 
-    public UsuarioMovieDTO(Long usuarioId, Long movieId) {
-        this.usuarioId = usuarioId;
+    public UsuarioMovieDTO(String username, Long movieId) {
+        this.username = username;
         this.movieId = movieId;
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getMovieId() {

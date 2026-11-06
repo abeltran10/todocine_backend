@@ -46,7 +46,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username);
 
-        Usuario usuario = usuarioDAO.findByUsername(username);
+        Usuario usuario = usuarioDAO.findById(username).orElse(null);
 
         if (usuario == null)
             throw new UsernameNotFoundException(USER_PASSWORD_ERROR);
@@ -62,7 +62,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
             throw new BadRequestException(CAPTCHA_MISSING);
 
         if (captchaService.isValidToken(usuarioReqDTO.getCaptcha())) {
-            Usuario usuario = usuarioDAO.findByUsername(usuarioReqDTO.getUsername());
+            Usuario usuario = usuarioDAO.findById(usuarioReqDTO.getUsername()).orElse(null);
 
             if (usuario == null) {
                 usuario = new Usuario();
@@ -89,16 +89,16 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioDTO updateUsuario(Long id, UsuarioReqDTO usuarioReqDTO) {
+    public UsuarioDTO updateUsuario(String username, UsuarioReqDTO usuarioReqDTO) {
        log.info("updateUsuario");
         Usuario usuario = null;
 
-        if (!id.equals(usuarioReqDTO.getId()))
+        if (!username.equals(usuarioReqDTO.getUsername()))
             throw new BadRequestException(ID_NOT_MATCH);
 
-        if (getCurrentUserId().equals(usuarioReqDTO.getId())) {
+        if (getCurrentUsername().equals(usuarioReqDTO.getUsername())) {
             try {
-                usuario = usuarioDAO.findById(id).get();
+                usuario = usuarioDAO.findById(username).get();
 
                 usuario.setPassword(passwordEncoder().encode(usuarioReqDTO.getPassword()));
 
@@ -117,9 +117,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
 
     @Override
-    public UsuarioDTO getUsuarioById(Long id) {
-        if (getCurrentUserId().equals(id)) {
-            Usuario usuario = usuarioDAO.findById(id).orElseThrow(() -> new NotFoudException(USER_NOTFOUND));
+    public UsuarioDTO getUsuarioById(String username) {
+        if (getCurrentUsername().equals(username)) {
+            Usuario usuario = usuarioDAO.findById(username).orElseThrow(() -> new NotFoudException(USER_NOTFOUND));
             return UserMapper.toDTO(usuario);
         } else {
             throw new ForbiddenException(USER_FORBIDDEN);

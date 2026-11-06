@@ -22,9 +22,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> getUsuario(@NotNull @PathVariable("id") Long id) {
-        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.getUsuarioById(id), HttpStatus.OK);
+    @GetMapping("/{username}")
+    public ResponseEntity<UsuarioDTO> getUsuario(@NotNull @PathVariable("username") String username) {
+        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.getUsuarioById(username), HttpStatus.OK);
         return responseEntity;
     }
 
@@ -34,10 +34,10 @@ public class UsuarioController {
         return responseEntity;
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> updateUsuario(@NotNull @PathVariable("id") Long id, @Valid @RequestBody UsuarioReqDTO usuarioReqDTO) {
+    @PutMapping("/{username}")
+    public ResponseEntity<UsuarioDTO> updateUsuario(@NotNull @PathVariable("username") String username, @Valid @RequestBody UsuarioReqDTO usuarioReqDTO) {
         logger.info("updateUsuario");
-        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.updateUsuario(id, usuarioReqDTO), HttpStatus.OK);
+        ResponseEntity<UsuarioDTO> responseEntity = new ResponseEntity<>(usuarioService.updateUsuario(username, usuarioReqDTO), HttpStatus.OK);
         return responseEntity;
     }
 

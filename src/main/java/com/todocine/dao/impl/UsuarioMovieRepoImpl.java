@@ -18,7 +18,7 @@ import java.util.Map;
 public class UsuarioMovieRepoImpl extends BaseRepoImpl implements UsuarioMovieRepo {
     private static final QUsuarioMovie usuarioMovie = QUsuarioMovie.usuarioMovie;
     @Override
-    public Paginator<UsuarioMovie> getUserMoviesByFilter(Long usuarioId, Map<String, String> filters, String orderBy,
+    public Paginator<UsuarioMovie> getUserMoviesByFilter(String username, Map<String, String> filters, String orderBy,
                                                          int limit, int pagina) {
         List<UsuarioMovie> resultList = new ArrayList<>();
         Paginator<UsuarioMovie> paginator = new Paginator<>();
@@ -28,10 +28,10 @@ public class UsuarioMovieRepoImpl extends BaseRepoImpl implements UsuarioMovieRe
         JPAQueryFactory queryFactory = new JPAQueryFactory(JPQLTemplates.DEFAULT, entityManager);
 
         JPAQuery<UsuarioMovie> q =  queryFactory.selectFrom(usuarioMovie)
-                .where(usuarioMovie.id.usuario.id.eq(usuarioId).and(usuarioMovie.favoritos.equalsIgnoreCase("s")));
+                .where(usuarioMovie.id.usuario.username.eq(username).and(usuarioMovie.favoritos.equalsIgnoreCase("s")));
         JPAQuery<Long> count = queryFactory.select(usuarioMovie.count())
                 .from(usuarioMovie)
-                .where(usuarioMovie.id.usuario.id.eq(usuarioId).and(usuarioMovie.favoritos.equalsIgnoreCase("s")));
+                .where(usuarioMovie.id.usuario.username.eq(username).and(usuarioMovie.favoritos.equalsIgnoreCase("s")));
 
         if ("s".equalsIgnoreCase(filters.get(Constants.VISTA_FILTER)) || "n".equalsIgnoreCase(filters.get(Constants.VISTA_FILTER))) {
             count = count.where(usuarioMovie.vista.equalsIgnoreCase(filters.get(Constants.VISTA_FILTER)));

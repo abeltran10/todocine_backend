@@ -8,8 +8,8 @@ import java.util.Map;
 
 public interface UsuarioMovieService {
 
-    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String, String> filters, String orderBy, Integer page);
+    public Paginator<MovieDetailDTO> getUsuarioMovies(String username, Map<String, String> filters, String orderBy, Integer page);
 
-    public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO);
+    public MovieDetailDTO updateUsuarioMovie(String username, Long movieId, UsuarioMovieDTO usuarioMovieDTO);
 
 }

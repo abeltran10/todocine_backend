@@ -65,7 +65,7 @@ public class CheckMoviesUnitTest {
         LOG.info("findMovieById");
 
         Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(new Usuario(1L));
+        Mockito.when(authentication.getPrincipal()).thenReturn(new Usuario("abeltran"));
 
         // Mock del SecurityContext
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);

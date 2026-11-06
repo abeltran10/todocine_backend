@@ -10,7 +10,7 @@ import java.util.Objects;
 public class ValoracionListaId {
 
     @ManyToOne
-    @JoinColumn(name = "usuario", referencedColumnName = "ID")
+    @JoinColumn(name = "usuario", referencedColumnName = "USERNAME")
     private Usuario usuario;
 
     @ManyToOne

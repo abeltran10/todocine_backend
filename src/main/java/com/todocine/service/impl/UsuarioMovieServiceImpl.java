@@ -46,14 +46,14 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional(readOnly = true)
-    public Paginator<MovieDetailDTO> getUsuarioMovies(Long userId, Map<String,String> filters, String orderBy, Integer page) {
+    public Paginator<MovieDetailDTO> getUsuarioMovies(String username, Map<String,String> filters, String orderBy, Integer page) {
         Paginator<MovieDetailDTO> paginator = new Paginator<>();
         Paginator<UsuarioMovie> usuarioMoviePaginator = new Paginator<>();
         List<MovieDetailDTO> movieDetailDTOS = new ArrayList<>();
 
-        if (getCurrentUserId().equals(userId)) {
+        if (getCurrentUsername().equals(username)) {
 
-            usuarioMoviePaginator = usuarioMovieDAO.getUserMoviesByFilter(userId, filters, orderBy, FAVOURITES_PAGE_SIZE, page);
+            usuarioMoviePaginator = usuarioMovieDAO.getUserMoviesByFilter(username, filters, orderBy, FAVOURITES_PAGE_SIZE, page);
 
             if (!usuarioMoviePaginator.getResults().isEmpty()) {
                 movieDetailDTOS = usuarioMoviePaginator.getResults().stream()
@@ -83,12 +83,12 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
 
     @Override
     @Transactional
-    public MovieDetailDTO updateUsuarioMovie(Long userId, Long movieId, UsuarioMovieDTO usuarioMovieDTO) {
+    public MovieDetailDTO updateUsuarioMovie(String username, Long movieId, UsuarioMovieDTO usuarioMovieDTO) {
 
-        if (!userId.equals(usuarioMovieDTO.getUsuarioId()) || !movieId.equals(usuarioMovieDTO.getMovieId()))
+        if (!username.equals(usuarioMovieDTO.getUsername()) || !movieId.equals(usuarioMovieDTO.getMovieId()))
             throw new BadRequestException(ID_NOT_MATCH);
 
-        if (getCurrentUserId().equals(userId)) {
+        if (getCurrentUsername().equals(username)) {
             Movie movie = null;
             MovieDTO movieDTO = null;
 
@@ -106,7 +106,7 @@ public class UsuarioMovieServiceImpl extends BaseServiceImpl implements UsuarioM
                      }
                  }
 
-                 UserMovieId userMovieId = new UserMovieId(new Usuario(userId), movie);
+                 UserMovieId userMovieId = new UserMovieId(new Usuario(username), movie);
                  UsuarioMovie usuarioMovie = usuarioMovieDAO.findById(userMovieId).orElse(null);
 
                  if (usuarioMovie != null && usuarioMovie.getVoto() != null &&
