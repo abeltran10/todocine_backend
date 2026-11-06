@@ -16,7 +16,7 @@ For creating new users it is implemented [Google reCaptchaV3](https://docs.cloud
 
 
 ## Last release
-- [v6.6.2.3](https://github.com/abeltran10/todocine_backend/releases/tag/v6.6.2.3)
+- [v7.0.0](https://github.com/abeltran10/todocine_backend/releases/tag/v7.0.0)
 
 ## Version: v7.0.0
 
