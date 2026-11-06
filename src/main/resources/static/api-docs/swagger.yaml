@@ -797,7 +797,7 @@ components:
 
     UsuarioMovieDTO:
       type: object
-      required: [usuarioId, movieId, favoritos, vista]
+      required: [username, movieId, favoritos, vista]
       properties:
         username: { type: string, description: "Username" }
         movieId: { type: integer, format: int64, description: "Movie ID" }

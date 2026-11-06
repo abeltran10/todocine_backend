@@ -714,12 +714,12 @@ Updates or posts an opinion about the list
 #### UsuarioMovieDTO
 
 | Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| username | string | Username | No |
-| movieId | long | Movie ID | Yes |
-| favoritos | boolean | Favorite status | Yes |
-| vista | boolean | Watch status | Yes |
-| voto | double | Personal score | No |
+| ---- | ---- | ----------- |----------|
+| username | string | Username | Yes      |
+| movieId | long | Movie ID | Yes      |
+| favoritos | boolean | Favorite status | Yes      |
+| vista | boolean | Watch status | Yes      |
+| voto | double | Personal score | No       |
 
 #### MovieDTO
 
