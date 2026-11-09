@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.todocine</groupId>
 	<artifactId>todocine</artifactId>
-	<version>v7.0.0</version>
+	<version>v7.0.1</version>
 	<name>todocine</name>
 	<description>Todo cine backend</description>
 	<properties>
@@ -90,6 +90,11 @@
 			<version>2.3.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
     </dependencies>
 	<profiles>
 		<profile>
@@ -99,13 +104,6 @@
 					<name>prod</name>
 				</property>
 			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.postgresql</groupId>
-					<artifactId>postgresql</artifactId>
-					<scope>runtime</scope>
-				</dependency>
-			</dependencies>
 			<properties>
 				<spring.profiles.active>prod</spring.profiles.active>
 			</properties>
@@ -119,15 +117,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<dependencies>
-				<dependency>
-					<groupId>com.oracle.ojdbc</groupId>
-					<artifactId>ojdbc8</artifactId>
-					<version>19.3.0.0</version>
-				</dependency>
-				<dependency>
-					<groupId>org.hibernate.orm</groupId>
-					<artifactId>hibernate-community-dialects</artifactId>
-				</dependency>
+
 			</dependencies>
 			<properties>
 				<spring.profiles.active>dev</spring.profiles.active>
@@ -140,7 +130,7 @@
 					<name>test</name>
 				</property>
 			</activation>
-			<dependencies>
+			<!--<dependencies>
 				<dependency>
 					<groupId>com.oracle.ojdbc</groupId>
 					<artifactId>ojdbc8</artifactId>
@@ -150,7 +140,7 @@
 					<groupId>org.hibernate.orm</groupId>
 					<artifactId>hibernate-community-dialects</artifactId>
 				</dependency>
-			</dependencies>
+			</dependencies>-->
 			<properties>
 				<spring.profiles.active>test</spring.profiles.active>
 			</properties>
