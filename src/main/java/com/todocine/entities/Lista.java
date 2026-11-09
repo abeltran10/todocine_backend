@@ -2,6 +2,7 @@ package com.todocine.entities;
 
 import jakarta.persistence.*;
 
+import java.security.Identity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,8 +12,7 @@ import java.util.Objects;
 public class Lista {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_entity_lista_generator")
-    @SequenceGenerator(name = "sequence_entity_lista_generator", allocationSize = 1, sequenceName = "sequence_entity_lista_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nombre;
