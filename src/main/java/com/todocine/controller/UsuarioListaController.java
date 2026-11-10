@@ -4,6 +4,7 @@ import com.todocine.dto.response.ListaDTO;
 import com.todocine.dto.response.Paginator;
 import com.todocine.service.ListaService;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class UsuarioListaController {
     private ListaService listaService;
 
     @GetMapping
-    public ResponseEntity<Paginator<ListaDTO>> getListasUser(@NotNull @PathVariable("username") String username,
+    public ResponseEntity<Paginator<ListaDTO>> getListasUser(@NotBlank @PathVariable("username") String username,
                                                              @NotNull @Min(1) @RequestParam("page") Integer page) {
         return new ResponseEntity<>(listaService.getListasUser(username, page), HttpStatus.OK);
     }

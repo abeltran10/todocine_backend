@@ -8,6 +8,7 @@ import com.todocine.service.UsuarioMovieService;
 import com.todocine.utils.Constants;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class UsuarioMovieController {
     private UsuarioMovieService usuarioMovieService;
 
     @PutMapping("/{movieId}")
-    public ResponseEntity<MovieDetailDTO> updateUsuarioMovie(@NotNull @PathVariable("username") String username,
+    public ResponseEntity<MovieDetailDTO> updateUsuarioMovie(@NotBlank @PathVariable("username") String username,
                                                              @NotNull @PathVariable("movieId") Long movieId,
                                                              @Valid @RequestBody UsuarioMovieDTO usuarioMovieDTO) {
         ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(usuarioMovieService.updateUsuarioMovie(username,
@@ -36,7 +37,7 @@ public class UsuarioMovieController {
     }
 
     @GetMapping
-    public ResponseEntity<Paginator<MovieDetailDTO>> getUsuarioMovies(@NotNull @PathVariable("username") String username,
+    public ResponseEntity<Paginator<MovieDetailDTO>> getUsuarioMovies(@NotBlank @PathVariable("username") String username,
                                                                       @RequestParam("vista") String vista,
                                                                       @RequestParam("votada") String votada,
                                                                       @RequestParam("orderBy") String orderBy,
