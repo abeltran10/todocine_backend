@@ -859,7 +859,7 @@ Updates or posts an opinion about the list
 
 ## Demo
 
-Demo is hosted in https://render.com/, there is a free service with PostgresSQL database. You can create a user or in case you don't want you can use this one:
+Demo is hosted in https://render.com/, there is a free service with PostgresSQL database. You can create a user account, or you can use this one if you prefer not to:
 
 - username: test_demo
 - password: 1234
