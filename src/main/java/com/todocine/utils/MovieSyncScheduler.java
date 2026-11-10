@@ -26,24 +26,6 @@ public class MovieSyncScheduler {
     @Autowired
     private TMDBService tmdbService;
 
-    @Autowired
-    private Environment environment;
-
-    /**
-     * DESENCADENANTE 1: Al desplegar / arrancar la aplicación.
-     * Se ejecuta automáticamente cuando la app está lista para recibir peticiones.
-     */
-    /*@EventListener(ApplicationReadyEvent.class)
-    public void syncOnDeploy() {
-        // 2. Comprobamos si el perfil "prod" está entre los perfiles activos
-        boolean isProd = Arrays.asList(environment.getActiveProfiles()).contains("prod");
-
-        if (isProd) {
-            System.out.println("Iniciando sincronización de películas por despliegue de nueva versión...");
-            ejecutarSincronizacionGlobal();
-        }
-    }*/
-
     /**
      * DESENCADENANTE 2: El primer domingo de cada mes a las 00:00:01.
      */
