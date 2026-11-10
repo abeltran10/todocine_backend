@@ -35,15 +35,22 @@ rectangle "Todo Cine System" {
     }
 
     package "Custom lists" {
-        U -- (Create list)
-        U -- (Edit list)
-        U -- (View owned lists)
-        U -- (View public lists)
-        U -- (Delete list)
-        U -- (Add movie to list)
-        U -- (Remove movie from list)
-        U -- (Share your opinion about a list)
-        U -- (View opinions about a list)
+        U -- (Manage Custom Lists)
+        (Manage Custom Lists) <|-- (Create list)
+        (Manage Custom Lists) <|-- (Edit list)
+        (Manage Custom Lists) <|-- (Delete list)
+
+        U -- (View Lists)
+        (View Lists) <|-- (View owned lists)
+        (View Lists) <|-- (View public lists)
+
+        U -- (Manage List Movies)
+        (Manage List Movies) <|-- (Add movie to list)
+        (Manage List Movies) <|-- (Remove movie from list)
+
+        U -- (Manage List Opinions)
+        (Manage List Opinions) <|-- (Share opinion about a list)
+        (Manage List Opinions) <|-- (View opinions about a list)
     }
 }
 
