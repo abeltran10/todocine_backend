@@ -36,10 +36,8 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
     @Autowired
     private CaptchaService captchaService;
 
-
-    private PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -73,7 +71,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
                 usuario = new Usuario();
                 usuario.setUsername(usuarioReqDTO.getUsername());
 
-                usuario.setPassword(passwordEncoder().encode(usuarioReqDTO.getPassword()));
+                usuario.setPassword(passwordEncoder.encode(usuarioReqDTO.getPassword()));
                 usuario.setEnabled(true);
                 usuario.setCredentialsNonExpired(true);
                 usuario.setAccountNonLocked(true);
@@ -110,7 +108,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
             try {
                 usuario = usuarioDAO.findById(username).get();
 
-                usuario.setPassword(passwordEncoder().encode(usuarioReqDTO.getPassword()));
+                usuario.setPassword(passwordEncoder.encode(usuarioReqDTO.getPassword()));
 
                 usuarioDAO.save(usuario);
 
