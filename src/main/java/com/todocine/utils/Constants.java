@@ -40,6 +40,8 @@ public class Constants {
 
     public static final String ID_NOT_MATCH = "El ID del path no coincide con el ID del cuerpo";
 
+    public static final String USER_PASSWORD_BLANK_SPACES_ERROR = "El username o la password no puede contener espacios en blanco";
+
 
     //FILTERS FAVORITOS
 

@@ -65,8 +65,14 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
             Usuario usuario = usuarioDAO.findById(usuarioReqDTO.getUsername()).orElse(null);
 
             if (usuario == null) {
+                if ((usuarioReqDTO.getPassword() != null && usuarioReqDTO.getPassword().contains(" ")) ||
+                        (usuarioReqDTO.getUsername() != null && usuarioReqDTO.getUsername().contains(" "))) {
+                    throw new BadRequestException(USER_PASSWORD_BLANK_SPACES_ERROR);
+                }
+
                 usuario = new Usuario();
                 usuario.setUsername(usuarioReqDTO.getUsername());
+
                 usuario.setPassword(passwordEncoder().encode(usuarioReqDTO.getPassword()));
                 usuario.setEnabled(true);
                 usuario.setCredentialsNonExpired(true);
@@ -95,6 +101,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UsuarioService {
 
         if (!username.equals(usuarioReqDTO.getUsername()))
             throw new BadRequestException(ID_NOT_MATCH);
+
+        if (usuarioReqDTO.getPassword() != null && usuarioReqDTO.getPassword().contains(" ")) {
+            throw new BadRequestException(USER_PASSWORD_BLANK_SPACES_ERROR);
+        }
 
         if (getCurrentUsername().equals(usuarioReqDTO.getUsername())) {
             try {
