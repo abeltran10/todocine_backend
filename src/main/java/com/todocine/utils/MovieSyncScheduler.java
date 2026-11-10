@@ -69,7 +69,6 @@ public class MovieSyncScheduler {
 
                 // If empty finish loop
                 if (moviePage.isEmpty()) {
-                    hasMorePages = false;
                     break;
                 }
 
@@ -115,12 +114,12 @@ public class MovieSyncScheduler {
                 if (moviePage.hasNext()) {
                     pageNumber++;
                 } else {
-                    hasMorePages = false; //It was last page, finish loop
+                    break; //It was last page, finish loop
                 }
 
             } catch (Exception e) {
                 System.err.println("Error crítico al recuperar el lote " + pageNumber + ": " + e.getMessage());
-                hasMorePages = false; // Interrupt to avoid infinite loop in case DB error
+                break; // Interrupt to avoid infinite loop in case DB error
             }
         }
 
