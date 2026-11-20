@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "USUARIO")
@@ -32,6 +30,17 @@ public class Usuario implements UserDetails {
 
     @Column
     private String rol;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "USUARIOSEGUIDORES",
+            joinColumns = @JoinColumn(name = "usuario", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "siguidor", referencedColumnName = "ID")
+    )
+    private List<Usuario> seguidores = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "siguidores")
+    private List<Usuario> siguiendo = new ArrayList<>();
 
     public Usuario() {
     }
@@ -141,6 +150,22 @@ public class Usuario implements UserDetails {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public List<Usuario> getSeguidores() {
+        return seguidores;
+    }
+
+    public void setSeguidores(List<Usuario> seguidores) {
+        this.seguidores = seguidores;
+    }
+
+    public List<Usuario> getSiguiendo() {
+        return siguiendo;
+    }
+
+    public void setSiguiendo(List<Usuario> siguiendo) {
+        this.siguiendo = siguiendo;
     }
 
     @Override
