@@ -1,5 +1,6 @@
 package com.todocine.controller;
 
+import com.todocine.dto.response.ComentarioDTO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.Paginator;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -46,6 +48,12 @@ public class MovieController {
     public ResponseEntity<MovieDetailDTO> getMovieDetailById(@NotNull @PathVariable("id") Long id) {
         ResponseEntity<MovieDetailDTO> responseEntity = new ResponseEntity<>(movieService.getMovieDetailById(id), HttpStatus.OK);
         return responseEntity;
+
+    }
+
+    @GetMapping("{id}/comentarios")
+    public ResponseEntity<List<ComentarioDTO>> getComentariosByMovie(@NotNull @PathVariable("id") Long id) {
+        return new ResponseEntity<List<ComentarioDTO>>(movieService.getComentariosByMovie(id), HttpStatus.OK);
 
     }
 

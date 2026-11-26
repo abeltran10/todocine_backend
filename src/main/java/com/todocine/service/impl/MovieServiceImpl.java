@@ -1,15 +1,14 @@
 package com.todocine.service.impl;
 
 
+import com.todocine.dao.ComentarioDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dao.UsuarioMovieDAO;
+import com.todocine.dto.response.ComentarioDTO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.Paginator;
-import com.todocine.entities.Movie;
-import com.todocine.entities.UserMovieId;
-import com.todocine.entities.Usuario;
-import com.todocine.entities.UsuarioMovie;
+import com.todocine.entities.*;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import static com.todocine.utils.Constants.*;
@@ -40,6 +40,9 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
 
     @Autowired
     private UsuarioMovieDAO usuarioMovieDAO;
+
+    @Autowired
+    private ComentarioDAO comentarioDAO;
 
     @Override
     @Transactional
@@ -99,6 +102,24 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
         } catch (IOException e) {
             throw new BadGatewayException(TMDB_ERROR);
         }
+    }
+
+    @Override
+    public List<ComentarioDTO> getComentariosByMovie(Long id) {
+
+        try {
+           Movie movie = movieDAO.findById(id).orElseThrow(() -> new NotFoudException(MOVIE_NOTFOUND));
+
+           List<Comentario> comentarioList = comentarioDAO.findByMovieIdAndParentIsNullOrderByFechaCreacionDesc(movie.getId());
+
+           return comentarioList.stream().map(ComentarioMapper::toDTO).toList();
+
+        } catch (IOException ex) {
+            throw new BadGatewayException(TMDB_ERROR);
+        }
+
+
+
     }
 
 }

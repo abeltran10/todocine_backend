@@ -1,11 +1,20 @@
 package com.todocine.enums;
 
 public enum TipoActividad {
-    FAVORITO_PELICULA,   // Marcó una película como favorita
-    PUNTUACION_PELICULA, // Puntuó una película
-    VISTA_PELÍCULA,      // Marcó como vista una película
-    COMENTARIO_PELICULA, // Escribió una reseña/comentario en una película
-    RESPUESTA_COMENTARIO,// Respondió al comentario de otro usuario
-    VOTO_COMENTARIO,     // Dio "Me gusta" a un comentario
-    CREACION_LISTA       // Creó una nueva lista pública
+    FAVORITO_PELICULA,
+    PUNTUACION_PELICULA,
+    VISTA_PELICULA,
+    COMENTARIO_PELICULA,
+    RESPUESTA_COMENTARIO,
+    VOTO_COMENTARIO,
+    CREACION_LISTA,
+    PUBLICAR_LISTA,
+    NOMBRE_DESC_LISTA,
+    NOMBRE_LISTA,
+    DESCRIPCION_LISTA,
+    BORRADA_LISTA,
+    MOVIE_LISTA,
+    VALORACION_LISTA
+
+
 }

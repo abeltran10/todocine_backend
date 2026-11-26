@@ -11,10 +11,12 @@ import com.todocine.dto.response.Paginator;
 import com.todocine.entities.Lista;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
+import com.todocine.enums.TipoActividad;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
+import com.todocine.service.ActividadService;
 import com.todocine.service.ListaService;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.mapper.ListaMapper;
@@ -47,6 +49,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
     @Autowired
     private TMDBService tmdbService;
+
+    @Autowired
+    private ActividadService actividadService;
 
     @Override
     public Paginator<ListaDTO> getListasUser(String username, Integer page) {
@@ -108,7 +113,12 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         lista.setUsuario(usuario);
         lista.setPublica("N");
 
-        return ListaMapper.toDTO(listaDAO.save(lista));
+        listaDAO.save(lista);
+
+        actividadService.guardarActividad(usuario, TipoActividad.CREACION_LISTA, lista.getId(), lista.getNombre(),
+                null, lista.getDescripcion());
+
+        return ListaMapper.toDTO(lista);
     }
 
     @Override
@@ -126,11 +136,41 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
         Lista listaExistente = listaDAO.findById(id)
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
+        TipoActividad tipoActividad = getTipoActividad(listaExistente, listaDTO);
+        String detalleExtra = buildDetalleExtra(listaExistente, listaDTO, tipoActividad);
+
         listaExistente.setNombre(listaDTO.getNombre());
         listaExistente.setDescripcion(listaDTO.getDescripcion());
         listaExistente.setPublica(listaDTO.getPublica() != null && listaDTO.getPublica() ? "S" : "N");
 
-        return ListaMapper.toDTO(listaDAO.save(listaExistente));
+        listaDAO.save(listaExistente);
+
+        actividadService.guardarActividad(usuario, tipoActividad, listaExistente.getId(), listaExistente.getNombre(),
+                null, detalleExtra);
+
+        return ListaMapper.toDTO(listaExistente);
+    }
+
+    private TipoActividad getTipoActividad(Lista existing, ListaReqDTO dto) {
+        boolean changedNombre = !existing.getNombre().equals(dto.getNombre());
+        boolean changedDesc = !existing.getDescripcion().equals(dto.getDescripcion());
+
+        if (changedNombre && changedDesc) return TipoActividad.NOMBRE_DESC_LISTA;
+        else if (changedNombre) return TipoActividad.NOMBRE_LISTA;
+        else if (changedDesc) return TipoActividad.DESCRIPCION_LISTA;
+
+        return TipoActividad.PUBLICAR_LISTA;
+
+    }
+
+    private String buildDetalleExtra(Lista existing, ListaReqDTO dto, TipoActividad tipoActividad) {
+        return switch (tipoActividad) {
+            case PUBLICAR_LISTA -> dto.getPublica() ? "Lista " + existing.getNombre() + " publicada" : "Lista " + existing.getNombre() + " ocultada";
+            case NOMBRE_DESC_LISTA -> "Editado el nombre y la descripción de la lista " + existing.getNombre() + " a " + dto.getNombre();
+            case NOMBRE_LISTA -> "Editado el nombre de la lista " + existing.getNombre() + " a " + dto.getNombre();
+            case DESCRIPCION_LISTA -> "Editada la descripción de la lista " + existing.getNombre() + ": " + dto.getDescripcion().substring(0, 10);
+            default -> "";
+        };
     }
 
     @Override
@@ -141,6 +181,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
         if (!lista.getUsuario().getUsername().equals(getCurrentUsername()))
             throw new ForbiddenException(USER_FORBIDDEN);
+
+        actividadService.guardarActividad(lista.getUsuario(), TipoActividad.BORRADA_LISTA, null, lista.getNombre(),
+                null, "Lista eliminada");
 
         listaDAO.delete(lista);
     }
@@ -176,6 +219,9 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
 
             listaDAO.save(lista);
 
+            actividadService.guardarActividad(lista.getUsuario(), TipoActividad.MOVIE_LISTA, lista.getId(), movie.getTitle(),
+                    movie.getPosterPath(), "Pelicula añadida a la lista " + lista.getNombre());
+
             return MovieListaMapper.toDTO(movie);
 
         } else {
@@ -191,11 +237,13 @@ public class ListaServiceImpl extends BaseServiceImpl implements ListaService {
                 .orElseThrow(() -> new NotFoudException(LISTA_NOT_FOUND));
 
         if (getCurrentUsername().equals(lista.getUsuario().getUsername())) {
-            boolean removed = lista.getMovies().removeIf(movie -> movie.getId().equals(movieId));
+            Movie movie = lista.getMovies().stream().filter(m -> m.getId().equals(movieId)).findFirst().orElse(null);
 
-            if (!removed) {
-                throw new NotFoudException(MOVIE_NOTFOUND);
-            }
+            if (movie != null) lista.getMovies().remove(movie);
+            else throw new NotFoudException(MOVIE_NOTFOUND);
+
+            actividadService.guardarActividad(lista.getUsuario(), TipoActividad.MOVIE_LISTA, lista.getId(), movie.getTitle(),
+                    movie.getPosterPath(), "Pelicula eliminada de la lista " + lista.getNombre());
 
             listaDAO.save(lista);
         } else {

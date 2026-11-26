@@ -9,9 +9,11 @@ import com.todocine.entities.Lista;
 import com.todocine.entities.Usuario;
 import com.todocine.entities.ValoracionLista;
 import com.todocine.entities.ValoracionListaId;
+import com.todocine.enums.TipoActividad;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
+import com.todocine.service.ActividadService;
 import com.todocine.service.ValoracionListaService;
 import com.todocine.utils.mapper.ValoracionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +37,14 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
     @Autowired
     private UsuarioDAO usuarioDAO;
 
+    @Autowired
+    private ActividadService actividadService;
+
     @Override
     @Transactional
     public ValoracionListaDTO guardarValoracionLista(Long listaId, ValoracionListaReqDTO valoracionListaReqDTO) {
         ValoracionLista valoracionLista = null;
+        boolean exist = true;
         Usuario usuario = usuarioDAO.findById(valoracionListaReqDTO.getUsername()).orElse(null);
 
         if (!listaId.equals(valoracionListaReqDTO.getListaId())) {
@@ -55,10 +61,15 @@ public class ValoracionListaServiceImpl extends BaseServiceImpl implements Valor
             if (valoracionLista == null) {
                 valoracionLista = new ValoracionLista(id);
                 valoracionLista.setFecha(LocalDateTime.now());
+
+                exist = false;
             }
 
             valoracionLista.setComentario(valoracionListaReqDTO.getComentario());
             valoracionLista.setPuntuacion(valoracionListaReqDTO.getPuntuacion());
+
+            actividadService.guardarActividad(usuario, TipoActividad.VALORACION_LISTA, lista.getId(), lista.getNombre(),
+                    null, exist ?  "Modificada la valoración de la lista" : "Añadida valoración a la lista");
 
             return ValoracionMapper.toDTO(valoracionListaDAO.save(valoracionLista));
 
