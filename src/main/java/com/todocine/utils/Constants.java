@@ -44,6 +44,8 @@ public class Constants {
 
     public static final String PARENT_COMMENT_NOTEXISTS = "El comentario padre no existe";
 
+    public static final String COMMENT_NOTEXISTS = "El comentario no existe";
+
 
     //FILTERS FAVORITOS
 

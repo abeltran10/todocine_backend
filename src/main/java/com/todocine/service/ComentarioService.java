@@ -11,4 +11,6 @@ public interface ComentarioService {
     List<ComentarioDTO> getComentarioReplies(Long id);
 
     ComentarioDTO insertarComentario(ComentarioReqDTO comentarioReqDTO);
+
+    ComentarioDTO updateComentario(Long id, ComentarioReqDTO comentarioReqDTO);
 }

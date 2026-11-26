@@ -9,6 +9,7 @@ import com.todocine.entities.Comentario;
 import com.todocine.entities.Movie;
 import com.todocine.entities.Usuario;
 import com.todocine.exceptions.BadGatewayException;
+import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.ComentarioService;
@@ -25,7 +26,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.todocine.utils.Constants.PARENT_COMMENT_NOTEXISTS;
+import static com.todocine.utils.Constants.*;
 
 @Service
 public class ComentarioServiceImpl extends BaseServiceImpl implements ComentarioService {
@@ -83,10 +84,22 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
         comentario.setFechaCreacion(LocalDateTime.now());
 
         return ComentarioMapper.toDTO(comentarioDAO.save(comentario));
+    }
 
+    @Override
+    public ComentarioDTO updateComentario(Long id, ComentarioReqDTO comentarioReqDTO) {
+        if (!id.equals(comentarioReqDTO.getId())) {
+            throw new BadRequestException(ID_NOT_MATCH);
+        }
 
+        if (!getCurrentUsername().equals(comentarioReqDTO.getUsername())) {
+            throw new ForbiddenException(Constants.USER_FORBIDDEN);
+        }
 
+        Comentario comentario = comentarioDAO.findById(id).orElseThrow(() -> new NotFoudException(COMMENT_NOTEXISTS));
+        comentario.setContenido(comentarioReqDTO.getContenido());
 
+        return ComentarioMapper.toDTO(comentarioDAO.save(comentario));
 
     }
 }
