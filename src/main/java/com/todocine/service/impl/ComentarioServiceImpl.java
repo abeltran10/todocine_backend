@@ -43,7 +43,7 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
     @Override
     @Transactional(readOnly = true)
     public List<ComentarioDTO> getComentarioReplies(Long id) {
-        return comentarioDAO.findByParentId(id).stream().map(ComentarioMapper::toDTO).toList();
+        return comentarioDAO.findByParentIdOrderByFechaCreacionDesc(id).stream().map(ComentarioMapper::toDTO).toList();
     }
 
     @Override
