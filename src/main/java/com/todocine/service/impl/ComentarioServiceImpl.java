@@ -87,6 +87,7 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
     }
 
     @Override
+    @Transactional
     public ComentarioDTO updateComentario(Long id, ComentarioReqDTO comentarioReqDTO) {
         if (!id.equals(comentarioReqDTO.getId())) {
             throw new BadRequestException(ID_NOT_MATCH);
