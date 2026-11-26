@@ -32,6 +32,8 @@ public class ComentarioDTO {
     @NotNull
     private Boolean hasReplies;
 
+    private Long parentId;
+
     private List<VotoComentarioDTO> votes = new ArrayList<>();
 
     public ComentarioDTO() {
@@ -99,5 +101,13 @@ public class ComentarioDTO {
 
     public void setVotes(List<VotoComentarioDTO> votes) {
         this.votes = votes;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 }

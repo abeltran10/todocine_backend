@@ -27,6 +27,8 @@ public class ComentarioMapper {
         List<VotoComentarioDTO> votoComentarios = comentario.getVotes().stream().map(VotoComentarioMapper::toDTO).toList();
         comentarioDTO.setVotes(votoComentarios);
 
+        comentarioDTO.setParentId(comentario.getParent() != null ? comentario.getParent().getId() : null);
+
         return comentarioDTO;
     }
 
