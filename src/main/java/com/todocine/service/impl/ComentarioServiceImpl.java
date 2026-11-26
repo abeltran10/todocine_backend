@@ -119,19 +119,29 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
         Comentario comentario = comentarioDAO.findById(votoComentarioReqDTO.getComentarioId())
                 .orElseThrow(() -> new NotFoudException(COMMENT_NOTEXISTS));
 
-        VotoComentarioId votoComentarioId = new VotoComentarioId(comentario, new Usuario(getCurrentUsername()));
-        VotoComentario votoComentario = new VotoComentario(votoComentarioId);
-        votoComentario.setTipo(votoComentarioReqDTO.getVoto().equals(TipoVoto.LIKE.getValue()) ? TipoVoto.LIKE : TipoVoto.DISLIKE);
+        TipoVoto nuevoTipo = TipoVoto.LIKE.getValue() == votoComentarioReqDTO.getVoto()
+                ? TipoVoto.LIKE
+                : TipoVoto.DISLIKE;
 
-        comentario.getVotes().remove(votoComentario);
-        comentario.getVotes().add(votoComentario);
+        VotoComentario votoExistente = comentario.getVotes().stream()
+                .filter(v -> v.getId().getUsuario() != null && getCurrentUsername().equals(v.getId().getUsuario().getUsername()))
+                .findFirst()
+                .orElse(null);
+
+        if (votoExistente != null) {
+            votoExistente.setTipo(nuevoTipo);
+        } else {
+            VotoComentarioId votoComentarioId = new VotoComentarioId(comentario, new Usuario(getCurrentUsername()));
+            VotoComentario nuevoVoto = new VotoComentario(votoComentarioId);
+            nuevoVoto.setTipo(nuevoTipo);
+            comentario.getVotes().add(nuevoVoto);
+        }
 
         comentarioDAO.save(comentario);
 
         VotoComentarioDTO comentarioDTO = new VotoComentarioDTO(getCurrentUsername(), comentario.getId());
-        comentarioDTO.setVoto(votoComentario.getTipo().getValue());
+        comentarioDTO.setVoto(nuevoTipo.getValue());
 
         return comentarioDTO;
-
     }
 }
