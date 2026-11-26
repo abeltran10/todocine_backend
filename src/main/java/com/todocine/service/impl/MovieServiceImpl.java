@@ -106,6 +106,7 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ComentarioDTO> getComentariosByMovie(Long id) {
            return comentarioDAO.findByMovieIdAndParentIsNullOrderByFechaCreacionDesc(id)
                    .stream().map(ComentarioMapper::toDTO).toList();

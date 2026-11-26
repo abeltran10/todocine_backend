@@ -51,9 +51,9 @@ public class MovieController {
 
     }
 
-    @GetMapping("{id}/comentarios")
+    @GetMapping("/{id}/comentarios")
     public ResponseEntity<List<ComentarioDTO>> getComentariosByMovie(@NotNull @PathVariable("id") Long id) {
-        return new ResponseEntity<List<ComentarioDTO>>(movieService.getComentariosByMovie(id), HttpStatus.OK);
+        return new ResponseEntity<>(movieService.getComentariosByMovie(id), HttpStatus.OK);
 
     }
 
