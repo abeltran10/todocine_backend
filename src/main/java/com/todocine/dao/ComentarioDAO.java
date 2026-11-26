@@ -8,4 +8,5 @@ import java.util.List;
 public interface ComentarioDAO extends JpaRepository<Comentario, Long> {
 
     List<Comentario> findByMovieIdAndParentIsNullOrderByFechaCreacionDesc(Long movieId);
+    List<Comentario> findByParentId(Long id);
 }

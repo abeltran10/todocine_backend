@@ -1,5 +1,6 @@
 package com.todocine.utils.mapper;
 
+import com.todocine.dto.request.ComentarioReqDTO;
 import com.todocine.dto.response.ComentarioDTO;
 import com.todocine.dto.response.VotoComentarioDTO;
 import com.todocine.entities.Comentario;
@@ -28,4 +29,5 @@ public class ComentarioMapper {
 
         return comentarioDTO;
     }
-}
+
+ }

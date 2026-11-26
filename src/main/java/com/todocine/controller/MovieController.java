@@ -1,11 +1,14 @@
 package com.todocine.controller;
 
+import com.todocine.dto.request.ComentarioReqDTO;
 import com.todocine.dto.response.ComentarioDTO;
 import com.todocine.dto.response.MovieDTO;
 import com.todocine.dto.response.MovieDetailDTO;
 import com.todocine.dto.response.Paginator;
+import com.todocine.service.ComentarioService;
 import com.todocine.service.MovieService;
 import com.todocine.utils.Constants;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -28,7 +31,6 @@ public class MovieController {
 
     @Autowired
     private MovieService movieService;
-
 
     @GetMapping
     public ResponseEntity<Paginator<MovieDTO>> getMovies(@RequestParam("name") String name, @RequestParam("status") String status,

@@ -42,6 +42,8 @@ public class Constants {
 
     public static final String USER_PASSWORD_BLANK_SPACES_ERROR = "El username o la password no puede contener espacios en blanco";
 
+    public static final String PARENT_COMMENT_NOTEXISTS = "El comentario padre no existe";
+
 
     //FILTERS FAVORITOS
 
