@@ -14,6 +14,7 @@ import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
+import com.todocine.utils.mapper.ComentarioMapper;
 import com.todocine.utils.mapper.MovieMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,20 +107,8 @@ public class MovieServiceImpl extends BaseServiceImpl implements MovieService {
 
     @Override
     public List<ComentarioDTO> getComentariosByMovie(Long id) {
-
-        try {
-           Movie movie = movieDAO.findById(id).orElseThrow(() -> new NotFoudException(MOVIE_NOTFOUND));
-
-           List<Comentario> comentarioList = comentarioDAO.findByMovieIdAndParentIsNullOrderByFechaCreacionDesc(movie.getId());
-
-           return comentarioList.stream().map(ComentarioMapper::toDTO).toList();
-
-        } catch (IOException ex) {
-            throw new BadGatewayException(TMDB_ERROR);
-        }
-
-
-
+           return comentarioDAO.findByMovieIdAndParentIsNullOrderByFechaCreacionDesc(id)
+                   .stream().map(ComentarioMapper::toDTO).toList();
     }
 
 }

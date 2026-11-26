@@ -1,10 +1,48 @@
 package com.todocine.dto.response;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class VotoComentarioDTO {
 
+    @NotBlank
     private String username;
 
+    @NotNull
     private Long comentarioId;
 
-    private String voto;
+    @NotNull
+    private Integer voto;
+
+    public VotoComentarioDTO() {
+    }
+
+    public VotoComentarioDTO(String username, Long comentarioId) {
+        this.username = username;
+        this.comentarioId = comentarioId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Long getComentarioId() {
+        return comentarioId;
+    }
+
+    public void setComentarioId(Long comentarioId) {
+        this.comentarioId = comentarioId;
+    }
+
+    public Integer getVoto() {
+        return voto;
+    }
+
+    public void setVoto(Integer voto) {
+        this.voto = voto;
+    }
 }
