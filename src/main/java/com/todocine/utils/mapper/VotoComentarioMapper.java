@@ -2,7 +2,6 @@ package com.todocine.utils.mapper;
 
 import com.todocine.dto.response.VotoComentarioDTO;
 import com.todocine.entities.VotoComentario;
-import com.todocine.enums.TipoVoto;
 
 public class VotoComentarioMapper {
 

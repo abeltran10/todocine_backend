@@ -1,7 +1,9 @@
 package com.todocine.service;
 
 import com.todocine.dto.request.ComentarioReqDTO;
+import com.todocine.dto.request.VotoComentarioReqDTO;
 import com.todocine.dto.response.ComentarioDTO;
+import com.todocine.dto.response.VotoComentarioDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,4 +15,6 @@ public interface ComentarioService {
     ComentarioDTO insertarComentario(ComentarioReqDTO comentarioReqDTO);
 
     ComentarioDTO updateComentario(Long id, ComentarioReqDTO comentarioReqDTO);
+
+    VotoComentarioDTO votarComentario(Long id, VotoComentarioReqDTO votoComentarioReqDTO);
 }

@@ -43,7 +43,7 @@ public class Comentario {
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     private List<Comentario> replies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "comentario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "comentario", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<VotoComentario> votes = new ArrayList<>();
 
     public Comentario() {

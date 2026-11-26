@@ -3,11 +3,12 @@ package com.todocine.service.impl;
 import com.todocine.dao.ComentarioDAO;
 import com.todocine.dao.MovieDAO;
 import com.todocine.dto.request.ComentarioReqDTO;
+import com.todocine.dto.request.VotoComentarioReqDTO;
 import com.todocine.dto.response.ComentarioDTO;
 import com.todocine.dto.response.MovieDTO;
-import com.todocine.entities.Comentario;
-import com.todocine.entities.Movie;
-import com.todocine.entities.Usuario;
+import com.todocine.dto.response.VotoComentarioDTO;
+import com.todocine.entities.*;
+import com.todocine.enums.TipoVoto;
 import com.todocine.exceptions.BadGatewayException;
 import com.todocine.exceptions.BadRequestException;
 import com.todocine.exceptions.ForbiddenException;
@@ -101,6 +102,36 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
         comentario.setContenido(comentarioReqDTO.getContenido());
 
         return ComentarioMapper.toDTO(comentarioDAO.save(comentario));
+
+    }
+
+    @Override
+    @Transactional
+    public VotoComentarioDTO votarComentario(Long id, VotoComentarioReqDTO votoComentarioReqDTO) {
+        if (!id.equals(votoComentarioReqDTO.getComentarioId())) {
+            throw new BadRequestException(ID_NOT_MATCH);
+        }
+
+        if (!getCurrentUsername().equals(votoComentarioReqDTO.getUsername())) {
+            throw new ForbiddenException(Constants.USER_FORBIDDEN);
+        }
+
+        Comentario comentario = comentarioDAO.findById(votoComentarioReqDTO.getComentarioId())
+                .orElseThrow(() -> new NotFoudException(COMMENT_NOTEXISTS));
+
+        VotoComentarioId votoComentarioId = new VotoComentarioId(comentario, new Usuario(getCurrentUsername()));
+        VotoComentario votoComentario = new VotoComentario(votoComentarioId);
+        votoComentario.setTipo(votoComentarioReqDTO.getVoto().equals(TipoVoto.LIKE.getValue()) ? TipoVoto.LIKE : TipoVoto.DISLIKE);
+
+        comentario.getVotes().remove(votoComentario);
+        comentario.getVotes().add(votoComentario);
+
+        comentarioDAO.save(comentario);
+
+        VotoComentarioDTO comentarioDTO = new VotoComentarioDTO(getCurrentUsername(), comentario.getId());
+        comentarioDTO.setVoto(votoComentario.getTipo().getValue());
+
+        return comentarioDTO;
 
     }
 }
