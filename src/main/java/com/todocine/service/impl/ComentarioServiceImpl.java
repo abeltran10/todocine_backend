@@ -180,6 +180,18 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
     }
 
     @Override
+    @Transactional
+    public void deleteComenatario(Long comentarioId) {
+        Comentario comentario = comentarioDAO.findById(comentarioId).orElseThrow(() -> new NotFoudException(COMMENT_NOTEXISTS));
+
+        actividadService.guardarActividad(comentario.getUsuario(), TipoActividad.BORRAR_COMENTARIO, comentarioId,
+                comentario.getMovie().getTitle(), comentario.getMovie().getPosterPath(),
+                "Comentario eliminado " + comentario.getContenido().substring(0, 10));
+
+        comentarioDAO.delete(comentario);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<ComentarioDTO> getComentariosByMovie(Long id) {
         return comentarioDAO.findByMovieIdAndParentIsNullOrderByFechaCreacionDesc(id)

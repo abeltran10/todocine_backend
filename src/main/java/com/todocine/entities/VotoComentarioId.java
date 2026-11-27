@@ -1,6 +1,7 @@
 package com.todocine.entities;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
@@ -10,7 +11,9 @@ import java.util.Objects;
 public class VotoComentarioId {
 
     @ManyToOne
-    @JoinColumn(name = "COMENTARIO", referencedColumnName = "ID")
+    @JoinColumn(name = "COMENTARIO",
+            referencedColumnName = "ID",
+            foreignKey = @ForeignKey(name = "fk_voto_comentario_comentario"))
     private Comentario comentario;
 
     @ManyToOne

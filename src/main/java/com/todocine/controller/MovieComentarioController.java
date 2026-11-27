@@ -34,4 +34,5 @@ public class MovieComentarioController {
         return new ResponseEntity<>(comentarioService.guardarComentario(id, comentarioReqDTO), HttpStatus.OK);
 
     }
+
 }

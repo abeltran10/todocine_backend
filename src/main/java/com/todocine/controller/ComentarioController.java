@@ -34,4 +34,11 @@ public class ComentarioController {
                                                           @Valid @RequestBody VotoComentarioDTO votoComentarioDTO) {
         return new ResponseEntity<>(comentarioService.votarComentario(id, votoComentarioDTO), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{comentarioId}")
+    public ResponseEntity<Void> eliminarComentario(@NotNull @PathVariable("comentarioId") Long comentarioId) {
+        comentarioService.deleteComenatario(comentarioId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

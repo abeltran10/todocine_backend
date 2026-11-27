@@ -37,13 +37,16 @@ public class Comentario {
     private LocalDateTime fechaCreacion = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "PARENT", referencedColumnName = "ID")
+    @JoinColumn(name = "PARENT",
+            referencedColumnName = "ID",
+            foreignKey = @ForeignKey(name = "fk_comentario_parent"))
     private Comentario parent;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Comentario> replies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "comentario", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "comentario", fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private List<VotoComentario> votes = new ArrayList<>();
 
     public Comentario() {
