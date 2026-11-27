@@ -44,6 +44,14 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
     @Autowired
     private ActividadService actividadService;
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ComentarioDTO> getComentariosByMovie(Long id) {
+        return comentarioDAO.findByMovieIdAndParentIsNullOrderByFechaCreacionDesc(id)
+                .stream().map(ComentarioMapper::toDTO).toList();
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<ComentarioDTO> getComentarioReplies(Long id) {
@@ -194,10 +202,5 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
         comentarioDAO.delete(comentario);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<ComentarioDTO> getComentariosByMovie(Long id) {
-        return comentarioDAO.findByMovieIdAndParentIsNullOrderByFechaCreacionDesc(id)
-                .stream().map(ComentarioMapper::toDTO).toList();
-    }
+
 }
