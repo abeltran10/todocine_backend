@@ -166,10 +166,10 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
                 comentario.getId(), comentario.getMovie().getTitle(),
                 comentario.getMovie().getPosterPath(), "Voto para el comentario " + nuevoTipo.getName());
 
-        VotoComentarioDTO comentarioDTO = new VotoComentarioDTO(getCurrentUsername(), comentario.getId());
-        comentarioDTO.setVoto(nuevoTipo.getValue());
+        VotoComentarioDTO votoComentarioDTO = new VotoComentarioDTO(getCurrentUsername(), comentario.getId());
+        votoComentarioDTO.setVoto(nuevoTipo.getValue());
 
-        return comentarioDTO;
+        return votoComentarioDTO;
     }
 
     @Override
