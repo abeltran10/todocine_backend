@@ -97,6 +97,11 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
         if (comentarioReqDTO.getParentId() != null) {
             parent = comentarioDAO.findById(comentarioReqDTO.getParentId())
                     .orElseThrow(() -> new NotFoudException(PARENT_COMMENT_NOTEXISTS));
+
+            if (!parent.getMovie().getId().equals(comentarioReqDTO.getMovieId())) {
+                throw new BadRequestException(COMMENT_WRONG_THREAD);
+            }
+
         }
 
         Comentario comentario = new Comentario();
@@ -117,6 +122,13 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
 
     private ComentarioDTO updateComentario(ComentarioReqDTO comentarioReqDTO) {
         Comentario comentario = comentarioDAO.findById(comentarioReqDTO.getId()).orElseThrow(() -> new NotFoudException(COMMENT_NOTEXISTS));
+
+        if (!getCurrentUsername().equals(comentario.getUsuario().getUsername()))
+            throw new ForbiddenException(Constants.USER_FORBIDDEN);
+
+        if (!comentario.getMovie().getId().equals(comentarioReqDTO.getMovieId()))
+            throw new BadRequestException(COMMENT_WRONG_MOVIE);
+
         comentario.setContenido(comentarioReqDTO.getContenido());
 
         actividadService.guardarActividad(new Usuario(getCurrentUsername()), TipoActividad.UPDATE_COMENTARIO,
