@@ -14,5 +14,5 @@ public interface MovieService {
 
     Paginator getMovies(Map<String, String> filters, Integer pagina);
 
-    List<ComentarioDTO> getComentariosByMovie(Long id);
+
 }

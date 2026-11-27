@@ -30,18 +30,6 @@ public class ComentarioController {
         return new ResponseEntity<>(comentarioService.getComentarioReplies(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<ComentarioDTO> insertarComentario(@Valid @RequestBody ComentarioReqDTO comentarioReqDTO) {
-        return new ResponseEntity<>(comentarioService.insertarComentario(comentarioReqDTO), HttpStatus.CREATED);
-
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ComentarioDTO> updateComentario(@NotNull @PathVariable("id") Long id,
-                                                       @Valid @RequestBody ComentarioReqDTO comentarioReqDTO) {
-        return new ResponseEntity<>(comentarioService.updateComentario(id, comentarioReqDTO), HttpStatus.OK);
-
-    }
 
     @PutMapping("/{id}/votos")
     private ResponseEntity<VotoComentarioDTO> votarComentario(@NotNull @PathVariable("id") Long id,

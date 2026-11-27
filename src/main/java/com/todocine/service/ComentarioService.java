@@ -10,11 +10,11 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public interface ComentarioService {
+    List<ComentarioDTO> getComentariosByMovie(Long id);
+
     List<ComentarioDTO> getComentarioReplies(Long id);
 
-    ComentarioDTO insertarComentario(ComentarioReqDTO comentarioReqDTO);
-
-    ComentarioDTO updateComentario(Long id, ComentarioReqDTO comentarioReqDTO);
+    ComentarioDTO guardarComentario(Long movieId, ComentarioReqDTO comentarioReqDTO);
 
     VotoComentarioDTO votarComentario(Long id, VotoComentarioReqDTO votoComentarioReqDTO);
 }
