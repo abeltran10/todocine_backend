@@ -184,6 +184,9 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
     public void deleteComenatario(Long comentarioId) {
         Comentario comentario = comentarioDAO.findById(comentarioId).orElseThrow(() -> new NotFoudException(COMMENT_NOTEXISTS));
 
+        if (!getCurrentUsername().equals(comentario.getUsuario().getUsername()))
+            throw new ForbiddenException(USER_FORBIDDEN);
+
         actividadService.guardarActividad(comentario.getUsuario(), TipoActividad.BORRAR_COMENTARIO, comentarioId,
                 comentario.getMovie().getTitle(), comentario.getMovie().getPosterPath(),
                 "Comentario eliminado " + comentario.getContenido().substring(0, 10));
