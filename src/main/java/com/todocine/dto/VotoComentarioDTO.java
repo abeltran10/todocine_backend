@@ -1,9 +1,9 @@
-package com.todocine.dto.request;
+package com.todocine.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class VotoComentarioReqDTO {
+public class VotoComentarioDTO {
 
     @NotBlank
     private String username;
@@ -14,10 +14,10 @@ public class VotoComentarioReqDTO {
     @NotNull
     private Integer voto;
 
-    public VotoComentarioReqDTO() {
+    public VotoComentarioDTO() {
     }
 
-    public VotoComentarioReqDTO(String username, Long comentarioId) {
+    public VotoComentarioDTO(String username, Long comentarioId) {
         this.username = username;
         this.comentarioId = comentarioId;
     }

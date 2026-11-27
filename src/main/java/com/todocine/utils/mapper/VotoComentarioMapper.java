@@ -1,6 +1,6 @@
 package com.todocine.utils.mapper;
 
-import com.todocine.dto.response.VotoComentarioDTO;
+import com.todocine.dto.VotoComentarioDTO;
 import com.todocine.entities.VotoComentario;
 
 public class VotoComentarioMapper {

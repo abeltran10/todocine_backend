@@ -1,7 +1,7 @@
 package com.todocine.utils.mapper;
 
 import com.todocine.dto.response.ComentarioDTO;
-import com.todocine.dto.response.VotoComentarioDTO;
+import com.todocine.dto.VotoComentarioDTO;
 import com.todocine.entities.Comentario;
 
 import java.time.format.DateTimeFormatter;

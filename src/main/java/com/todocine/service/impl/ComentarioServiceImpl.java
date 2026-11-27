@@ -2,11 +2,10 @@ package com.todocine.service.impl;
 
 import com.todocine.dao.ComentarioDAO;
 import com.todocine.dao.MovieDAO;
+import com.todocine.dto.VotoComentarioDTO;
 import com.todocine.dto.request.ComentarioReqDTO;
-import com.todocine.dto.request.VotoComentarioReqDTO;
 import com.todocine.dto.response.ComentarioDTO;
 import com.todocine.dto.response.MovieDTO;
-import com.todocine.dto.response.VotoComentarioDTO;
 import com.todocine.entities.*;
 import com.todocine.enums.TipoActividad;
 import com.todocine.enums.TipoVoto;
@@ -16,7 +15,6 @@ import com.todocine.exceptions.ForbiddenException;
 import com.todocine.exceptions.NotFoudException;
 import com.todocine.service.ActividadService;
 import com.todocine.service.ComentarioService;
-import com.todocine.service.MovieService;
 import com.todocine.service.TMDBService;
 import com.todocine.utils.Constants;
 import com.todocine.utils.mapper.ComentarioMapper;
@@ -142,19 +140,19 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
 
     @Override
     @Transactional
-    public VotoComentarioDTO votarComentario(Long id, VotoComentarioReqDTO votoComentarioReqDTO) {
-        if (!id.equals(votoComentarioReqDTO.getComentarioId())) {
+    public ComentarioDTO votarComentario(Long id, VotoComentarioDTO votoComentarioDTO) {
+        if (!id.equals(votoComentarioDTO.getComentarioId())) {
             throw new BadRequestException(ID_NOT_MATCH);
         }
 
-        if (!getCurrentUsername().equals(votoComentarioReqDTO.getUsername())) {
+        if (!getCurrentUsername().equals(votoComentarioDTO.getUsername())) {
             throw new ForbiddenException(Constants.USER_FORBIDDEN);
         }
 
-        Comentario comentario = comentarioDAO.findById(votoComentarioReqDTO.getComentarioId())
+        Comentario comentario = comentarioDAO.findById(votoComentarioDTO.getComentarioId())
                 .orElseThrow(() -> new NotFoudException(COMMENT_NOTEXISTS));
 
-        TipoVoto nuevoTipo = TipoVoto.LIKE.getValue() == votoComentarioReqDTO.getVoto()
+        TipoVoto nuevoTipo = TipoVoto.LIKE.getValue() == votoComentarioDTO.getVoto()
                 ? TipoVoto.LIKE
                 : TipoVoto.DISLIKE;
 
@@ -178,10 +176,7 @@ public class ComentarioServiceImpl extends BaseServiceImpl implements Comentario
                 comentario.getId(), comentario.getMovie().getTitle(),
                 comentario.getMovie().getPosterPath(), "Voto para el comentario " + nuevoTipo.getName());
 
-        VotoComentarioDTO votoComentarioDTO = new VotoComentarioDTO(getCurrentUsername(), comentario.getId());
-        votoComentarioDTO.setVoto(nuevoTipo.getValue());
-
-        return votoComentarioDTO;
+        return ComentarioMapper.toDTO(comentario);
     }
 
     @Override

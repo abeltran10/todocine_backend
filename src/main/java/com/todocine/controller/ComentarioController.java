@@ -1,10 +1,8 @@
 package com.todocine.controller;
 
 
-import com.todocine.dto.request.ComentarioReqDTO;
-import com.todocine.dto.request.VotoComentarioReqDTO;
+import com.todocine.dto.VotoComentarioDTO;
 import com.todocine.dto.response.ComentarioDTO;
-import com.todocine.dto.response.VotoComentarioDTO;
 import com.todocine.service.ComentarioService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -32,8 +30,8 @@ public class ComentarioController {
 
 
     @PutMapping("/{id}/votos")
-    private ResponseEntity<VotoComentarioDTO> votarComentario(@NotNull @PathVariable("id") Long id,
-                                                              @Valid @RequestBody VotoComentarioReqDTO votoComentarioReqDTO) {
-        return new ResponseEntity<>(comentarioService.votarComentario(id, votoComentarioReqDTO), HttpStatus.OK);
+    private ResponseEntity<ComentarioDTO> votarComentario(@NotNull @PathVariable("id") Long id,
+                                                          @Valid @RequestBody VotoComentarioDTO votoComentarioDTO) {
+        return new ResponseEntity<>(comentarioService.votarComentario(id, votoComentarioDTO), HttpStatus.OK);
     }
 }
