@@ -698,6 +698,145 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  /movies/{id}/comentarios:
+    parameters:
+      - name: "id"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: "Unique identifier of the movie"
+    get:
+      tags: ["Comments of the movie"]
+      summary: "Get root comments of the movie"
+      description: "Get root comments of the movie"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '200':
+          description: "List of root comments of the movie"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComentarioDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    put:
+      tags: ["Comments of the movie"]
+      summary: "Post or update a comment or a response"
+      description: "Post or update a comment or a response"
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComentarioReqDTO'
+      responses:
+        '200':
+          description: "Comment saved or updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComentarioDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+
+  /comentarios/{id}/replies:
+    parameters:
+      - name: "id"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: "Unique identifier of the comment"
+    get:
+      tags: [ "Responses to a comment" ]
+      summary: "Get responses to a comment"
+      description: "Get responses to a comment"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '200':
+          description: "List of responses to a comment"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComentarioDTO'
+
+  /comentarios/{id}/votos:
+    parameters:
+      - name: "id"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: "Unique identifier of the comment"
+    put:
+      tags: [ "Like or Dislike" ]
+      summary: "Like or Dislike"
+      description: "Like or dislike the comment"
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VotoComentarioDTO'
+      responses:
+        '200':
+          description: "Vote added successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComentarioDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /comentarios/{comentarioId}:
+    parameters:
+      - name: "comentarioId"
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: "Unique identifier of the comment"
+    delete:
+      tags: [ "Delete a comment" ]
+      summary: "Delete a comment"
+      description: "Delete a comment by comment ID"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '204':
+          description: "Comment removed successfully"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -925,4 +1064,38 @@ components:
         comentario: { type: string, description: "A comment about the list" }
         username: { type: string, description: "Opinion owner" }
         fecha: { type: string, description: "Opinion creation date" }
+
+    VotoComentarioDTO:
+      type: object
+      required: [ username, comentarioId, voto ]
+      properties:
+        username: { type: string, description: "Username" }
+        comentarioId: { type: integer, format: int64, description: "Comment unique ID" }
+        voto: { type: integer, format: int32, description: "Type of vote (0 = DISLIKE, 1 = LIKE)" }
+
+    ComentarioDTO:
+      type: object
+      required: [ id, username, movieId, contenido, fecha, hasReplies ]
+      properties:
+        id: { type: integer, format: int64, description: "Comment unique identifier" }
+        username: { type: string, description: "Username" }
+        movieId: { type: integer, format: int64, description: "Movie unique identifier" }
+        contenido: { type: string, description: "Comment about a movie or response to comment" }
+        fecha: { type: string, description: "Post creation date" }
+        hasReplies: { type: boolean, description: "Wether there are response to this comment or not" }
+        parentId: { type: integer, format: int64, nullable: true, description: "Comment parent unique identifier" }
+        votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/VotoComentarioDTO'
+
+    ComentarioReqDTO:
+      type: object
+      required: [ username, movieId, contenido ]
+      properties:
+        id: { type: integer, format: int64, description: "Comment unique identifier" }
+        username: { type: string, description: "Username" }
+        movieId: { type: integer, format: int64, description: "Movie unique identifier" }
+        contenido: { type: string, description: "Comment about a movie or response to comment" }
+        parentId: { type: integer, format: int64, nullable: true, description: "Comment parent unique identifier" }
 
